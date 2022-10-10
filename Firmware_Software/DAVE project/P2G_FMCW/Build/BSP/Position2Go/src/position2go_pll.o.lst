@@ -1,0 +1,1552 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "position2go_pll.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.pll_init,"ax",%progbits
+  20              	 .align 2
+  21              	 .global pll_init
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	pll_init:
+  26              	.LFB470:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src/position2go_pll.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****     @file: position2go_pll.c
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****     @brief: This file implements the function declarations for Texas Instrument's
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****             PLL device named LMX249x
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****  */
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** /* ===========================================================================
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ** All rights reserved.
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ** ===========================================================================
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** **
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ** ===========================================================================
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ** Passing on and copying of this document, and communication of its contents
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ** is not permitted without Infineon's prior written authorization.
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ** ===========================================================================
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** */
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** /*
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ==============================================================================
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****    1. INCLUDE FILES
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ==============================================================================
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****  */
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** #include "bsp_common.h"
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** #include "position2go_pll.h"
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** /*
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ==============================================================================
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****    2. DEFINES
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ==============================================================================
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****  */
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** #define ISM_MIN_RF_FREQUENCY_KHZ     (24025000U)   /**< Minimum RF frequency supported by BGT24MTR1
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** #define ISM_MAX_RF_FREQUENCY_KHZ     (24225000U)   /**< Maximum RF frequency supported by BGT24MTR1
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** /*
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ==============================================================================
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****    3. DATA
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ==============================================================================
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****  */
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** static uint32_t s_pll_chirp_time_usec = DEFAULT_CHIRP_TIME_USEC; /* Current chirp-time in units of 
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****  
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** static float s_pll_bandwidth_MHz = MAX_BANDWIDTH_MHZ; /* Current bandwidth in units of MHz used by 
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** static float s_pll_lower_freq_MHz = 0; /* PLL lower frequency for FMCW modulation */
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** static float s_pll_upper_freq_MHz = 0; /* PLL upper frequency for FMCW modulation */
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** static uint32_t s_pll_num_of_chirps = 0; /* Number of chirps count per frame */
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** static float s_pll_base_freq_MHz = 0; /* PLL base frequency for Doppler and FMCW modulation */
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** static volatile  uint8_t  s_update_pll_config_flag = false; /* PLL SPI ramp settings if bandwidth, 
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** static SPI_DIGITAL_IOs_t lmx249x_spi_pins; /* SPI GPIOs used to configure PGA112 device */
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** /*
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ==============================================================================
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****    3. EXPORTED FUNCTIONS
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** ==============================================================================
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****  */
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_init(void* pll_handle)
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+  28              	 .loc 1 67 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 2DE9F04F 	 push {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 36
+  36              	 .cfi_offset 4,-36
+  37              	 .cfi_offset 5,-32
+  38              	 .cfi_offset 6,-28
+  39              	 .cfi_offset 7,-24
+  40              	 .cfi_offset 8,-20
+  41              	 .cfi_offset 9,-16
+  42              	 .cfi_offset 10,-12
+  43              	 .cfi_offset 11,-8
+  44              	 .cfi_offset 14,-4
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Object_t* lmx249x_pll = (Lmx249x_Object_t*)pll_handle;
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Hardware_Setup_t s_sPLLHardwareSetup;
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Send general configuration to PLL */
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* --------------------------------- */
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.dReferenceFreq         = 40.0;
+  45              	 .loc 1 73 0
+  46 0004 9FED307B 	 fldd d7,.L3
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Object_t* lmx249x_pll = (Lmx249x_Object_t*)pll_handle;
+  47              	 .loc 1 67 0
+  48 0008 8BB0     	 sub sp,sp,#44
+  49              	.LCFI1:
+  50              	 .cfi_def_cfa_offset 80
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uReferenceDivider      = 1;
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eReferenceDoubler      = LMX249x_OSCIN_DOUBLER_OFF;
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eOscInMode             = LMX249x_OSCIN_SINGLE_ENDED;
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uExternalDivider       = 16;
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig1PinFunction      = LMX249x_MUX_OUT_FLAG0_FROM_RAMP;
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig1PinDriveMode     = LMX249x_PIN_FCN_PULLUPDN_OUT;
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig2PinFunction      = LMX249x_MUX_IN_TRIG2;
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig2PinDriveMode     = LMX249x_PIN_FCN_INPUT;
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eModPinFunction        = LMX249x_MUX_OUT_FLAG1_FROM_RAMP;
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eModPinDriveMode       = LMX249x_PIN_FCN_PULLUPDN_OUT;
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eMUXoutPinFunction     = LMX249x_MUX_OUT_READ_BACK;
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eMUXoutPinDriveMode    = LMX249x_PIN_FCN_PULLUPDN_OUT;
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eChargePumpPolarity    = LMX249x_CPPOL_NEGATIVE;
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpCurrent     = 20;
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpCurrentFS   = 0;
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpThresholdLo = 6;
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpThresholdHi = 42;
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eChargePumpPulseWidth  = LMX249x_CP_PULSE_860PS;
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eCycleSlipReduction    = LMX249x_CSR_DISABLED;
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uFastLockTimer         = 0;
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uLockDetectNumGoodEdge = 32;
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uLockDetectNumBadEdge  = 4;
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eLockDetectWindow      = LMX249x_DLD_TOL_10NS;
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Set the digital IOs used by SPI interface */
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_spi_pins.spi_device = LMX_DEVICE;
+  51              	 .loc 1 99 0
+  52 000a DFF8CCE0 	 ldr lr,.L3+16
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_spi_pins.gpio_cs_pin 	 = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_PLL;
+  53              	 .loc 1 100 0
+  54 000e 304B     	 ldr r3,.L3+8
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_spi_pins.gpio_data_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_DATA;
+  55              	 .loc 1 101 0
+  56 0010 DFF8C880 	 ldr r8,.L3+20
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_spi_pins.gpio_clk_pin  = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CLK;
+  57              	 .loc 1 102 0
+  58 0014 DFF8C8C0 	 ldr ip,.L3+24
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_init(lmx249x_pll, &s_sPLLHardwareSetup, spi_transmit_data, (void*)&lmx249x_spi_pins);
+  59              	 .loc 1 104 0
+  60 0018 2E4A     	 ldr r2,.L3+12
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_spi_pins.gpio_data_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_DATA;
+  61              	 .loc 1 100 0
+  62 001a CEF80430 	 str r3,[lr,#4]
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eOscInMode             = LMX249x_OSCIN_SINGLE_ENDED;
+  63              	 .loc 1 75 0
+  64 001e 0027     	 movs r7,#0
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eReferenceDoubler      = LMX249x_OSCIN_DOUBLER_OFF;
+  65              	 .loc 1 74 0
+  66 0020 0125     	 movs r5,#1
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig1PinFunction      = LMX249x_MUX_OUT_FLAG0_FROM_RAMP;
+  67              	 .loc 1 77 0
+  68 0022 1021     	 movs r1,#16
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig2PinFunction      = LMX249x_MUX_IN_TRIG2;
+  69              	 .loc 1 79 0
+  70 0024 0224     	 movs r4,#2
+  71              	 .loc 1 104 0
+  72 0026 7346     	 mov r3,lr
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eModPinFunction        = LMX249x_MUX_OUT_FLAG1_FROM_RAMP;
+  73              	 .loc 1 81 0
+  74 0028 0726     	 movs r6,#7
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_spi_pins.gpio_clk_pin  = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CLK;
+  75              	 .loc 1 101 0
+  76 002a CEF80880 	 str r8,[lr,#8]
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+  77              	 .loc 1 102 0
+  78 002e CEF80CC0 	 str ip,[lr,#12]
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_spi_pins.gpio_cs_pin 	 = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_PLL;
+  79              	 .loc 1 99 0
+  80 0032 8EF80050 	 strb r5,[lr]
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eChargePumpPulseWidth  = LMX249x_CP_PULSE_860PS;
+  81              	 .loc 1 90 0
+  82 0036 4FF02A0C 	 mov ip,#42
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uLockDetectNumBadEdge  = 4;
+  83              	 .loc 1 94 0
+  84 003a 4FF0200E 	 mov lr,#32
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eReferenceDoubler      = LMX249x_OSCIN_DOUBLER_OFF;
+  85              	 .loc 1 74 0
+  86 003e ADF80850 	 strh r5,[sp,#8]
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eCycleSlipReduction    = LMX249x_CSR_DISABLED;
+  87              	 .loc 1 91 0
+  88 0042 8DF81D50 	 strb r5,[sp,#29]
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eOscInMode             = LMX249x_OSCIN_SINGLE_ENDED;
+  89              	 .loc 1 75 0
+  90 0046 8DF80A70 	 strb r7,[sp,#10]
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eLockDetectWindow      = LMX249x_DLD_TOL_10NS;
+  91              	 .loc 1 95 0
+  92 004a 0425     	 movs r5,#4
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uExternalDivider       = 16;
+  93              	 .loc 1 76 0
+  94 004c 8DF80B70 	 strb r7,[sp,#11]
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpCurrent     = 20;
+  95              	 .loc 1 86 0
+  96 0050 8DF81870 	 strb r7,[sp,#24]
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpThresholdLo = 6;
+  97              	 .loc 1 88 0
+  98 0054 8DF81A70 	 strb r7,[sp,#26]
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uFastLockTimer         = 0;
+  99              	 .loc 1 92 0
+ 100 0058 8DF81E70 	 strb r7,[sp,#30]
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uLockDetectNumGoodEdge = 32;
+ 101              	 .loc 1 93 0
+ 102 005c ADF82070 	 strh r7,[sp,#32]
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig1PinFunction      = LMX249x_MUX_OUT_FLAG0_FROM_RAMP;
+ 103              	 .loc 1 77 0
+ 104 0060 0391     	 str r1,[sp,#12]
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Object_t* lmx249x_pll = (Lmx249x_Object_t*)pll_handle;
+ 105              	 .loc 1 67 0
+ 106 0062 0746     	 mov r7,r0
+ 107              	.LVL1:
+ 108              	 .loc 1 104 0
+ 109 0064 6946     	 mov r1,sp
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig1PinDriveMode     = LMX249x_PIN_FCN_PULLUPDN_OUT;
+ 110              	 .loc 1 78 0
+ 111 0066 4FF01E0B 	 mov fp,#30
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eModPinDriveMode       = LMX249x_PIN_FCN_PULLUPDN_OUT;
+ 112              	 .loc 1 82 0
+ 113 006a 4FF01F0A 	 mov r10,#31
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpCurrentFS   = 0;
+ 114              	 .loc 1 87 0
+ 115 006e 4FF01409 	 mov r9,#20
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpThresholdHi = 42;
+ 116              	 .loc 1 89 0
+ 117 0072 4FF00608 	 mov r8,#6
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uReferenceDivider      = 1;
+ 118              	 .loc 1 73 0
+ 119 0076 8DED007B 	 fstd d7,[sp]
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eChargePumpPulseWidth  = LMX249x_CP_PULSE_860PS;
+ 120              	 .loc 1 90 0
+ 121 007a 8DF81CC0 	 strb ip,[sp,#28]
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uLockDetectNumBadEdge  = 4;
+ 122              	 .loc 1 94 0
+ 123 007e 8DF822E0 	 strb lr,[sp,#34]
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig1PinDriveMode     = LMX249x_PIN_FCN_PULLUPDN_OUT;
+ 124              	 .loc 1 78 0
+ 125 0082 8DF810B0 	 strb fp,[sp,#16]
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig2PinFunction      = LMX249x_MUX_IN_TRIG2;
+ 126              	 .loc 1 79 0
+ 127 0086 8DF81140 	 strb r4,[sp,#17]
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eTrig2PinDriveMode     = LMX249x_PIN_FCN_INPUT;
+ 128              	 .loc 1 80 0
+ 129 008a 8DF81240 	 strb r4,[sp,#18]
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eMUXoutPinFunction     = LMX249x_MUX_OUT_READ_BACK;
+ 130              	 .loc 1 83 0
+ 131 008e 8DF81540 	 strb r4,[sp,#21]
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eChargePumpPolarity    = LMX249x_CPPOL_NEGATIVE;
+ 132              	 .loc 1 85 0
+ 133 0092 8DF81740 	 strb r4,[sp,#23]
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eModPinFunction        = LMX249x_MUX_OUT_FLAG1_FROM_RAMP;
+ 134              	 .loc 1 81 0
+ 135 0096 8DF81360 	 strb r6,[sp,#19]
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eMUXoutPinDriveMode    = LMX249x_PIN_FCN_PULLUPDN_OUT;
+ 136              	 .loc 1 84 0
+ 137 009a 8DF81660 	 strb r6,[sp,#22]
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eModPinDriveMode       = LMX249x_PIN_FCN_PULLUPDN_OUT;
+ 138              	 .loc 1 82 0
+ 139 009e 8DF814A0 	 strb r10,[sp,#20]
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpCurrentFS   = 0;
+ 140              	 .loc 1 87 0
+ 141 00a2 8DF81990 	 strb r9,[sp,#25]
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.uChargePumpThresholdHi = 42;
+ 142              	 .loc 1 89 0
+ 143 00a6 8DF81B80 	 strb r8,[sp,#27]
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_sPLLHardwareSetup.eLockDetectWindow      = LMX249x_DLD_TOL_10NS;
+ 144              	 .loc 1 95 0
+ 145 00aa 8DF82350 	 strb r5,[sp,#35]
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 146              	 .loc 1 96 0
+ 147 00ae 8DF82450 	 strb r5,[sp,#36]
+ 148              	 .loc 1 104 0
+ 149 00b2 FFF7FEFF 	 bl lmx249x_init
+ 150              	.LVL2:
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_set_power_state(lmx249x_pll, LMX249x_POWER_CE);
+ 151              	 .loc 1 106 0
+ 152 00b6 3846     	 mov r0,r7
+ 153 00b8 2146     	 mov r1,r4
+ 154 00ba FFF7FEFF 	 bl lmx249x_set_power_state
+ 155              	.LVL3:
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 156              	 .loc 1 107 0
+ 157 00be 0BB0     	 add sp,sp,#44
+ 158              	.LCFI2:
+ 159              	 .cfi_def_cfa_offset 36
+ 160              	 
+ 161 00c0 BDE8F08F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 162              	.LVL4:
+ 163              	.L4:
+ 164 00c4 AFF30080 	 .align 3
+ 165              	.L3:
+ 166 00c8 00000000 	 .word 0
+ 167 00cc 00004440 	 .word 1078198272
+ 168 00d0 00000000 	 .word DIGITAL_IO_SPI_M_CS_PLL
+ 169 00d4 00000000 	 .word spi_transmit_data
+ 170 00d8 00000000 	 .word .LANCHOR0
+ 171 00dc 00000000 	 .word DIGITAL_IO_SPI_M_DATA
+ 172 00e0 00000000 	 .word DIGITAL_IO_SPI_M_CLK
+ 173              	 .cfi_endproc
+ 174              	.LFE470:
+ 176              	 .global __aeabi_f2d
+ 177              	 .global __aeabi_ui2d
+ 178 00e4 AFF30080 	 .section .text.pll_configure_ramps,"ax",%progbits
+ 179              	 .align 2
+ 180              	 .global pll_configure_ramps
+ 181              	 .thumb
+ 182              	 .thumb_func
+ 184              	pll_configure_ramps:
+ 185              	.LFB471:
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_configure_ramps(void* pll_handle)
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 186              	 .loc 1 112 0
+ 187              	 .cfi_startproc
+ 188              	 
+ 189              	 
+ 190              	.LVL5:
+ 191 0000 2DE9F04F 	 push {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+ 192              	.LCFI3:
+ 193              	 .cfi_def_cfa_offset 36
+ 194              	 .cfi_offset 4,-36
+ 195              	 .cfi_offset 5,-32
+ 196              	 .cfi_offset 6,-28
+ 197              	 .cfi_offset 7,-24
+ 198              	 .cfi_offset 8,-20
+ 199              	 .cfi_offset 9,-16
+ 200              	 .cfi_offset 10,-12
+ 201              	 .cfi_offset 11,-8
+ 202              	 .cfi_offset 14,-4
+ 203 0004 2DED048B 	 fstmfdd sp!,{d8,d9}
+ 204              	.LCFI4:
+ 205              	 .cfi_def_cfa_offset 52
+ 206              	 .cfi_offset 80,-52
+ 207              	 .cfi_offset 81,-48
+ 208              	 .cfi_offset 82,-44
+ 209              	 .cfi_offset 83,-40
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Setup data configuration data for PLL chip */
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Object_t*	lmx249x_pll = (Lmx249x_Object_t*)pll_handle;
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Ramp_Global_t pllGlobalRampSetup;
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Ramp_Section_t pllRampSections[5];
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dBaseFrequency = (double)s_pll_base_freq_MHz; /*!< base frequency */
+ 210              	 .loc 1 120 0
+ 211 0008 634B     	 ldr r3,.L7+8
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dMinFrequency  = (double)(s_pll_lower_freq_MHz - (float)PLL_RAMP_GUARD_FREQ_MH
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dMaxFrequency  = (double)(s_pll_upper_freq_MHz + (float)PLL_RAMP_GUARD_FREQ_MH
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dComp0Freq     = (double)s_pll_lower_freq_MHz; /*!< Frequency that is used by 
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dComp1Freq     = (double)s_pll_upper_freq_MHz; /*!< Frequency that is used by 
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dDeviationFrequency = 0;  			    /*!< FSK deviation frequency */
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.uNumRamps = s_pll_num_of_chirps * 4 + 1;	    /*!< Number of ramps to do before
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eTriggerA   = LMX249x_RAMP_TRIG_NEVER_TRIGGERS;             /*!< Define the so
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eTriggerB   = LMX249x_RAMP_TRIG_TRIG2_TERMINAL_RISING_EDGE; /*!< Define the so
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eTriggerC   = LMX249x_RAMP_TRIG_NEVER_TRIGGERS;             /*!< Define the so
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eRampClock  = LMX249x_RAMP_CLOCK_INTERNAL;         	 /*!< determines if intern
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eModulation = LMX249x_RAMP_MODULATION_FM;        		 /*!< Kind of modulation */
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eAutoOff    = LMX249x_RAMP_AUTO_OFF_ENABLE;           	 /*!< Defines, if the R
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eRampCountTrigger = LMX249x_RAMP_COUNT_INCREMENT_SEGMENT_TRANSITION; /*!< Defi
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eDevTrigger = LMX249x_TRIGGER_A;				 /*!< Defines the deviation trigger for FS
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eDitherMode = LMX249x_FRAC_DITHER_DISABLED;                 /*!< Defines the f
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eFracOrder  = LMX249x_FRAC_ORD_SECOND;                      /*!< Defines the f
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Calculate real frequency shift based on PLL clock */
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   double bandwidth_MHz = lmx249x_get_real_frequency_shift(lmx249x_pll, s_pll_bandwidth_MHz, s_pll_c
+ 212              	 .loc 1 142 0
+ 213 000a DFF8A091 	 ldr r9,.L7+28
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Setup data configuration data for PLL chip */
+ 214              	 .loc 1 112 0
+ 215 000e BBB0     	 sub sp,sp,#236
+ 216              	.LCFI5:
+ 217              	 .cfi_def_cfa_offset 288
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Setup data configuration data for PLL chip */
+ 218              	 .loc 1 112 0
+ 219 0010 8046     	 mov r8,r0
+ 220              	.LVL6:
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 221              	 .loc 1 120 0
+ 222 0012 1868     	 ldr r0,[r3]
+ 223              	.LVL7:
+ 224 0014 FFF7FEFF 	 bl __aeabi_f2d
+ 225              	.LVL8:
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dMaxFrequency  = (double)(s_pll_upper_freq_MHz + (float)PLL_RAMP_GUARD_FREQ_MH
+ 226              	 .loc 1 122 0
+ 227 0018 604B     	 ldr r3,.L7+12
+ 228 001a D3ED008A 	 flds s17,[r3]
+ 229 001e B6EE009A 	 fconsts s18,#96
+ 230 0022 78EEC97A 	 fsubs s15,s17,s18
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 231              	 .loc 1 120 0
+ 232 0026 CDE90201 	 strd r0,[sp,#8]
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dMaxFrequency  = (double)(s_pll_upper_freq_MHz + (float)PLL_RAMP_GUARD_FREQ_MH
+ 233              	 .loc 1 122 0
+ 234 002a 17EE900A 	 fmrs r0,s15
+ 235 002e FFF7FEFF 	 bl __aeabi_f2d
+ 236              	.LVL9:
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dComp0Freq     = (double)s_pll_lower_freq_MHz; /*!< Frequency that is used by 
+ 237              	 .loc 1 123 0
+ 238 0032 5B4B     	 ldr r3,.L7+16
+ 239 0034 93ED008A 	 flds s16,[r3]
+ 240 0038 78EE097A 	 fadds s15,s16,s18
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dMaxFrequency  = (double)(s_pll_upper_freq_MHz + (float)PLL_RAMP_GUARD_FREQ_MH
+ 241              	 .loc 1 122 0
+ 242 003c CDE90601 	 strd r0,[sp,#24]
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dComp0Freq     = (double)s_pll_lower_freq_MHz; /*!< Frequency that is used by 
+ 243              	 .loc 1 123 0
+ 244 0040 17EE900A 	 fmrs r0,s15
+ 245 0044 FFF7FEFF 	 bl __aeabi_f2d
+ 246              	.LVL10:
+ 247 0048 CDE90801 	 strd r0,[sp,#32]
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dComp1Freq     = (double)s_pll_upper_freq_MHz; /*!< Frequency that is used by 
+ 248              	 .loc 1 124 0
+ 249 004c 18EE900A 	 fmrs r0,s17
+ 250 0050 FFF7FEFF 	 bl __aeabi_f2d
+ 251              	.LVL11:
+ 252 0054 CDE90A01 	 strd r0,[sp,#40]
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dDeviationFrequency = 0;  			    /*!< FSK deviation frequency */
+ 253              	 .loc 1 125 0
+ 254 0058 18EE100A 	 fmrs r0,s16
+ 255 005c FFF7FEFF 	 bl __aeabi_f2d
+ 256              	.LVL12:
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 257              	 .loc 1 128 0
+ 258 0060 504B     	 ldr r3,.L7+20
+ 259              	 .loc 1 142 0
+ 260 0062 514A     	 ldr r2,.L7+24
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 261              	 .loc 1 128 0
+ 262 0064 1B68     	 ldr r3,[r3]
+ 263 0066 9B00     	 lsls r3,r3,#2
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eTriggerB   = LMX249x_RAMP_TRIG_TRIG2_TERMINAL_RISING_EDGE; /*!< Define the so
+ 264              	 .loc 1 130 0
+ 265 0068 0024     	 movs r4,#0
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 266              	 .loc 1 126 0
+ 267 006a 4FF0000A 	 mov r10,#0
+ 268 006e 4FF0000B 	 mov fp,#0
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eRampCountTrigger = LMX249x_RAMP_COUNT_INCREMENT_SEGMENT_TRANSITION; /*!< Defi
+ 269              	 .loc 1 135 0
+ 270 0072 0125     	 movs r5,#1
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eTriggerC   = LMX249x_RAMP_TRIG_NEVER_TRIGGERS;             /*!< Define the so
+ 271              	 .loc 1 131 0
+ 272 0074 0226     	 movs r6,#2
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eFracOrder  = LMX249x_FRAC_ORD_SECOND;                      /*!< Defines the f
+ 273              	 .loc 1 138 0
+ 274 0076 0327     	 movs r7,#3
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.dDeviationFrequency = 0;  			    /*!< FSK deviation frequency */
+ 275              	 .loc 1 125 0
+ 276 0078 CDE90C01 	 strd r0,[sp,#48]
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 277              	 .loc 1 128 0
+ 278 007c 0133     	 adds r3,r3,#1
+ 279              	 .loc 1 142 0
+ 280 007e 1068     	 ldr r0,[r2]
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 281              	 .loc 1 128 0
+ 282 0080 ADF83E30 	 strh r3,[sp,#62]
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eTriggerC   = LMX249x_RAMP_TRIG_NEVER_TRIGGERS;             /*!< Define the so
+ 283              	 .loc 1 131 0
+ 284 0084 8DF83960 	 strb r6,[sp,#57]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 285              	 .loc 1 139 0
+ 286 0088 8DF84260 	 strb r6,[sp,#66]
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 287              	 .loc 1 126 0
+ 288 008c CDE904AB 	 strd r10,[sp,#16]
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eTriggerB   = LMX249x_RAMP_TRIG_TRIG2_TERMINAL_RISING_EDGE; /*!< Define the so
+ 289              	 .loc 1 130 0
+ 290 0090 8DF83840 	 strb r4,[sp,#56]
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eRampClock  = LMX249x_RAMP_CLOCK_INTERNAL;         	 /*!< determines if intern
+ 291              	 .loc 1 132 0
+ 292 0094 8DF83A40 	 strb r4,[sp,#58]
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eModulation = LMX249x_RAMP_MODULATION_FM;        		 /*!< Kind of modulation */
+ 293              	 .loc 1 133 0
+ 294 0098 8DF83B40 	 strb r4,[sp,#59]
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eAutoOff    = LMX249x_RAMP_AUTO_OFF_ENABLE;           	 /*!< Defines, if the R
+ 295              	 .loc 1 134 0
+ 296 009c 8DF83C40 	 strb r4,[sp,#60]
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eDevTrigger = LMX249x_TRIGGER_A;				 /*!< Defines the deviation trigger for FS
+ 297              	 .loc 1 136 0
+ 298 00a0 8DF84040 	 strb r4,[sp,#64]
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eRampCountTrigger = LMX249x_RAMP_COUNT_INCREMENT_SEGMENT_TRANSITION; /*!< Defi
+ 299              	 .loc 1 135 0
+ 300 00a4 8DF83D50 	 strb r5,[sp,#61]
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eDitherMode = LMX249x_FRAC_DITHER_DISABLED;                 /*!< Defines the f
+ 301              	 .loc 1 137 0
+ 302 00a8 8DF84150 	 strb r5,[sp,#65]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllGlobalRampSetup.eFracOrder  = LMX249x_FRAC_ORD_SECOND;                      /*!< Defines the f
+ 303              	 .loc 1 138 0
+ 304 00ac 8DF84370 	 strb r7,[sp,#67]
+ 305              	 .loc 1 142 0
+ 306 00b0 FFF7FEFF 	 bl __aeabi_f2d
+ 307              	.LVL13:
+ 308 00b4 0B46     	 mov r3,r1
+ 309 00b6 D9F80010 	 ldr r1,[r9]
+ 310 00ba 0091     	 str r1,[sp]
+ 311 00bc 0246     	 mov r2,r0
+ 312 00be 4046     	 mov r0,r8
+ 313 00c0 FFF7FEFF 	 bl lmx249x_get_real_frequency_shift
+ 314              	.LVL14:
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* reset ramp  */
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].dFreqShift   = 0.0;
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].dTramp       = 0;
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eFlag        = LMX249x_RAMP_FLAG_CLR_BOTH;
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eReset       = LMX249x_RAMP_RST_ENABLE;
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_TRIGB;
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].uNext        = 1;
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Ramp down to lower frequency */
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].dFreqShift   = -bandwidth_MHz;
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].dTramp       = (double)PLL_RAMP_DOWM_TIME_USEC;
+ 315              	 .loc 1 157 0
+ 316 00c4 9FED327B 	 fldd d7,.L7
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 317              	 .loc 1 142 0
+ 318 00c8 0246     	 mov r2,r0
+ 319 00ca 0B46     	 mov r3,r1
+ 320              	.LVL15:
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eFlag        = LMX249x_RAMP_FLAG_CLR_BOTH;
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eReset       = LMX249x_RAMP_RST_DISABLE; /* first ramp resets counters */
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN;
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].uNext        = 2;
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Wait time between ramps */
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].dFreqShift   = 0;
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].dTramp       = (double)PLL_STEADY_STATE_USEC;
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eFlag        = LMX249x_RAMP_FLAG_CLR_BOTH;
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eReset       = LMX249x_RAMP_RST_DISABLE;
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN;
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].uNext        = 3;
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Ramp up and trigger ADC sampling */
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].dFreqShift   = bandwidth_MHz;
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].dTramp       = (double)s_pll_chirp_time_usec;
+ 321              	 .loc 1 177 0
+ 322 00cc D9F80000 	 ldr r0,[r9]
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].uNext        = 1;
+ 323              	 .loc 1 150 0
+ 324 00d0 8DF86260 	 strb r6,[sp,#98]
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 325              	 .loc 1 155 0
+ 326 00d4 01F10041 	 add r1,r1,#-2147483648
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 327              	 .loc 1 175 0
+ 328 00d8 CDE92A23 	 strd r2,[sp,#168]
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 329              	 .loc 1 161 0
+ 330 00dc 8DF88360 	 strb r6,[sp,#131]
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 331              	 .loc 1 155 0
+ 332 00e0 1A92     	 str r2,[sp,#104]
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eFlag        = LMX249x_RAMP_FLAG_CLR_BOTH;
+ 333              	 .loc 1 157 0
+ 334 00e2 8DED1E7B 	 fstd d7,[sp,#120]
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eFlag        = LMX249x_RAMP_FLAG_CLR_BOTH;
+ 335              	 .loc 1 167 0
+ 336 00e6 8DED267B 	 fstd d7,[sp,#152]
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].dTramp       = 0;
+ 337              	 .loc 1 146 0
+ 338 00ea 8DF85040 	 strb r4,[sp,#80]
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 339              	 .loc 1 145 0
+ 340 00ee CDE912AB 	 strd r10,[sp,#72]
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eFlag        = LMX249x_RAMP_FLAG_CLR_BOTH;
+ 341              	 .loc 1 147 0
+ 342 00f2 CDE916AB 	 strd r10,[sp,#88]
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eReset       = LMX249x_RAMP_RST_ENABLE;
+ 343              	 .loc 1 148 0
+ 344 00f6 8DF86040 	 strb r4,[sp,#96]
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_TRIGB;
+ 345              	 .loc 1 149 0
+ 346 00fa 8DF86150 	 strb r5,[sp,#97]
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[0].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 347              	 .loc 1 151 0
+ 348 00fe 8DF86350 	 strb r5,[sp,#99]
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 349              	 .loc 1 152 0
+ 350 0102 8DF86440 	 strb r4,[sp,#100]
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].dTramp       = (double)PLL_RAMP_DOWM_TIME_USEC;
+ 351              	 .loc 1 156 0
+ 352 0106 8DF87040 	 strb r4,[sp,#112]
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eReset       = LMX249x_RAMP_RST_DISABLE; /* first ramp resets counters */
+ 353              	 .loc 1 158 0
+ 354 010a 8DF88040 	 strb r4,[sp,#128]
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN;
+ 355              	 .loc 1 159 0
+ 356 010e 8DF88140 	 strb r4,[sp,#129]
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].uNext        = 2;
+ 357              	 .loc 1 160 0
+ 358 0112 8DF88240 	 strb r4,[sp,#130]
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 359              	 .loc 1 162 0
+ 360 0116 8DF88440 	 strb r4,[sp,#132]
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 361              	 .loc 1 165 0
+ 362 011a CDE922AB 	 strd r10,[sp,#136]
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].dTramp       = (double)PLL_STEADY_STATE_USEC;
+ 363              	 .loc 1 166 0
+ 364 011e 8DF89040 	 strb r4,[sp,#144]
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eReset       = LMX249x_RAMP_RST_DISABLE;
+ 365              	 .loc 1 168 0
+ 366 0122 8DF8A040 	 strb r4,[sp,#160]
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN;
+ 367              	 .loc 1 169 0
+ 368 0126 8DF8A140 	 strb r4,[sp,#161]
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].uNext        = 3;
+ 369              	 .loc 1 170 0
+ 370 012a 8DF8A240 	 strb r4,[sp,#162]
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[2].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 371              	 .loc 1 171 0
+ 372 012e 8DF8A370 	 strb r7,[sp,#163]
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 373              	 .loc 1 172 0
+ 374 0132 8DF8A440 	 strb r4,[sp,#164]
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].dTramp       = (double)s_pll_chirp_time_usec;
+ 375              	 .loc 1 176 0
+ 376 0136 8DF8B040 	 strb r4,[sp,#176]
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[1].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 377              	 .loc 1 155 0
+ 378 013a 1B91     	 str r1,[sp,#108]
+ 379              	 .loc 1 177 0
+ 380 013c FFF7FEFF 	 bl __aeabi_ui2d
+ 381              	.LVL16:
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eFlag        = LMX249x_RAMP_FLAG_SET_BOTH;
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eReset       = LMX249x_RAMP_RST_DISABLE;
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN;
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].uNext        = 4;
+ 382              	 .loc 1 181 0
+ 383 0140 0426     	 movs r6,#4
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eFlag        = LMX249x_RAMP_FLAG_SET_BOTH;
+ 384              	 .loc 1 177 0
+ 385 0142 CDE92E01 	 strd r0,[sp,#184]
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Clear ADC sampling flags */
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].dFreqShift   = 0;
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].dTramp       = 0;
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eFlag        = LMX249x_RAMP_FLAG_CLR_BOTH;
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eReset       = LMX249x_RAMP_RST_ENABLE;
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN;
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].uNext        = 1;
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_configure_ramps(lmx249x_pll, &pllGlobalRampSetup, pllRampSections, 5);
+ 386              	 .loc 1 194 0
+ 387 0146 12AA     	 add r2,sp,#72
+ 388 0148 4046     	 mov r0,r8
+ 389 014a 02A9     	 add r1,sp,#8
+ 390 014c 0523     	 movs r3,#5
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eReset       = LMX249x_RAMP_RST_DISABLE;
+ 391              	 .loc 1 178 0
+ 392 014e 8DF8C070 	 strb r7,[sp,#192]
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN;
+ 393              	 .loc 1 179 0
+ 394 0152 8DF8C140 	 strb r4,[sp,#193]
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].uNext        = 4;
+ 395              	 .loc 1 180 0
+ 396 0156 8DF8C240 	 strb r4,[sp,#194]
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 397              	 .loc 1 182 0
+ 398 015a 8DF8C440 	 strb r4,[sp,#196]
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eFastlock    = LMX249x_RAMP_FASTLOCK_DISABLED;
+ 399              	 .loc 1 185 0
+ 400 015e CDE932AB 	 strd r10,[sp,#200]
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].dTramp       = 0;
+ 401              	 .loc 1 186 0
+ 402 0162 8DF8D040 	 strb r4,[sp,#208]
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eFlag        = LMX249x_RAMP_FLAG_CLR_BOTH;
+ 403              	 .loc 1 187 0
+ 404 0166 CDE936AB 	 strd r10,[sp,#216]
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eReset       = LMX249x_RAMP_RST_ENABLE;
+ 405              	 .loc 1 188 0
+ 406 016a 8DF8E040 	 strb r4,[sp,#224]
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eNextTrig    = LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN;
+ 407              	 .loc 1 189 0
+ 408 016e 8DF8E150 	 strb r5,[sp,#225]
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].uNext        = 1;
+ 409              	 .loc 1 190 0
+ 410 0172 8DF8E240 	 strb r4,[sp,#226]
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[4].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 411              	 .loc 1 191 0
+ 412 0176 8DF8E350 	 strb r5,[sp,#227]
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 413              	 .loc 1 192 0
+ 414 017a 8DF8E440 	 strb r4,[sp,#228]
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pllRampSections[3].eComparators = LMX249x_RAMP_NO_COMPARATOR;
+ 415              	 .loc 1 181 0
+ 416 017e 8DF8C360 	 strb r6,[sp,#195]
+ 417              	 .loc 1 194 0
+ 418 0182 FFF7FEFF 	 bl lmx249x_configure_ramps
+ 419              	.LVL17:
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 420              	 .loc 1 195 0
+ 421 0186 3BB0     	 add sp,sp,#236
+ 422              	.LCFI6:
+ 423              	 .cfi_def_cfa_offset 52
+ 424              	 
+ 425 0188 BDEC048B 	 fldmfdd sp!,{d8-d9}
+ 426              	.LCFI7:
+ 427              	 .cfi_restore 82
+ 428              	 .cfi_restore 83
+ 429              	 .cfi_restore 80
+ 430              	 .cfi_restore 81
+ 431              	 .cfi_def_cfa_offset 36
+ 432 018c BDE8F08F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 433              	.LVL18:
+ 434              	.L8:
+ 435              	 .align 3
+ 436              	.L7:
+ 437 0190 00000000 	 .word 0
+ 438 0194 00005940 	 .word 1079574528
+ 439 0198 00000000 	 .word .LANCHOR1
+ 440 019c 00000000 	 .word .LANCHOR2
+ 441 01a0 00000000 	 .word .LANCHOR3
+ 442 01a4 00000000 	 .word .LANCHOR4
+ 443 01a8 00000000 	 .word .LANCHOR5
+ 444 01ac 00000000 	 .word .LANCHOR6
+ 445              	 .cfi_endproc
+ 446              	.LFE471:
+ 448              	 .section .text.pll_enable_ramps,"ax",%progbits
+ 449              	 .align 2
+ 450              	 .global pll_enable_ramps
+ 451              	 .thumb
+ 452              	 .thumb_func
+ 454              	pll_enable_ramps:
+ 455              	.LFB472:
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_enable_ramps(void* pll_handle)
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 456              	 .loc 1 200 0
+ 457              	 .cfi_startproc
+ 458              	 
+ 459              	 
+ 460              	 
+ 461              	.LVL19:
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Object_t* lmx249x_pll = (Lmx249x_Object_t*)pll_handle;
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_enable_ramps(lmx249x_pll, true);
+ 462              	 .loc 1 202 0
+ 463 0000 0121     	 movs r1,#1
+ 464 0002 FFF7FEBF 	 b lmx249x_enable_ramps
+ 465              	.LVL20:
+ 466              	 .cfi_endproc
+ 467              	.LFE472:
+ 469 0006 00BF     	 .section .text.pll_disable_ramps,"ax",%progbits
+ 470              	 .align 2
+ 471              	 .global pll_disable_ramps
+ 472              	 .thumb
+ 473              	 .thumb_func
+ 475              	pll_disable_ramps:
+ 476              	.LFB473:
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_disable_ramps(void* pll_handle)
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 477              	 .loc 1 208 0
+ 478              	 .cfi_startproc
+ 479              	 
+ 480              	 
+ 481              	 
+ 482              	.LVL21:
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Object_t* lmx249x_pll = (Lmx249x_Object_t*)pll_handle;
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_enable_ramps(lmx249x_pll, false);
+ 483              	 .loc 1 210 0
+ 484 0000 0021     	 movs r1,#0
+ 485 0002 FFF7FEBF 	 b lmx249x_enable_ramps
+ 486              	.LVL22:
+ 487              	 .cfi_endproc
+ 488              	.LFE473:
+ 490 0006 00BF     	 .section .text.pll_trigger_ramp,"ax",%progbits
+ 491              	 .align 2
+ 492              	 .global pll_trigger_ramp
+ 493              	 .thumb
+ 494              	 .thumb_func
+ 496              	pll_trigger_ramp:
+ 497              	.LFB474:
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_trigger_ramp(void)
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 498              	 .loc 1 216 0
+ 499              	 .cfi_startproc
+ 500              	 
+ 501              	 
+ 502              	 
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Start ramps generation */
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_trigger_ramp();
+ 503              	 .loc 1 218 0
+ 504 0000 FFF7FEBF 	 b lmx249x_trigger_ramp
+ 505              	.LVL23:
+ 506              	 .cfi_endproc
+ 507              	.LFE474:
+ 509              	 .section .text.pll_release_ramp_trigger,"ax",%progbits
+ 510              	 .align 2
+ 511              	 .global pll_release_ramp_trigger
+ 512              	 .thumb
+ 513              	 .thumb_func
+ 515              	pll_release_ramp_trigger:
+ 516              	.LFB475:
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_release_ramp_trigger(void)
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 517              	 .loc 1 224 0
+ 518              	 .cfi_startproc
+ 519              	 
+ 520              	 
+ 521              	 
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* Bring PLL trigger to down state */
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_release_ramp_trigger();
+ 522              	 .loc 1 226 0
+ 523 0000 FFF7FEBF 	 b lmx249x_release_ramp_trigger
+ 524              	.LVL24:
+ 525              	 .cfi_endproc
+ 526              	.LFE475:
+ 528              	 .section .text.pll_power_up,"ax",%progbits
+ 529              	 .align 2
+ 530              	 .global pll_power_up
+ 531              	 .thumb
+ 532              	 .thumb_func
+ 534              	pll_power_up:
+ 535              	.LFB476:
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_power_up(void)
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 536              	 .loc 1 232 0
+ 537              	 .cfi_startproc
+ 538              	 
+ 539              	 
+ 540              	 
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* PLL power-up */
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_power_up();
+ 541              	 .loc 1 234 0
+ 542 0000 FFF7FEBF 	 b lmx249x_power_up
+ 543              	.LVL25:
+ 544              	 .cfi_endproc
+ 545              	.LFE476:
+ 547              	 .section .text.pll_power_down,"ax",%progbits
+ 548              	 .align 2
+ 549              	 .global pll_power_down
+ 550              	 .thumb
+ 551              	 .thumb_func
+ 553              	pll_power_down:
+ 554              	.LFB477:
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_power_down(void)
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 555              	 .loc 1 240 0
+ 556              	 .cfi_startproc
+ 557              	 
+ 558              	 
+ 559              	 
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   /* PLL power-down */
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   lmx249x_power_down();
+ 560              	 .loc 1 242 0
+ 561 0000 FFF7FEBF 	 b lmx249x_power_down
+ 562              	.LVL26:
+ 563              	 .cfi_endproc
+ 564              	.LFE477:
+ 566              	 .section .text.pll_update_configuration,"ax",%progbits
+ 567              	 .align 2
+ 568              	 .global pll_update_configuration
+ 569              	 .thumb
+ 570              	 .thumb_func
+ 572              	pll_update_configuration:
+ 573              	.LFB478:
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_update_configuration(void* pll_handle, uint8_t modulation_type)
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 574              	 .loc 1 248 0
+ 575              	 .cfi_startproc
+ 576              	 
+ 577              	 
+ 578              	.LVL27:
+ 579 0000 30B5     	 push {r4,r5,lr}
+ 580              	.LCFI8:
+ 581              	 .cfi_def_cfa_offset 12
+ 582              	 .cfi_offset 4,-12
+ 583              	 .cfi_offset 5,-8
+ 584              	 .cfi_offset 14,-4
+ 585 0002 0C46     	 mov r4,r1
+ 586 0004 83B0     	 sub sp,sp,#12
+ 587              	.LCFI9:
+ 588              	 .cfi_def_cfa_offset 24
+ 589              	 .loc 1 248 0
+ 590 0006 0546     	 mov r5,r0
+ 591              	.LVL28:
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   Lmx249x_Object_t* lmx249x_pll = (Lmx249x_Object_t*)pll_handle;
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   pll_configure_ramps(lmx249x_pll);
+ 592              	 .loc 1 251 0
+ 593 0008 FFF7FEFF 	 bl pll_configure_ramps
+ 594              	.LVL29:
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   if (modulation_type == 1) /* FMCW modulation */
+ 595              	 .loc 1 253 0
+ 596 000c 012C     	 cmp r4,#1
+ 597 000e 11D0     	 beq .L20
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   {
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****     lmx249x_enable_ramps(lmx249x_pll, true);
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   }
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   else
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   {
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****     lmx249x_set_frequency(lmx249x_pll, s_pll_base_freq_MHz, LMX249x_FRAC_ORD_THIRD, LMX249x_FRAC_DI
+ 598              	 .loc 1 259 0
+ 599 0010 0B4B     	 ldr r3,.L21
+ 600 0012 1868     	 ldr r0,[r3]
+ 601 0014 FFF7FEFF 	 bl __aeabi_f2d
+ 602              	.LVL30:
+ 603 0018 0324     	 movs r4,#3
+ 604 001a 0B46     	 mov r3,r1
+ 605 001c 0021     	 movs r1,#0
+ 606 001e 0246     	 mov r2,r0
+ 607 0020 0094     	 str r4,[sp]
+ 608 0022 2846     	 mov r0,r5
+ 609 0024 0191     	 str r1,[sp,#4]
+ 610 0026 FFF7FEFF 	 bl lmx249x_set_frequency
+ 611              	.LVL31:
+ 612              	.L17:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   }
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_update_pll_config_flag = false;
+ 613              	 .loc 1 262 0
+ 614 002a 064B     	 ldr r3,.L21+4
+ 615 002c 0022     	 movs r2,#0
+ 616 002e 1A70     	 strb r2,[r3]
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 617              	 .loc 1 263 0
+ 618 0030 03B0     	 add sp,sp,#12
+ 619              	.LCFI10:
+ 620              	 .cfi_remember_state
+ 621              	 .cfi_def_cfa_offset 12
+ 622              	 
+ 623 0032 30BD     	 pop {r4,r5,pc}
+ 624              	.LVL32:
+ 625              	.L20:
+ 626              	.LCFI11:
+ 627              	 .cfi_restore_state
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   }
+ 628              	 .loc 1 255 0
+ 629 0034 2846     	 mov r0,r5
+ 630 0036 2146     	 mov r1,r4
+ 631 0038 FFF7FEFF 	 bl lmx249x_enable_ramps
+ 632              	.LVL33:
+ 633 003c F5E7     	 b .L17
+ 634              	.L22:
+ 635 003e 00BF     	 .align 2
+ 636              	.L21:
+ 637 0040 00000000 	 .word .LANCHOR1
+ 638 0044 00000000 	 .word .LANCHOR7
+ 639              	 .cfi_endproc
+ 640              	.LFE478:
+ 642              	 .section .text.pll_set_update_config_flag,"ax",%progbits
+ 643              	 .align 2
+ 644              	 .global pll_set_update_config_flag
+ 645              	 .thumb
+ 646              	 .thumb_func
+ 648              	pll_set_update_config_flag:
+ 649              	.LFB479:
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_set_update_config_flag(uint8_t flag)
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 650              	 .loc 1 268 0
+ 651              	 .cfi_startproc
+ 652              	 
+ 653              	 
+ 654              	 
+ 655              	.LVL34:
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   if (flag == 0)
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   {
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****     s_update_pll_config_flag = false;
+ 656              	 .loc 1 271 0
+ 657 0000 034B     	 ldr r3,.L27
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   if (flag == 0)
+ 658              	 .loc 1 269 0
+ 659 0002 10B1     	 cbz r0,.L26
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   }
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   else
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   {
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****     s_update_pll_config_flag = true;
+ 660              	 .loc 1 275 0
+ 661 0004 0122     	 movs r2,#1
+ 662 0006 1A70     	 strb r2,[r3]
+ 663 0008 7047     	 bx lr
+ 664              	.L26:
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   }
+ 665              	 .loc 1 271 0
+ 666 000a 1870     	 strb r0,[r3]
+ 667 000c 7047     	 bx lr
+ 668              	.L28:
+ 669 000e 00BF     	 .align 2
+ 670              	.L27:
+ 671 0010 00000000 	 .word .LANCHOR7
+ 672              	 .cfi_endproc
+ 673              	.LFE479:
+ 675              	 .section .text.pll_get_update_config_flag,"ax",%progbits
+ 676              	 .align 2
+ 677              	 .global pll_get_update_config_flag
+ 678              	 .thumb
+ 679              	 .thumb_func
+ 681              	pll_get_update_config_flag:
+ 682              	.LFB480:
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   }
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** uint8_t pll_get_update_config_flag(void)
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 683              	 .loc 1 282 0
+ 684              	 .cfi_startproc
+ 685              	 
+ 686              	 
+ 687              	 
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   return (s_update_pll_config_flag);
+ 688              	 .loc 1 283 0
+ 689 0000 014B     	 ldr r3,.L30
+ 690 0002 1878     	 ldrb r0,[r3]
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 691              	 .loc 1 284 0
+ 692 0004 7047     	 bx lr
+ 693              	.L31:
+ 694 0006 00BF     	 .align 2
+ 695              	.L30:
+ 696 0008 00000000 	 .word .LANCHOR7
+ 697              	 .cfi_endproc
+ 698              	.LFE480:
+ 700              	 .global __aeabi_dcmplt
+ 701              	 .global __aeabi_dcmpgt
+ 702              	 .global __aeabi_d2f
+ 703              	 .section .text.pll_set_frequency,"ax",%progbits
+ 704              	 .align 2
+ 705              	 .global pll_set_frequency
+ 706              	 .thumb
+ 707              	 .thumb_func
+ 709              	pll_set_frequency:
+ 710              	.LFB481:
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 287:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 288:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_set_frequency(double freq_MHz)
+ 289:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 711              	 .loc 1 289 0
+ 712              	 .cfi_startproc
+ 713              	 
+ 714              	 
+ 715              	.LVL35:
+ 716 0000 38B5     	 push {r3,r4,r5,lr}
+ 717              	.LCFI12:
+ 718              	 .cfi_def_cfa_offset 16
+ 719              	 .cfi_offset 3,-16
+ 720              	 .cfi_offset 4,-12
+ 721              	 .cfi_offset 5,-8
+ 722              	 .cfi_offset 14,-4
+ 290:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	/* This check ensures, that the RF Frequency is not set out-side of the 24GHz- ISM band,
+ 291:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	 * do not circumvent it would understanding the consequences. Emitting outside ISM band is forbidd
+ 292:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	 */
+ 293:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 294:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	if( freq_MHz < (double) ISM_MIN_RF_FREQUENCY_KHZ / 1000.0 )
+ 723              	 .loc 1 294 0
+ 724 0002 12A3     	 adr r3,.L38+12
+ 725 0004 D3E90023 	 ldrd r2,[r3]
+ 289:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	/* This check ensures, that the RF Frequency is not set out-side of the 24GHz- ISM band,
+ 726              	 .loc 1 289 0
+ 727 0008 0446     	 mov r4,r0
+ 728 000a 0D46     	 mov r5,r1
+ 729              	 .loc 1 294 0
+ 730 000c FFF7FEFF 	 bl __aeabi_dcmplt
+ 731              	.LVL36:
+ 732 0010 90B9     	 cbnz r0,.L34
+ 295:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 		freq_MHz = (double) ISM_MIN_RF_FREQUENCY_KHZ / 1000.0;
+ 296:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 297:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	else if( freq_MHz > (double) ISM_MAX_RF_FREQUENCY_KHZ / 1000.0 )
+ 733              	 .loc 1 297 0
+ 734 0012 2046     	 mov r0,r4
+ 735 0014 2946     	 mov r1,r5
+ 736 0016 0FA3     	 adr r3,.L38+20
+ 737 0018 D3E90023 	 ldrd r2,[r3]
+ 738 001c FFF7FEFF 	 bl __aeabi_dcmpgt
+ 739              	.LVL37:
+ 740 0020 18B1     	 cbz r0,.L37
+ 298:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 		freq_MHz = (double) ISM_MAX_RF_FREQUENCY_KHZ / 1000.0;
+ 299:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 300:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	s_pll_base_freq_MHz = freq_MHz;
+ 741              	 .loc 1 300 0
+ 742 0022 074B     	 ldr r3,.L38
+ 743 0024 0748     	 ldr r0,.L38+4
+ 744              	.LVL38:
+ 745 0026 1860     	 str r0,[r3]
+ 746 0028 38BD     	 pop {r3,r4,r5,pc}
+ 747              	.LVL39:
+ 748              	.L37:
+ 749 002a 2046     	 mov r0,r4
+ 750 002c 2946     	 mov r1,r5
+ 751 002e FFF7FEFF 	 bl __aeabi_d2f
+ 752              	.LVL40:
+ 753 0032 034B     	 ldr r3,.L38
+ 754 0034 1860     	 str r0,[r3]
+ 755 0036 38BD     	 pop {r3,r4,r5,pc}
+ 756              	.LVL41:
+ 757              	.L34:
+ 758 0038 014B     	 ldr r3,.L38
+ 759 003a 0348     	 ldr r0,.L38+8
+ 760              	.LVL42:
+ 761 003c 1860     	 str r0,[r3]
+ 762 003e 38BD     	 pop {r3,r4,r5,pc}
+ 763              	.L39:
+ 764              	 .align 3
+ 765              	.L38:
+ 766 0040 00000000 	 .word .LANCHOR1
+ 767 0044 0042BD46 	 .word 1186808320
+ 768 0048 00B2BB46 	 .word 1186705920
+ 769 004c 00000000 	 .word 0
+ 770 0050 4076D740 	 .word 1087862336
+ 771 0054 00000000 	 .word 0
+ 772 0058 40A8D740 	 .word 1087875136
+ 773              	 .cfi_endproc
+ 774              	.LFE481:
+ 776 005c AFF30080 	 .section .text.pll_set_upper_lower_frequency,"ax",%progbits
+ 777              	 .align 2
+ 778              	 .global pll_set_upper_lower_frequency
+ 779              	 .thumb
+ 780              	 .thumb_func
+ 782              	pll_set_upper_lower_frequency:
+ 783              	.LFB482:
+ 301:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 302:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 303:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 304:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 305:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_set_upper_lower_frequency(double lower_freq_MHz, double upper_freq_MHz)
+ 306:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 784              	 .loc 1 306 0
+ 785              	 .cfi_startproc
+ 786              	 
+ 787              	 
+ 788              	.LVL43:
+ 789 0000 F8B5     	 push {r3,r4,r5,r6,r7,lr}
+ 790              	.LCFI13:
+ 791              	 .cfi_def_cfa_offset 24
+ 792              	 .cfi_offset 3,-24
+ 793              	 .cfi_offset 4,-20
+ 794              	 .cfi_offset 5,-16
+ 795              	 .cfi_offset 6,-12
+ 796              	 .cfi_offset 7,-8
+ 797              	 .cfi_offset 14,-4
+ 798              	 .loc 1 306 0
+ 799 0002 1446     	 mov r4,r2
+ 800 0004 1D46     	 mov r5,r3
+ 307:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	/* This check ensures, that the RF Frequency is not set out-side of the 24GHz- ISM band,
+ 308:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	 * do not circumvent it would understanding the consequences. Emitting outside ISM band is forbidd
+ 309:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	 */
+ 310:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	if( lower_freq_MHz < (double) ISM_MIN_RF_FREQUENCY_KHZ / 1000.0 )
+ 801              	 .loc 1 310 0
+ 802 0006 16A3     	 adr r3,.L47+16
+ 803 0008 D3E90023 	 ldrd r2,[r3]
+ 804              	.LVL44:
+ 306:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	/* This check ensures, that the RF Frequency is not set out-side of the 24GHz- ISM band,
+ 805              	 .loc 1 306 0
+ 806 000c 0646     	 mov r6,r0
+ 807 000e 0F46     	 mov r7,r1
+ 808              	 .loc 1 310 0
+ 809 0010 FFF7FEFF 	 bl __aeabi_dcmplt
+ 810              	.LVL45:
+ 811 0014 90B9     	 cbnz r0,.L43
+ 812 0016 3046     	 mov r0,r6
+ 813 0018 3946     	 mov r1,r7
+ 814 001a FFF7FEFF 	 bl __aeabi_d2f
+ 815              	.LVL46:
+ 816 001e 0646     	 mov r6,r0
+ 817              	.L41:
+ 818              	.LVL47:
+ 311:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 		lower_freq_MHz = (double) ISM_MIN_RF_FREQUENCY_KHZ / 1000.0;
+ 312:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 313:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 	if( upper_freq_MHz > (double) ISM_MAX_RF_FREQUENCY_KHZ / 1000.0 )
+ 819              	 .loc 1 313 0
+ 820 0020 2046     	 mov r0,r4
+ 821 0022 2946     	 mov r1,r5
+ 822 0024 10A3     	 adr r3,.L47+24
+ 823 0026 D3E90023 	 ldrd r2,[r3]
+ 824 002a FFF7FEFF 	 bl __aeabi_dcmpgt
+ 825              	.LVL48:
+ 826 002e 38B1     	 cbz r0,.L46
+ 827 0030 0748     	 ldr r0,.L47
+ 828              	.L42:
+ 829              	.LVL49:
+ 314:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 		upper_freq_MHz = (double) ISM_MAX_RF_FREQUENCY_KHZ / 1000.0;
+ 315:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 316:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_pll_lower_freq_MHz = lower_freq_MHz;
+ 830              	 .loc 1 316 0
+ 831 0032 084A     	 ldr r2,.L47+4
+ 317:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_pll_upper_freq_MHz = upper_freq_MHz;
+ 832              	 .loc 1 317 0
+ 833 0034 084B     	 ldr r3,.L47+8
+ 316:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_pll_upper_freq_MHz = upper_freq_MHz;
+ 834              	 .loc 1 316 0
+ 835 0036 1660     	 str r6,[r2]
+ 836              	 .loc 1 317 0
+ 837 0038 1860     	 str r0,[r3]
+ 838 003a F8BD     	 pop {r3,r4,r5,r6,r7,pc}
+ 839              	.LVL50:
+ 840              	.L43:
+ 841 003c 074E     	 ldr r6,.L47+12
+ 842 003e EFE7     	 b .L41
+ 843              	.LVL51:
+ 844              	.L46:
+ 845 0040 2046     	 mov r0,r4
+ 846 0042 2946     	 mov r1,r5
+ 847 0044 FFF7FEFF 	 bl __aeabi_d2f
+ 848              	.LVL52:
+ 849 0048 F3E7     	 b .L42
+ 850              	.L48:
+ 851 004a 00BFAFF3 	 .align 3
+ 851      0080
+ 852              	.L47:
+ 853 0050 0042BD46 	 .word 1186808320
+ 854 0054 00000000 	 .word .LANCHOR2
+ 855 0058 00000000 	 .word .LANCHOR3
+ 856 005c 00B2BB46 	 .word 1186705920
+ 857 0060 00000000 	 .word 0
+ 858 0064 4076D740 	 .word 1087862336
+ 859 0068 00000000 	 .word 0
+ 860 006c 40A8D740 	 .word 1087875136
+ 861              	 .cfi_endproc
+ 862              	.LFE482:
+ 864              	 .section .text.pll_get_frequency,"ax",%progbits
+ 865              	 .align 2
+ 866              	 .global pll_get_frequency
+ 867              	 .thumb
+ 868              	 .thumb_func
+ 870              	pll_get_frequency:
+ 871              	.LFB483:
+ 318:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 319:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 320:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 321:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 322:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** double pll_get_frequency(void)
+ 323:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 872              	 .loc 1 323 0
+ 873              	 .cfi_startproc
+ 874              	 
+ 875              	 
+ 876 0000 08B5     	 push {r3,lr}
+ 877              	.LCFI14:
+ 878              	 .cfi_def_cfa_offset 8
+ 879              	 .cfi_offset 3,-8
+ 880              	 .cfi_offset 14,-4
+ 324:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   return(s_pll_base_freq_MHz);
+ 881              	 .loc 1 324 0
+ 882 0002 024B     	 ldr r3,.L51
+ 883 0004 1868     	 ldr r0,[r3]
+ 884 0006 FFF7FEFF 	 bl __aeabi_f2d
+ 885              	.LVL53:
+ 325:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 886              	 .loc 1 325 0
+ 887 000a 08BD     	 pop {r3,pc}
+ 888              	.L52:
+ 889              	 .align 2
+ 890              	.L51:
+ 891 000c 00000000 	 .word .LANCHOR1
+ 892              	 .cfi_endproc
+ 893              	.LFE483:
+ 895              	 .section .text.pll_set_num_chirps_per_frame,"ax",%progbits
+ 896              	 .align 2
+ 897              	 .global pll_set_num_chirps_per_frame
+ 898              	 .thumb
+ 899              	 .thumb_func
+ 901              	pll_set_num_chirps_per_frame:
+ 902              	.LFB484:
+ 326:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 327:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 328:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 329:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_set_num_chirps_per_frame(uint32_t num_chirps_per_frame)
+ 330:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 903              	 .loc 1 330 0
+ 904              	 .cfi_startproc
+ 905              	 
+ 906              	 
+ 907              	 
+ 908              	.LVL54:
+ 331:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_pll_num_of_chirps = num_chirps_per_frame;
+ 909              	 .loc 1 331 0
+ 910 0000 014B     	 ldr r3,.L54
+ 911 0002 1860     	 str r0,[r3]
+ 912 0004 7047     	 bx lr
+ 913              	.L55:
+ 914 0006 00BF     	 .align 2
+ 915              	.L54:
+ 916 0008 00000000 	 .word .LANCHOR4
+ 917              	 .cfi_endproc
+ 918              	.LFE484:
+ 920              	 .section .text.pll_set_bandwidth,"ax",%progbits
+ 921              	 .align 2
+ 922              	 .global pll_set_bandwidth
+ 923              	 .thumb
+ 924              	 .thumb_func
+ 926              	pll_set_bandwidth:
+ 927              	.LFB485:
+ 332:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 333:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 334:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 335:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 336:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_set_bandwidth(float bandwidth_MHz)
+ 337:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 928              	 .loc 1 337 0
+ 929              	 .cfi_startproc
+ 930              	 
+ 931              	 
+ 932              	 
+ 933              	.LVL55:
+ 338:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_pll_bandwidth_MHz = bandwidth_MHz;
+ 934              	 .loc 1 338 0
+ 935 0000 014B     	 ldr r3,.L57
+ 936 0002 1860     	 str r0,[r3]
+ 937 0004 7047     	 bx lr
+ 938              	.L58:
+ 939 0006 00BF     	 .align 2
+ 940              	.L57:
+ 941 0008 00000000 	 .word .LANCHOR5
+ 942              	 .cfi_endproc
+ 943              	.LFE485:
+ 945              	 .section .text.pll_set_chirp_time,"ax",%progbits
+ 946              	 .align 2
+ 947              	 .global pll_set_chirp_time
+ 948              	 .thumb
+ 949              	 .thumb_func
+ 951              	pll_set_chirp_time:
+ 952              	.LFB486:
+ 339:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** }
+ 340:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 341:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** //============================================================================
+ 342:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** 
+ 343:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** void pll_set_chirp_time(uint32_t chirp_time_usec)
+ 344:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c **** {
+ 953              	 .loc 1 344 0
+ 954              	 .cfi_startproc
+ 955              	 
+ 956              	 
+ 957              	 
+ 958              	.LVL56:
+ 345:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_pll.c ****   s_pll_chirp_time_usec = chirp_time_usec;
+ 959              	 .loc 1 345 0
+ 960 0000 014B     	 ldr r3,.L60
+ 961 0002 1860     	 str r0,[r3]
+ 962 0004 7047     	 bx lr
+ 963              	.L61:
+ 964 0006 00BF     	 .align 2
+ 965              	.L60:
+ 966 0008 00000000 	 .word .LANCHOR6
+ 967              	 .cfi_endproc
+ 968              	.LFE486:
+ 970              	 .section .bss.s_update_pll_config_flag,"aw",%nobits
+ 971              	 .set .LANCHOR7,.+0
+ 974              	s_update_pll_config_flag:
+ 975 0000 00       	 .space 1
+ 976              	 .section .bss.s_pll_upper_freq_MHz,"aw",%nobits
+ 977              	 .align 2
+ 978              	 .set .LANCHOR3,.+0
+ 981              	s_pll_upper_freq_MHz:
+ 982 0000 00000000 	 .space 4
+ 983              	 .section .bss.s_pll_lower_freq_MHz,"aw",%nobits
+ 984              	 .align 2
+ 985              	 .set .LANCHOR2,.+0
+ 988              	s_pll_lower_freq_MHz:
+ 989 0000 00000000 	 .space 4
+ 990              	 .section .data.s_pll_chirp_time_usec,"aw",%progbits
+ 991              	 .align 2
+ 992              	 .set .LANCHOR6,.+0
+ 995              	s_pll_chirp_time_usec:
+ 996 0000 2C010000 	 .word 300
+ 997              	 .section .bss.s_pll_num_of_chirps,"aw",%nobits
+ 998              	 .align 2
+ 999              	 .set .LANCHOR4,.+0
+ 1002              	s_pll_num_of_chirps:
+ 1003 0000 00000000 	 .space 4
+ 1004              	 .section .bss.lmx249x_spi_pins,"aw",%nobits
+ 1005              	 .align 2
+ 1006              	 .set .LANCHOR0,.+0
+ 1009              	lmx249x_spi_pins:
+ 1010 0000 00000000 	 .space 16
+ 1010      00000000 
+ 1010      00000000 
+ 1010      00000000 
+ 1011              	 .section .data.s_pll_bandwidth_MHz,"aw",%progbits
+ 1012              	 .align 2
+ 1013              	 .set .LANCHOR5,.+0
+ 1016              	s_pll_bandwidth_MHz:
+ 1017 0000 00004843 	 .word 1128792064
+ 1018              	 .section .bss.s_pll_base_freq_MHz,"aw",%nobits
+ 1019              	 .align 2
+ 1020              	 .set .LANCHOR1,.+0
+ 1023              	s_pll_base_freq_MHz:
+ 1024 0000 00000000 	 .space 4
+ 1025              	 .text
+ 1026              	.Letext0:
+ 1027              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1028              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1029              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 1030              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_gpio.h"
+ 1031              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 1032              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 1033              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io.h"
+ 1034              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 1035              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 1036              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 1037              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/inc/bsp_common.h"
+ 1038              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Components/lmx249x/inc/lmx249x.h"
+ 1039              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 1040              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 1041              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 1042              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io_extern.h"
+ 1043              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 position2go_pll.c
+    {standard input}:20     .text.pll_init:00000000 $t
+    {standard input}:25     .text.pll_init:00000000 pll_init
+    {standard input}:166    .text.pll_init:000000c8 $d
+    {standard input}:179    .text.pll_configure_ramps:00000000 $t
+    {standard input}:184    .text.pll_configure_ramps:00000000 pll_configure_ramps
+    {standard input}:437    .text.pll_configure_ramps:00000190 $d
+    {standard input}:449    .text.pll_enable_ramps:00000000 $t
+    {standard input}:454    .text.pll_enable_ramps:00000000 pll_enable_ramps
+    {standard input}:470    .text.pll_disable_ramps:00000000 $t
+    {standard input}:475    .text.pll_disable_ramps:00000000 pll_disable_ramps
+    {standard input}:491    .text.pll_trigger_ramp:00000000 $t
+    {standard input}:496    .text.pll_trigger_ramp:00000000 pll_trigger_ramp
+    {standard input}:510    .text.pll_release_ramp_trigger:00000000 $t
+    {standard input}:515    .text.pll_release_ramp_trigger:00000000 pll_release_ramp_trigger
+    {standard input}:529    .text.pll_power_up:00000000 $t
+    {standard input}:534    .text.pll_power_up:00000000 pll_power_up
+    {standard input}:548    .text.pll_power_down:00000000 $t
+    {standard input}:553    .text.pll_power_down:00000000 pll_power_down
+    {standard input}:567    .text.pll_update_configuration:00000000 $t
+    {standard input}:572    .text.pll_update_configuration:00000000 pll_update_configuration
+    {standard input}:637    .text.pll_update_configuration:00000040 $d
+    {standard input}:643    .text.pll_set_update_config_flag:00000000 $t
+    {standard input}:648    .text.pll_set_update_config_flag:00000000 pll_set_update_config_flag
+    {standard input}:671    .text.pll_set_update_config_flag:00000010 $d
+    {standard input}:676    .text.pll_get_update_config_flag:00000000 $t
+    {standard input}:681    .text.pll_get_update_config_flag:00000000 pll_get_update_config_flag
+    {standard input}:696    .text.pll_get_update_config_flag:00000008 $d
+    {standard input}:704    .text.pll_set_frequency:00000000 $t
+    {standard input}:709    .text.pll_set_frequency:00000000 pll_set_frequency
+    {standard input}:766    .text.pll_set_frequency:00000040 $d
+    {standard input}:777    .text.pll_set_upper_lower_frequency:00000000 $t
+    {standard input}:782    .text.pll_set_upper_lower_frequency:00000000 pll_set_upper_lower_frequency
+    {standard input}:853    .text.pll_set_upper_lower_frequency:00000050 $d
+    {standard input}:865    .text.pll_get_frequency:00000000 $t
+    {standard input}:870    .text.pll_get_frequency:00000000 pll_get_frequency
+    {standard input}:891    .text.pll_get_frequency:0000000c $d
+    {standard input}:896    .text.pll_set_num_chirps_per_frame:00000000 $t
+    {standard input}:901    .text.pll_set_num_chirps_per_frame:00000000 pll_set_num_chirps_per_frame
+    {standard input}:916    .text.pll_set_num_chirps_per_frame:00000008 $d
+    {standard input}:921    .text.pll_set_bandwidth:00000000 $t
+    {standard input}:926    .text.pll_set_bandwidth:00000000 pll_set_bandwidth
+    {standard input}:941    .text.pll_set_bandwidth:00000008 $d
+    {standard input}:946    .text.pll_set_chirp_time:00000000 $t
+    {standard input}:951    .text.pll_set_chirp_time:00000000 pll_set_chirp_time
+    {standard input}:966    .text.pll_set_chirp_time:00000008 $d
+    {standard input}:974    .bss.s_update_pll_config_flag:00000000 s_update_pll_config_flag
+    {standard input}:975    .bss.s_update_pll_config_flag:00000000 $d
+    {standard input}:977    .bss.s_pll_upper_freq_MHz:00000000 $d
+    {standard input}:981    .bss.s_pll_upper_freq_MHz:00000000 s_pll_upper_freq_MHz
+    {standard input}:984    .bss.s_pll_lower_freq_MHz:00000000 $d
+    {standard input}:988    .bss.s_pll_lower_freq_MHz:00000000 s_pll_lower_freq_MHz
+    {standard input}:991    .data.s_pll_chirp_time_usec:00000000 $d
+    {standard input}:995    .data.s_pll_chirp_time_usec:00000000 s_pll_chirp_time_usec
+    {standard input}:998    .bss.s_pll_num_of_chirps:00000000 $d
+    {standard input}:1002   .bss.s_pll_num_of_chirps:00000000 s_pll_num_of_chirps
+    {standard input}:1005   .bss.lmx249x_spi_pins:00000000 $d
+    {standard input}:1009   .bss.lmx249x_spi_pins:00000000 lmx249x_spi_pins
+    {standard input}:1012   .data.s_pll_bandwidth_MHz:00000000 $d
+    {standard input}:1016   .data.s_pll_bandwidth_MHz:00000000 s_pll_bandwidth_MHz
+    {standard input}:1019   .bss.s_pll_base_freq_MHz:00000000 $d
+    {standard input}:1023   .bss.s_pll_base_freq_MHz:00000000 s_pll_base_freq_MHz
+                     .debug_frame:00000010 $d
+    {standard input}:178    .text.pll_init:000000e4 $t
+    {standard input}:776    .text.pll_set_frequency:0000005c $t
+
+UNDEFINED SYMBOLS
+lmx249x_init
+lmx249x_set_power_state
+DIGITAL_IO_SPI_M_CS_PLL
+spi_transmit_data
+DIGITAL_IO_SPI_M_DATA
+DIGITAL_IO_SPI_M_CLK
+__aeabi_f2d
+__aeabi_ui2d
+lmx249x_get_real_frequency_shift
+lmx249x_configure_ramps
+lmx249x_enable_ramps
+lmx249x_trigger_ramp
+lmx249x_release_ramp_trigger
+lmx249x_power_up
+lmx249x_power_down
+lmx249x_set_frequency
+__aeabi_dcmplt
+__aeabi_dcmpgt
+__aeabi_d2f

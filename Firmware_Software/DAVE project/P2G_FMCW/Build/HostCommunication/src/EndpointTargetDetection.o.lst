@@ -1,0 +1,2064 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu vfp
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "EndpointTargetDetection.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.ep_target_detection_handle_message,"ax",%progbits
+  20              	 .align 2
+  21              	 .global ep_target_detection_handle_message
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	ep_target_detection_handle_message:
+  26              	.LFB489:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src/EndpointTargetDetection.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * \file EndpointTargetDetection.c
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  *
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * \brief ...
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  *
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * ...
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  *
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  */
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /* ===========================================================================
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  ** Copyright (C) 2016-2018 Infineon Technologies AG
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  ** All rights reserved.
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  ** ===========================================================================
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  **
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  ** ===========================================================================
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  ** This document contains proprietary information of Infineon Technologies AG.
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  ** Passing on and copying of this document, and communication of its contents
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  ** is not permitted without Infineon's prior written authorization.
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  ** ===========================================================================
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  */
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /*
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****    1. INCLUDE FILES
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  */
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** #include "EndpointTargetDetection.h"
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** #include "EndpointRadarChangeCodes.h"
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** #include "PayloadHelper.h"
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /*
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****    2. LOCAL DEFINITIONS
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  */
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /**
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * \internal
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * \defgroup EndpointTargetDetectionCodes
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  *
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * \brief These are the command codes to identify the payload type.
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  *
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * Each payload message of the supported endpoint starts with one of these
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * commend codes.
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  *
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  * @{
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  */
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** #define  MSG_GET_DSP_SETTINGS		    0x00 	/**< A message to retrieve DSP settings */
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** #define  MSG_SET_DSP_SETTINGS           0x01 	/**< A message to set DSP settings */
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** #define  MSG_GET_TARGETS                0x02	/**< A message to get targets information */
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** #define  MSG_GET_RANGE_THRESHOLD		0x03    /**< A message to get range detection threshold */
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /** @} */
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** Target_Info_t  target_list[MAX_NUM_OF_TARGETS];		/**< Defined global structured array to avoid stac
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /*
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****    5. LOCAL FUNCTION PROTOTYPES
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  */
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** static uint16_t send_dsp_settings (uint8_t endpoint, Radar_Handle_t radar_driver);
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** static uint16_t send_targets_info (uint8_t endpoint, Radar_Handle_t radar_driver);
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** static uint16_t send_range_threshold (uint8_t endpoint, Radar_Handle_t radar_driver);
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /*
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****   6. LOCAL FUNCTIONS
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  */
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** static uint16_t send_dsp_settings (uint8_t endpoint, Radar_Handle_t radar_driver)
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** {
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	uint16_t error_code = 0;
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	DSP_Settings_t  dsp_settings;
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	error_code = radar_get_dsp_settings(radar_driver, &dsp_settings);
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	if (error_code == RADAR_ERR_OK)
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		uint8_t message[27];
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		/* compile message */
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message,  0, MSG_GET_DSP_SETTINGS);
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message,  1, dsp_settings.range_mvg_avg_length);
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message,  2, dsp_settings.min_range_cm);
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message,  4, dsp_settings.max_range_cm);
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message,  6, dsp_settings.min_speed_kmh);
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message,  8, dsp_settings.max_speed_kmh);
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 10, dsp_settings.min_angle_degree);
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 12, dsp_settings.max_angle_degree);
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 14, dsp_settings.range_threshold);
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 16, dsp_settings.speed_threshold);
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 18, 0); // see MMWSW-603
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message, 20, dsp_settings.enable_tracking);
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message, 21, dsp_settings.num_of_tracks);
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message, 22, dsp_settings.median_filter_length);
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message, 23, dsp_settings.enable_mti_filter);
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 24, dsp_settings.mti_filter_length);
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message, 26, 0); // see MMWSW-603
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		/* send message */
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_header(endpoint, sizeof(message));
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload(message, sizeof(message));
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_tail();
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	return error_code;
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** }
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** //==============================================================================
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** static uint16_t send_targets_info (uint8_t endpoint, Radar_Handle_t radar_driver)
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** {
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	uint16_t i;
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	uint16_t error_code = 0;
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	uint8_t num_of_targets = 0;
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	uint8_t message = MSG_GET_TARGETS;
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	for (i = 0; i < MAX_NUM_OF_TARGETS; i++)		// initialize target list
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].target_id = 0;
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	error_code = radar_get_target_info(radar_driver, target_list, &num_of_targets);
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	if (error_code == RADAR_ERR_OK)
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		/* send message */
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_header(endpoint, num_of_targets * sizeof(Target_Info_t) + 1 + 1);
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload (&message, 1);
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload ((const uint8_t*) &num_of_targets, 1);
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		for (i = 0; i < num_of_targets; i++)
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			protocol_send_payload ((uint8_t*) &target_list[i], sizeof(Target_Info_t));
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_tail();
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	return error_code;
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** }
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** //==============================================================================
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** static uint16_t send_range_threshold (uint8_t endpoint, Radar_Handle_t radar_driver)
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** {
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	uint16_t error_code = 0;
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	uint16_t threshold = 0;
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	error_code = radar_get_range_detection_threshold(radar_driver, &threshold);
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	if (error_code == RADAR_ERR_OK)
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		uint8_t message[3];
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		/* compile message */
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message, 0, MSG_GET_RANGE_THRESHOLD);
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 1, threshold);
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		/* send message */
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_header(endpoint, sizeof(message));
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload(message, sizeof(message));
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_tail();
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	return error_code;
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** }
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** /*
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****    7. EXPORTED FUNCTIONS
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** ==============================================================================
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c ****  */
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** uint16_t ep_target_detection_handle_message (uint8_t endpoint, uint8_t* message_data, uint16_t num_
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** {
+  28              	 .loc 1 203 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 2DE9F04F 	 push {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 36
+  36              	 .cfi_offset 4,-36
+  37              	 .cfi_offset 5,-32
+  38              	 .cfi_offset 6,-28
+  39              	 .cfi_offset 7,-24
+  40              	 .cfi_offset 8,-20
+  41              	 .cfi_offset 9,-16
+  42              	 .cfi_offset 10,-12
+  43              	 .cfi_offset 11,-8
+  44              	 .cfi_offset 14,-4
+  45 0004 0646     	 mov r6,r0
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	Radar_Handle_t radar_driver = (Radar_Handle_t) context;
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	switch (message_data[0])
+  46              	 .loc 1 206 0
+  47 0006 0878     	 ldrb r0,[r1]
+  48              	.LVL1:
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	Radar_Handle_t radar_driver = (Radar_Handle_t) context;
+  49              	 .loc 1 203 0
+  50 0008 93B0     	 sub sp,sp,#76
+  51              	.LCFI1:
+  52              	 .cfi_def_cfa_offset 112
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	Radar_Handle_t radar_driver = (Radar_Handle_t) context;
+  53              	 .loc 1 203 0
+  54 000a 1546     	 mov r5,r2
+  55              	.LVL2:
+  56              	 .loc 1 206 0
+  57 000c 0328     	 cmp r0,#3
+  58 000e 06D8     	 bhi .L18
+  59 0010 DFE800F0 	 tbb [pc,r0]
+  60              	.LVL3:
+  61              	.L4:
+  62 0014 B0       	 .byte (.L3-.L4)/2
+  63 0015 50       	 .byte (.L5-.L4)/2
+  64 0016 0A       	 .byte (.L6-.L4)/2
+  65 0017 02       	 .byte (.L7-.L4)/2
+  66              	 .p2align 1
+  67              	.L7:
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	case MSG_GET_DSP_SETTINGS:
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		if (num_bytes == 1)
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			return send_dsp_settings(endpoint, radar_driver);
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		break;
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	case MSG_SET_DSP_SETTINGS:
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		if (num_bytes >= 18)
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			DSP_Settings_t dsp_settings;
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			/* extract parameters from message */
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.range_mvg_avg_length = rd_payload_u8(message_data, 1);
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.min_range_cm     = rd_payload_u16(message_data, 2);
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.max_range_cm     = rd_payload_u16(message_data, 4);
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.min_speed_kmh    = rd_payload_u16(message_data, 6);
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.max_speed_kmh    = rd_payload_u16(message_data, 8);
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.min_angle_degree = rd_payload_u16(message_data, 10);
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.max_angle_degree = rd_payload_u16(message_data, 12);
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.range_threshold  = rd_payload_u16(message_data, 14);
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.speed_threshold  = rd_payload_u16(message_data, 16);
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			// skip uint16 entry for index 18
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.enable_tracking  = rd_payload_u8 (message_data, 20);
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.num_of_tracks    = rd_payload_u8 (message_data, 21);
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.median_filter_length = rd_payload_u8 (message_data, 22);
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.enable_mti_filter    = rd_payload_u8 (message_data, 23);
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.mti_filter_length = rd_payload_u16(message_data, 24);
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			// skip uint8 entry for index 26
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			/* apply DSP Settings */
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			return radar_set_dsp_settings(radar_driver, &dsp_settings);
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		break;
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	case MSG_GET_TARGETS:
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		if (num_bytes == 1)
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			return send_targets_info (endpoint, radar_driver);
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		break;
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	case MSG_GET_RANGE_THRESHOLD:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		if (num_bytes == 1)
+  68              	 .loc 1 261 0
+  69 0018 012D     	 cmp r5,#1
+  70 001a 00F02281 	 beq .L23
+  71              	.L18:
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			return send_range_threshold (endpoint, radar_driver);
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		break;
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	default:
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		break;
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	return PROTOCOL_STATUS_INVALID_PAYLOAD;
+  72              	 .loc 1 272 0
+  73 001e 4FF6FF70 	 movw r0,#65535
+  74              	.LVL4:
+  75              	.L2:
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** }
+  76              	 .loc 1 274 0 discriminator 1
+  77 0022 13B0     	 add sp,sp,#76
+  78              	.LCFI2:
+  79              	 .cfi_remember_state
+  80              	 .cfi_def_cfa_offset 36
+  81              	 
+  82 0024 BDE8F08F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,pc}
+  83              	.LVL5:
+  84              	.L6:
+  85              	.LCFI3:
+  86              	 .cfi_restore_state
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+  87              	 .loc 1 252 0
+  88 0028 012D     	 cmp r5,#1
+  89 002a F8D1     	 bne .L18
+  90              	.LVL6:
+  91              	.LBB146:
+  92              	.LBB147:
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+  93              	 .loc 1 137 0
+  94 002c AD4F     	 ldr r7,.L25
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+  95              	 .loc 1 138 0
+  96 002e 0024     	 movs r4,#0
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  97              	 .loc 1 147 0
+  98 0030 1846     	 mov r0,r3
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+  99              	 .loc 1 133 0
+ 100 0032 4FF0020E 	 mov lr,#2
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 101              	 .loc 1 131 0
+ 102 0036 0023     	 movs r3,#0
+ 103              	.LVL7:
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+ 104              	 .loc 1 137 0
+ 105 0038 3B60     	 str r3,[r7]
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 106              	 .loc 1 131 0
+ 107 003a 8DF81430 	 strb r3,[sp,#20]
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+ 108              	 .loc 1 137 0
+ 109 003e 3B62     	 str r3,[r7,#32]
+ 110 0040 3B64     	 str r3,[r7,#64]
+ 111 0042 3B66     	 str r3,[r7,#96]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 112              	 .loc 1 138 0
+ 113 0044 7C60     	 str r4,[r7,#4]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 114              	 .loc 1 139 0
+ 115 0046 BC60     	 str r4,[r7,#8]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 116              	 .loc 1 140 0
+ 117 0048 FC60     	 str r4,[r7,#12]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 118              	 .loc 1 141 0
+ 119 004a 3C61     	 str r4,[r7,#16]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 120              	 .loc 1 142 0
+ 121 004c 7C61     	 str r4,[r7,#20]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 122              	 .loc 1 143 0
+ 123 004e BC61     	 str r4,[r7,#24]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 124              	 .loc 1 144 0
+ 125 0050 FC61     	 str r4,[r7,#28]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 126              	 .loc 1 138 0
+ 127 0052 7C62     	 str r4,[r7,#36]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 128              	 .loc 1 139 0
+ 129 0054 BC62     	 str r4,[r7,#40]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 130              	 .loc 1 140 0
+ 131 0056 FC62     	 str r4,[r7,#44]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 132              	 .loc 1 141 0
+ 133 0058 3C63     	 str r4,[r7,#48]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 134              	 .loc 1 142 0
+ 135 005a 7C63     	 str r4,[r7,#52]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 136              	 .loc 1 143 0
+ 137 005c BC63     	 str r4,[r7,#56]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 138              	 .loc 1 144 0
+ 139 005e FC63     	 str r4,[r7,#60]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 140              	 .loc 1 138 0
+ 141 0060 7C64     	 str r4,[r7,#68]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 142              	 .loc 1 139 0
+ 143 0062 BC64     	 str r4,[r7,#72]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 144              	 .loc 1 140 0
+ 145 0064 FC64     	 str r4,[r7,#76]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 146              	 .loc 1 141 0
+ 147 0066 3C65     	 str r4,[r7,#80]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 148              	 .loc 1 142 0
+ 149 0068 7C65     	 str r4,[r7,#84]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 150              	 .loc 1 143 0
+ 151 006a BC65     	 str r4,[r7,#88]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 152              	 .loc 1 144 0
+ 153 006c FC65     	 str r4,[r7,#92]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 154              	 .loc 1 138 0
+ 155 006e 7C66     	 str r4,[r7,#100]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 156              	 .loc 1 139 0
+ 157 0070 BC66     	 str r4,[r7,#104]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 158              	 .loc 1 140 0
+ 159 0072 FC66     	 str r4,[r7,#108]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 160              	 .loc 1 141 0
+ 161 0074 3C67     	 str r4,[r7,#112]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 162              	 .loc 1 142 0
+ 163 0076 7C67     	 str r4,[r7,#116]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 164              	 .loc 1 143 0
+ 165 0078 BC67     	 str r4,[r7,#120]
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 166              	 .loc 1 133 0
+ 167 007a 8DF82CE0 	 strb lr,[sp,#44]
+ 168              	.LVL8:
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 169              	 .loc 1 147 0
+ 170 007e 3946     	 mov r1,r7
+ 171              	.LVL9:
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 172              	 .loc 1 144 0
+ 173 0080 FC67     	 str r4,[r7,#124]
+ 174              	.LVL10:
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 175              	 .loc 1 147 0
+ 176 0082 05AA     	 add r2,sp,#20
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 177              	 .loc 1 138 0
+ 178 0084 C7F88440 	 str r4,[r7,#132]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 179              	 .loc 1 139 0
+ 180 0088 C7F88840 	 str r4,[r7,#136]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 181              	 .loc 1 140 0
+ 182 008c C7F88C40 	 str r4,[r7,#140]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 183              	 .loc 1 141 0
+ 184 0090 C7F89040 	 str r4,[r7,#144]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 185              	 .loc 1 142 0
+ 186 0094 C7F89440 	 str r4,[r7,#148]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 187              	 .loc 1 143 0
+ 188 0098 C7F89840 	 str r4,[r7,#152]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 189              	 .loc 1 144 0
+ 190 009c C7F89C40 	 str r4,[r7,#156]
+ 191              	.LVL11:
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+ 192              	 .loc 1 137 0
+ 193 00a0 C7F88030 	 str r3,[r7,#128]
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 194              	 .loc 1 147 0
+ 195 00a4 FFF7FEFF 	 bl radar_get_target_info
+ 196              	.LVL12:
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 197              	 .loc 1 149 0
+ 198 00a8 0446     	 mov r4,r0
+ 199 00aa 0028     	 cmp r0,#0
+ 200 00ac 00F0FA80 	 beq .L24
+ 201              	.LVL13:
+ 202              	.L12:
+ 203              	.LBE147:
+ 204              	.LBE146:
+ 205              	.LBB149:
+ 206              	.LBB150:
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 207              	 .loc 1 177 0
+ 208 00b0 2046     	 mov r0,r4
+ 209              	.LBE150:
+ 210              	.LBE149:
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 211              	 .loc 1 263 0
+ 212 00b2 B6E7     	 b .L2
+ 213              	.LVL14:
+ 214              	.L5:
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 215              	 .loc 1 219 0
+ 216 00b4 112D     	 cmp r5,#17
+ 217 00b6 B2D9     	 bls .L18
+ 218              	.LVL15:
+ 219              	.LBB163:
+ 220              	.LBB164:
+ 221              	.LBB165:
+ 222              	 .file 2 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src/PayloadHelper.h"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ﻿/**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \file PayloadHelper.h
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief This file defines an internal protocol API to be used by endpoint
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        implementations.
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * This file defines some light weight function that help to access data in
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * protocol payload. Different implementation allow to adapt to the
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * capabilities of the target machine. Special implementations can be chosen
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * by defining the according compile time switch. If none of the available
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * compile time switches is chosen, the default implementation will be used.
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The default implementation is safe on all target machines and can handle
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * both, big endian CPUs and little endian CPUs. It may be slower than other
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * special implementations.
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * If the compile time switch COMLIB_ALLOW_PAYLOAD_CASTS is set, a special
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * implementation for little endian machines is used, that can access data
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * faster by casting data to the right data type. This implementation works
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * only for CPUs that have no alignment requirement for 16 bit and 32 bit
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * integers.
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /* ===========================================================================
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** Copyright (C) 2016-2018 Infineon Technologies AG
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** All rights reserved.
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** ===========================================================================
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** **
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** ===========================================================================
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** This document contains proprietary information of Infineon Technologies AG.
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** Passing on and copying of this document, and communication of its contents
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** is not permitted without Infineon's prior written authorisation.
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** ===========================================================================
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** */
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** #ifndef HOSTCOMMUNICATION_PAYLOAD_HELPER_H_
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** #define HOSTCOMMUNICATION_PAYLOAD_HELPER_H_
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /*
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****    1. INCLUDE FILES
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** */
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** #include <stdint.h>
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /*
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****    2. FUNCTION PROTOTYPES AND INLINE FUNCTIONS
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** */
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts a signed 8 bit integer from a payload buffer.
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads one byte from the given payload buffer at the requested
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * position and interprets it as a signed 8 bit integer value, which will be
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * returned.
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int8_t rd_payload_i8(const uint8_t* payload, uint16_t offset)
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return (int8_t)payload[offset];
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts an unsigned 8 bit integer from a payload
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads one byte from the given payload buffer at the requested
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * position and interprets it as an unsigned 8 bit integer value, which will
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * be returned.
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint8_t rd_payload_u8(const uint8_t* payload, uint16_t offset)
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return payload[offset];
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts a signed 16 bit integer from a payload buffer.
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads two bytes from the given payload buffer starting at the
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as a signed 16 bit integer value,
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int16_t rd_payload_i16(const uint8_t* payload, uint16_t offset);
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts an unsigned 16 bit integer from a payload
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads two bytes from the given payload buffer starting at the
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as an unsigned 16 bit integer value,
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint16_t rd_payload_u16(const uint8_t* payload,
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                       uint16_t offset);
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts a signed 32 bit integer from a payload buffer.
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as a signed 32 bit integer value,
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int32_t rd_payload_i32(const uint8_t* payload, uint16_t offset);
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts an unsigned 32 bit integer from a payload
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as an unsigned 32 bit integer value,
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint32_t rd_payload_u32(const uint8_t* payload,
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                       uint16_t offset);
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts a signed 64 bit integer from a payload buffer.
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as a signed 64 bit integer value,
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int64_t rd_payload_i64(const uint8_t* payload, uint16_t offset);
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts an unsigned 64 bit integer from a payload
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as an unsigned 64 bit integer value,
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint64_t rd_payload_u64(const uint8_t* payload,
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                       uint16_t offset);
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes a signed 8 bit integer value to a payload
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position.
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i8(uint8_t* payload, uint16_t offset,
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                  int8_t value)
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset] = (uint8_t)value;
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes an unsigned 8 bit integer value to a payload
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position.
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u8(uint8_t* payload, uint16_t offset,
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                  uint8_t value)
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset] = value;
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes a signed 16 bit integer value to a payload
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i16(uint8_t* payload, uint16_t offset,
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   int16_t value);
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes an unsigned 16 bit integer value to a payload
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u16(uint8_t* payload, uint16_t offset,
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   uint16_t value);
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes a signed 32 bit integer value to a payload
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i32(uint8_t* payload, uint16_t offset,
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   int32_t value);
+ 287:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 288:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 289:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 290:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes an unsigned 32 bit integer value to a payload
+ 291:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 292:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 293:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 294:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 295:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 296:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 297:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 298:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 299:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 300:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 301:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 302:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u32(uint8_t* payload, uint16_t offset,
+ 303:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   uint32_t value);
+ 304:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 305:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 306:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 307:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes a signed 64 bit integer value to a payload
+ 308:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 309:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 310:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 311:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 312:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 313:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 314:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 315:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 316:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 317:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 318:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 319:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i64(uint8_t* payload, uint16_t offset,
+ 320:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   int64_t value);
+ 321:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 322:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 323:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 324:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes an unsigned 64 bit integer value to a payload
+ 325:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 326:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 327:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 328:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 329:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 330:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 331:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 332:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 333:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 334:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 335:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 336:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u64(uint8_t* payload, uint16_t offset,
+ 337:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   uint64_t value);
+ 338:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /*
+ 339:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+ 340:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****    3. INLINE FUNCTIONS
+ 341:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+ 342:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** */
+ 343:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** #ifdef COMLIB_ALLOW_PAYLOAD_CASTS
+ 344:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /*
+ 345:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The following function implementations wan only be used on machines with
+ 346:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * little endian CPUs, but are faster than the generic implementations.
+ 347:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 348:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 349:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int16_t rd_payload_i16(const uint8_t* payload, uint16_t offset)
+ 350:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 351:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return *(int16_t*)(payload + offset);
+ 352:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 353:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 354:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint16_t rd_payload_u16(const uint8_t* payload, uint16_t offset)
+ 355:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 356:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return *(uint16_t*)(payload + offset);
+ 357:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 358:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 359:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int32_t rd_payload_i32(const uint8_t* payload, uint16_t offset)
+ 360:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 361:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return *(int32_t*)(payload + offset);
+ 362:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 363:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 364:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint32_t rd_payload_u32(const uint8_t* payload, uint16_t offset)
+ 365:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 366:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return *(uint32_t*)(payload + offset);
+ 367:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 368:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 369:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int64_t rd_payload_i64(const uint8_t* payload, uint16_t offset)
+ 370:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 371:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     union
+ 372:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     {
+ 373:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****         uint32_t u32[2];
+ 374:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****         int64_t i64;
+ 375:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     } value;
+ 376:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     value.u32[0] = *(uint32_t*)(payload + offset);
+ 377:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     value.u32[1] = *(uint32_t*)(payload + offset + 4);
+ 378:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 379:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return value.i64;
+ 380:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 381:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 382:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint64_t rd_payload_u64(const uint8_t* payload, uint16_t offset)
+ 383:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 384:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     union
+ 385:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     {
+ 386:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****         uint32_t u32[2];
+ 387:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****         uint64_t u64;
+ 388:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     } value;
+ 389:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     value.u32[0] = *(uint32_t*)(payload + offset);
+ 390:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     value.u32[1] = *(uint32_t*)(payload + offset + 4);
+ 391:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 392:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return value.u64;
+ 393:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 394:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 395:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i16(uint8_t* payload, uint16_t offset,
+ 396:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   int16_t iValue)
+ 397:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 398:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     *(int16_t*)(payload + offset) = iValue;
+ 399:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 400:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 401:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u16(uint8_t* payload, uint16_t offset,
+ 402:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   uint16_t value)
+ 403:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 404:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     *(uint16_t*)(payload + offset) = value;
+ 405:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 406:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 407:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i32(uint8_t* payload, uint16_t offset,
+ 408:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   int32_t value)
+ 409:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 410:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     *(int32_t*)(payload + offset) = value;
+ 411:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 412:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 413:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u32(uint8_t* payload, uint16_t offset,
+ 414:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   uint32_t value)
+ 415:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 416:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     *(uint32_t*)(payload + offset) = value;
+ 417:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 418:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 419:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i64(uint8_t* payload, uint16_t offset,
+ 420:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   int64_t value)
+ 421:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 422:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     union
+ 423:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     {
+ 424:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****         uint32_t u32[2];
+ 425:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****         int64_t i64;
+ 426:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     } value_;
+ 427:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     value_.i64 = value;
+ 428:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     *(uint32_t*)(payload + offset)     = value_.u32[0];
+ 429:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     *(uint32_t*)(payload + offset + 4) = value_.u32[1];
+ 430:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 431:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 432:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u64(uint8_t* payload, uint16_t offset,
+ 433:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   uint64_t value)
+ 434:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 435:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     union
+ 436:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     {
+ 437:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****         uint32_t u32[2];
+ 438:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****         uint64_t u64;
+ 439:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     } value_;
+ 440:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     value_.u64 = value;
+ 441:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     *(uint32_t*)(payload + offset)     = value_.u32[0];
+ 442:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     *(uint32_t*)(payload + offset + 4) = value_.u32[1];
+ 443:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 444:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 445:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /*
+ 446:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+ 447:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****    4. INLINE FUNCTIONS
+ 448:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+ 449:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** */
+ 450:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** #else
+ 451:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /*
+ 452:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The following function implementations are safe on any platform, but slower
+ 453:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * than the native little endian implementations.
+ 454:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 455:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 456:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int16_t rd_payload_i16(const uint8_t* payload, uint16_t offset)
+ 457:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 458:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return (int16_t)((((uint16_t)payload[offset + 1]) <<  8) |
+ 459:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                       ((uint16_t)payload[offset    ]));
+ 460:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 461:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 462:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint16_t rd_payload_u16(const uint8_t* payload, uint16_t offset)
+ 463:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 464:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return (((uint16_t)payload[offset + 1]) <<  8) |
+ 223              	 .loc 2 464 0
+ 224 00b8 91F80BC0 	 ldrb ip,[r1,#11]
+ 225 00bc 8C7A     	 ldrb r4,[r1,#10]
+ 226              	.LBE165:
+ 227              	.LBE164:
+ 228              	.LBB168:
+ 229              	.LBB169:
+ 230 00be 4A7B     	 ldrb r2,[r1,#13]
+ 231 00c0 0292     	 str r2,[sp,#8]
+ 232              	.LBE169:
+ 233              	.LBE168:
+ 234              	.LBB173:
+ 235              	.LBB166:
+ 236 00c2 44EA0C24 	 orr r4,r4,ip,lsl#8
+ 237              	.LBE166:
+ 238              	.LBE173:
+ 239              	.LBB174:
+ 240              	.LBB170:
+ 241 00c6 0A7B     	 ldrb r2,[r1,#12]
+ 242              	.LBE170:
+ 243              	.LBE174:
+ 244              	.LBB175:
+ 245              	.LBB176:
+ 246 00c8 C87B     	 ldrb r0,[r1,#15]
+ 247              	.LBE176:
+ 248              	.LBE175:
+ 249              	.LBB181:
+ 250              	.LBB167:
+ 251 00ca 0194     	 str r4,[sp,#4]
+ 252              	.LBE167:
+ 253              	.LBE181:
+ 254              	.LBB182:
+ 255              	.LBB171:
+ 256 00cc 029C     	 ldr r4,[sp,#8]
+ 257              	.LBE171:
+ 258              	.LBE182:
+ 259              	.LBB183:
+ 260              	.LBB184:
+ 261 00ce 91F803B0 	 ldrb fp,[r1,#3]
+ 262              	.LBE184:
+ 263              	.LBE183:
+ 264              	.LBB187:
+ 265              	.LBB188:
+ 266 00d2 91F80790 	 ldrb r9,[r1,#7]
+ 267              	.LBE188:
+ 268              	.LBE187:
+ 269              	.LBB191:
+ 270              	.LBB177:
+ 271 00d6 0390     	 str r0,[sp,#12]
+ 272              	.LBE177:
+ 273              	.LBE191:
+ 274              	.LBB192:
+ 275              	.LBB185:
+ 276 00d8 91F802E0 	 ldrb lr,[r1,#2]
+ 277              	.LBE185:
+ 278              	.LBE192:
+ 279              	.LBB193:
+ 280              	.LBB189:
+ 281 00dc 8E79     	 ldrb r6,[r1,#6]
+ 282              	.LBE189:
+ 283              	.LBE193:
+ 284              	.LBB194:
+ 285              	.LBB195:
+ 286 00de 91F805A0 	 ldrb r10,[r1,#5]
+ 287              	.LBE195:
+ 288              	.LBE194:
+ 289              	.LBB198:
+ 290              	.LBB199:
+ 291 00e2 91F80980 	 ldrb r8,[r1,#9]
+ 292              	.LBE199:
+ 293              	.LBE198:
+ 294              	.LBB202:
+ 295              	.LBB178:
+ 296 00e6 887B     	 ldrb r0,[r1,#14]
+ 297              	.LBE178:
+ 298              	.LBE202:
+ 299              	.LBB203:
+ 300              	.LBB196:
+ 301 00e8 0F79     	 ldrb r7,[r1,#4]
+ 302              	.LBE196:
+ 303              	.LBE203:
+ 304              	.LBB204:
+ 305              	.LBB200:
+ 306 00ea 0D7A     	 ldrb r5,[r1,#8]
+ 307              	.LBE200:
+ 308              	.LBE204:
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.enable_mti_filter    = rd_payload_u8 (message_data, 23);
+ 309              	 .loc 1 238 0
+ 310 00ec 91F816C0 	 ldrb ip,[r1,#22]
+ 311              	.LBB205:
+ 312              	.LBB172:
+ 313              	 .loc 2 464 0
+ 314 00f0 42EA0424 	 orr r4,r2,r4,lsl#8
+ 315              	.LBE172:
+ 316              	.LBE205:
+ 317              	.LBB206:
+ 318              	.LBB179:
+ 319 00f4 039A     	 ldr r2,[sp,#12]
+ 320              	.LBE179:
+ 321              	.LBE206:
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.range_threshold  = rd_payload_u16(message_data, 14);
+ 322              	 .loc 1 230 0
+ 323 00f6 ADF83840 	 strh r4,[sp,#56]
+ 324              	.LBB207:
+ 325              	.LBB186:
+ 326              	 .loc 2 464 0
+ 327 00fa 4EEA0B2E 	 orr lr,lr,fp,lsl#8
+ 328              	.LBE186:
+ 329              	.LBE207:
+ 330              	.LBB208:
+ 331              	.LBB190:
+ 332 00fe 46EA0926 	 orr r6,r6,r9,lsl#8
+ 333              	.LBE190:
+ 334              	.LBE208:
+ 335              	.LBB209:
+ 336              	.LBB210:
+ 337 0102 91F810B0 	 ldrb fp,[r1,#16]
+ 338 0106 91F81190 	 ldrb r9,[r1,#17]
+ 339              	.LBE210:
+ 340              	.LBE209:
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.max_range_cm     = rd_payload_u16(message_data, 4);
+ 341              	 .loc 1 225 0
+ 342 010a ADF82EE0 	 strh lr,[sp,#46]
+ 343              	.LBB212:
+ 344              	.LBB197:
+ 345              	 .loc 2 464 0
+ 346 010e 47EA0A27 	 orr r7,r7,r10,lsl#8
+ 347              	.LBE197:
+ 348              	.LBE212:
+ 349              	.LBB213:
+ 350              	.LBB201:
+ 351 0112 45EA0825 	 orr r5,r5,r8,lsl#8
+ 352              	.LBE201:
+ 353              	.LBE213:
+ 354              	.LBB214:
+ 355              	.LBB180:
+ 356 0116 40EA0222 	 orr r2,r0,r2,lsl#8
+ 357              	.LBE180:
+ 358              	.LBE214:
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.max_angle_degree = rd_payload_u16(message_data, 12);
+ 359              	 .loc 1 229 0
+ 360 011a BDF80400 	 ldrh r0,[sp,#4]
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.min_range_cm     = rd_payload_u16(message_data, 2);
+ 361              	 .loc 1 224 0
+ 362 011e 91F801A0 	 ldrb r10,[r1,#1]
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 363              	 .loc 1 236 0
+ 364 0122 91F81580 	 ldrb r8,[r1,#21]
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 365              	 .loc 1 239 0
+ 366 0126 91F817E0 	 ldrb lr,[r1,#23]
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.max_angle_degree = rd_payload_u16(message_data, 12);
+ 367              	 .loc 1 229 0
+ 368 012a ADF83600 	 strh r0,[sp,#54]
+ 369              	.LBB215:
+ 370              	.LBB211:
+ 371              	 .loc 2 464 0
+ 372 012e 4BEA092B 	 orr fp,fp,r9,lsl#8
+ 373              	.LBE211:
+ 374              	.LBE215:
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.min_speed_kmh    = rd_payload_u16(message_data, 6);
+ 375              	 .loc 1 226 0
+ 376 0132 ADF83070 	 strh r7,[sp,#48]
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.num_of_tracks    = rd_payload_u8 (message_data, 21);
+ 377              	 .loc 1 235 0
+ 378 0136 91F81490 	 ldrb r9,[r1,#20]
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.max_speed_kmh    = rd_payload_u16(message_data, 8);
+ 379              	 .loc 1 227 0
+ 380 013a ADF83260 	 strh r6,[sp,#50]
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.min_angle_degree = rd_payload_u16(message_data, 10);
+ 381              	 .loc 1 228 0
+ 382 013e ADF83450 	 strh r5,[sp,#52]
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.speed_threshold  = rd_payload_u16(message_data, 16);
+ 383              	 .loc 1 231 0
+ 384 0142 ADF83A20 	 strh r2,[sp,#58]
+ 385              	.LBB216:
+ 386              	.LBB217:
+ 387              	 .loc 2 464 0
+ 388 0146 4C7E     	 ldrb r4,[r1,#25]
+ 389 0148 0A7E     	 ldrb r2,[r1,#24]
+ 390              	.LBE217:
+ 391              	.LBE216:
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 392              	 .loc 1 232 0
+ 393 014a ADF83CB0 	 strh fp,[sp,#60]
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 394              	 .loc 1 245 0
+ 395 014e 1846     	 mov r0,r3
+ 396 0150 0BA9     	 add r1,sp,#44
+ 397              	.LVL16:
+ 398              	.LBB219:
+ 399              	.LBB218:
+ 400              	 .loc 2 464 0
+ 401 0152 42EA0423 	 orr r3,r2,r4,lsl#8
+ 402              	.LVL17:
+ 403              	.LBE218:
+ 404              	.LBE219:
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.min_range_cm     = rd_payload_u16(message_data, 2);
+ 405              	 .loc 1 224 0
+ 406 0156 8DF82CA0 	 strb r10,[sp,#44]
+ 407              	.LVL18:
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.num_of_tracks    = rd_payload_u8 (message_data, 21);
+ 408              	 .loc 1 235 0
+ 409 015a 8DF83E90 	 strb r9,[sp,#62]
+ 410              	.LVL19:
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 411              	 .loc 1 236 0
+ 412 015e 8DF83F80 	 strb r8,[sp,#63]
+ 413              	.LVL20:
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			dsp_settings.enable_mti_filter    = rd_payload_u8 (message_data, 23);
+ 414              	 .loc 1 238 0
+ 415 0162 8DF840C0 	 strb ip,[sp,#64]
+ 416              	.LVL21:
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 417              	 .loc 1 239 0
+ 418 0166 8DF841E0 	 strb lr,[sp,#65]
+ 419              	.LVL22:
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 			// skip uint8 entry for index 26
+ 420              	 .loc 1 241 0
+ 421 016a ADF84230 	 strh r3,[sp,#66]
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 422              	 .loc 1 245 0
+ 423 016e FFF7FEFF 	 bl radar_set_dsp_settings
+ 424              	.LVL23:
+ 425 0172 56E7     	 b .L2
+ 426              	.LVL24:
+ 427              	.L3:
+ 428              	.LBE163:
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 429              	 .loc 1 210 0
+ 430 0174 012D     	 cmp r5,#1
+ 431 0176 7FF452AF 	 bne .L18
+ 432              	.LVL25:
+ 433              	.LBB220:
+ 434              	.LBB221:
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 435              	 .loc 1 85 0
+ 436 017a 1846     	 mov r0,r3
+ 437 017c 05A9     	 add r1,sp,#20
+ 438              	.LVL26:
+ 439 017e FFF7FEFF 	 bl radar_get_dsp_settings
+ 440              	.LVL27:
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 441              	 .loc 1 87 0
+ 442 0182 0446     	 mov r4,r0
+ 443 0184 0028     	 cmp r0,#0
+ 444 0186 93D1     	 bne .L12
+ 445              	.LVL28:
+ 446              	.LBB222:
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message,  4, dsp_settings.max_range_cm);
+ 447              	 .loc 1 95 0
+ 448 0188 BDF816C0 	 ldrh ip,[sp,#22]
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message,  6, dsp_settings.min_speed_kmh);
+ 449              	 .loc 1 96 0
+ 450 018c BDF818E0 	 ldrh lr,[sp,#24]
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message,  8, dsp_settings.max_speed_kmh);
+ 451              	 .loc 1 97 0
+ 452 0190 BDF81A70 	 ldrh r7,[sp,#26]
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 10, dsp_settings.min_angle_degree);
+ 453              	 .loc 1 98 0
+ 454 0194 BDF81C50 	 ldrh r5,[sp,#28]
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 12, dsp_settings.max_angle_degree);
+ 455              	 .loc 1 99 0
+ 456 0198 BDF81E00 	 ldrh r0,[sp,#30]
+ 457              	.LVL29:
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 16, dsp_settings.speed_threshold);
+ 458              	 .loc 1 101 0
+ 459 019c BDF82220 	 ldrh r2,[sp,#34]
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 460              	 .loc 1 102 0
+ 461 01a0 BDF82430 	 ldrh r3,[sp,#36]
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u16(message, 14, dsp_settings.range_threshold);
+ 462              	 .loc 1 100 0
+ 463 01a4 BDF82010 	 ldrh r1,[sp,#32]
+ 464              	.LBB223:
+ 465              	.LBB224:
+ 465:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****             ((uint16_t)payload[offset    ]);
+ 466:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 467:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 468:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int32_t rd_payload_i32(const uint8_t* payload, uint16_t offset)
+ 469:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 470:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return (int32_t)((((uint32_t)payload[offset + 3]) << 24) |
+ 471:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                      (((uint32_t)payload[offset + 2]) << 16) |
+ 472:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                      (((uint32_t)payload[offset + 1]) <<  8) |
+ 473:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                       ((uint32_t)payload[offset    ]));
+ 474:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 475:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 476:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint32_t rd_payload_u32(const uint8_t* payload, uint16_t offset)
+ 477:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 478:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return (((uint32_t)payload[offset + 3]) << 24) |
+ 479:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****            (((uint32_t)payload[offset + 2]) << 16) |
+ 480:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****            (((uint32_t)payload[offset + 1]) <<  8) |
+ 481:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****             ((uint32_t)payload[offset    ]);
+ 482:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 483:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 484:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int64_t rd_payload_i64(const uint8_t* payload, uint16_t offset)
+ 485:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 486:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return (int64_t)((((uint64_t)payload[offset + 7]) << 56) |
+ 487:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                      (((uint64_t)payload[offset + 6]) << 48) |
+ 488:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                      (((uint64_t)payload[offset + 5]) << 40) |
+ 489:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                      (((uint64_t)payload[offset + 4]) << 32) |
+ 490:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                      (((uint64_t)payload[offset + 3]) << 24) |
+ 491:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                      (((uint64_t)payload[offset + 2]) << 16) |
+ 492:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                      (((uint64_t)payload[offset + 1]) <<  8) |
+ 493:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                       ((uint64_t)payload[offset    ]));
+ 494:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 495:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 496:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint64_t rd_payload_u64(const uint8_t* payload, uint16_t offset)
+ 497:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 498:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return (((uint64_t)payload[offset + 7]) << 56) |
+ 499:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****            (((uint64_t)payload[offset + 6]) << 48) |
+ 500:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****            (((uint64_t)payload[offset + 5]) << 40) |
+ 501:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****            (((uint64_t)payload[offset + 4]) << 32) |
+ 502:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****            (((uint64_t)payload[offset + 3]) << 24) |
+ 503:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****            (((uint64_t)payload[offset + 2]) << 16) |
+ 504:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****            (((uint64_t)payload[offset + 1]) <<  8) |
+ 505:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****             ((uint64_t)payload[offset    ]);
+ 506:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 507:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 508:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i16(uint8_t* payload, uint16_t offset,
+ 509:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   int16_t value)
+ 510:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 511:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset + 1] = (((uint16_t)value) >>  8) & 0xFF;
+ 512:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  ((uint16_t)value)        & 0xFF;
+ 513:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 514:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 515:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u16(uint8_t* payload, uint16_t offset,
+ 516:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                   uint16_t value)
+ 517:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+ 519:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 466              	 .loc 2 519 0
+ 467 01a8 8DF82EC0 	 strb ip,[sp,#46]
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 468              	 .loc 2 518 0
+ 469 01ac 4FEA1C2B 	 lsr fp,ip,#8
+ 470 01b0 8DF82FB0 	 strb fp,[sp,#47]
+ 471              	.LBE224:
+ 472              	.LBE223:
+ 473              	.LBB225:
+ 474              	.LBB226:
+ 475 01b4 4FEA1E2C 	 lsr ip,lr,#8
+ 476              	.LBE226:
+ 477              	.LBE225:
+ 478              	.LBB228:
+ 479              	.LBB229:
+ 480 01b8 4FEA172B 	 lsr fp,r7,#8
+ 481              	.LBE229:
+ 482              	.LBE228:
+ 483              	.LBB231:
+ 484              	.LBB232:
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 485              	 .loc 2 234 0
+ 486 01bc 9DF814A0 	 ldrb r10,[sp,#20]
+ 487              	.LBE232:
+ 488              	.LBE231:
+ 489              	.LBB234:
+ 490              	.LBB235:
+ 491 01c0 9DF82690 	 ldrb r9,[sp,#38]
+ 492              	.LBE235:
+ 493              	.LBE234:
+ 494              	.LBB237:
+ 495              	.LBB238:
+ 496 01c4 9DF82780 	 ldrb r8,[sp,#39]
+ 497              	.LBE238:
+ 498              	.LBE237:
+ 499              	.LBB240:
+ 500              	.LBB227:
+ 501              	 .loc 2 519 0
+ 502 01c8 8DF830E0 	 strb lr,[sp,#48]
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 503              	 .loc 2 518 0
+ 504 01cc 8DF831C0 	 strb ip,[sp,#49]
+ 505              	.LBE227:
+ 506              	.LBE240:
+ 507              	.LBB241:
+ 508              	.LBB242:
+ 509 01d0 4FEA152E 	 lsr lr,r5,#8
+ 510              	.LBE242:
+ 511              	.LBE241:
+ 512              	.LBB245:
+ 513              	.LBB246:
+ 514 01d4 4FEA102C 	 lsr ip,r0,#8
+ 515              	.LBE246:
+ 516              	.LBE245:
+ 517              	.LBB248:
+ 518              	.LBB230:
+ 519              	 .loc 2 519 0
+ 520 01d8 8DF83270 	 strb r7,[sp,#50]
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 521              	 .loc 2 518 0
+ 522 01dc 8DF833B0 	 strb fp,[sp,#51]
+ 523              	.LBE230:
+ 524              	.LBE248:
+ 525              	.LBB249:
+ 526              	.LBB250:
+ 527 01e0 0F0A     	 lsrs r7,r1,#8
+ 528              	.LBE250:
+ 529              	.LBE249:
+ 530              	.LBB252:
+ 531              	.LBB253:
+ 532 01e2 4FEA122B 	 lsr fp,r2,#8
+ 533              	.LBE253:
+ 534              	.LBE252:
+ 535              	.LBB256:
+ 536              	.LBB243:
+ 537              	 .loc 2 519 0
+ 538 01e6 8DF83450 	 strb r5,[sp,#52]
+ 539              	.LBE243:
+ 540              	.LBE256:
+ 541              	.LBB257:
+ 542              	.LBB258:
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 543              	 .loc 2 518 0
+ 544 01ea 1D0A     	 lsrs r5,r3,#8
+ 545              	.LBE258:
+ 546              	.LBE257:
+ 547              	.LBB260:
+ 548              	.LBB244:
+ 549 01ec 8DF835E0 	 strb lr,[sp,#53]
+ 550              	.LBE244:
+ 551              	.LBE260:
+ 552              	.LBB261:
+ 553              	.LBB247:
+ 554 01f0 8DF837C0 	 strb ip,[sp,#55]
+ 555              	 .loc 2 519 0
+ 556 01f4 8DF83600 	 strb r0,[sp,#54]
+ 557              	.LBE247:
+ 558              	.LBE261:
+ 559              	.LBB262:
+ 560              	.LBB254:
+ 561 01f8 8DF83A20 	 strb r2,[sp,#58]
+ 562              	.LBE254:
+ 563              	.LBE262:
+ 564              	.LBB263:
+ 565              	.LBB259:
+ 566 01fc 8DF83C30 	 strb r3,[sp,#60]
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 567              	 .loc 2 518 0
+ 568 0200 8DF83D50 	 strb r5,[sp,#61]
+ 569              	.LBE259:
+ 570              	.LBE263:
+ 571              	.LBB264:
+ 572              	.LBB265:
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 573              	 .loc 2 234 0
+ 574 0204 8DF82C40 	 strb r4,[sp,#44]
+ 575              	.LVL30:
+ 576              	.LBE265:
+ 577              	.LBE264:
+ 578              	.LBB266:
+ 579              	.LBB267:
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 580              	 .loc 2 518 0
+ 581 0208 8DF83F40 	 strb r4,[sp,#63]
+ 582              	 .loc 2 519 0
+ 583 020c 8DF83E40 	 strb r4,[sp,#62]
+ 584              	.LBE267:
+ 585              	.LBE266:
+ 586              	.LBB268:
+ 587              	.LBB251:
+ 588 0210 8DF83810 	 strb r1,[sp,#56]
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 589              	 .loc 2 518 0
+ 590 0214 8DF83970 	 strb r7,[sp,#57]
+ 591              	.LBE251:
+ 592              	.LBE268:
+ 593              	.LBB269:
+ 594              	.LBB255:
+ 595 0218 8DF83BB0 	 strb fp,[sp,#59]
+ 596              	.LBE255:
+ 597              	.LBE269:
+ 598              	.LBB270:
+ 599              	.LBB233:
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 600              	 .loc 2 234 0
+ 601 021c 8DF82DA0 	 strb r10,[sp,#45]
+ 602              	.LBE233:
+ 603              	.LBE270:
+ 604              	.LBB271:
+ 605              	.LBB236:
+ 606 0220 8DF84090 	 strb r9,[sp,#64]
+ 607              	.LVL31:
+ 608              	.LBE236:
+ 609              	.LBE271:
+ 610              	.LBB272:
+ 611              	.LBB239:
+ 612 0224 8DF84180 	 strb r8,[sp,#65]
+ 613              	.LVL32:
+ 614              	.LBE239:
+ 615              	.LBE272:
+ 616              	.LBB273:
+ 617              	.LBB274:
+ 618 0228 9DF82810 	 ldrb r1,[sp,#40]
+ 619              	.LVL33:
+ 620              	.LBE274:
+ 621              	.LBE273:
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		wr_payload_u8 (message, 26, 0); // see MMWSW-603
+ 622              	 .loc 1 111 0
+ 623 022c BDF82A30 	 ldrh r3,[sp,#42]
+ 624              	.LVL34:
+ 625              	.LBB276:
+ 626              	.LBB277:
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 627              	 .loc 2 234 0
+ 628 0230 9DF82920 	 ldrb r2,[sp,#41]
+ 629              	.LVL35:
+ 630              	.LBE277:
+ 631              	.LBE276:
+ 632              	.LBB279:
+ 633              	.LBB275:
+ 634 0234 8DF84210 	 strb r1,[sp,#66]
+ 635              	.LVL36:
+ 636              	.LBE275:
+ 637              	.LBE279:
+ 638              	.LBB280:
+ 639              	.LBB281:
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 640              	 .loc 2 518 0
+ 641 0238 1D0A     	 lsrs r5,r3,#8
+ 642              	.LBE281:
+ 643              	.LBE280:
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload(message, sizeof(message));
+ 644              	 .loc 1 115 0
+ 645 023a 3046     	 mov r0,r6
+ 646              	.LVL37:
+ 647 023c 1B21     	 movs r1,#27
+ 648              	.LBB284:
+ 649              	.LBB282:
+ 650              	 .loc 2 519 0
+ 651 023e 8DF84430 	 strb r3,[sp,#68]
+ 652              	.LVL38:
+ 653              	.LBE282:
+ 654              	.LBE284:
+ 655              	.LBB285:
+ 656              	.LBB278:
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 657              	 .loc 2 234 0
+ 658 0242 8DF84320 	 strb r2,[sp,#67]
+ 659              	.LBE278:
+ 660              	.LBE285:
+ 661              	.LBB286:
+ 662              	.LBB287:
+ 663 0246 8DF84640 	 strb r4,[sp,#70]
+ 664              	.LBE287:
+ 665              	.LBE286:
+ 666              	.LBB288:
+ 667              	.LBB283:
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 668              	 .loc 2 518 0
+ 669 024a 8DF84550 	 strb r5,[sp,#69]
+ 670              	.LBE283:
+ 671              	.LBE288:
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload(message, sizeof(message));
+ 672              	 .loc 1 115 0
+ 673 024e FFF7FEFF 	 bl protocol_send_header
+ 674              	.LVL39:
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_tail();
+ 675              	 .loc 1 116 0
+ 676 0252 0BA8     	 add r0,sp,#44
+ 677              	.LVL40:
+ 678 0254 1B21     	 movs r1,#27
+ 679 0256 FFF7FEFF 	 bl protocol_send_payload
+ 680              	.LVL41:
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 681              	 .loc 1 117 0
+ 682 025a FFF7FEFF 	 bl protocol_send_tail
+ 683              	.LVL42:
+ 684              	.LBE222:
+ 685              	.LBE221:
+ 686              	.LBE220:
+ 687              	.LBB289:
+ 688              	.LBB162:
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 689              	 .loc 1 177 0
+ 690 025e 2046     	 mov r0,r4
+ 691 0260 DFE6     	 b .L2
+ 692              	.LVL43:
+ 693              	.L23:
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 694              	 .loc 1 175 0
+ 695 0262 12A9     	 add r1,sp,#72
+ 696              	.LVL44:
+ 697 0264 0022     	 movs r2,#0
+ 698 0266 21F8342D 	 strh r2,[r1,#-52]!
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 699              	 .loc 1 177 0
+ 700 026a 1846     	 mov r0,r3
+ 701 026c FFF7FEFF 	 bl radar_get_range_detection_threshold
+ 702              	.LVL45:
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 703              	 .loc 1 179 0
+ 704 0270 0446     	 mov r4,r0
+ 705 0272 0028     	 cmp r0,#0
+ 706 0274 7FF41CAF 	 bne .L12
+ 707              	.LVL46:
+ 708              	.LBB151:
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 709              	 .loc 1 185 0
+ 710 0278 BDF81430 	 ldrh r3,[sp,#20]
+ 711              	.LVL47:
+ 712              	.LBB152:
+ 713              	.LBB153:
+ 714              	 .loc 2 519 0
+ 715 027c 8DF82D30 	 strb r3,[sp,#45]
+ 716              	.LBE153:
+ 717              	.LBE152:
+ 718              	.LBB156:
+ 719              	.LBB157:
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 720              	 .loc 2 234 0
+ 721 0280 0325     	 movs r5,#3
+ 722              	.LBE157:
+ 723              	.LBE156:
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload(message, sizeof(message));
+ 724              	 .loc 1 188 0
+ 725 0282 3046     	 mov r0,r6
+ 726              	.LVL48:
+ 727              	.LBB159:
+ 728              	.LBB154:
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 729              	 .loc 2 518 0
+ 730 0284 1B0A     	 lsrs r3,r3,#8
+ 731              	.LVL49:
+ 732              	.LBE154:
+ 733              	.LBE159:
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload(message, sizeof(message));
+ 734              	 .loc 1 188 0
+ 735 0286 2946     	 mov r1,r5
+ 736              	.LBB160:
+ 737              	.LBB155:
+ 518:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 738              	 .loc 2 518 0
+ 739 0288 8DF82E30 	 strb r3,[sp,#46]
+ 740              	.LBE155:
+ 741              	.LBE160:
+ 742              	.LBB161:
+ 743              	.LBB158:
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 744              	 .loc 2 234 0
+ 745 028c 8DF82C50 	 strb r5,[sp,#44]
+ 746              	.LBE158:
+ 747              	.LBE161:
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_payload(message, sizeof(message));
+ 748              	 .loc 1 188 0
+ 749 0290 FFF7FEFF 	 bl protocol_send_header
+ 750              	.LVL50:
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		protocol_send_tail();
+ 751              	 .loc 1 189 0
+ 752 0294 2946     	 mov r1,r5
+ 753 0296 0BA8     	 add r0,sp,#44
+ 754              	.LVL51:
+ 755 0298 FFF7FEFF 	 bl protocol_send_payload
+ 756              	.LVL52:
+ 757              	.L21:
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 758              	 .loc 1 190 0
+ 759 029c FFF7FEFF 	 bl protocol_send_tail
+ 760              	.LVL53:
+ 761              	.LBE151:
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 762              	 .loc 1 177 0
+ 763 02a0 2046     	 mov r0,r4
+ 764 02a2 BEE6     	 b .L2
+ 765              	.LVL54:
+ 766              	.L24:
+ 767              	.LBE162:
+ 768              	.LBE289:
+ 769              	.LBB290:
+ 770              	.LBB148:
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 771              	 .loc 1 152 0
+ 772 02a4 9DF81410 	 ldrb r1,[sp,#20]
+ 773 02a8 4901     	 lsls r1,r1,#5
+ 774 02aa 3046     	 mov r0,r6
+ 775              	.LVL55:
+ 776 02ac 0231     	 adds r1,r1,#2
+ 777 02ae FFF7FEFF 	 bl protocol_send_header
+ 778              	.LVL56:
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 779              	 .loc 1 154 0
+ 780 02b2 2946     	 mov r1,r5
+ 781 02b4 0BA8     	 add r0,sp,#44
+ 782 02b6 FFF7FEFF 	 bl protocol_send_payload
+ 783              	.LVL57:
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 784              	 .loc 1 156 0
+ 785 02ba 2946     	 mov r1,r5
+ 786 02bc 05A8     	 add r0,sp,#20
+ 787 02be FFF7FEFF 	 bl protocol_send_payload
+ 788              	.LVL58:
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 789              	 .loc 1 158 0
+ 790 02c2 9DF81430 	 ldrb r3,[sp,#20]
+ 791 02c6 2546     	 mov r5,r4
+ 792 02c8 002B     	 cmp r3,#0
+ 793 02ca E7D0     	 beq .L21
+ 794              	.LVL59:
+ 795              	.L10:
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 796              	 .loc 1 160 0
+ 797 02cc 07EB4510 	 add r0,r7,r5,lsl#5
+ 798 02d0 2021     	 movs r1,#32
+ 799 02d2 FFF7FEFF 	 bl protocol_send_payload
+ 800              	.LVL60:
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 801              	 .loc 1 158 0
+ 802 02d6 0135     	 adds r5,r5,#1
+ 803              	.LVL61:
+ 804 02d8 9DF81430 	 ldrb r3,[sp,#20]
+ 805 02dc ADB2     	 uxth r5,r5
+ 806              	.LVL62:
+ 807 02de AB42     	 cmp r3,r5
+ 808 02e0 F4D8     	 bhi .L10
+ 809 02e2 DBE7     	 b .L21
+ 810              	.L26:
+ 811              	 .align 2
+ 812              	.L25:
+ 813 02e4 00000000 	 .word target_list
+ 814              	.LBE148:
+ 815              	.LBE290:
+ 816              	 .cfi_endproc
+ 817              	.LFE489:
+ 819              	 .section .text.ep_target_detection_handle_change,"ax",%progbits
+ 820              	 .align 2
+ 821              	 .global ep_target_detection_handle_change
+ 822              	 .thumb
+ 823              	 .thumb_func
+ 825              	ep_target_detection_handle_change:
+ 826              	.LFB490:
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** //==============================================================================
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** void ep_target_detection_handle_change (uint8_t endpoint, void* context, uint32_t what)
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** {
+ 827              	 .loc 1 279 0
+ 828              	 .cfi_startproc
+ 829              	 
+ 830              	 
+ 831              	.LVL63:
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	switch (what)
+ 832              	 .loc 1 282 0
+ 833 0000 012A     	 cmp r2,#1
+ 834 0002 00D0     	 beq .L37
+ 835 0004 7047     	 bx lr
+ 836              	.L37:
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+ 837              	 .loc 1 279 0
+ 838 0006 F0B5     	 push {r4,r5,r6,r7,lr}
+ 839              	.LCFI4:
+ 840              	 .cfi_def_cfa_offset 20
+ 841              	 .cfi_offset 4,-20
+ 842              	 .cfi_offset 5,-16
+ 843              	 .cfi_offset 6,-12
+ 844              	 .cfi_offset 7,-8
+ 845              	 .cfi_offset 14,-4
+ 846              	.LBB293:
+ 847              	.LBB294:
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+ 848              	 .loc 1 137 0
+ 849 0008 344C     	 ldr r4,.L39
+ 850              	.LBE294:
+ 851              	.LBE293:
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+ 852              	 .loc 1 279 0
+ 853 000a 83B0     	 sub sp,sp,#12
+ 854              	.LCFI5:
+ 855              	 .cfi_def_cfa_offset 32
+ 856              	.LBB297:
+ 857              	.LBB295:
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 858              	 .loc 1 138 0
+ 859 000c 0023     	 movs r3,#0
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 860              	 .loc 1 131 0
+ 861 000e 0025     	 movs r5,#0
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 862              	 .loc 1 133 0
+ 863 0010 4FF0020E 	 mov lr,#2
+ 864 0014 0746     	 mov r7,r0
+ 865              	.LVL64:
+ 866 0016 1646     	 mov r6,r2
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 867              	 .loc 1 147 0
+ 868 0018 0846     	 mov r0,r1
+ 869              	.LVL65:
+ 870 001a 0DF10602 	 add r2,sp,#6
+ 871              	.LVL66:
+ 872 001e 2146     	 mov r1,r4
+ 873              	.LVL67:
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+ 874              	 .loc 1 137 0
+ 875 0020 2560     	 str r5,[r4]
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 876              	 .loc 1 131 0
+ 877 0022 8DF80650 	 strb r5,[sp,#6]
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+ 878              	 .loc 1 137 0
+ 879 0026 2562     	 str r5,[r4,#32]
+ 880 0028 2564     	 str r5,[r4,#64]
+ 881 002a 2566     	 str r5,[r4,#96]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 882              	 .loc 1 138 0
+ 883 002c 6360     	 str r3,[r4,#4]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 884              	 .loc 1 139 0
+ 885 002e A360     	 str r3,[r4,#8]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 886              	 .loc 1 140 0
+ 887 0030 E360     	 str r3,[r4,#12]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 888              	 .loc 1 141 0
+ 889 0032 2361     	 str r3,[r4,#16]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 890              	 .loc 1 142 0
+ 891 0034 6361     	 str r3,[r4,#20]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 892              	 .loc 1 143 0
+ 893 0036 A361     	 str r3,[r4,#24]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 894              	 .loc 1 144 0
+ 895 0038 E361     	 str r3,[r4,#28]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 896              	 .loc 1 138 0
+ 897 003a 6362     	 str r3,[r4,#36]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 898              	 .loc 1 139 0
+ 899 003c A362     	 str r3,[r4,#40]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 900              	 .loc 1 140 0
+ 901 003e E362     	 str r3,[r4,#44]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 902              	 .loc 1 141 0
+ 903 0040 2363     	 str r3,[r4,#48]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 904              	 .loc 1 142 0
+ 905 0042 6363     	 str r3,[r4,#52]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 906              	 .loc 1 143 0
+ 907 0044 A363     	 str r3,[r4,#56]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 908              	 .loc 1 144 0
+ 909 0046 E363     	 str r3,[r4,#60]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 910              	 .loc 1 138 0
+ 911 0048 6364     	 str r3,[r4,#68]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 912              	 .loc 1 139 0
+ 913 004a A364     	 str r3,[r4,#72]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 914              	 .loc 1 140 0
+ 915 004c E364     	 str r3,[r4,#76]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 916              	 .loc 1 141 0
+ 917 004e 2365     	 str r3,[r4,#80]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 918              	 .loc 1 142 0
+ 919 0050 6365     	 str r3,[r4,#84]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 920              	 .loc 1 143 0
+ 921 0052 A365     	 str r3,[r4,#88]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 922              	 .loc 1 144 0
+ 923 0054 E365     	 str r3,[r4,#92]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 924              	 .loc 1 138 0
+ 925 0056 6366     	 str r3,[r4,#100]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 926              	 .loc 1 139 0
+ 927 0058 A366     	 str r3,[r4,#104]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 928              	 .loc 1 140 0
+ 929 005a E366     	 str r3,[r4,#108]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 930              	 .loc 1 141 0
+ 931 005c 2367     	 str r3,[r4,#112]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 932              	 .loc 1 142 0
+ 933 005e 6367     	 str r3,[r4,#116]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 934              	 .loc 1 143 0
+ 935 0060 A367     	 str r3,[r4,#120]
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 936              	 .loc 1 133 0
+ 937 0062 8DF807E0 	 strb lr,[sp,#7]
+ 938              	.LVL68:
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].level = 0.f;
+ 939              	 .loc 1 137 0
+ 940 0066 C4F88050 	 str r5,[r4,#128]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 941              	 .loc 1 144 0
+ 942 006a E367     	 str r3,[r4,#124]
+ 943              	.LVL69:
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radius = 0.f;
+ 944              	 .loc 1 138 0
+ 945 006c C4F88430 	 str r3,[r4,#132]
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth = 0.f;
+ 946              	 .loc 1 139 0
+ 947 0070 C4F88830 	 str r3,[r4,#136]
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation = 0.f;
+ 948              	 .loc 1 140 0
+ 949 0074 C4F88C30 	 str r3,[r4,#140]
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].radial_speed = 0.f;
+ 950              	 .loc 1 141 0
+ 951 0078 C4F89030 	 str r3,[r4,#144]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].azimuth_speed = 0.f;
+ 952              	 .loc 1 142 0
+ 953 007c C4F89430 	 str r3,[r4,#148]
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		target_list[i].elevation_speed = 0.f;
+ 954              	 .loc 1 143 0
+ 955 0080 C4F89830 	 str r3,[r4,#152]
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 956              	 .loc 1 144 0
+ 957 0084 C4F89C30 	 str r3,[r4,#156]
+ 958              	.LVL70:
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 959              	 .loc 1 147 0
+ 960 0088 FFF7FEFF 	 bl radar_get_target_info
+ 961              	.LVL71:
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 962              	 .loc 1 149 0
+ 963 008c 0546     	 mov r5,r0
+ 964 008e 08B1     	 cbz r0,.L38
+ 965              	.LBE295:
+ 966              	.LBE297:
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	{
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	case EP_RADAR_CHNG_FRAME_FORMAT:
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		send_targets_info(endpoint, radar_driver);
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		break;
+ 287:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 288:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	default:
+ 289:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		break;
+ 290:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 291:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** }
+ 967              	 .loc 1 291 0
+ 968 0090 03B0     	 add sp,sp,#12
+ 969              	.LCFI6:
+ 970              	 .cfi_remember_state
+ 971              	 .cfi_def_cfa_offset 20
+ 972              	 
+ 973 0092 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 974              	.LVL72:
+ 975              	.L38:
+ 976              	.LCFI7:
+ 977              	 .cfi_restore_state
+ 978              	.LBB298:
+ 979              	.LBB296:
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 980              	 .loc 1 152 0
+ 981 0094 9DF80610 	 ldrb r1,[sp,#6]
+ 982 0098 4901     	 lsls r1,r1,#5
+ 983 009a 3846     	 mov r0,r7
+ 984              	.LVL73:
+ 985 009c 0231     	 adds r1,r1,#2
+ 986 009e FFF7FEFF 	 bl protocol_send_header
+ 987              	.LVL74:
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 988              	 .loc 1 154 0
+ 989 00a2 0DF10700 	 add r0,sp,#7
+ 990 00a6 3146     	 mov r1,r6
+ 991 00a8 FFF7FEFF 	 bl protocol_send_payload
+ 992              	.LVL75:
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 
+ 993              	 .loc 1 156 0
+ 994 00ac 0DF10600 	 add r0,sp,#6
+ 995 00b0 3146     	 mov r1,r6
+ 996 00b2 FFF7FEFF 	 bl protocol_send_payload
+ 997              	.LVL76:
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 998              	 .loc 1 158 0
+ 999 00b6 9DF80630 	 ldrb r3,[sp,#6]
+ 1000 00ba 53B1     	 cbz r3,.L32
+ 1001              	.LVL77:
+ 1002              	.L31:
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		}
+ 1003              	 .loc 1 160 0
+ 1004 00bc 04EB4510 	 add r0,r4,r5,lsl#5
+ 1005 00c0 2021     	 movs r1,#32
+ 1006 00c2 FFF7FEFF 	 bl protocol_send_payload
+ 1007              	.LVL78:
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 		{
+ 1008              	 .loc 1 158 0
+ 1009 00c6 0135     	 adds r5,r5,#1
+ 1010              	.LVL79:
+ 1011 00c8 9DF80630 	 ldrb r3,[sp,#6]
+ 1012 00cc ADB2     	 uxth r5,r5
+ 1013              	.LVL80:
+ 1014 00ce AB42     	 cmp r3,r5
+ 1015 00d0 F4D8     	 bhi .L31
+ 1016              	.LVL81:
+ 1017              	.L32:
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointTargetDetection.c **** 	}
+ 1018              	 .loc 1 163 0
+ 1019 00d2 FFF7FEFF 	 bl protocol_send_tail
+ 1020              	.LVL82:
+ 1021              	.LBE296:
+ 1022              	.LBE298:
+ 1023              	 .loc 1 291 0
+ 1024 00d6 03B0     	 add sp,sp,#12
+ 1025              	.LCFI8:
+ 1026              	 .cfi_def_cfa_offset 20
+ 1027              	 
+ 1028 00d8 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 1029              	.LVL83:
+ 1030              	.L40:
+ 1031 00da 00BF     	 .align 2
+ 1032              	.L39:
+ 1033 00dc 00000000 	 .word target_list
+ 1034              	 .cfi_endproc
+ 1035              	.LFE490:
+ 1037              	 .comm target_list,160,4
+ 1038              	 .text
+ 1039              	.Letext0:
+ 1040              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1041              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1042              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 1043              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 1044              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 1045              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 1046              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 1047              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 1048              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 1049              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 1050              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 1051              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 1052              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 1053              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/include/Protocol.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 EndpointTargetDetection.c
+    {standard input}:20     .text.ep_target_detection_handle_message:00000000 $t
+    {standard input}:25     .text.ep_target_detection_handle_message:00000000 ep_target_detection_handle_message
+    {standard input}:62     .text.ep_target_detection_handle_message:00000014 $d
+    {standard input}:66     .text.ep_target_detection_handle_message:00000018 $t
+    {standard input}:813    .text.ep_target_detection_handle_message:000002e4 $d
+                            *COM*:000000a0 target_list
+    {standard input}:820    .text.ep_target_detection_handle_change:00000000 $t
+    {standard input}:825    .text.ep_target_detection_handle_change:00000000 ep_target_detection_handle_change
+    {standard input}:1033   .text.ep_target_detection_handle_change:000000dc $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+radar_get_target_info
+radar_set_dsp_settings
+radar_get_dsp_settings
+protocol_send_header
+protocol_send_payload
+protocol_send_tail
+radar_get_range_detection_threshold

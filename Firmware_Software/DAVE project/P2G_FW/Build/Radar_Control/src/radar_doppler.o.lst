@@ -1,0 +1,220 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "radar_doppler.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.radar_set_doppler_configuration,"ax",%progbits
+  20              	 .align 2
+  21              	 .global radar_set_doppler_configuration
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	radar_set_doppler_configuration:
+  26              	.LFB470:
+  27              	 .file 1 "../Radar_Control/src/radar_doppler.c"
+   1:../Radar_Control/src/radar_doppler.c **** /**
+   2:../Radar_Control/src/radar_doppler.c ****     @file: radar_doppler.c
+   3:../Radar_Control/src/radar_doppler.c **** 
+   4:../Radar_Control/src/radar_doppler.c ****   	@brief: This file contains the driver API for Doppler operation of
+   5:../Radar_Control/src/radar_doppler.c ****   			Infineon radar sensors.
+   6:../Radar_Control/src/radar_doppler.c **** */
+   7:../Radar_Control/src/radar_doppler.c **** 
+   8:../Radar_Control/src/radar_doppler.c **** /* ===========================================================================
+   9:../Radar_Control/src/radar_doppler.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../Radar_Control/src/radar_doppler.c **** ** All rights reserved.
+  11:../Radar_Control/src/radar_doppler.c **** ** ===========================================================================
+  12:../Radar_Control/src/radar_doppler.c **** **
+  13:../Radar_Control/src/radar_doppler.c **** ** ===========================================================================
+  14:../Radar_Control/src/radar_doppler.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../Radar_Control/src/radar_doppler.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../Radar_Control/src/radar_doppler.c **** ** is not permitted without Infineon's prior written authorization.
+  17:../Radar_Control/src/radar_doppler.c **** ** ===========================================================================
+  18:../Radar_Control/src/radar_doppler.c **** */
+  19:../Radar_Control/src/radar_doppler.c **** 
+  20:../Radar_Control/src/radar_doppler.c **** /*
+  21:../Radar_Control/src/radar_doppler.c **** ==============================================================================
+  22:../Radar_Control/src/radar_doppler.c ****    1. INCLUDE FILES
+  23:../Radar_Control/src/radar_doppler.c **** ==============================================================================
+  24:../Radar_Control/src/radar_doppler.c ****  */
+  25:../Radar_Control/src/radar_doppler.c **** 
+  26:../Radar_Control/src/radar_doppler.c **** #include "radar_api.h"
+  27:../Radar_Control/src/radar_doppler.c **** #include "radar_control.h"
+  28:../Radar_Control/src/radar_doppler.c **** #include "ds_radar_interface.h"
+  29:../Radar_Control/src/radar_doppler.c **** #include "position2go_bsp.h"
+  30:../Radar_Control/src/radar_doppler.c **** 
+  31:../Radar_Control/src/radar_doppler.c **** /*
+  32:../Radar_Control/src/radar_doppler.c **** ==============================================================================
+  33:../Radar_Control/src/radar_doppler.c ****    2. EXPORTED FUNCTIONS
+  34:../Radar_Control/src/radar_doppler.c **** ==============================================================================
+  35:../Radar_Control/src/radar_doppler.c ****  */
+  36:../Radar_Control/src/radar_doppler.c **** 
+  37:../Radar_Control/src/radar_doppler.c **** uint16_t radar_set_doppler_configuration(Radar_Handle_t device, const Doppler_Configuration_t* cons
+  38:../Radar_Control/src/radar_doppler.c **** {
+  28              	 .loc 1 38 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 38B5     	 push {r3,r4,r5,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 16
+  36              	 .cfi_offset 3,-16
+  37              	 .cfi_offset 4,-12
+  38              	 .cfi_offset 5,-8
+  39              	 .cfi_offset 14,-4
+  40              	 .loc 1 38 0
+  41 0002 0D46     	 mov r5,r1
+  39:../Radar_Control/src/radar_doppler.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  40:../Radar_Control/src/radar_doppler.c ****   
+  41:../Radar_Control/src/radar_doppler.c ****   /* Configuration change is only allowed while automatic trigger is not working */
+  42:../Radar_Control/src/radar_doppler.c ****   if (radar_get_data_acq_mode() != RADAR_MANUAL_TRIGGER)
+  42              	 .loc 1 42 0
+  43 0004 FFF7FEFF 	 bl radar_get_data_acq_mode
+  44              	.LVL1:
+  45 0008 0446     	 mov r4,r0
+  46 000a 08B1     	 cbz r0,.L8
+  43:../Radar_Control/src/radar_doppler.c ****   {
+  44:../Radar_Control/src/radar_doppler.c ****     return (RADAR_ERR_BUSY);
+  47              	 .loc 1 44 0
+  48 000c 0220     	 movs r0,#2
+  49 000e 38BD     	 pop {r3,r4,r5,pc}
+  50              	.LVL2:
+  51              	.L8:
+  45:../Radar_Control/src/radar_doppler.c ****   }
+  46:../Radar_Control/src/radar_doppler.c ****   
+  47:../Radar_Control/src/radar_doppler.c ****   /* Check if configuration is valid */
+  48:../Radar_Control/src/radar_doppler.c ****   /* ------------------------------- */
+  49:../Radar_Control/src/radar_doppler.c ****   if((configuration->frequency_kHz < BSP_MIN_RF_FREQUENCY_KHZ) ||
+  52              	 .loc 1 49 0
+  53 0010 2968     	 ldr r1,[r5]
+  54 0012 084B     	 ldr r3,.L11
+  55 0014 084A     	 ldr r2,.L11+4
+  56 0016 0B44     	 add r3,r3,r1
+  57 0018 9342     	 cmp r3,r2
+  58 001a 01D9     	 bls .L9
+  50:../Radar_Control/src/radar_doppler.c ****      (configuration->frequency_kHz > BSP_MAX_RF_FREQUENCY_KHZ))
+  51:../Radar_Control/src/radar_doppler.c ****   {
+  52:../Radar_Control/src/radar_doppler.c ****     return (RADAR_ERR_FREQUENCY_OUT_OF_RANGE);
+  59              	 .loc 1 52 0
+  60 001c 0920     	 movs r0,#9
+  61 001e 38BD     	 pop {r3,r4,r5,pc}
+  62              	.LVL3:
+  63              	.L9:
+  53:../Radar_Control/src/radar_doppler.c ****   }
+  54:../Radar_Control/src/radar_doppler.c ****   
+  55:../Radar_Control/src/radar_doppler.c ****   if (configuration->tx_power > BSP_MAX_TX_POWER_LEVEL)
+  64              	 .loc 1 55 0
+  65 0020 2B79     	 ldrb r3,[r5,#4]
+  66 0022 072B     	 cmp r3,#7
+  67 0024 01D9     	 bls .L10
+  56:../Radar_Control/src/radar_doppler.c ****   {
+  57:../Radar_Control/src/radar_doppler.c ****     return (RADAR_ERR_POWER_OUT_OF_RANGE);
+  68              	 .loc 1 57 0
+  69 0026 0A20     	 movs r0,#10
+  58:../Radar_Control/src/radar_doppler.c ****   }
+  59:../Radar_Control/src/radar_doppler.c ****   
+  60:../Radar_Control/src/radar_doppler.c ****   /* Copy the new Doppler configuration to the data store*/
+  61:../Radar_Control/src/radar_doppler.c ****   ds_ep_store_doppler_config(configuration);
+  62:../Radar_Control/src/radar_doppler.c ****   
+  63:../Radar_Control/src/radar_doppler.c ****   return (RADAR_ERR_OK);
+  64:../Radar_Control/src/radar_doppler.c **** }
+  70              	 .loc 1 64 0
+  71 0028 38BD     	 pop {r3,r4,r5,pc}
+  72              	.LVL4:
+  73              	.L10:
+  61:../Radar_Control/src/radar_doppler.c ****   
+  74              	 .loc 1 61 0
+  75 002a 2846     	 mov r0,r5
+  76 002c FFF7FEFF 	 bl ds_ep_store_doppler_config
+  77              	.LVL5:
+  63:../Radar_Control/src/radar_doppler.c **** }
+  78              	 .loc 1 63 0
+  79 0030 2046     	 mov r0,r4
+  80 0032 38BD     	 pop {r3,r4,r5,pc}
+  81              	.LVL6:
+  82              	.L12:
+  83              	 .align 2
+  84              	.L11:
+  85 0034 586891FE 	 .word -24025000
+  86 0038 400D0300 	 .word 200000
+  87              	 .cfi_endproc
+  88              	.LFE470:
+  90              	 .section .text.radar_get_doppler_configuration,"ax",%progbits
+  91              	 .align 2
+  92              	 .global radar_get_doppler_configuration
+  93              	 .thumb
+  94              	 .thumb_func
+  96              	radar_get_doppler_configuration:
+  97              	.LFB471:
+  65:../Radar_Control/src/radar_doppler.c **** 
+  66:../Radar_Control/src/radar_doppler.c **** //============================================================================
+  67:../Radar_Control/src/radar_doppler.c **** 
+  68:../Radar_Control/src/radar_doppler.c **** uint16_t radar_get_doppler_configuration(Radar_Handle_t device, Doppler_Configuration_t* configurat
+  69:../Radar_Control/src/radar_doppler.c **** {
+  98              	 .loc 1 69 0
+  99              	 .cfi_startproc
+ 100              	 
+ 101              	 
+ 102              	.LVL7:
+ 103 0000 08B5     	 push {r3,lr}
+ 104              	.LCFI1:
+ 105              	 .cfi_def_cfa_offset 8
+ 106              	 .cfi_offset 3,-8
+ 107              	 .cfi_offset 14,-4
+  70:../Radar_Control/src/radar_doppler.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  71:../Radar_Control/src/radar_doppler.c ****   
+  72:../Radar_Control/src/radar_doppler.c ****   /* Get the current Doppler configuration from data store */
+  73:../Radar_Control/src/radar_doppler.c ****   ds_ep_fetch_doppler_config(configuration);
+ 108              	 .loc 1 73 0
+ 109 0002 0846     	 mov r0,r1
+ 110              	.LVL8:
+ 111 0004 FFF7FEFF 	 bl ds_ep_fetch_doppler_config
+ 112              	.LVL9:
+  74:../Radar_Control/src/radar_doppler.c ****   return (RADAR_ERR_OK);
+  75:../Radar_Control/src/radar_doppler.c **** }
+ 113              	 .loc 1 75 0
+ 114 0008 0020     	 movs r0,#0
+ 115 000a 08BD     	 pop {r3,pc}
+ 116              	 .cfi_endproc
+ 117              	.LFE471:
+ 119              	 .text
+ 120              	.Letext0:
+ 121              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 122              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 123              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 124              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 125              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 126              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 127              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 128              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 129              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 130              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 131              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 132              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 133              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 134              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/ds_radar_interface.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 radar_doppler.c
+    {standard input}:20     .text.radar_set_doppler_configuration:00000000 $t
+    {standard input}:25     .text.radar_set_doppler_configuration:00000000 radar_set_doppler_configuration
+    {standard input}:85     .text.radar_set_doppler_configuration:00000034 $d
+    {standard input}:91     .text.radar_get_doppler_configuration:00000000 $t
+    {standard input}:96     .text.radar_get_doppler_configuration:00000000 radar_get_doppler_configuration
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+radar_get_data_acq_mode
+ds_ep_store_doppler_config
+ds_ep_fetch_doppler_config

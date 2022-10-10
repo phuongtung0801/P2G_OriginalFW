@@ -1,0 +1,1926 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "dsp_lib.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.fft_init,"ax",%progbits
+  20              	 .align 2
+  21              	 .global fft_init
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	fft_init:
+  26              	.LFB470:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src/dsp_lib.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****     @file: dsp_lib.c
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****   	@brief: This library includes basic functions like FFT and windowing functions etc.
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** */
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** /* ===========================================================================
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ** All rights reserved.
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ** ===========================================================================
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** **
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ** ===========================================================================
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ** Passing on and copying of this document, and communication of its contents
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ** is not permitted without Infineon's prior written authorization.
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ** ===========================================================================
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** */
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** /*
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ==============================================================================
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****    1. INCLUDE FILES
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ==============================================================================
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****  */
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #include "dsp_lib.h"
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** /*
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ==============================================================================
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****    2. DEFINITIONS
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ==============================================================================
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****  */
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #define FAST_TIME_FFT_WIN_LEN			(256U)		/**< Max Window length for FFT windowing over fast time */
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #define SLOW_TIME_FFT_WIN_LEN			(16U)		/**< Max Window length for FFT windowing over slow time */
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** /*
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ==============================================================================
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****    3. DATA
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ==============================================================================
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****  */
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** const arm_cfft_instance_f32 *fast_time_twiddle_table;
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** const arm_cfft_instance_f32 *slow_time_twiddle_table;
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** // BlackmanHarris Window without 3dB compensation
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** static float FastTime_Window[] = {
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.000060,0.000069,0.000095,0.000138,0.000201,0.000283,0.000386,0.000511,0.000662,0.000839,0.00104
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.003089,0.003600,0.004172,0.004811,0.005521,0.006309,0.007180,0.008141,0.009199,0.010361,0.01163
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.022007,0.024267,0.026702,0.029319,0.032127,0.035136,0.038353,0.041787,0.045448,0.049343,0.05348
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.083885,0.089953,0.096327,0.103011,0.110014,0.117340,0.124993,0.132979,0.141302,0.149965,0.15897
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.220273,0.231697,0.243461,0.255559,0.267988,0.280741,0.293812,0.307192,0.320874,0.334847,0.34910
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.439837,0.455692,0.471712,0.487879,0.504173,0.520575,0.537064,0.553619,0.570218,0.586838,0.60345
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.701782,0.717708,0.733434,0.748935,0.764185,0.779160,0.793834,0.808181,0.822177,0.835799,0.84902
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.918706,0.928515,0.937756,0.946413,0.954469,0.961909,0.968718,0.974885,0.980396,0.985242,0.98941
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.999912,0.999209,0.997804,0.995700,0.992902,0.989413,0.985242,0.980396,0.974885,0.968718,0.96190
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.908348,0.897460,0.886062,0.874175,0.861821,0.849021,0.835799,0.822177,0.808181,0.793834,0.77916
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.685683,0.669435,0.653063,0.636593,0.620049,0.603456,0.586838,0.570218,0.553619,0.537064,0.52057
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.424165,0.408693,0.393436,0.378409,0.363627,0.349102,0.334847,0.320874,0.307192,0.293812,0.28074
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.209191,0.198453,0.188062,0.178018,0.168321,0.158971,0.149965,0.141302,0.132979,0.124993,0.11734
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.078115,0.072636,0.067441,0.062523,0.057872,0.053482,0.049343,0.045448,0.041787,0.038353,0.03513
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.019912,0.017974,0.016185,0.014537,0.013022,0.011633,0.010361,0.009199,0.008141,0.007180,0.00630
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.002634,0.002230,0.001874,0.001560,0.001285,0.001046,0.000839,0.000662,0.000511,0.000386,0.00028
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** // Chebychev Window with 60dB gain
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** static float SlowTime_Window[] = {
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		0.024082,0.078911,0.182342,0.337575,0.531631,0.733976,0.903277,1.000000,1.000000,0.903277,0.73397
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** /*
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ==============================================================================
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****    4. EXPORTED FUNCTIONS
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** ==============================================================================
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c ****  */
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** void fft_init(void)
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** {
+  28              	 .loc 1 76 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	 
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Fast Time FFT */
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #if (RANGE_FFT_SIZE == 1024U)
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	fast_time_twiddle_table = &arm_cfft_sR_f32_len1024;		// as FFT_SIZE = 1024 points
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #elif (RANGE_FFT_SIZE == 512U)
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	fast_time_twiddle_table = &arm_cfft_sR_f32_len512;		// as FFT_SIZE = 512 points
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #elif (RANGE_FFT_SIZE == 256U)
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	fast_time_twiddle_table = &arm_cfft_sR_f32_len256;		// as FFT_SIZE = 256 points
+  33              	 .loc 1 83 0
+  34 0000 0349     	 ldr r1,.L2
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #elif (RANGE_FFT_SIZE == 128U)
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	fast_time_twiddle_table = &arm_cfft_sR_f32_len128;		// as FFT_SIZE = 128 points
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #else
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	fast_time_twiddle_table = &arm_cfft_sR_f32_len64;		// as FFT_SIZE = 64 points
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #endif
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Slow Time FFT */
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #if (DOPPLER_FFT_SIZE == 64U)
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	slow_time_twiddle_table = &arm_cfft_sR_f32_len64;		// as FFT_SIZE = 64 points
+  35              	 .loc 1 92 0
+  36 0002 044B     	 ldr r3,.L2+4
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #elif (RANGE_FFT_SIZE == 128U)
+  37              	 .loc 1 83 0
+  38 0004 0448     	 ldr r0,.L2+8
+  39              	 .loc 1 92 0
+  40 0006 054A     	 ldr r2,.L2+12
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #elif (RANGE_FFT_SIZE == 128U)
+  41              	 .loc 1 83 0
+  42 0008 0860     	 str r0,[r1]
+  43              	 .loc 1 92 0
+  44 000a 1A60     	 str r2,[r3]
+  45 000c 7047     	 bx lr
+  46              	.L3:
+  47 000e 00BF     	 .align 2
+  48              	.L2:
+  49 0010 00000000 	 .word fast_time_twiddle_table
+  50 0014 00000000 	 .word slow_time_twiddle_table
+  51 0018 00000000 	 .word arm_cfft_sR_f32_len256
+  52 001c 00000000 	 .word arm_cfft_sR_f32_len64
+  53              	 .cfi_endproc
+  54              	.LFE470:
+  56              	 .global __aeabi_f2d
+  57              	 .global __aeabi_dadd
+  58              	 .global __aeabi_dmul
+  59              	 .global __aeabi_d2f
+  60              	 .section .text.compute_fft_signal,"ax",%progbits
+  61              	 .align 2
+  62              	 .global compute_fft_signal
+  63              	 .thumb
+  64              	 .thumb_func
+  66              	compute_fft_signal:
+  67              	.LFB471:
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #else
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	slow_time_twiddle_table = &arm_cfft_sR_f32_len32;		// as FFT_SIZE = 32 points
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** #endif
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** }
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** //============================================================================
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** void compute_fft_signal(float* i_data, float* q_data, uint16_t Nd, uint16_t Nf, float if_scale,
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 						FFT_Input_t fft_type, FFT_Direction_t fft_direction,
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 						float* i_mean, float* q_mean, float* complex_fft_signal)
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** {
+  68              	 .loc 1 103 0
+  69              	 .cfi_startproc
+  70              	 
+  71              	 
+  72              	.LVL0:
+  73 0000 2DE9F04F 	 push {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+  74              	.LCFI0:
+  75              	 .cfi_def_cfa_offset 36
+  76              	 .cfi_offset 4,-36
+  77              	 .cfi_offset 5,-32
+  78              	 .cfi_offset 6,-28
+  79              	 .cfi_offset 7,-24
+  80              	 .cfi_offset 8,-20
+  81              	 .cfi_offset 9,-16
+  82              	 .cfi_offset 10,-12
+  83              	 .cfi_offset 11,-8
+  84              	 .cfi_offset 14,-4
+  85 0004 2DED028B 	 fstmfdd sp!,{d8}
+  86              	.LCFI1:
+  87              	 .cfi_def_cfa_offset 44
+  88              	 .cfi_offset 80,-44
+  89              	 .cfi_offset 81,-40
+  90 0008 87B0     	 sub sp,sp,#28
+  91              	.LCFI2:
+  92              	 .cfi_def_cfa_offset 72
+  93              	 .loc 1 103 0
+  94 000a 9DED128A 	 flds s16,[sp,#72]
+  95 000e 9DF85050 	 ldrb r5,[sp,#80]
+  96 0012 9DF84CC0 	 ldrb ip,[sp,#76]
+  97 0016 DDF854A0 	 ldr r10,[sp,#84]
+  98 001a DDF85890 	 ldr r9,[sp,#88]
+  99 001e DDF85CB0 	 ldr fp,[sp,#92]
+ 100 0022 0293     	 str r3,[sp,#8]
+ 101 0024 0746     	 mov r7,r0
+ 102 0026 0E46     	 mov r6,r1
+ 103 0028 1446     	 mov r4,r2
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	uint32_t idx;
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	uint32_t dec_idx;   // decimation index of FFT window in case selected data points are less than W
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	float *fft_window;
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	const arm_cfft_instance_f32 *cfft_twiddle_table;
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	if (fft_direction == FFT_FAST_TIME)
+ 104              	 .loc 1 110 0
+ 105 002a 002D     	 cmp r5,#0
+ 106 002c 40F09B80 	 bne .L5
+ 107              	.LVL1:
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		fft_window = FastTime_Window;
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		cfft_twiddle_table = fast_time_twiddle_table;
+ 108              	 .loc 1 114 0
+ 109 0030 724B     	 ldr r3,.L28
+ 110              	.LVL2:
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 111              	 .loc 1 112 0
+ 112 0032 734D     	 ldr r5,.L28+4
+ 113              	 .loc 1 114 0
+ 114 0034 1B68     	 ldr r3,[r3]
+ 115 0036 0393     	 str r3,[sp,#12]
+ 116              	.LVL3:
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		dec_idx = FAST_TIME_FFT_WIN_LEN / Nd;
+ 117              	 .loc 1 116 0
+ 118 0038 4FF48078 	 mov r8,#256
+ 119 003c B8FBF2F8 	 udiv r8,r8,r2
+ 120              	.LVL4:
+ 121              	.L6:
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else /* fft_direction == FFT_SLOW_TIME */
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		fft_window = SlowTime_Window;
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		cfft_twiddle_table = slow_time_twiddle_table;
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		dec_idx = SLOW_TIME_FFT_WIN_LEN / Nd;
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Find the mean in i_data */
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	arm_mean_f32(i_data, Nd, i_mean);
+ 122              	 .loc 1 128 0
+ 123 0040 3846     	 mov r0,r7
+ 124              	.LVL5:
+ 125 0042 2146     	 mov r1,r4
+ 126              	.LVL6:
+ 127 0044 5246     	 mov r2,r10
+ 128              	.LVL7:
+ 129 0046 CDF800C0 	 str ip,[sp]
+ 130 004a FFF7FEFF 	 bl arm_mean_f32
+ 131              	.LVL8:
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Find the mean in q_data */
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	arm_mean_f32(q_data, Nd, q_mean);
+ 132              	 .loc 1 131 0
+ 133 004e 3046     	 mov r0,r6
+ 134 0050 2146     	 mov r1,r4
+ 135 0052 4A46     	 mov r2,r9
+ 136 0054 FFF7FEFF 	 bl arm_mean_f32
+ 137              	.LVL9:
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	if (fft_type == FFT_INPUT_REAL_I)
+ 138              	 .loc 1 133 0
+ 139 0058 DDF800C0 	 ldr ip,[sp]
+ 140 005c BCF1000F 	 cmp ip,#0
+ 141 0060 55D1     	 bne .L7
+ 142              	.LVL10:
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		/* Interleaved (re = I & im = 0) samples as {re[0], im[0], re[1], im[1], ...} */
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		for (idx = 0; idx < Nd; idx++)
+ 143              	 .loc 1 136 0 discriminator 1
+ 144 0062 002C     	 cmp r4,#0
+ 145 0064 3BD0     	 beq .L12
+ 146 0066 18EE100A 	 fmrs r0,s16
+ 147 006a FFF7FEFF 	 bl __aeabi_f2d
+ 148              	.LVL11:
+ 149 006e CDE90001 	 strd r0,[sp]
+ 150 0072 0BEBC402 	 add r2,fp,r4,lsl#3
+ 151 0076 4FEA8803 	 lsl r3,r8,#2
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 0] = 2.0 * (float)(i_data[idx] - *i_mean) * if_scale * fft_window[i
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = 0;
+ 152              	 .loc 1 139 0
+ 153 007a 9FED628A 	 flds s16,.L28+8
+ 154 007e 0494     	 str r4,[sp,#16]
+ 155 0080 5E46     	 mov r6,fp
+ 156              	.LVL12:
+ 157 0082 CDF814B0 	 str fp,[sp,#20]
+ 158 0086 1C46     	 mov r4,r3
+ 159 0088 9346     	 mov fp,r2
+ 160              	.LVL13:
+ 161              	.L11:
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = 0;
+ 162              	 .loc 1 138 0 discriminator 3
+ 163 008a B7EC017A 	 fldmias r7!,{s14}
+ 164 008e DAED007A 	 flds s15,[r10]
+ 165 0092 77EE677A 	 fsubs s15,s14,s15
+ 166 0096 0836     	 adds r6,r6,#8
+ 167 0098 17EE900A 	 fmrs r0,s15
+ 168 009c FFF7FEFF 	 bl __aeabi_f2d
+ 169              	.LVL14:
+ 170 00a0 0246     	 mov r2,r0
+ 171 00a2 0B46     	 mov r3,r1
+ 172 00a4 FFF7FEFF 	 bl __aeabi_dadd
+ 173              	.LVL15:
+ 174 00a8 DDE90023 	 ldrd r2,[sp]
+ 175 00ac FFF7FEFF 	 bl __aeabi_dmul
+ 176              	.LVL16:
+ 177 00b0 8046     	 mov r8,r0
+ 178 00b2 2868     	 ldr r0,[r5]
+ 179 00b4 8946     	 mov r9,r1
+ 180 00b6 FFF7FEFF 	 bl __aeabi_f2d
+ 181              	.LVL17:
+ 182 00ba 0246     	 mov r2,r0
+ 183 00bc 0B46     	 mov r3,r1
+ 184 00be 4046     	 mov r0,r8
+ 185 00c0 4946     	 mov r1,r9
+ 186 00c2 FFF7FEFF 	 bl __aeabi_dmul
+ 187              	.LVL18:
+ 188 00c6 FFF7FEFF 	 bl __aeabi_d2f
+ 189              	.LVL19:
+ 190              	 .loc 1 139 0 discriminator 3
+ 191 00ca 06ED018A 	 fsts s16,[r6,#-4]
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = 0;
+ 192              	 .loc 1 138 0 discriminator 3
+ 193 00ce 46F8080C 	 str r0,[r6,#-8]
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 194              	 .loc 1 136 0 discriminator 3
+ 195 00d2 5E45     	 cmp r6,fp
+ 196 00d4 2544     	 add r5,r5,r4
+ 197 00d6 D8D1     	 bne .L11
+ 198 00d8 049C     	 ldr r4,[sp,#16]
+ 199 00da DDF814B0 	 ldr fp,[sp,#20]
+ 200              	.L12:
+ 201              	.LVL20:
+ 202              	.LBB2:
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		}
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else if (fft_type == FFT_INPUT_REAL_Q)
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		/* Interleaved (re = Q & im = 0) samples as {re[0], im[0], re[1], im[1], ...} */
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		for (idx = 0; idx < Nd; idx++)
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 0] = 2.0 * (float)(q_data[idx] - *q_mean) * if_scale * fft_window[i
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = 0;
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		}
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		/* Interleaved (re = I & im = Q) samples as {re[0], im[0], re[1], im[1], ...} */
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		for (idx = 0; idx < Nd; idx++)
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 0] = (float)(i_data[idx] - *i_mean) * if_scale * fft_window[idx*dec
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = (float)(q_data[idx] - *q_mean) * if_scale * fft_window[idx*dec
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		}
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Zero Padding */
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	for (uint16_t idx = Nd; idx < Nf; idx++)
+ 203              	 .loc 1 162 0
+ 204 00de 029B     	 ldr r3,[sp,#8]
+ 205 00e0 9C42     	 cmp r4,r3
+ 206 00e2 09D2     	 bcs .L10
+ 207 00e4 1846     	 mov r0,r3
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		complex_fft_signal[2 * idx + 0] = 0;
+ 208              	 .loc 1 164 0 discriminator 3
+ 209 00e6 0022     	 movs r2,#0
+ 210              	.L17:
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 211              	 .loc 1 162 0 discriminator 3
+ 212 00e8 611C     	 adds r1,r4,#1
+ 213              	 .loc 1 164 0 discriminator 3
+ 214 00ea 0BEBC403 	 add r3,fp,r4,lsl#3
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 215              	 .loc 1 162 0 discriminator 3
+ 216 00ee 8CB2     	 uxth r4,r1
+ 217              	.LVL21:
+ 218 00f0 8442     	 cmp r4,r0
+ 219              	 .loc 1 164 0 discriminator 3
+ 220 00f2 1A60     	 str r2,[r3]
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		complex_fft_signal[2 * idx + 1] = 0;
+ 221              	 .loc 1 165 0 discriminator 3
+ 222 00f4 5A60     	 str r2,[r3,#4]
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 223              	 .loc 1 162 0 discriminator 3
+ 224 00f6 F7D1     	 bne .L17
+ 225              	.L10:
+ 226              	.LBE2:
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Processing the floating-point complex FFT. */
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	arm_cfft_f32(cfft_twiddle_table, complex_fft_signal, 0, 1);
+ 227              	 .loc 1 169 0
+ 228 00f8 0398     	 ldr r0,[sp,#12]
+ 229 00fa 5946     	 mov r1,fp
+ 230 00fc 0022     	 movs r2,#0
+ 231 00fe 0123     	 movs r3,#1
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** }
+ 232              	 .loc 1 170 0
+ 233 0100 07B0     	 add sp,sp,#28
+ 234              	.LCFI3:
+ 235              	 .cfi_remember_state
+ 236              	 .cfi_def_cfa_offset 44
+ 237              	 
+ 238 0102 BDEC028B 	 fldmfdd sp!,{d8}
+ 239              	.LCFI4:
+ 240              	 .cfi_restore 80
+ 241              	 .cfi_restore 81
+ 242              	 .cfi_def_cfa_offset 36
+ 243 0106 BDE8F04F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+ 244              	.LCFI5:
+ 245              	 .cfi_restore 14
+ 246              	 .cfi_restore 11
+ 247              	 .cfi_restore 10
+ 248              	 .cfi_restore 9
+ 249              	 .cfi_restore 8
+ 250              	 .cfi_restore 7
+ 251              	 .cfi_restore 6
+ 252              	 .cfi_restore 5
+ 253              	 .cfi_restore 4
+ 254              	 .cfi_def_cfa_offset 0
+ 255              	.LVL22:
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** }
+ 256              	 .loc 1 169 0
+ 257 010a FFF7FEBF 	 b arm_cfft_f32
+ 258              	.LVL23:
+ 259              	.L7:
+ 260              	.LCFI6:
+ 261              	 .cfi_restore_state
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 262              	 .loc 1 142 0
+ 263 010e BCF1010F 	 cmp ip,#1
+ 264 0112 31D0     	 beq .L13
+ 265              	.LVL24:
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 266              	 .loc 1 154 0 discriminator 1
+ 267 0114 002C     	 cmp r4,#0
+ 268 0116 E2D0     	 beq .L12
+ 269 0118 4FEA8808 	 lsl r8,r8,#2
+ 270              	.LVL25:
+ 271 011c 07EB8402 	 add r2,r7,r4,lsl#2
+ 272 0120 5B46     	 mov r3,fp
+ 273              	.LVL26:
+ 274              	.L16:
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = (float)(q_data[idx] - *q_mean) * if_scale * fft_window[idx*dec
+ 275              	 .loc 1 156 0 discriminator 3
+ 276 0122 F7EC016A 	 fldmias r7!,{s13}
+ 277 0126 DAED007A 	 flds s15,[r10]
+ 278 012a 95ED007A 	 flds s14,[r5]
+ 279 012e 76EEE77A 	 fsubs s15,s13,s15
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 280              	 .loc 1 154 0 discriminator 3
+ 281 0132 9742     	 cmp r7,r2
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = (float)(q_data[idx] - *q_mean) * if_scale * fft_window[idx*dec
+ 282              	 .loc 1 156 0 discriminator 3
+ 283 0134 67EE887A 	 fmuls s15,s15,s16
+ 284 0138 03F10803 	 add r3,r3,#8
+ 285 013c 67EE877A 	 fmuls s15,s15,s14
+ 286 0140 43ED027A 	 fsts s15,[r3,#-8]
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		}
+ 287              	 .loc 1 157 0 discriminator 3
+ 288 0144 F6EC016A 	 fldmias r6!,{s13}
+ 289 0148 D9ED007A 	 flds s15,[r9]
+ 290 014c 95ED007A 	 flds s14,[r5]
+ 291 0150 76EEE77A 	 fsubs s15,s13,s15
+ 292 0154 4544     	 add r5,r5,r8
+ 293 0156 67EE887A 	 fmuls s15,s15,s16
+ 294 015a 67EE877A 	 fmuls s15,s15,s14
+ 295 015e 43ED017A 	 fsts s15,[r3,#-4]
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 296              	 .loc 1 154 0 discriminator 3
+ 297 0162 DED1     	 bne .L16
+ 298 0164 BBE7     	 b .L12
+ 299              	.LVL27:
+ 300              	.L5:
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 301              	 .loc 1 122 0
+ 302 0166 284B     	 ldr r3,.L28+12
+ 303              	.LVL28:
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 304              	 .loc 1 120 0
+ 305 0168 284D     	 ldr r5,.L28+16
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 306              	 .loc 1 122 0
+ 307 016a 1B68     	 ldr r3,[r3]
+ 308 016c 0393     	 str r3,[sp,#12]
+ 309              	.LVL29:
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 310              	 .loc 1 124 0
+ 311 016e 4FF01008 	 mov r8,#16
+ 312 0172 B8FBF2F8 	 udiv r8,r8,r2
+ 313              	.LVL30:
+ 314 0176 63E7     	 b .L6
+ 315              	.LVL31:
+ 316              	.L13:
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 317              	 .loc 1 145 0 discriminator 1
+ 318 0178 002C     	 cmp r4,#0
+ 319 017a B0D0     	 beq .L12
+ 320 017c 18EE100A 	 fmrs r0,s16
+ 321 0180 FFF7FEFF 	 bl __aeabi_f2d
+ 322              	.LVL32:
+ 323 0184 CDE90001 	 strd r0,[sp]
+ 324 0188 4FEA8803 	 lsl r3,r8,#2
+ 325 018c 0BEBC402 	 add r2,fp,r4,lsl#3
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		}
+ 326              	 .loc 1 148 0
+ 327 0190 9FED1C8A 	 flds s16,.L28+8
+ 328 0194 0494     	 str r4,[sp,#16]
+ 329 0196 A846     	 mov r8,r5
+ 330              	.LVL33:
+ 331 0198 CDF814B0 	 str fp,[sp,#20]
+ 332 019c 5D46     	 mov r5,fp
+ 333              	.LVL34:
+ 334 019e B246     	 mov r10,r6
+ 335 01a0 1C46     	 mov r4,r3
+ 336 01a2 9346     	 mov fp,r2
+ 337              	.LVL35:
+ 338              	.L15:
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = 0;
+ 339              	 .loc 1 147 0 discriminator 3
+ 340 01a4 BAEC017A 	 fldmias r10!,{s14}
+ 341 01a8 D9ED007A 	 flds s15,[r9]
+ 342 01ac 77EE677A 	 fsubs s15,s14,s15
+ 343 01b0 0835     	 adds r5,r5,#8
+ 344 01b2 17EE900A 	 fmrs r0,s15
+ 345 01b6 FFF7FEFF 	 bl __aeabi_f2d
+ 346              	.LVL36:
+ 347 01ba 0246     	 mov r2,r0
+ 348 01bc 0B46     	 mov r3,r1
+ 349 01be FFF7FEFF 	 bl __aeabi_dadd
+ 350              	.LVL37:
+ 351 01c2 DDE90023 	 ldrd r2,[sp]
+ 352 01c6 FFF7FEFF 	 bl __aeabi_dmul
+ 353              	.LVL38:
+ 354 01ca 0646     	 mov r6,r0
+ 355 01cc D8F80000 	 ldr r0,[r8]
+ 356 01d0 0F46     	 mov r7,r1
+ 357 01d2 FFF7FEFF 	 bl __aeabi_f2d
+ 358              	.LVL39:
+ 359 01d6 0246     	 mov r2,r0
+ 360 01d8 0B46     	 mov r3,r1
+ 361 01da 3046     	 mov r0,r6
+ 362 01dc 3946     	 mov r1,r7
+ 363 01de FFF7FEFF 	 bl __aeabi_dmul
+ 364              	.LVL40:
+ 365 01e2 FFF7FEFF 	 bl __aeabi_d2f
+ 366              	.LVL41:
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		}
+ 367              	 .loc 1 148 0 discriminator 3
+ 368 01e6 05ED018A 	 fsts s16,[r5,#-4]
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 			complex_fft_signal[2 * idx + 1] = 0;
+ 369              	 .loc 1 147 0 discriminator 3
+ 370 01ea 45F8080C 	 str r0,[r5,#-8]
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		{
+ 371              	 .loc 1 145 0 discriminator 3
+ 372 01ee 5D45     	 cmp r5,fp
+ 373 01f0 A044     	 add r8,r8,r4
+ 374 01f2 D7D1     	 bne .L15
+ 375 01f4 049C     	 ldr r4,[sp,#16]
+ 376 01f6 DDF814B0 	 ldr fp,[sp,#20]
+ 377 01fa 70E7     	 b .L12
+ 378              	.L29:
+ 379              	 .align 2
+ 380              	.L28:
+ 381 01fc 00000000 	 .word fast_time_twiddle_table
+ 382 0200 00000000 	 .word .LANCHOR0
+ 383 0204 00000000 	 .word 0
+ 384 0208 00000000 	 .word slow_time_twiddle_table
+ 385 020c 00000000 	 .word .LANCHOR1
+ 386              	 .cfi_endproc
+ 387              	.LFE471:
+ 389              	 .section .text.compute_fft_spectrum,"ax",%progbits
+ 390              	 .align 2
+ 391              	 .global compute_fft_spectrum
+ 392              	 .thumb
+ 393              	 .thumb_func
+ 395              	compute_fft_spectrum:
+ 396              	.LFB472:
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** //============================================================================
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** void compute_fft_spectrum(float* fft_input_signal, uint32_t Nf, float* fft_output_spectrum)
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** {
+ 397              	 .loc 1 175 0
+ 398              	 .cfi_startproc
+ 399              	 
+ 400              	 
+ 401              	 
+ 402              	.LVL42:
+ 403              	 .loc 1 175 0
+ 404 0000 0B46     	 mov r3,r1
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Convert to real magnitude data */
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	arm_cmplx_mag_f32(fft_input_signal, fft_output_spectrum, Nf);
+ 405              	 .loc 1 177 0
+ 406 0002 1146     	 mov r1,r2
+ 407              	.LVL43:
+ 408 0004 1A46     	 mov r2,r3
+ 409              	.LVL44:
+ 410 0006 FFF7FEBF 	 b arm_cmplx_mag_f32
+ 411              	.LVL45:
+ 412              	 .cfi_endproc
+ 413              	.LFE472:
+ 415              	 .global __aeabi_ddiv
+ 416              	 .global __aeabi_d2uiz
+ 417              	 .global __aeabi_dcmpgt
+ 418              	 .global __aeabi_dsub
+ 419              	 .global __aeabi_dcmplt
+ 420              	 .global __aeabi_i2d
+ 421 000a 00BF     	 .section .text.compute_angle,"ax",%progbits
+ 422              	 .align 2
+ 423              	 .global compute_angle
+ 424              	 .thumb
+ 425              	 .thumb_func
+ 427              	compute_angle:
+ 428              	.LFB473:
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** }
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** //============================================================================
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** target_angle_data compute_angle(float if1_i, float if1_q, float if2_i, float if2_q, double d_old, i
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** {
+ 429              	 .loc 1 182 0
+ 430              	 .cfi_startproc
+ 431              	 
+ 432              	 
+ 433              	.LVL46:
+ 434 0000 F8B5     	 push {r3,r4,r5,r6,r7,lr}
+ 435              	.LCFI7:
+ 436              	 .cfi_def_cfa_offset 24
+ 437              	 .cfi_offset 3,-24
+ 438              	 .cfi_offset 4,-20
+ 439              	 .cfi_offset 5,-16
+ 440              	 .cfi_offset 6,-12
+ 441              	 .cfi_offset 7,-8
+ 442              	 .cfi_offset 14,-4
+ 443 0002 2DED048B 	 fstmfdd sp!,{d8,d9}
+ 444              	.LCFI8:
+ 445              	 .cfi_def_cfa_offset 40
+ 446              	 .cfi_offset 80,-40
+ 447              	 .cfi_offset 81,-36
+ 448              	 .cfi_offset 82,-32
+ 449              	 .cfi_offset 83,-28
+ 450              	 .loc 1 182 0
+ 451 0006 08EE101A 	 fmsr s16,r1
+ 452              	.LVL47:
+ 453              	.LBB11:
+ 454              	.LBB12:
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	//float wave_length_ant_spacing_ratio = (TGT_WAVE_LENGTH_MM / TGT_ANTENNA_SPACING_MM);
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	target_angle_data temp;
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	float rx1_ang, rx2_ang;
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	float d_phi;
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	float delta_angle;
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	float target_angle;
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	rx1_ang = get_phase(if1_i, if1_q); //- (double)(0.13 * PI);
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	rx2_ang = get_phase(if2_i, if2_q);
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	d_phi = (rx1_ang - rx2_ang);
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	if (d_phi <= 0)
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		d_phi += 2*PI;
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	d_phi -= PI;
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	if ((uint32_t)d_old == IGNORE_NAN)
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		target_angle = 0;
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else if (d_phi > d_old + 0.9* PI || d_phi < d_old - 0.9* PI)
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	   d_phi = d_old;
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Arcus sinus (-PI/2 to PI/2), input= -1..1 */
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	target_angle = asin(d_phi * wave_length_ant_spacing_ratio / (2*PI));
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	target_angle = target_angle * 180 / PI;	// Angle (-90...90°)
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	target_angle = target_angle + (double)((int32_t) angle_offset_deg + ANGLE_QUANTIZATION * 0.5);
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	delta_angle  = fmodf(target_angle , (double)ANGLE_QUANTIZATION);
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	target_angle -= delta_angle;
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	temp.d_phi = d_phi;
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	temp.target_angle = target_angle;
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	return temp;
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** }
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** //============================================================================
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** double get_phase(float real, float imag)
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** {
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	double phi;
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	/* Phase angle (0 to 2Pi) */
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	if((real > 0) && (imag >= 0))		// 1st quadrant
+ 455              	 .loc 1 242 0
+ 456 000a B5EEC08A 	 fcmpezs s16
+ 457 000e F1EE10FA 	 fmstat
+ 458              	.LBE12:
+ 459              	.LBE11:
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 460              	 .loc 1 182 0
+ 461 0012 0446     	 mov r4,r0
+ 462 0014 07EE902A 	 fmsr s15,r2
+ 463              	.LVL48:
+ 464 0018 09EE103A 	 fmsr s18,r3
+ 465 001c DDED0A9A 	 flds s19,[sp,#40]
+ 466 0020 BDF93850 	 ldrsh r5,[sp,#56]
+ 467 0024 DDED0F8A 	 flds s17,[sp,#60]
+ 468              	.LBB28:
+ 469              	.LBB21:
+ 470              	 .loc 1 242 0
+ 471 0028 40F3BF80 	 ble .L32
+ 472 002c F5EEC07A 	 fcmpezs s15
+ 473 0030 F1EE10FA 	 fmstat
+ 474 0034 C0F2B980 	 blt .L32
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		phi = atan((double)imag / (double)real);
+ 475              	 .loc 1 244 0
+ 476 0038 1046     	 mov r0,r2
+ 477              	.LVL49:
+ 478 003a FFF7FEFF 	 bl __aeabi_f2d
+ 479              	.LVL50:
+ 480 003e 0646     	 mov r6,r0
+ 481 0040 18EE100A 	 fmrs r0,s16
+ 482 0044 0F46     	 mov r7,r1
+ 483 0046 FFF7FEFF 	 bl __aeabi_f2d
+ 484              	.LVL51:
+ 485 004a 0246     	 mov r2,r0
+ 486 004c 0B46     	 mov r3,r1
+ 487 004e 3046     	 mov r0,r6
+ 488 0050 3946     	 mov r1,r7
+ 489 0052 FFF7FEFF 	 bl __aeabi_ddiv
+ 490              	.LVL52:
+ 491 0056 FFF7FEFF 	 bl atan
+ 492              	.LVL53:
+ 493 005a FFF7FEFF 	 bl __aeabi_d2f
+ 494              	.LVL54:
+ 495 005e 08EE100A 	 fmsr s16,r0
+ 496              	.LVL55:
+ 497              	.L35:
+ 498              	.LBE21:
+ 499              	.LBE28:
+ 500              	.LBB29:
+ 501              	.LBB30:
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 502              	 .loc 1 242 0
+ 503 0062 B5EEC09A 	 fcmpezs s18
+ 504 0066 F1EE10FA 	 fmstat
+ 505 006a 40F3C280 	 ble .L46
+ 506              	.L88:
+ 507 006e F5EEC09A 	 fcmpezs s19
+ 508 0072 F1EE10FA 	 fmstat
+ 509 0076 C0F2BC80 	 blt .L46
+ 510              	 .loc 1 244 0
+ 511 007a 19EE900A 	 fmrs r0,s19
+ 512 007e FFF7FEFF 	 bl __aeabi_f2d
+ 513              	.LVL56:
+ 514 0082 0646     	 mov r6,r0
+ 515 0084 19EE100A 	 fmrs r0,s18
+ 516 0088 0F46     	 mov r7,r1
+ 517 008a FFF7FEFF 	 bl __aeabi_f2d
+ 518              	.LVL57:
+ 519 008e 0246     	 mov r2,r0
+ 520 0090 0B46     	 mov r3,r1
+ 521 0092 3046     	 mov r0,r6
+ 522 0094 3946     	 mov r1,r7
+ 523 0096 FFF7FEFF 	 bl __aeabi_ddiv
+ 524              	.LVL58:
+ 525 009a FFF7FEFF 	 bl atan
+ 526              	.LVL59:
+ 527 009e FFF7FEFF 	 bl __aeabi_d2f
+ 528              	.LVL60:
+ 529 00a2 07EE900A 	 fmsr s15,r0
+ 530              	.L49:
+ 531              	.LVL61:
+ 532              	.LBE30:
+ 533              	.LBE29:
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 534              	 .loc 1 200 0
+ 535 00a6 78EE677A 	 fsubs s15,s16,s15
+ 536              	.LVL62:
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 537              	 .loc 1 206 0
+ 538 00aa 9FEDB38A 	 flds s16,.L92+24
+ 539              	.LVL63:
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 540              	 .loc 1 202 0
+ 541 00ae F5EEC07A 	 fcmpezs s15
+ 542 00b2 F1EE10FA 	 fmstat
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 543              	 .loc 1 204 0
+ 544 00b6 9CBF     	 itt ls
+ 545 00b8 9FEDB07A 	 fldsls s14,.L92+28
+ 546 00bc 77EE877A 	 faddsls s15,s15,s14
+ 547              	.LVL64:
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 548              	 .loc 1 208 0
+ 549 00c0 DDE90C01 	 ldrd r0,[sp,#48]
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 550              	 .loc 1 206 0
+ 551 00c4 37EEC88A 	 fsubs s16,s15,s16
+ 552              	.LVL65:
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 553              	 .loc 1 208 0
+ 554 00c8 FFF7FEFF 	 bl __aeabi_d2uiz
+ 555              	.LVL66:
+ 556 00cc 40F22B23 	 movw r3,#555
+ 557 00d0 9842     	 cmp r0,r3
+ 558 00d2 27D0     	 beq .L62
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 559              	 .loc 1 212 0
+ 560 00d4 18EE100A 	 fmrs r0,s16
+ 561 00d8 FFF7FEFF 	 bl __aeabi_f2d
+ 562              	.LVL67:
+ 563 00dc A0A3     	 adr r3,.L92
+ 564 00de D3E90023 	 ldrd r2,[r3]
+ 565 00e2 0646     	 mov r6,r0
+ 566 00e4 0F46     	 mov r7,r1
+ 567 00e6 DDE90C01 	 ldrd r0,[sp,#48]
+ 568 00ea FFF7FEFF 	 bl __aeabi_dadd
+ 569              	.LVL68:
+ 570 00ee 0246     	 mov r2,r0
+ 571 00f0 0B46     	 mov r3,r1
+ 572 00f2 3046     	 mov r0,r6
+ 573 00f4 3946     	 mov r1,r7
+ 574 00f6 FFF7FEFF 	 bl __aeabi_dcmpgt
+ 575              	.LVL69:
+ 576 00fa 68B9     	 cbnz r0,.L63
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 577              	 .loc 1 212 0 is_stmt 0 discriminator 1
+ 578 00fc 98A3     	 adr r3,.L92
+ 579 00fe D3E90023 	 ldrd r2,[r3]
+ 580 0102 DDE90C01 	 ldrd r0,[sp,#48]
+ 581 0106 FFF7FEFF 	 bl __aeabi_dsub
+ 582              	.LVL70:
+ 583 010a 0246     	 mov r2,r0
+ 584 010c 0B46     	 mov r3,r1
+ 585 010e 3046     	 mov r0,r6
+ 586 0110 3946     	 mov r1,r7
+ 587 0112 FFF7FEFF 	 bl __aeabi_dcmplt
+ 588              	.LVL71:
+ 589 0116 28B1     	 cbz r0,.L62
+ 590              	.L63:
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 591              	 .loc 1 214 0 is_stmt 1
+ 592 0118 DDE90C01 	 ldrd r0,[sp,#48]
+ 593 011c FFF7FEFF 	 bl __aeabi_d2f
+ 594              	.LVL72:
+ 595 0120 08EE100A 	 fmsr s16,r0
+ 596              	.LVL73:
+ 597              	.L62:
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 598              	 .loc 1 218 0
+ 599 0124 68EE288A 	 fmuls s17,s16,s17
+ 600 0128 DFED947A 	 flds s15,.L92+28
+ 601 012c C8EEA77A 	 fdivs s15,s17,s15
+ 602 0130 17EE900A 	 fmrs r0,s15
+ 603 0134 FFF7FEFF 	 bl __aeabi_f2d
+ 604              	.LVL74:
+ 605 0138 FFF7FEFF 	 bl asin
+ 606              	.LVL75:
+ 607 013c FFF7FEFF 	 bl __aeabi_d2f
+ 608              	.LVL76:
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 609              	 .loc 1 220 0
+ 610 0140 DFED8F7A 	 flds s15,.L92+32
+ 611 0144 9FED8C7A 	 flds s14,.L92+24
+ 612 0148 06EE900A 	 fmsr s13,r0
+ 613 014c 66EEA77A 	 fmuls s15,s13,s15
+ 614              	.LVL77:
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 615              	 .loc 1 222 0
+ 616 0150 C7EE877A 	 fdivs s15,s15,s14
+ 617              	.LVL78:
+ 618 0154 17EE900A 	 fmrs r0,s15
+ 619 0158 FFF7FEFF 	 bl __aeabi_f2d
+ 620              	.LVL79:
+ 621 015c 0646     	 mov r6,r0
+ 622 015e 2846     	 mov r0,r5
+ 623 0160 0F46     	 mov r7,r1
+ 624 0162 FFF7FEFF 	 bl __aeabi_i2d
+ 625              	.LVL80:
+ 626 0166 0022     	 movs r2,#0
+ 627 0168 864B     	 ldr r3,.L92+36
+ 628 016a FFF7FEFF 	 bl __aeabi_dadd
+ 629              	.LVL81:
+ 630 016e 0246     	 mov r2,r0
+ 631 0170 0B46     	 mov r3,r1
+ 632 0172 3046     	 mov r0,r6
+ 633 0174 3946     	 mov r1,r7
+ 634 0176 FFF7FEFF 	 bl __aeabi_dadd
+ 635              	.LVL82:
+ 636 017a FFF7FEFF 	 bl __aeabi_d2f
+ 637              	.LVL83:
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 638              	 .loc 1 224 0
+ 639 017e 4FF07E51 	 mov r1,#1065353216
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 640              	 .loc 1 222 0
+ 641 0182 08EE900A 	 fmsr s17,r0
+ 642              	.LVL84:
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 643              	 .loc 1 224 0
+ 644 0186 FFF7FEFF 	 bl fmodf
+ 645              	.LVL85:
+ 646 018a 09EE100A 	 fmsr s18,r0
+ 647              	.LVL86:
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 648              	 .loc 1 226 0
+ 649 018e 78EEC98A 	 fsubs s17,s17,s18
+ 650              	.LVL87:
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 651              	 .loc 1 228 0
+ 652 0192 18EE100A 	 fmrs r0,s16
+ 653              	.LVL88:
+ 654 0196 FFF7FEFF 	 bl __aeabi_f2d
+ 655              	.LVL89:
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** }
+ 656              	 .loc 1 232 0
+ 657 019a C4ED028A 	 fsts s17,[r4,#8]
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 658              	 .loc 1 233 0
+ 659 019e BDEC048B 	 fldmfdd sp!,{d8-d9}
+ 660              	.LCFI9:
+ 661              	 .cfi_remember_state
+ 662              	 .cfi_restore 82
+ 663              	 .cfi_restore 83
+ 664              	 .cfi_restore 80
+ 665              	 .cfi_restore 81
+ 666              	 .cfi_def_cfa_offset 24
+ 667              	.LVL90:
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 668              	 .loc 1 228 0
+ 669 01a2 C4E90001 	 strd r0,[r4]
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 670              	 .loc 1 233 0
+ 671 01a6 2046     	 mov r0,r4
+ 672 01a8 F8BD     	 pop {r3,r4,r5,r6,r7,pc}
+ 673              	.LVL91:
+ 674              	.L32:
+ 675              	.LCFI10:
+ 676              	 .cfi_restore_state
+ 677              	.LBB45:
+ 678              	.LBB22:
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else if((real < 0) && (imag >= 0))	// 2nd quadrant
+ 679              	 .loc 1 246 0
+ 680 01aa B5EEC08A 	 fcmpezs s16
+ 681 01ae F1EE10FA 	 fmstat
+ 682 01b2 45D4     	 bmi .L85
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		phi = atan((double)imag / (double)real) + PI;
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else if((real < 0) && (imag <= 0)) 	// 3rd quadrant
+ 683              	 .loc 1 250 0
+ 684 01b4 00F18C80 	 bmi .L38
+ 685              	.L40:
+ 686              	.LVL92:
+ 687              	.LBB13:
+ 688              	.LBB14:
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		phi = atan((double)imag / (double)real) + PI;
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else if((real > 0) && (imag <= 0)) 	// 4th quadrant
+ 689              	 .loc 1 254 0
+ 690 01b8 B5EEC08A 	 fcmpezs s16
+ 691 01bc F1EE10FA 	 fmstat
+ 692 01c0 05DD     	 ble .L43
+ 693 01c2 F5EEC07A 	 fcmpezs s15
+ 694 01c6 F1EE10FA 	 fmstat
+ 695 01ca 40F2A480 	 bls .L86
+ 696              	.L43:
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		phi = atan((double)imag / (double)real) + 2*PI;
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else if((real == 0) && (imag > 0))
+ 697              	 .loc 1 258 0
+ 698 01ce B5EE408A 	 fcmpzs s16
+ 699 01d2 F1EE10FA 	 fmstat
+ 700 01d6 2BD1     	 bne .L65
+ 701 01d8 F5EEC07A 	 fcmpezs s15
+ 702 01dc F1EE10FA 	 fmstat
+ 703 01e0 24DD     	 ble .L87
+ 704              	.LBE14:
+ 705              	.LBE13:
+ 706              	.LBE22:
+ 707              	.LBE45:
+ 708              	.LBB46:
+ 709              	.LBB39:
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 710              	 .loc 1 242 0
+ 711 01e2 B5EEC09A 	 fcmpezs s18
+ 712 01e6 F1EE10FA 	 fmstat
+ 713              	.LBE39:
+ 714              	.LBE46:
+ 715              	.LBB47:
+ 716              	.LBB23:
+ 717              	.LBB18:
+ 718              	.LBB15:
+ 719              	 .loc 1 258 0
+ 720 01ea 9FED678A 	 flds s16,.L92+40
+ 721              	.LVL93:
+ 722              	.LBE15:
+ 723              	.LBE18:
+ 724              	.LBE23:
+ 725              	.LBE47:
+ 726              	.LBB48:
+ 727              	.LBB40:
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 728              	 .loc 1 242 0
+ 729 01ee 3FF73EAF 	 bgt .L88
+ 730              	.LVL94:
+ 731              	.L46:
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 732              	 .loc 1 246 0
+ 733 01f2 B5EEC09A 	 fcmpezs s18
+ 734 01f6 F1EE10FA 	 fmstat
+ 735 01fa 42D4     	 bmi .L89
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 736              	 .loc 1 250 0
+ 737 01fc 62D4     	 bmi .L52
+ 738              	.L54:
+ 739              	.LVL95:
+ 740              	.LBB31:
+ 741              	.LBB32:
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 742              	 .loc 1 254 0
+ 743 01fe B5EEC09A 	 fcmpezs s18
+ 744 0202 F1EE10FA 	 fmstat
+ 745 0206 04DD     	 ble .L57
+ 746 0208 F5EEC09A 	 fcmpezs s19
+ 747 020c F1EE10FA 	 fmstat
+ 748 0210 65D9     	 bls .L90
+ 749              	.L57:
+ 750              	 .loc 1 258 0
+ 751 0212 B5EE409A 	 fcmpzs s18
+ 752 0216 F1EE10FA 	 fmstat
+ 753 021a 0ED1     	 bne .L68
+ 754 021c F5EEC09A 	 fcmpezs s19
+ 755 0220 F1EE10FA 	 fmstat
+ 756 0224 07DD     	 ble .L91
+ 757 0226 DFED587A 	 flds s15,.L92+40
+ 758 022a 3CE7     	 b .L49
+ 759              	.LVL96:
+ 760              	.L87:
+ 761              	.LBE32:
+ 762              	.LBE31:
+ 763              	.LBE40:
+ 764              	.LBE48:
+ 765              	.LBB49:
+ 766              	.LBB24:
+ 767              	.LBB19:
+ 768              	.LBB16:
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		phi = PI/2;
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else if((real == 0) && (imag < 0))
+ 769              	 .loc 1 262 0
+ 770 022c 00F18F80 	 bmi .L67
+ 771              	.L65:
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 772              	 .loc 1 258 0
+ 773 0230 9FED568A 	 flds s16,.L92+44
+ 774 0234 15E7     	 b .L35
+ 775              	.LVL97:
+ 776              	.L91:
+ 777              	.LBE16:
+ 778              	.LBE19:
+ 779              	.LBE24:
+ 780              	.LBE49:
+ 781              	.LBB50:
+ 782              	.LBB41:
+ 783              	.LBB36:
+ 784              	.LBB33:
+ 785              	 .loc 1 262 0
+ 786 0236 00F18D80 	 bmi .L70
+ 787              	.L68:
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 788              	 .loc 1 258 0
+ 789 023a DFED547A 	 flds s15,.L92+44
+ 790 023e 32E7     	 b .L49
+ 791              	.LVL98:
+ 792              	.L85:
+ 793              	.LBE33:
+ 794              	.LBE36:
+ 795              	.LBE41:
+ 796              	.LBE50:
+ 797              	.LBB51:
+ 798              	.LBB25:
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 799              	 .loc 1 246 0
+ 800 0240 F5EEC07A 	 fcmpezs s15
+ 801 0244 F1EE10FA 	 fmstat
+ 802 0248 42DB     	 blt .L38
+ 803              	.L42:
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 804              	 .loc 1 248 0
+ 805 024a 17EE900A 	 fmrs r0,s15
+ 806              	.LVL99:
+ 807 024e FFF7FEFF 	 bl __aeabi_f2d
+ 808              	.LVL100:
+ 809 0252 0646     	 mov r6,r0
+ 810 0254 18EE100A 	 fmrs r0,s16
+ 811 0258 0F46     	 mov r7,r1
+ 812 025a FFF7FEFF 	 bl __aeabi_f2d
+ 813              	.LVL101:
+ 814 025e 0246     	 mov r2,r0
+ 815 0260 0B46     	 mov r3,r1
+ 816 0262 3046     	 mov r0,r6
+ 817 0264 3946     	 mov r1,r7
+ 818 0266 FFF7FEFF 	 bl __aeabi_ddiv
+ 819              	.LVL102:
+ 820 026a FFF7FEFF 	 bl atan
+ 821              	.LVL103:
+ 822 026e 3EA3     	 adr r3,.L92+8
+ 823 0270 D3E90023 	 ldrd r2,[r3]
+ 824 0274 FFF7FEFF 	 bl __aeabi_dadd
+ 825              	.LVL104:
+ 826 0278 FFF7FEFF 	 bl __aeabi_d2f
+ 827              	.LVL105:
+ 828 027c 08EE100A 	 fmsr s16,r0
+ 829              	.LVL106:
+ 830 0280 EFE6     	 b .L35
+ 831              	.LVL107:
+ 832              	.L89:
+ 833              	.LBE25:
+ 834              	.LBE51:
+ 835              	.LBB52:
+ 836              	.LBB42:
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 837              	 .loc 1 246 0
+ 838 0282 F5EEC09A 	 fcmpezs s19
+ 839 0286 F1EE10FA 	 fmstat
+ 840 028a 1BDB     	 blt .L52
+ 841              	.L56:
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 842              	 .loc 1 248 0
+ 843 028c 19EE900A 	 fmrs r0,s19
+ 844 0290 FFF7FEFF 	 bl __aeabi_f2d
+ 845              	.LVL108:
+ 846 0294 0646     	 mov r6,r0
+ 847 0296 19EE100A 	 fmrs r0,s18
+ 848 029a 0F46     	 mov r7,r1
+ 849 029c FFF7FEFF 	 bl __aeabi_f2d
+ 850              	.LVL109:
+ 851 02a0 0246     	 mov r2,r0
+ 852 02a2 0B46     	 mov r3,r1
+ 853 02a4 3046     	 mov r0,r6
+ 854 02a6 3946     	 mov r1,r7
+ 855 02a8 FFF7FEFF 	 bl __aeabi_ddiv
+ 856              	.LVL110:
+ 857 02ac FFF7FEFF 	 bl atan
+ 858              	.LVL111:
+ 859 02b0 2DA3     	 adr r3,.L92+8
+ 860 02b2 D3E90023 	 ldrd r2,[r3]
+ 861 02b6 FFF7FEFF 	 bl __aeabi_dadd
+ 862              	.LVL112:
+ 863 02ba FFF7FEFF 	 bl __aeabi_d2f
+ 864              	.LVL113:
+ 865 02be 07EE900A 	 fmsr s15,r0
+ 866 02c2 F0E6     	 b .L49
+ 867              	.L52:
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 868              	 .loc 1 250 0
+ 869 02c4 F5EEC09A 	 fcmpezs s19
+ 870 02c8 F1EE10FA 	 fmstat
+ 871 02cc 97D8     	 bhi .L54
+ 872 02ce DDE7     	 b .L56
+ 873              	.LVL114:
+ 874              	.L38:
+ 875              	.LBE42:
+ 876              	.LBE52:
+ 877              	.LBB53:
+ 878              	.LBB26:
+ 879 02d0 F5EEC07A 	 fcmpezs s15
+ 880 02d4 F1EE10FA 	 fmstat
+ 881 02d8 3FF66EAF 	 bhi .L40
+ 882 02dc B5E7     	 b .L42
+ 883              	.LVL115:
+ 884              	.L90:
+ 885              	.LBE26:
+ 886              	.LBE53:
+ 887              	.LBB54:
+ 888              	.LBB43:
+ 889              	.LBB37:
+ 890              	.LBB34:
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 891              	 .loc 1 256 0
+ 892 02de 19EE900A 	 fmrs r0,s19
+ 893 02e2 FFF7FEFF 	 bl __aeabi_f2d
+ 894              	.LVL116:
+ 895 02e6 0646     	 mov r6,r0
+ 896 02e8 19EE100A 	 fmrs r0,s18
+ 897 02ec 0F46     	 mov r7,r1
+ 898 02ee FFF7FEFF 	 bl __aeabi_f2d
+ 899              	.LVL117:
+ 900 02f2 0246     	 mov r2,r0
+ 901 02f4 0B46     	 mov r3,r1
+ 902 02f6 3046     	 mov r0,r6
+ 903 02f8 3946     	 mov r1,r7
+ 904 02fa FFF7FEFF 	 bl __aeabi_ddiv
+ 905              	.LVL118:
+ 906 02fe FFF7FEFF 	 bl atan
+ 907              	.LVL119:
+ 908 0302 1BA3     	 adr r3,.L92+16
+ 909 0304 D3E90023 	 ldrd r2,[r3]
+ 910 0308 FFF7FEFF 	 bl __aeabi_dadd
+ 911              	.LVL120:
+ 912 030c FFF7FEFF 	 bl __aeabi_d2f
+ 913              	.LVL121:
+ 914 0310 07EE900A 	 fmsr s15,r0
+ 915 0314 C7E6     	 b .L49
+ 916              	.LVL122:
+ 917              	.L86:
+ 918              	.LBE34:
+ 919              	.LBE37:
+ 920              	.LBE43:
+ 921              	.LBE54:
+ 922              	.LBB55:
+ 923              	.LBB27:
+ 924              	.LBB20:
+ 925              	.LBB17:
+ 926 0316 17EE900A 	 fmrs r0,s15
+ 927              	.LVL123:
+ 928 031a FFF7FEFF 	 bl __aeabi_f2d
+ 929              	.LVL124:
+ 930 031e 0646     	 mov r6,r0
+ 931 0320 18EE100A 	 fmrs r0,s16
+ 932 0324 0F46     	 mov r7,r1
+ 933 0326 FFF7FEFF 	 bl __aeabi_f2d
+ 934              	.LVL125:
+ 935 032a 0246     	 mov r2,r0
+ 936 032c 0B46     	 mov r3,r1
+ 937 032e 3046     	 mov r0,r6
+ 938 0330 3946     	 mov r1,r7
+ 939 0332 FFF7FEFF 	 bl __aeabi_ddiv
+ 940              	.LVL126:
+ 941 0336 FFF7FEFF 	 bl atan
+ 942              	.LVL127:
+ 943 033a 0DA3     	 adr r3,.L92+16
+ 944 033c D3E90023 	 ldrd r2,[r3]
+ 945 0340 FFF7FEFF 	 bl __aeabi_dadd
+ 946              	.LVL128:
+ 947 0344 FFF7FEFF 	 bl __aeabi_d2f
+ 948              	.LVL129:
+ 949 0348 08EE100A 	 fmsr s16,r0
+ 950              	.LVL130:
+ 951 034c 89E6     	 b .L35
+ 952              	.LVL131:
+ 953              	.L67:
+ 954              	 .loc 1 262 0
+ 955 034e 9FED108A 	 flds s16,.L92+48
+ 956 0352 86E6     	 b .L35
+ 957              	.LVL132:
+ 958              	.L70:
+ 959              	.LBE17:
+ 960              	.LBE20:
+ 961              	.LBE27:
+ 962              	.LBE55:
+ 963              	.LBB56:
+ 964              	.LBB44:
+ 965              	.LBB38:
+ 966              	.LBB35:
+ 967 0354 DFED0E7A 	 flds s15,.L92+48
+ 968 0358 A5E6     	 b .L49
+ 969              	.L93:
+ 970 035a 00BFAFF3 	 .align 3
+ 970      0080
+ 971              	.L92:
+ 972 0360 00000070 	 .word 1879048192
+ 973 0364 959E0640 	 .word 1074175637
+ 974 0368 00000060 	 .word 1610612736
+ 975 036c FB210940 	 .word 1074340347
+ 976 0370 00000060 	 .word 1610612736
+ 977 0374 FB211940 	 .word 1075388923
+ 978 0378 DB0F4940 	 .word 1078530011
+ 979 037c DB0FC940 	 .word 1086918619
+ 980 0380 00003443 	 .word 1127481344
+ 981 0384 0000E03F 	 .word 1071644672
+ 982 0388 DB0FC93F 	 .word 1070141403
+ 983 038c 00000000 	 .word 0
+ 984 0390 E4CB9640 	 .word 1083624420
+ 985              	.LBE35:
+ 986              	.LBE38:
+ 987              	.LBE44:
+ 988              	.LBE56:
+ 989              	 .cfi_endproc
+ 990              	.LFE473:
+ 992 0394 AFF30080 	 .section .text.get_phase,"ax",%progbits
+ 993              	 .align 2
+ 994              	 .global get_phase
+ 995              	 .thumb
+ 996              	 .thumb_func
+ 998              	get_phase:
+ 999              	.LFB474:
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	double phi;
+ 1000              	 .loc 1 238 0
+ 1001              	 .cfi_startproc
+ 1002              	 
+ 1003              	 
+ 1004              	.LVL133:
+ 1005 0000 38B5     	 push {r3,r4,r5,lr}
+ 1006              	.LCFI11:
+ 1007              	 .cfi_def_cfa_offset 16
+ 1008              	 .cfi_offset 3,-16
+ 1009              	 .cfi_offset 4,-12
+ 1010              	 .cfi_offset 5,-8
+ 1011              	 .cfi_offset 14,-4
+ 1012 0002 2DED028B 	 fstmfdd sp!,{d8}
+ 1013              	.LCFI12:
+ 1014              	 .cfi_def_cfa_offset 24
+ 1015              	 .cfi_offset 80,-24
+ 1016              	 .cfi_offset 81,-20
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	double phi;
+ 1017              	 .loc 1 238 0
+ 1018 0006 08EE100A 	 fmsr s16,r0
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1019              	 .loc 1 242 0
+ 1020 000a B5EEC08A 	 fcmpezs s16
+ 1021 000e F1EE10FA 	 fmstat
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	double phi;
+ 1022              	 .loc 1 238 0
+ 1023 0012 07EE901A 	 fmsr s15,r1
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1024              	 .loc 1 242 0
+ 1025 0016 19DD     	 ble .L95
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1026              	 .loc 1 242 0 is_stmt 0 discriminator 1
+ 1027 0018 F5EEC07A 	 fcmpezs s15
+ 1028 001c F1EE10FA 	 fmstat
+ 1029 0020 14DB     	 blt .L95
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 1030              	 .loc 1 244 0 is_stmt 1
+ 1031 0022 0846     	 mov r0,r1
+ 1032              	.LVL134:
+ 1033 0024 FFF7FEFF 	 bl __aeabi_f2d
+ 1034              	.LVL135:
+ 1035 0028 0446     	 mov r4,r0
+ 1036 002a 18EE100A 	 fmrs r0,s16
+ 1037 002e 0D46     	 mov r5,r1
+ 1038 0030 FFF7FEFF 	 bl __aeabi_f2d
+ 1039              	.LVL136:
+ 1040 0034 0B46     	 mov r3,r1
+ 1041 0036 0246     	 mov r2,r0
+ 1042 0038 2946     	 mov r1,r5
+ 1043 003a 2046     	 mov r0,r4
+ 1044 003c FFF7FEFF 	 bl __aeabi_ddiv
+ 1045              	.LVL137:
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		phi = 3*PI/2;
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	else
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 		phi = 0;	// Indeterminate
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	return(phi);
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** }
+ 1046              	 .loc 1 272 0
+ 1047 0040 BDEC028B 	 fldmfdd sp!,{d8}
+ 1048              	.LCFI13:
+ 1049              	 .cfi_remember_state
+ 1050              	 .cfi_restore 80
+ 1051              	 .cfi_restore 81
+ 1052              	 .cfi_def_cfa_offset 16
+ 1053              	.LVL138:
+ 1054 0044 BDE83840 	 pop {r3,r4,r5,lr}
+ 1055              	.LCFI14:
+ 1056              	 .cfi_restore 14
+ 1057              	 .cfi_restore 5
+ 1058              	 .cfi_restore 4
+ 1059              	 .cfi_restore 3
+ 1060              	 .cfi_def_cfa_offset 0
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 1061              	 .loc 1 244 0
+ 1062 0048 FFF7FEBF 	 b atan
+ 1063              	.LVL139:
+ 1064              	.L95:
+ 1065              	.LCFI15:
+ 1066              	 .cfi_restore_state
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1067              	 .loc 1 246 0
+ 1068 004c B5EEC08A 	 fcmpezs s16
+ 1069 0050 F1EE10FA 	 fmstat
+ 1070 0054 20D4     	 bmi .L119
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1071              	 .loc 1 250 0
+ 1072 0056 3ED4     	 bmi .L100
+ 1073              	.L103:
+ 1074              	.LVL140:
+ 1075              	.LBB59:
+ 1076              	.LBB60:
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1077              	 .loc 1 254 0
+ 1078 0058 B5EEC08A 	 fcmpezs s16
+ 1079 005c F1EE10FA 	 fmstat
+ 1080 0060 04DD     	 ble .L106
+ 1081 0062 F5EEC07A 	 fcmpezs s15
+ 1082 0066 F1EE10FA 	 fmstat
+ 1083 006a 3AD9     	 bls .L120
+ 1084              	.L106:
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1085              	 .loc 1 258 0
+ 1086 006c B5EE408A 	 fcmpzs s16
+ 1087 0070 F1EE10FA 	 fmstat
+ 1088 0074 0BD1     	 bne .L109
+ 1089 0076 F5EEC07A 	 fcmpezs s15
+ 1090 007a F1EE10FA 	 fmstat
+ 1091 007e 05DD     	 ble .L121
+ 1092              	.LBE60:
+ 1093              	.LBE59:
+ 1094              	 .loc 1 272 0
+ 1095 0080 BDEC028B 	 fldmfdd sp!,{d8}
+ 1096              	.LCFI16:
+ 1097              	 .cfi_remember_state
+ 1098              	 .cfi_restore 80
+ 1099              	 .cfi_restore 81
+ 1100              	 .cfi_def_cfa_offset 16
+ 1101              	.LBB64:
+ 1102              	.LBB61:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 1103              	 .loc 1 260 0
+ 1104 0084 26A1     	 adr r1,.L122
+ 1105 0086 D1E90001 	 ldrd r0,[r1]
+ 1106              	.LVL141:
+ 1107              	.LBE61:
+ 1108              	.LBE64:
+ 1109              	 .loc 1 272 0
+ 1110 008a 38BD     	 pop {r3,r4,r5,pc}
+ 1111              	.LVL142:
+ 1112              	.L121:
+ 1113              	.LCFI17:
+ 1114              	 .cfi_restore_state
+ 1115              	.LBB65:
+ 1116              	.LBB62:
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1117              	 .loc 1 262 0
+ 1118 008c 41D4     	 bmi .L111
+ 1119              	.L109:
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 1120              	 .loc 1 268 0
+ 1121 008e 0020     	 movs r0,#0
+ 1122              	.LVL143:
+ 1123 0090 0021     	 movs r1,#0
+ 1124              	.LVL144:
+ 1125              	.L102:
+ 1126              	.LBE62:
+ 1127              	.LBE65:
+ 1128              	 .loc 1 272 0
+ 1129 0092 BDEC028B 	 fldmfdd sp!,{d8}
+ 1130              	.LCFI18:
+ 1131              	 .cfi_remember_state
+ 1132              	 .cfi_restore 80
+ 1133              	 .cfi_restore 81
+ 1134              	 .cfi_def_cfa_offset 16
+ 1135              	.LVL145:
+ 1136 0096 38BD     	 pop {r3,r4,r5,pc}
+ 1137              	.LVL146:
+ 1138              	.L119:
+ 1139              	.LCFI19:
+ 1140              	 .cfi_restore_state
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1141              	 .loc 1 246 0 discriminator 1
+ 1142 0098 F5EEC07A 	 fcmpezs s15
+ 1143 009c F1EE10FA 	 fmstat
+ 1144 00a0 19DB     	 blt .L100
+ 1145              	.L105:
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 1146              	 .loc 1 248 0
+ 1147 00a2 17EE900A 	 fmrs r0,s15
+ 1148              	.LVL147:
+ 1149 00a6 FFF7FEFF 	 bl __aeabi_f2d
+ 1150              	.LVL148:
+ 1151 00aa 0446     	 mov r4,r0
+ 1152 00ac 18EE100A 	 fmrs r0,s16
+ 1153 00b0 0D46     	 mov r5,r1
+ 1154 00b2 FFF7FEFF 	 bl __aeabi_f2d
+ 1155              	.LVL149:
+ 1156 00b6 0246     	 mov r2,r0
+ 1157 00b8 0B46     	 mov r3,r1
+ 1158 00ba 2046     	 mov r0,r4
+ 1159 00bc 2946     	 mov r1,r5
+ 1160 00be FFF7FEFF 	 bl __aeabi_ddiv
+ 1161              	.LVL150:
+ 1162 00c2 FFF7FEFF 	 bl atan
+ 1163              	.LVL151:
+ 1164 00c6 18A3     	 adr r3,.L122+8
+ 1165 00c8 D3E90023 	 ldrd r2,[r3]
+ 1166 00cc FFF7FEFF 	 bl __aeabi_dadd
+ 1167              	.LVL152:
+ 1168              	 .loc 1 272 0
+ 1169 00d0 BDEC028B 	 fldmfdd sp!,{d8}
+ 1170              	.LCFI20:
+ 1171              	 .cfi_remember_state
+ 1172              	 .cfi_restore 80
+ 1173              	 .cfi_restore 81
+ 1174              	 .cfi_def_cfa_offset 16
+ 1175              	.LVL153:
+ 1176 00d4 38BD     	 pop {r3,r4,r5,pc}
+ 1177              	.LVL154:
+ 1178              	.L100:
+ 1179              	.LCFI21:
+ 1180              	 .cfi_restore_state
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	{
+ 1181              	 .loc 1 250 0 discriminator 1
+ 1182 00d6 F5EEC07A 	 fcmpezs s15
+ 1183 00da F1EE10FA 	 fmstat
+ 1184 00de BBD8     	 bhi .L103
+ 1185 00e0 DFE7     	 b .L105
+ 1186              	.LVL155:
+ 1187              	.L120:
+ 1188              	.LBB66:
+ 1189              	.LBB63:
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 1190              	 .loc 1 256 0
+ 1191 00e2 17EE900A 	 fmrs r0,s15
+ 1192              	.LVL156:
+ 1193 00e6 FFF7FEFF 	 bl __aeabi_f2d
+ 1194              	.LVL157:
+ 1195 00ea 0446     	 mov r4,r0
+ 1196 00ec 18EE100A 	 fmrs r0,s16
+ 1197 00f0 0D46     	 mov r5,r1
+ 1198 00f2 FFF7FEFF 	 bl __aeabi_f2d
+ 1199              	.LVL158:
+ 1200 00f6 0246     	 mov r2,r0
+ 1201 00f8 0B46     	 mov r3,r1
+ 1202 00fa 2046     	 mov r0,r4
+ 1203 00fc 2946     	 mov r1,r5
+ 1204 00fe FFF7FEFF 	 bl __aeabi_ddiv
+ 1205              	.LVL159:
+ 1206 0102 FFF7FEFF 	 bl atan
+ 1207              	.LVL160:
+ 1208 0106 0AA3     	 adr r3,.L122+16
+ 1209 0108 D3E90023 	 ldrd r2,[r3]
+ 1210 010c FFF7FEFF 	 bl __aeabi_dadd
+ 1211              	.LVL161:
+ 1212 0110 BFE7     	 b .L102
+ 1213              	.LVL162:
+ 1214              	.L111:
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/src\dsp_lib.c **** 	}
+ 1215              	 .loc 1 264 0
+ 1216 0112 09A1     	 adr r1,.L122+24
+ 1217 0114 D1E90001 	 ldrd r0,[r1]
+ 1218              	.LVL163:
+ 1219 0118 BBE7     	 b .L102
+ 1220              	.L123:
+ 1221 011a 00BFAFF3 	 .align 3
+ 1221      0080
+ 1222              	.L122:
+ 1223 0120 00000060 	 .word 1610612736
+ 1224 0124 FB21F93F 	 .word 1073291771
+ 1225 0128 00000060 	 .word 1610612736
+ 1226 012c FB210940 	 .word 1074340347
+ 1227 0130 00000060 	 .word 1610612736
+ 1228 0134 FB211940 	 .word 1075388923
+ 1229 0138 00000080 	 .word -2147483648
+ 1230 013c 7CD91240 	 .word 1074977148
+ 1231              	.LBE63:
+ 1232              	.LBE66:
+ 1233              	 .cfi_endproc
+ 1234              	.LFE474:
+ 1236              	 .comm slow_time_twiddle_table,4,4
+ 1237              	 .comm fast_time_twiddle_table,4,4
+ 1238              	 .section .data.FastTime_Window,"aw",%progbits
+ 1239              	 .align 2
+ 1240              	 .set .LANCHOR0,.+0
+ 1243              	FastTime_Window:
+ 1244 0000 82A87B38 	 .word 947628162
+ 1245 0004 18B49038 	 .word 949007384
+ 1246 0008 BD3AC738 	 .word 952580797
+ 1247 000c 18B41039 	 .word 957395992
+ 1248 0010 87C35239 	 .word 961725319
+ 1249 0014 9E5F9439 	 .word 966025118
+ 1250 0018 0B60CA39 	 .word 969564171
+ 1251 001c A1F4053A 	 .word 973468833
+ 1252 0020 118A2D3A 	 .word 976062993
+ 1253 0024 56F05B3A 	 .word 979103830
+ 1254 0028 F019893A 	 .word 982063600
+ 1255 002c 726DA83A 	 .word 984116594
+ 1256 0030 EA78CC3A 	 .word 986478826
+ 1257 0034 01A1F53A 	 .word 989176065
+ 1258 0038 3125123B 	 .word 991044913
+ 1259 003c 309F2C3B 	 .word 992780080
+ 1260 0040 D2704A3B 	 .word 994734290
+ 1261 0044 FAED6B3B 	 .word 996929018
+ 1262 0048 46B5883B 	 .word 998815046
+ 1263 004c 98A59D3B 	 .word 1000187288
+ 1264 0050 81E9B43B 	 .word 1001712001
+ 1265 0054 BABBCE3B 	 .word 1003404218
+ 1266 0058 3546EB3B 	 .word 1005274677
+ 1267 005c D461053C 	 .word 1006985684
+ 1268 0060 67B7163C 	 .word 1008121703
+ 1269 0064 2FC1293C 	 .word 1009369391
+ 1270 0068 57983E3C 	 .word 1010735191
+ 1271 006c 3A5A553C 	 .word 1012226618
+ 1272 0070 992C6E3C 	 .word 1013853337
+ 1273 0074 6896843C 	 .word 1015322216
+ 1274 0078 363E933C 	 .word 1016282678
+ 1275 007c 7E1EA33C 	 .word 1017323134
+ 1276 0080 0648B43C 	 .word 1018447878
+ 1277 0084 96CBC63C 	 .word 1019661206
+ 1278 0088 27BEDA3C 	 .word 1020968487
+ 1279 008c 662EF03C 	 .word 1022373478
+ 1280 0090 9A97033D 	 .word 1023645594
+ 1281 0094 C4EA0F3D 	 .word 1024453316
+ 1282 0098 09181D3D 	 .word 1025316873
+ 1283 009c D8282B3D 	 .word 1026238680
+ 1284 00a0 AF273A3D 	 .word 1027221423
+ 1285 00a4 E31B4A3D 	 .word 1028266979
+ 1286 00a8 F10F5B3D 	 .word 1029378033
+ 1287 00ac 310B6D3D 	 .word 1030556465
+ 1288 00b0 0F0C803D 	 .word 1031801871
+ 1289 00b4 821E8A3D 	 .word 1032461954
+ 1290 00b8 2FC2943D 	 .word 1033159215
+ 1291 00bc C2FA9F3D 	 .word 1033894594
+ 1292 00c0 E6CBAB3D 	 .word 1034669030
+ 1293 00c4 4739B83D 	 .word 1035483463
+ 1294 00c8 1747C53D 	 .word 1036338967
+ 1295 00cc 6EF7D23D 	 .word 1037236078
+ 1296 00d0 054FE13D 	 .word 1038176005
+ 1297 00d4 F44FF03D 	 .word 1039159284
+ 1298 00d8 54FCFF3D 	 .word 1040186452
+ 1299 00dc A62B083E 	 .word 1040722854
+ 1300 00e0 79B1103E 	 .word 1041281401
+ 1301 00e4 6D90193E 	 .word 1041862765
+ 1302 00e8 4BC9223E 	 .word 1042467147
+ 1303 00ec 575C2C3E 	 .word 1043094615
+ 1304 00f0 5A4A363E 	 .word 1043745370
+ 1305 00f4 5393403E 	 .word 1044419411
+ 1306 00f8 43374B3E 	 .word 1045116739
+ 1307 00fc 2A36563E 	 .word 1045837354
+ 1308 0100 3F8F613E 	 .word 1046581055
+ 1309 0104 FA416D3E 	 .word 1047347706
+ 1310 0108 D74D793E 	 .word 1048137175
+ 1311 010c A1D8823E 	 .word 1048762529
+ 1312 0110 B935893E 	 .word 1049179577
+ 1313 0114 49BD8F3E 	 .word 1049607497
+ 1314 0118 876E963E 	 .word 1050046087
+ 1315 011c 45489D3E 	 .word 1050495045
+ 1316 0120 9949A43E 	 .word 1050954137
+ 1317 0124 1171AB3E 	 .word 1051422993
+ 1318 0128 7FBDB23E 	 .word 1051901311
+ 1319 012c 512DBA3E 	 .word 1052388689
+ 1320 0130 D3BEC13E 	 .word 1052884691
+ 1321 0134 7270C93E 	 .word 1053388914
+ 1322 0138 3540D13E 	 .word 1053900853
+ 1323 013c 282CD93E 	 .word 1054420008
+ 1324 0140 5132E13E 	 .word 1054945873
+ 1325 0144 7650E93E 	 .word 1055477878
+ 1326 0148 3C84F13E 	 .word 1056015420
+ 1327 014c 47CBF93E 	 .word 1056557895
+ 1328 0150 7B11013F 	 .word 1057034619
+ 1329 0154 6744053F 	 .word 1057309799
+ 1330 0158 077D093F 	 .word 1057586439
+ 1331 015c FAB90D3F 	 .word 1057864186
+ 1332 0160 CFF9113F 	 .word 1058142671
+ 1333 0164 043B163F 	 .word 1058421508
+ 1334 0168 187C1A3F 	 .word 1058700312
+ 1335 016c 88BB1E3F 	 .word 1058978696
+ 1336 0170 C2F7223F 	 .word 1059256258
+ 1337 0174 232F273F 	 .word 1059532579
+ 1338 0178 18602B3F 	 .word 1059807256
+ 1339 017c EC882F3F 	 .word 1060079852
+ 1340 0180 FCA7333F 	 .word 1060349948
+ 1341 0184 B6BB373F 	 .word 1060617142
+ 1342 0188 55C23B3F 	 .word 1060880981
+ 1343 018c 34BA3F3F 	 .word 1061141044
+ 1344 0190 A1A1433F 	 .word 1061396897
+ 1345 0194 0877473F 	 .word 1061648136
+ 1346 0198 B4384B3F 	 .word 1061894324
+ 1347 019c F3E44E3F 	 .word 1062135027
+ 1348 01a0 317A523F 	 .word 1062369841
+ 1349 01a4 ECF6553F 	 .word 1062598380
+ 1350 01a8 7159593F 	 .word 1062820209
+ 1351 01ac 4DA05C3F 	 .word 1063034957
+ 1352 01b0 EFC95F3F 	 .word 1063242223
+ 1353 01b4 F6D4623F 	 .word 1063441654
+ 1354 01b8 F0BF653F 	 .word 1063632880
+ 1355 01bc 7F89683F 	 .word 1063815551
+ 1356 01c0 51306B3F 	 .word 1063989329
+ 1357 01c4 29B36D3F 	 .word 1064153897
+ 1358 01c8 C710703F 	 .word 1064308935
+ 1359 01cc 1F48723F 	 .word 1064454175
+ 1360 01d0 1558743F 	 .word 1064589333
+ 1361 01d4 AB3F763F 	 .word 1064714155
+ 1362 01d8 E7FD773F 	 .word 1064828391
+ 1363 01dc 1092793F 	 .word 1064931856
+ 1364 01e0 3BFB7A3F 	 .word 1065024315
+ 1365 01e4 D2387C3F 	 .word 1065105618
+ 1366 01e8 2C4A7D3F 	 .word 1065175596
+ 1367 01ec D32E7E3F 	 .word 1065234131
+ 1368 01f0 32E67E3F 	 .word 1065281074
+ 1369 01f4 15707F3F 	 .word 1065316373
+ 1370 01f8 29CC7F3F 	 .word 1065339945
+ 1371 01fc 3CFA7F3F 	 .word 1065351740
+ 1372 0200 3CFA7F3F 	 .word 1065351740
+ 1373 0204 29CC7F3F 	 .word 1065339945
+ 1374 0208 15707F3F 	 .word 1065316373
+ 1375 020c 32E67E3F 	 .word 1065281074
+ 1376 0210 D32E7E3F 	 .word 1065234131
+ 1377 0214 2C4A7D3F 	 .word 1065175596
+ 1378 0218 D2387C3F 	 .word 1065105618
+ 1379 021c 3BFB7A3F 	 .word 1065024315
+ 1380 0220 1092793F 	 .word 1064931856
+ 1381 0224 E7FD773F 	 .word 1064828391
+ 1382 0228 AB3F763F 	 .word 1064714155
+ 1383 022c 1558743F 	 .word 1064589333
+ 1384 0230 1F48723F 	 .word 1064454175
+ 1385 0234 C710703F 	 .word 1064308935
+ 1386 0238 29B36D3F 	 .word 1064153897
+ 1387 023c 51306B3F 	 .word 1063989329
+ 1388 0240 7F89683F 	 .word 1063815551
+ 1389 0244 F0BF653F 	 .word 1063632880
+ 1390 0248 F6D4623F 	 .word 1063441654
+ 1391 024c EFC95F3F 	 .word 1063242223
+ 1392 0250 4DA05C3F 	 .word 1063034957
+ 1393 0254 7159593F 	 .word 1062820209
+ 1394 0258 ECF6553F 	 .word 1062598380
+ 1395 025c 317A523F 	 .word 1062369841
+ 1396 0260 F3E44E3F 	 .word 1062135027
+ 1397 0264 B4384B3F 	 .word 1061894324
+ 1398 0268 0877473F 	 .word 1061648136
+ 1399 026c A1A1433F 	 .word 1061396897
+ 1400 0270 34BA3F3F 	 .word 1061141044
+ 1401 0274 55C23B3F 	 .word 1060880981
+ 1402 0278 B6BB373F 	 .word 1060617142
+ 1403 027c FCA7333F 	 .word 1060349948
+ 1404 0280 EC882F3F 	 .word 1060079852
+ 1405 0284 18602B3F 	 .word 1059807256
+ 1406 0288 232F273F 	 .word 1059532579
+ 1407 028c C2F7223F 	 .word 1059256258
+ 1408 0290 88BB1E3F 	 .word 1058978696
+ 1409 0294 187C1A3F 	 .word 1058700312
+ 1410 0298 043B163F 	 .word 1058421508
+ 1411 029c CFF9113F 	 .word 1058142671
+ 1412 02a0 FAB90D3F 	 .word 1057864186
+ 1413 02a4 077D093F 	 .word 1057586439
+ 1414 02a8 6744053F 	 .word 1057309799
+ 1415 02ac 7B11013F 	 .word 1057034619
+ 1416 02b0 47CBF93E 	 .word 1056557895
+ 1417 02b4 3C84F13E 	 .word 1056015420
+ 1418 02b8 7650E93E 	 .word 1055477878
+ 1419 02bc 5132E13E 	 .word 1054945873
+ 1420 02c0 282CD93E 	 .word 1054420008
+ 1421 02c4 3540D13E 	 .word 1053900853
+ 1422 02c8 7270C93E 	 .word 1053388914
+ 1423 02cc D3BEC13E 	 .word 1052884691
+ 1424 02d0 512DBA3E 	 .word 1052388689
+ 1425 02d4 7FBDB23E 	 .word 1051901311
+ 1426 02d8 1171AB3E 	 .word 1051422993
+ 1427 02dc 9949A43E 	 .word 1050954137
+ 1428 02e0 45489D3E 	 .word 1050495045
+ 1429 02e4 876E963E 	 .word 1050046087
+ 1430 02e8 49BD8F3E 	 .word 1049607497
+ 1431 02ec B935893E 	 .word 1049179577
+ 1432 02f0 A1D8823E 	 .word 1048762529
+ 1433 02f4 D74D793E 	 .word 1048137175
+ 1434 02f8 FA416D3E 	 .word 1047347706
+ 1435 02fc 3F8F613E 	 .word 1046581055
+ 1436 0300 2A36563E 	 .word 1045837354
+ 1437 0304 43374B3E 	 .word 1045116739
+ 1438 0308 5393403E 	 .word 1044419411
+ 1439 030c 5A4A363E 	 .word 1043745370
+ 1440 0310 575C2C3E 	 .word 1043094615
+ 1441 0314 4BC9223E 	 .word 1042467147
+ 1442 0318 6D90193E 	 .word 1041862765
+ 1443 031c 79B1103E 	 .word 1041281401
+ 1444 0320 A62B083E 	 .word 1040722854
+ 1445 0324 54FCFF3D 	 .word 1040186452
+ 1446 0328 F44FF03D 	 .word 1039159284
+ 1447 032c 054FE13D 	 .word 1038176005
+ 1448 0330 6EF7D23D 	 .word 1037236078
+ 1449 0334 1747C53D 	 .word 1036338967
+ 1450 0338 4739B83D 	 .word 1035483463
+ 1451 033c E6CBAB3D 	 .word 1034669030
+ 1452 0340 C2FA9F3D 	 .word 1033894594
+ 1453 0344 2FC2943D 	 .word 1033159215
+ 1454 0348 821E8A3D 	 .word 1032461954
+ 1455 034c 0F0C803D 	 .word 1031801871
+ 1456 0350 310B6D3D 	 .word 1030556465
+ 1457 0354 F10F5B3D 	 .word 1029378033
+ 1458 0358 E31B4A3D 	 .word 1028266979
+ 1459 035c AF273A3D 	 .word 1027221423
+ 1460 0360 D8282B3D 	 .word 1026238680
+ 1461 0364 09181D3D 	 .word 1025316873
+ 1462 0368 C4EA0F3D 	 .word 1024453316
+ 1463 036c 9A97033D 	 .word 1023645594
+ 1464 0370 662EF03C 	 .word 1022373478
+ 1465 0374 27BEDA3C 	 .word 1020968487
+ 1466 0378 96CBC63C 	 .word 1019661206
+ 1467 037c 0648B43C 	 .word 1018447878
+ 1468 0380 7E1EA33C 	 .word 1017323134
+ 1469 0384 363E933C 	 .word 1016282678
+ 1470 0388 6896843C 	 .word 1015322216
+ 1471 038c 992C6E3C 	 .word 1013853337
+ 1472 0390 3A5A553C 	 .word 1012226618
+ 1473 0394 57983E3C 	 .word 1010735191
+ 1474 0398 2FC1293C 	 .word 1009369391
+ 1475 039c 67B7163C 	 .word 1008121703
+ 1476 03a0 D461053C 	 .word 1006985684
+ 1477 03a4 3546EB3B 	 .word 1005274677
+ 1478 03a8 BABBCE3B 	 .word 1003404218
+ 1479 03ac 81E9B43B 	 .word 1001712001
+ 1480 03b0 98A59D3B 	 .word 1000187288
+ 1481 03b4 46B5883B 	 .word 998815046
+ 1482 03b8 FAED6B3B 	 .word 996929018
+ 1483 03bc D2704A3B 	 .word 994734290
+ 1484 03c0 309F2C3B 	 .word 992780080
+ 1485 03c4 3125123B 	 .word 991044913
+ 1486 03c8 01A1F53A 	 .word 989176065
+ 1487 03cc EA78CC3A 	 .word 986478826
+ 1488 03d0 726DA83A 	 .word 984116594
+ 1489 03d4 F019893A 	 .word 982063600
+ 1490 03d8 56F05B3A 	 .word 979103830
+ 1491 03dc 118A2D3A 	 .word 976062993
+ 1492 03e0 A1F4053A 	 .word 973468833
+ 1493 03e4 0B60CA39 	 .word 969564171
+ 1494 03e8 9E5F9439 	 .word 966025118
+ 1495 03ec 87C35239 	 .word 961725319
+ 1496 03f0 18B41039 	 .word 957395992
+ 1497 03f4 BD3AC738 	 .word 952580797
+ 1498 03f8 18B49038 	 .word 949007384
+ 1499 03fc 82A87B38 	 .word 947628162
+ 1500              	 .section .data.SlowTime_Window,"aw",%progbits
+ 1501              	 .align 2
+ 1502              	 .set .LANCHOR1,.+0
+ 1505              	SlowTime_Window:
+ 1506 0000 9D47C53C 	 .word 1019561885
+ 1507 0004 179CA13D 	 .word 1034001431
+ 1508 0008 DCB73A3E 	 .word 1044035548
+ 1509 000c A1D6AC3E 	 .word 1051514529
+ 1510 0010 F818083F 	 .word 1057495288
+ 1511 0014 DAE53B3F 	 .word 1060890074
+ 1512 0018 293D673F 	 .word 1063730473
+ 1513 001c 0000803F 	 .word 1065353216
+ 1514 0020 0000803F 	 .word 1065353216
+ 1515 0024 293D673F 	 .word 1063730473
+ 1516 0028 DAE53B3F 	 .word 1060890074
+ 1517 002c F818083F 	 .word 1057495288
+ 1518 0030 A1D6AC3E 	 .word 1051514529
+ 1519 0034 DCB73A3E 	 .word 1044035548
+ 1520 0038 179CA13D 	 .word 1034001431
+ 1521 003c 9D47C53C 	 .word 1019561885
+ 1522              	 .text
+ 1523              	.Letext0:
+ 1524              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1525              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1526              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 1527              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 1528              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/arm_math.h"
+ 1529              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 1530              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 1531              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 1532              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/inc/dsp_lib.h"
+ 1533              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 1534              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 1535              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 1536              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 1537              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/arm_const_structs.h"
+ 1538              	 .file 16 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\math.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 dsp_lib.c
+    {standard input}:20     .text.fft_init:00000000 $t
+    {standard input}:25     .text.fft_init:00000000 fft_init
+    {standard input}:49     .text.fft_init:00000010 $d
+                            *COM*:00000004 fast_time_twiddle_table
+                            *COM*:00000004 slow_time_twiddle_table
+    {standard input}:61     .text.compute_fft_signal:00000000 $t
+    {standard input}:66     .text.compute_fft_signal:00000000 compute_fft_signal
+    {standard input}:381    .text.compute_fft_signal:000001fc $d
+    {standard input}:390    .text.compute_fft_spectrum:00000000 $t
+    {standard input}:395    .text.compute_fft_spectrum:00000000 compute_fft_spectrum
+    {standard input}:422    .text.compute_angle:00000000 $t
+    {standard input}:427    .text.compute_angle:00000000 compute_angle
+    {standard input}:972    .text.compute_angle:00000360 $d
+    {standard input}:993    .text.get_phase:00000000 $t
+    {standard input}:998    .text.get_phase:00000000 get_phase
+    {standard input}:1223   .text.get_phase:00000120 $d
+    {standard input}:1239   .data.FastTime_Window:00000000 $d
+    {standard input}:1243   .data.FastTime_Window:00000000 FastTime_Window
+    {standard input}:1501   .data.SlowTime_Window:00000000 $d
+    {standard input}:1505   .data.SlowTime_Window:00000000 SlowTime_Window
+                     .debug_frame:00000010 $d
+    {standard input}:992    .text.compute_angle:00000394 $t
+
+UNDEFINED SYMBOLS
+arm_cfft_sR_f32_len256
+arm_cfft_sR_f32_len64
+__aeabi_f2d
+__aeabi_dadd
+__aeabi_dmul
+__aeabi_d2f
+arm_mean_f32
+arm_cfft_f32
+arm_cmplx_mag_f32
+__aeabi_ddiv
+__aeabi_d2uiz
+__aeabi_dcmpgt
+__aeabi_dsub
+__aeabi_dcmplt
+__aeabi_i2d
+atan
+asin
+fmodf

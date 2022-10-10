@@ -1,0 +1,667 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "position2go_pga.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.pga_init,"ax",%progbits
+  20              	 .align 2
+  21              	 .global pga_init
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	pga_init:
+  26              	.LFB470:
+  27              	 .file 1 "../BSP/Position2Go/src/position2go_pga.c"
+   1:../BSP/Position2Go/src/position2go_pga.c **** /**
+   2:../BSP/Position2Go/src/position2go_pga.c ****     @file: position2go_pga.c
+   3:../BSP/Position2Go/src/position2go_pga.c **** 
+   4:../BSP/Position2Go/src/position2go_pga.c ****     @brief: This file provides driver for PGA112xxx Zero-Drift, Programmable Gain
+   5:../BSP/Position2Go/src/position2go_pga.c ****             Amplifier. It contains a set of functions to configure and use PGA112 device.
+   6:../BSP/Position2Go/src/position2go_pga.c ****  */
+   7:../BSP/Position2Go/src/position2go_pga.c **** 
+   8:../BSP/Position2Go/src/position2go_pga.c **** /* ===========================================================================
+   9:../BSP/Position2Go/src/position2go_pga.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../BSP/Position2Go/src/position2go_pga.c **** ** All rights reserved.
+  11:../BSP/Position2Go/src/position2go_pga.c **** ** ===========================================================================
+  12:../BSP/Position2Go/src/position2go_pga.c **** **
+  13:../BSP/Position2Go/src/position2go_pga.c **** ** ===========================================================================
+  14:../BSP/Position2Go/src/position2go_pga.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../BSP/Position2Go/src/position2go_pga.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../BSP/Position2Go/src/position2go_pga.c **** ** is not permitted without Infineon's prior written authorization.
+  17:../BSP/Position2Go/src/position2go_pga.c **** ** ===========================================================================
+  18:../BSP/Position2Go/src/position2go_pga.c **** */
+  19:../BSP/Position2Go/src/position2go_pga.c **** 
+  20:../BSP/Position2Go/src/position2go_pga.c **** /*
+  21:../BSP/Position2Go/src/position2go_pga.c **** ==============================================================================
+  22:../BSP/Position2Go/src/position2go_pga.c ****    1. INCLUDE FILES
+  23:../BSP/Position2Go/src/position2go_pga.c **** ==============================================================================
+  24:../BSP/Position2Go/src/position2go_pga.c ****  */
+  25:../BSP/Position2Go/src/position2go_pga.c **** 
+  26:../BSP/Position2Go/src/position2go_pga.c **** #include "bsp_common.h"
+  27:../BSP/Position2Go/src/position2go_pga.c **** #include "position2go_pga.h"
+  28:../BSP/Position2Go/src/position2go_pga.c **** #include "pga112.h"
+  29:../BSP/Position2Go/src/position2go_pga.c **** 
+  30:../BSP/Position2Go/src/position2go_pga.c **** /*
+  31:../BSP/Position2Go/src/position2go_pga.c **** ==============================================================================
+  32:../BSP/Position2Go/src/position2go_pga.c ****    2. EXPORTED FUNCTIONS
+  33:../BSP/Position2Go/src/position2go_pga.c **** ==============================================================================
+  34:../BSP/Position2Go/src/position2go_pga.c ****  */
+  35:../BSP/Position2Go/src/position2go_pga.c **** 
+  36:../BSP/Position2Go/src/position2go_pga.c **** Pga_Status_t pga_init(uint16_t gain_level)
+  37:../BSP/Position2Go/src/position2go_pga.c **** {
+  28              	 .loc 1 37 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	 
+  33              	.LVL0:
+  38:../BSP/Position2Go/src/position2go_pga.c ****   /* Initialize the PGA112 device */
+  39:../BSP/Position2Go/src/position2go_pga.c ****   return pga112_init(gain_level);
+  34              	 .loc 1 39 0
+  35 0000 FFF7FEBF 	 b pga112_init
+  36              	.LVL1:
+  37              	 .cfi_endproc
+  38              	.LFE470:
+  40              	 .section .text.pga_get_gain,"ax",%progbits
+  41              	 .align 2
+  42              	 .global pga_get_gain
+  43              	 .thumb
+  44              	 .thumb_func
+  46              	pga_get_gain:
+  47              	.LFB471:
+  40:../BSP/Position2Go/src/position2go_pga.c **** }
+  41:../BSP/Position2Go/src/position2go_pga.c **** 
+  42:../BSP/Position2Go/src/position2go_pga.c **** //============================================================================
+  43:../BSP/Position2Go/src/position2go_pga.c **** 
+  44:../BSP/Position2Go/src/position2go_pga.c **** void pga_get_gain(uint16_t* gain_level)
+  45:../BSP/Position2Go/src/position2go_pga.c **** {
+  48              	 .loc 1 45 0
+  49              	 .cfi_startproc
+  50              	 
+  51              	 
+  52              	 
+  53              	.LVL2:
+  46:../BSP/Position2Go/src/position2go_pga.c ****   pga112_get_gain(gain_level);
+  54              	 .loc 1 46 0
+  55 0000 FFF7FEBF 	 b pga112_get_gain
+  56              	.LVL3:
+  57              	 .cfi_endproc
+  58              	.LFE471:
+  60              	 .section .text.pga_set_gain,"ax",%progbits
+  61              	 .align 2
+  62              	 .global pga_set_gain
+  63              	 .thumb
+  64              	 .thumb_func
+  66              	pga_set_gain:
+  67              	.LFB472:
+  47:../BSP/Position2Go/src/position2go_pga.c **** }
+  48:../BSP/Position2Go/src/position2go_pga.c **** 
+  49:../BSP/Position2Go/src/position2go_pga.c **** //============================================================================
+  50:../BSP/Position2Go/src/position2go_pga.c **** 
+  51:../BSP/Position2Go/src/position2go_pga.c **** Pga_Status_t pga_set_gain(uint16_t gain_level)
+  52:../BSP/Position2Go/src/position2go_pga.c **** {
+  68              	 .loc 1 52 0
+  69              	 .cfi_startproc
+  70              	 
+  71              	 
+  72              	 
+  73              	.LVL4:
+  53:../BSP/Position2Go/src/position2go_pga.c ****   /* Updates the PGA112 gain */
+  54:../BSP/Position2Go/src/position2go_pga.c ****   return pga112_set_gain(gain_level);
+  74              	 .loc 1 54 0
+  75 0000 FFF7FEBF 	 b pga112_set_gain
+  76              	.LVL5:
+  77              	 .cfi_endproc
+  78              	.LFE472:
+  80              	 .section .text.pga_ldo_enable,"ax",%progbits
+  81              	 .align 2
+  82              	 .global pga_ldo_enable
+  83              	 .thumb
+  84              	 .thumb_func
+  86              	pga_ldo_enable:
+  87              	.LFB473:
+  55:../BSP/Position2Go/src/position2go_pga.c **** }
+  56:../BSP/Position2Go/src/position2go_pga.c **** 
+  57:../BSP/Position2Go/src/position2go_pga.c **** //============================================================================
+  58:../BSP/Position2Go/src/position2go_pga.c **** 
+  59:../BSP/Position2Go/src/position2go_pga.c **** void pga_ldo_enable(void)
+  60:../BSP/Position2Go/src/position2go_pga.c **** {
+  88              	 .loc 1 60 0
+  89              	 .cfi_startproc
+  90              	 
+  91              	 
+  92              	 
+  93 0000 074A     	 ldr r2,.L6
+  94 0002 084B     	 ldr r3,.L6+4
+  95              	.LBB30:
+  96              	.LBB31:
+  97              	.LBB32:
+  98              	 .file 2 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_gpio.h"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @file xmc_gpio.h
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @date 2015-06-20
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @cond
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMClib v2.1.16 - XMC Peripheral Driver Library 
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Copyright (c) 2015-2017, Infineon Technologies AG
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * All rights reserved.                        
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                             
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * following conditions are met:   
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer.                        
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * products derived from this software without specific prior written permission.                  
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Change History
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * --------------
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-02-20:
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Initial draft<br>
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Documentation improved <br>
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *      
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-06-20:
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @endcond
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #ifndef XMC_GPIO_H
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_H
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * HEADER FILES
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc_common.h"
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup XMClib XMC Peripheral Library
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @{
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup GPIO
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @brief General Purpose Input Output (GPIO) driver for the XMC microcontroller family.
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * GPIO driver provide a generic and very flexible software interface for all standard digital I/O 
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Each port slice has individual interfaces for the operation as General Purpose I/O and it furthe
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * connectivity to the on-chip periphery and the control for the pad characteristics. 
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * The driver is divided into Input and Output mode.
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Input mode features:
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Configuration structure XMC_GPIO_CONFIG_t and initialization function XMC_GPIO_Init()
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of weak pull-up or pull-down device. Configuration structure XMC_GPIO_MO
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of input hysteresis. XMC_GPIO_SetInputHysteresis()
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Output mode features:
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of push pull/open drain and Alternate output. Configuration structure XM
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of pad driver strength. Configuration structure XMC_GPIO_OUTPUT_STRENGTH
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of initial output level. Configuration structure XMC_GPIO_OUTPUT_LEVEL_t
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *@{
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * MACROS
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Pos PORT0_IOCR0_PC0_Pos
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Msk PORT0_IOCR0_PC0_Msk
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Size 				(8U)
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 											
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_OUTPUT_LEVEL(level) ((level == XMC_GPIO_OUTPUT_LEVEL_LOW) || \
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             (level == XMC_GPIO_OUTPUT_LEVEL_HIGH))
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_HWCTRL(hwctrl) ((hwctrl == XMC_GPIO_HWCTRL_DISABLED) || \
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL1) || \
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL2))                    
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * ENUMS
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines output level of a pin. Use type \a XMC_GPIO_OUTPUT_LEVEL_t for this enum.
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_OUTPUT_LEVEL
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_LOW  = 0x10000U, /**<  Reset bit */
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_HIGH = 0x1U, 	/**< Set bit  */
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_OUTPUT_LEVEL_t;
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines direct hardware control characteristics of the pin . Use type \a XMC_GPIO_HWCTRL_t for t
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_HWCTRL
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_DISABLED     = 0x0U, /**<  Software control only */
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL1  = 0x1U, /**<  HWI0/HWO0 control path can override the software confi
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL2  = 0x2U  /**<  HWI1/HWO1 control path can override the software confi
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_HWCTRL_t;
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * DEVICE FAMILY EXTENSIONS
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  #if UC_FAMILY == XMC1
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc1_gpio.h"
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #elif UC_FAMILY == XMC4
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc4_gpio.h"
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #else
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #error "xmc_gpio.h: family device not supported"
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * API PROTOTYPES
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #ifdef __cplusplus
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** extern "C" {
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	  Constant pointer pointing to GPIO port, to access port registers like Pn_OUT,Pn_O
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	  Port pin number.
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  config GPIO configuration data structure. Refer data structure @ref XMC_GPIO_CONFIG_t fo
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,hysteresis, push pull
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for a selected \a po
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \a config provides selected I/O settings. It configures hardware registers Pn_IOCR,Pn_OUT, Pn_OM
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,push pull /open drain
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for selected \a port
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * It configures hardware registers Pn_IOCR,Pn_OUT,Pn_OMR,Pn_PDISC and Pn_PDR.\n
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * This API is called in definition of DAVE_init by code generation and therefore should not be exp
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * for the normal operation. Use other APIs only after DAVE_init is called successfully (returns DA
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_Init(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_CONFIG_t *const c
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	Constant pointer pointing to GPIO port, to access hardware register Pn_IOCR.
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  mode input / output functionality selection. Refer @ref XMC_GPIO_MODE_t for valid values
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets digital input and output driver functionality and characteristics of a GPIO port pin. It co
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * registers Pn_IOCR. \a mode is initially configured during initialization in XMC_GPIO_Init(). Cal
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * the port direction functionality as needed later in the program.
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_SetMode(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_MODE_t mode);
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	 Constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	 Port pin number.
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  level output level selection. Refer @ref XMC_GPIO_OUTPUT_LEVEL_t for valid values.
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Set port pin output level to high or low.It configures hardware registers Pn_OMR.\a level is ini
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * configured during initialization in XMC_GPIO_Init(). Call this API to alter output level as need
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLevel(XMC_GPIO_PORT_t *const port, const uint8_t pin, const 
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid output level", XMC_GPIO_CHECK_OUTPUT_LEVEL(level));
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)level << pin;
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  Sets port pin output to high. It configures hardware registers Pn_OMR.
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  \par<b>Related APIs:</b><BR>
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputLow()
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().\n
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputHigh: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)0x1U << pin;
+  99              	 .loc 2 260 0
+ 100 0004 107C     	 ldrb r0,[r2,#16]
+ 101 0006 1168     	 ldr r1,[r2]
+ 102              	.LVL6:
+ 103 0008 1A68     	 ldr r2,[r3]
+ 104              	.LVL7:
+ 105              	.LBE32:
+ 106              	.LBE31:
+ 107              	.LBE30:
+ 108              	 .loc 1 60 0
+ 109 000a 10B4     	 push {r4}
+ 110              	.LCFI0:
+ 111              	 .cfi_def_cfa_offset 4
+ 112              	 .cfi_offset 4,-4
+ 113              	.LBB37:
+ 114              	.LBB38:
+ 115              	.LBB39:
+ 116              	 .loc 2 260 0
+ 117 000c 1C7C     	 ldrb r4,[r3,#16]
+ 118              	.LBE39:
+ 119              	.LBE38:
+ 120              	.LBE37:
+ 121              	.LBB44:
+ 122              	.LBB35:
+ 123              	.LBB33:
+ 124 000e 0123     	 movs r3,#1
+ 125 0010 03FA00F0 	 lsl r0,r3,r0
+ 126              	.LBE33:
+ 127              	.LBE35:
+ 128              	.LBE44:
+ 129              	.LBB45:
+ 130              	.LBB42:
+ 131              	.LBB40:
+ 132 0014 A340     	 lsls r3,r3,r4
+ 133              	.LBE40:
+ 134              	.LBE42:
+ 135              	.LBE45:
+ 136              	.LBB46:
+ 137              	.LBB36:
+ 138              	.LBB34:
+ 139 0016 4860     	 str r0,[r1,#4]
+ 140              	.LBE34:
+ 141              	.LBE36:
+ 142              	.LBE46:
+  61:../BSP/Position2Go/src/position2go_pga.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_SPI_M_CS_PGA);
+  62:../BSP/Position2Go/src/position2go_pga.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_PGA_LDO_ENABLE);
+  63:../BSP/Position2Go/src/position2go_pga.c **** }
+ 143              	 .loc 1 63 0
+ 144 0018 5DF8044B 	 ldr r4,[sp],#4
+ 145              	.LCFI1:
+ 146              	 .cfi_restore 4
+ 147              	 .cfi_def_cfa_offset 0
+ 148              	.LBB47:
+ 149              	.LBB43:
+ 150              	.LBB41:
+ 151              	 .loc 2 260 0
+ 152 001c 5360     	 str r3,[r2,#4]
+ 153              	.LBE41:
+ 154              	.LBE43:
+ 155              	.LBE47:
+ 156              	 .loc 1 63 0
+ 157 001e 7047     	 bx lr
+ 158              	.L7:
+ 159              	 .align 2
+ 160              	.L6:
+ 161 0020 00000000 	 .word DIGITAL_IO_SPI_M_CS_PGA
+ 162 0024 00000000 	 .word DIGITAL_IO_PGA_LDO_ENABLE
+ 163              	 .cfi_endproc
+ 164              	.LFE473:
+ 166              	 .section .text.pga_ldo_disable,"ax",%progbits
+ 167              	 .align 2
+ 168              	 .global pga_ldo_disable
+ 169              	 .thumb
+ 170              	 .thumb_func
+ 172              	pga_ldo_disable:
+ 173              	.LFB474:
+  64:../BSP/Position2Go/src/position2go_pga.c **** 
+  65:../BSP/Position2Go/src/position2go_pga.c **** //============================================================================
+  66:../BSP/Position2Go/src/position2go_pga.c **** 
+  67:../BSP/Position2Go/src/position2go_pga.c **** void pga_ldo_disable(void)
+  68:../BSP/Position2Go/src/position2go_pga.c **** {
+ 174              	 .loc 1 68 0
+ 175              	 .cfi_startproc
+ 176              	 
+ 177              	 
+ 178              	 
+ 179 0000 70B4     	 push {r4,r5,r6}
+ 180              	.LCFI2:
+ 181              	 .cfi_def_cfa_offset 12
+ 182              	 .cfi_offset 4,-12
+ 183              	 .cfi_offset 5,-8
+ 184              	 .cfi_offset 6,-4
+ 185 0002 0A49     	 ldr r1,.L10
+ 186 0004 0A4A     	 ldr r2,.L10+4
+ 187 0006 0B4B     	 ldr r3,.L10+8
+ 188              	.LBB48:
+ 189              	.LBB49:
+ 190              	.LBB50:
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	port pin number.
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return  None
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Description:</b><br>
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets port pin output to low. It configures hardware registers Pn_OMR.\n
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>>
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMC_GPIO_SetOutputHigh()
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Note:</b><br>
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLow(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLow: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = 0x10000U << pin;
+ 191              	 .loc 2 286 0
+ 192 0008 0D7C     	 ldrb r5,[r1,#16]
+ 193              	.LBE50:
+ 194              	.LBE49:
+ 195              	.LBE48:
+ 196              	.LBB55:
+ 197              	.LBB56:
+ 198              	.LBB57:
+ 199 000a 1E7C     	 ldrb r6,[r3,#16]
+ 200              	.LBE57:
+ 201              	.LBE56:
+ 202              	.LBE55:
+ 203              	.LBB62:
+ 204              	.LBB63:
+ 205              	.LBB64:
+ 206 000c 107C     	 ldrb r0,[r2,#16]
+ 207 000e 0C68     	 ldr r4,[r1]
+ 208              	.LVL8:
+ 209 0010 1168     	 ldr r1,[r2]
+ 210              	.LVL9:
+ 211 0012 1A68     	 ldr r2,[r3]
+ 212              	.LVL10:
+ 213              	.LBE64:
+ 214              	.LBE63:
+ 215              	.LBE62:
+ 216              	.LBB69:
+ 217              	.LBB53:
+ 218              	.LBB51:
+ 219 0014 4FF48033 	 mov r3,#65536
+ 220 0018 03FA05F5 	 lsl r5,r3,r5
+ 221              	.LBE51:
+ 222              	.LBE53:
+ 223              	.LBE69:
+ 224              	.LBB70:
+ 225              	.LBB67:
+ 226              	.LBB65:
+ 227 001c 03FA00F0 	 lsl r0,r3,r0
+ 228              	.LBE65:
+ 229              	.LBE67:
+ 230              	.LBE70:
+ 231              	.LBB71:
+ 232              	.LBB60:
+ 233              	.LBB58:
+ 234 0020 B340     	 lsls r3,r3,r6
+ 235              	.LBE58:
+ 236              	.LBE60:
+ 237              	.LBE71:
+ 238              	.LBB72:
+ 239              	.LBB54:
+ 240              	.LBB52:
+ 241 0022 6560     	 str r5,[r4,#4]
+ 242              	.LBE52:
+ 243              	.LBE54:
+ 244              	.LBE72:
+ 245              	.LBB73:
+ 246              	.LBB68:
+ 247              	.LBB66:
+ 248 0024 4860     	 str r0,[r1,#4]
+ 249              	.LBE66:
+ 250              	.LBE68:
+ 251              	.LBE73:
+  69:../BSP/Position2Go/src/position2go_pga.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_SPI_DATA_PGA);
+  70:../BSP/Position2Go/src/position2go_pga.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_SPI_M_CS_PGA);
+  71:../BSP/Position2Go/src/position2go_pga.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_PGA_LDO_ENABLE);
+  72:../BSP/Position2Go/src/position2go_pga.c **** }
+ 252              	 .loc 1 72 0
+ 253 0026 70BC     	 pop {r4,r5,r6}
+ 254              	.LCFI3:
+ 255              	 .cfi_restore 6
+ 256              	 .cfi_restore 5
+ 257              	 .cfi_restore 4
+ 258              	 .cfi_def_cfa_offset 0
+ 259              	.LVL11:
+ 260              	.LBB74:
+ 261              	.LBB61:
+ 262              	.LBB59:
+ 263              	 .loc 2 286 0
+ 264 0028 5360     	 str r3,[r2,#4]
+ 265              	.LBE59:
+ 266              	.LBE61:
+ 267              	.LBE74:
+ 268              	 .loc 1 72 0
+ 269 002a 7047     	 bx lr
+ 270              	.L11:
+ 271              	 .align 2
+ 272              	.L10:
+ 273 002c 00000000 	 .word DIGITAL_IO_SPI_DATA_PGA
+ 274 0030 00000000 	 .word DIGITAL_IO_SPI_M_CS_PGA
+ 275 0034 00000000 	 .word DIGITAL_IO_PGA_LDO_ENABLE
+ 276              	 .cfi_endproc
+ 277              	.LFE474:
+ 279              	 .text
+ 280              	.Letext0:
+ 281              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 282              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 283              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 284              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 285              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 286              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io.h"
+ 287              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 288              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 289              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 290              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/inc/bsp_common.h"
+ 291              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 292              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 293              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 294              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io_extern.h"
+ 295              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 296              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Components/pga112/inc/pga112.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 position2go_pga.c
+    {standard input}:20     .text.pga_init:00000000 $t
+    {standard input}:25     .text.pga_init:00000000 pga_init
+    {standard input}:41     .text.pga_get_gain:00000000 $t
+    {standard input}:46     .text.pga_get_gain:00000000 pga_get_gain
+    {standard input}:61     .text.pga_set_gain:00000000 $t
+    {standard input}:66     .text.pga_set_gain:00000000 pga_set_gain
+    {standard input}:81     .text.pga_ldo_enable:00000000 $t
+    {standard input}:86     .text.pga_ldo_enable:00000000 pga_ldo_enable
+    {standard input}:161    .text.pga_ldo_enable:00000020 $d
+    {standard input}:167    .text.pga_ldo_disable:00000000 $t
+    {standard input}:172    .text.pga_ldo_disable:00000000 pga_ldo_disable
+    {standard input}:273    .text.pga_ldo_disable:0000002c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+pga112_init
+pga112_get_gain
+pga112_set_gain
+DIGITAL_IO_SPI_M_CS_PGA
+DIGITAL_IO_PGA_LDO_ENABLE
+DIGITAL_IO_SPI_DATA_PGA

@@ -1,0 +1,2608 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "lmx249x.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .global __aeabi_ui2d
+  20              	 .global __aeabi_ddiv
+  21              	 .global __aeabi_dmul
+  22              	 .global __aeabi_i2d
+  23              	 .section .text.lmx249x_init,"ax",%progbits
+  24              	 .align 2
+  25              	 .global lmx249x_init
+  26              	 .thumb
+  27              	 .thumb_func
+  29              	lmx249x_init:
+  30              	.LFB470:
+  31              	 .file 1 "../BSP/Components/lmx249x/src/lmx249x.c"
+   1:../BSP/Components/lmx249x/src/lmx249x.c **** /**
+   2:../BSP/Components/lmx249x/src/lmx249x.c ****     @file: lmx249x.c
+   3:../BSP/Components/lmx249x/src/lmx249x.c **** 
+   4:../BSP/Components/lmx249x/src/lmx249x.c ****     @brief: This file provides low level driver for LMX2491RTW low noise fractional-N PLL
+   5:../BSP/Components/lmx249x/src/lmx249x.c ****             It contains a set of functions to configure and use LMX2491RTW PLL.
+   6:../BSP/Components/lmx249x/src/lmx249x.c **** */
+   7:../BSP/Components/lmx249x/src/lmx249x.c **** 
+   8:../BSP/Components/lmx249x/src/lmx249x.c **** /* ===========================================================================
+   9:../BSP/Components/lmx249x/src/lmx249x.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../BSP/Components/lmx249x/src/lmx249x.c **** ** All rights reserved.
+  11:../BSP/Components/lmx249x/src/lmx249x.c **** ** ===========================================================================
+  12:../BSP/Components/lmx249x/src/lmx249x.c **** **
+  13:../BSP/Components/lmx249x/src/lmx249x.c **** ** ===========================================================================
+  14:../BSP/Components/lmx249x/src/lmx249x.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../BSP/Components/lmx249x/src/lmx249x.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../BSP/Components/lmx249x/src/lmx249x.c **** ** is not permitted without Infineon's prior written authorization.
+  17:../BSP/Components/lmx249x/src/lmx249x.c **** ** ===========================================================================
+  18:../BSP/Components/lmx249x/src/lmx249x.c **** */
+  19:../BSP/Components/lmx249x/src/lmx249x.c **** 
+  20:../BSP/Components/lmx249x/src/lmx249x.c **** /*
+  21:../BSP/Components/lmx249x/src/lmx249x.c **** ==============================================================================
+  22:../BSP/Components/lmx249x/src/lmx249x.c ****    1. INCLUDE FILES
+  23:../BSP/Components/lmx249x/src/lmx249x.c **** ==============================================================================
+  24:../BSP/Components/lmx249x/src/lmx249x.c ****  */
+  25:../BSP/Components/lmx249x/src/lmx249x.c **** 
+  26:../BSP/Components/lmx249x/src/lmx249x.c **** #include "lmx249x.h"
+  27:../BSP/Components/lmx249x/src/lmx249x.c **** 
+  28:../BSP/Components/lmx249x/src/lmx249x.c **** /*
+  29:../BSP/Components/lmx249x/src/lmx249x.c **** ==============================================================================
+  30:../BSP/Components/lmx249x/src/lmx249x.c ****    2. EXPORTED FUNCTIONS
+  31:../BSP/Components/lmx249x/src/lmx249x.c **** ==============================================================================
+  32:../BSP/Components/lmx249x/src/lmx249x.c ****  */
+  33:../BSP/Components/lmx249x/src/lmx249x.c **** 
+  34:../BSP/Components/lmx249x/src/lmx249x.c **** void lmx249x_init(Lmx249x_Object_t* pThis, const Lmx249x_Hardware_Setup_t* pSetup,
+  35:../BSP/Components/lmx249x/src/lmx249x.c ****                   sendSPIFunction sendSPI, void* pDataForSendSPI)
+  36:../BSP/Components/lmx249x/src/lmx249x.c **** {
+  32              	 .loc 1 36 0
+  33              	 .cfi_startproc
+  34              	 
+  35              	 
+  36              	.LVL0:
+  37 0000 2DE9F04F 	 push {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+  38              	.LCFI0:
+  39              	 .cfi_def_cfa_offset 36
+  40              	 .cfi_offset 4,-36
+  41              	 .cfi_offset 5,-32
+  42              	 .cfi_offset 6,-28
+  43              	 .cfi_offset 7,-24
+  44              	 .cfi_offset 8,-20
+  45              	 .cfi_offset 9,-16
+  46              	 .cfi_offset 10,-12
+  47              	 .cfi_offset 11,-8
+  48              	 .cfi_offset 14,-4
+  49 0004 0546     	 mov r5,r0
+  50 0006 87B0     	 sub sp,sp,#28
+  51              	.LCFI1:
+  52              	 .cfi_def_cfa_offset 64
+  37:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[17];
+  38:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  39:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Set Internal Parameters */
+  40:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->dExternalDivideFactor = (1.0 / pSetup->uExternalDivider); /* inverse RF-divider within the
+  53              	 .loc 1 40 0
+  54 0008 C868     	 ldr r0,[r1,#12]
+  55              	.LVL1:
+  36:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[17];
+  56              	 .loc 1 36 0
+  57 000a 0C46     	 mov r4,r1
+  58 000c 1646     	 mov r6,r2
+  59 000e 1F46     	 mov r7,r3
+  60              	 .loc 1 40 0
+  61 0010 FFF7FEFF 	 bl __aeabi_ui2d
+  62              	.LVL2:
+  63 0014 0246     	 mov r2,r0
+  64 0016 0B46     	 mov r3,r1
+  65 0018 0020     	 movs r0,#0
+  66 001a 5F49     	 ldr r1,.L6
+  67 001c FFF7FEFF 	 bl __aeabi_ddiv
+  68              	.LVL3:
+  41:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->dPFDCycleTime = 1.0f / (pSetup->dReferenceFreq * (pSetup->eReferenceDoubler ? 2.0 : 1.0) /
+  69              	 .loc 1 41 0
+  70 0020 A37A     	 ldrb r3,[r4,#10]
+  71 0022 0022     	 movs r2,#0
+  40:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->dPFDCycleTime = 1.0f / (pSetup->dReferenceFreq * (pSetup->eReferenceDoubler ? 2.0 : 1.0) /
+  72              	 .loc 1 40 0
+  73 0024 C5E90001 	 strd r0,[r5]
+  74              	 .loc 1 41 0
+  75 0028 D4E90001 	 ldrd r0,[r4]
+  76 002c 002B     	 cmp r3,#0
+  77 002e 40F0B080 	 bne .L3
+  78 0032 594B     	 ldr r3,.L6
+  79              	.L2:
+  80              	 .loc 1 41 0 is_stmt 0 discriminator 4
+  81 0034 FFF7FEFF 	 bl __aeabi_dmul
+  82              	.LVL4:
+  83 0038 8046     	 mov r8,r0
+  84 003a 2089     	 ldrh r0,[r4,#8]
+  85 003c 8946     	 mov r9,r1
+  86 003e FFF7FEFF 	 bl __aeabi_i2d
+  87              	.LVL5:
+  88 0042 0246     	 mov r2,r0
+  89 0044 0B46     	 mov r3,r1
+  90 0046 4046     	 mov r0,r8
+  91 0048 4946     	 mov r1,r9
+  92 004a FFF7FEFF 	 bl __aeabi_ddiv
+  93              	.LVL6:
+  94 004e 0246     	 mov r2,r0
+  95 0050 0B46     	 mov r3,r1
+  96 0052 0020     	 movs r0,#0
+  97 0054 5049     	 ldr r1,.L6
+  98 0056 FFF7FEFF 	 bl __aeabi_ddiv
+  99              	.LVL7:
+  42:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->uReg58 = 0;
+ 100              	 .loc 1 42 0 is_stmt 1 discriminator 4
+ 101 005a 4FF00008 	 mov r8,#0
+  43:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI = sendSPI;
+  44:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->pDataForSendSPI = pDataForSendSPI;
+ 102              	 .loc 1 44 0 discriminator 4
+ 103 005e AF61     	 str r7,[r5,#24]
+  45:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  46:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Do a Power on Reset and set all PLL registers to the default value */
+  47:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;
+  48:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 2;
+  49:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = (1 << 2);
+  50:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 3, pThis->pDataForSendSPI);
+ 104              	 .loc 1 50 0 discriminator 4
+ 105 0060 3A46     	 mov r2,r7
+  49:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 3, pThis->pDataForSendSPI);
+ 106              	 .loc 1 49 0 discriminator 4
+ 107 0062 0423     	 movs r3,#4
+  48:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = (1 << 2);
+ 108              	 .loc 1 48 0 discriminator 4
+ 109 0064 0227     	 movs r7,#2
+ 110              	.LVL8:
+  41:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->uReg58 = 0;
+ 111              	 .loc 1 41 0 discriminator 4
+ 112 0066 C5E90201 	 strd r0,[r5,#8]
+  43:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->pDataForSendSPI = pDataForSendSPI;
+ 113              	 .loc 1 43 0 discriminator 4
+ 114 006a 6E61     	 str r6,[r5,#20]
+ 115              	 .loc 1 50 0 discriminator 4
+ 116 006c 01A8     	 add r0,sp,#4
+  48:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = (1 << 2);
+ 117              	 .loc 1 48 0 discriminator 4
+ 118 006e 8DF80570 	 strb r7,[sp,#5]
+  49:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 3, pThis->pDataForSendSPI);
+ 119              	 .loc 1 49 0 discriminator 4
+ 120 0072 8DF80630 	 strb r3,[sp,#6]
+  42:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI = sendSPI;
+ 121              	 .loc 1 42 0 discriminator 4
+ 122 0076 85F81080 	 strb r8,[r5,#16]
+ 123              	 .loc 1 50 0 discriminator 4
+ 124 007a 0321     	 movs r1,#3
+  47:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 2;
+ 125              	 .loc 1 47 0 discriminator 4
+ 126 007c 8DF80480 	 strb r8,[sp,#4]
+ 127              	 .loc 1 50 0 discriminator 4
+ 128 0080 B047     	 blx r6
+ 129              	.LVL9:
+  51:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  52:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup Routing and Drive for Pins TRIG1, TRIG2, MOD and MUXout */
+  53:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 35)] = 0x41 | /* these bits must be set */
+  54:../BSP/Components/lmx249x/src/lmx249x.c ****     ((pSetup->eTrig1PinFunction   >> 2) & 0x08) | /* TRIG1_MUX[5] shifted to bit 3 */
+ 130              	 .loc 1 54 0 discriminator 4
+ 131 0082 94F81090 	 ldrb r9,[r4,#16]
+  55:../BSP/Components/lmx249x/src/lmx249x.c ****       ((pSetup->eTrig2PinFunction   >> 1) & 0x10) | /* TRIG2_MUX[5] shifted to bit 4 */
+  56:../BSP/Components/lmx249x/src/lmx249x.c ****         ((pSetup->eMUXoutPinFunction  >> 0) & 0x20) | /* MUXout_MUX[5] stays at bit 5 */
+ 132              	 .loc 1 56 0 discriminator 4
+ 133 0086 A77D     	 ldrb r7,[r4,#22]
+  55:../BSP/Components/lmx249x/src/lmx249x.c ****       ((pSetup->eTrig2PinFunction   >> 1) & 0x10) | /* TRIG2_MUX[5] shifted to bit 4 */
+ 134              	 .loc 1 55 0 discriminator 4
+ 135 0088 94F812C0 	 ldrb ip,[r4,#18]
+  57:../BSP/Components/lmx249x/src/lmx249x.c ****           ((pSetup->eModPinFunction     << 2) & 0x80);  /* MOD_MUX[5] shifted to at bit 7 */
+  58:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  59:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 36)] = ((pSetup->eTrig1PinFunction & 0x1F) << 3) |
+  60:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eTrig1PinDriveMode;
+  61:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  62:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 37)] = ((pSetup->eTrig2PinFunction & 0x1F) << 3) |
+  63:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eTrig2PinDriveMode;
+  64:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  65:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 38)] = ((pSetup->eModPinFunction & 0x1F) << 3) |
+  66:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eModPinDriveMode;
+  67:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  68:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 39)] = ((pSetup->eMUXoutPinFunction & 0x1F) << 3) |
+  69:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eMUXoutPinDriveMode;
+  70:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  71:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup Reference Scaling */
+  72:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 25)] = (pSetup->uReferenceDivider >> 0) & 0xFF;
+  73:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 26)] = (pSetup->uReferenceDivider >> 8) & 0xFF;
+  74:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 27)] =  pSetup->eReferenceDoubler |
+  75:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->eOscInMode << 2);
+  76:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  77:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup Charge Pump configuration */
+  78:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 27)] |= (pSetup->eChargePumpPulseWidth << 3);
+ 136              	 .loc 1 78 0 discriminator 4
+ 137 008c 617F     	 ldrb r1,[r4,#29]
+  75:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 138              	 .loc 1 75 0 discriminator 4
+ 139 008e E67A     	 ldrb r6,[r4,#11]
+ 140              	.LVL10:
+  57:../BSP/Components/lmx249x/src/lmx249x.c ****           ((pSetup->eModPinFunction     << 2) & 0x80);  /* MOD_MUX[5] shifted to at bit 7 */
+ 141              	 .loc 1 57 0 discriminator 4
+ 142 0090 94F814E0 	 ldrb lr,[r4,#20]
+ 143              	 .loc 1 78 0 discriminator 4
+ 144 0094 94F80AB0 	 ldrb fp,[r4,#10]
+  79:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 28)] = ((pSetup->eChargePumpPolarity) << 5) |
+  80:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->uChargePumpCurrent & 0x1F);
+  81:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 29)] =  (pSetup->uChargePumpCurrentFS & 0x1F);
+  82:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  83:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup speed up settings */
+  84:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 27)] |= (pSetup->eCycleSlipReduction << 5);
+  85:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 32)]  = (pSetup->uFastLockTimer & 0xFF);
+ 145              	 .loc 1 85 0 discriminator 4
+ 146 0098 238C     	 ldrh r3,[r4,#32]
+ 147 009a 8DF80D30 	 strb r3,[sp,#13]
+  53:../BSP/Components/lmx249x/src/lmx249x.c ****     ((pSetup->eTrig1PinFunction   >> 2) & 0x08) | /* TRIG1_MUX[5] shifted to bit 3 */
+ 148              	 .loc 1 53 0 discriminator 4
+ 149 009e 4FEA9900 	 lsr r0,r9,#2
+ 150 00a2 07F02002 	 and r2,r7,#32
+ 151 00a6 00F00800 	 and r0,r0,#8
+ 152 00aa 4FEA5C0A 	 lsr r10,ip,#1
+ 153 00ae 42F04102 	 orr r2,r2,#65
+ 154 00b2 0243     	 orrs r2,r2,r0
+ 155 00b4 0AF0100A 	 and r10,r10,#16
+  78:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 28)] = ((pSetup->eChargePumpPolarity) << 5) |
+ 156              	 .loc 1 78 0 discriminator 4
+ 157 00b8 C900     	 lsls r1,r1,#3
+ 158 00ba 41EA8601 	 orr r1,r1,r6,lsl#2
+  53:../BSP/Components/lmx249x/src/lmx249x.c ****     ((pSetup->eTrig1PinFunction   >> 2) & 0x08) | /* TRIG1_MUX[5] shifted to bit 3 */
+ 159              	 .loc 1 53 0 discriminator 4
+ 160 00be 42EA0A02 	 orr r2,r2,r10
+  57:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 161              	 .loc 1 57 0 discriminator 4
+ 162 00c2 4FEA8E0A 	 lsl r10,lr,#2
+  78:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 28)] = ((pSetup->eChargePumpPolarity) << 5) |
+ 163              	 .loc 1 78 0 discriminator 4
+ 164 00c6 41EA0B01 	 orr r1,r1,fp
+  53:../BSP/Components/lmx249x/src/lmx249x.c ****     ((pSetup->eTrig1PinFunction   >> 2) & 0x08) | /* TRIG1_MUX[5] shifted to bit 3 */
+ 165              	 .loc 1 53 0 discriminator 4
+ 166 00ca 2AF07F0A 	 bic r10,r10,#127
+  59:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eTrig1PinDriveMode;
+ 167              	 .loc 1 59 0 discriminator 4
+ 168 00ce 94F811B0 	 ldrb fp,[r4,#17]
+  81:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 169              	 .loc 1 81 0 discriminator 4
+ 170 00d2 A67E     	 ldrb r6,[r4,#26]
+  79:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->uChargePumpCurrent & 0x1F);
+ 171              	 .loc 1 79 0 discriminator 4
+ 172 00d4 607E     	 ldrb r0,[r4,#25]
+  53:../BSP/Components/lmx249x/src/lmx249x.c ****     ((pSetup->eTrig1PinFunction   >> 2) & 0x08) | /* TRIG1_MUX[5] shifted to bit 3 */
+ 173              	 .loc 1 53 0 discriminator 4
+ 174 00d6 42EA0A02 	 orr r2,r2,r10
+  62:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eTrig2PinDriveMode;
+ 175              	 .loc 1 62 0 discriminator 4
+ 176 00da 94F813A0 	 ldrb r10,[r4,#19]
+  53:../BSP/Components/lmx249x/src/lmx249x.c ****     ((pSetup->eTrig1PinFunction   >> 2) & 0x08) | /* TRIG1_MUX[5] shifted to bit 3 */
+ 177              	 .loc 1 53 0 discriminator 4
+ 178 00de 8DF80A20 	 strb r2,[sp,#10]
+  59:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eTrig1PinDriveMode;
+ 179              	 .loc 1 59 0 discriminator 4
+ 180 00e2 4BEAC909 	 orr r9,fp,r9,lsl#3
+  68:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eMUXoutPinDriveMode;
+ 181              	 .loc 1 68 0 discriminator 4
+ 182 00e6 E27D     	 ldrb r2,[r4,#23]
+  65:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eModPinDriveMode;
+ 183              	 .loc 1 65 0 discriminator 4
+ 184 00e8 94F815B0 	 ldrb fp,[r4,#21]
+  59:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eTrig1PinDriveMode;
+ 185              	 .loc 1 59 0 discriminator 4
+ 186 00ec 8DF80990 	 strb r9,[sp,#9]
+  62:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eTrig2PinDriveMode;
+ 187              	 .loc 1 62 0 discriminator 4
+ 188 00f0 4AEACC0C 	 orr ip,r10,ip,lsl#3
+  84:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 32)]  = (pSetup->uFastLockTimer & 0xFF);
+ 189              	 .loc 1 84 0 discriminator 4
+ 190 00f4 94F81E90 	 ldrb r9,[r4,#30]
+  79:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->uChargePumpCurrent & 0x1F);
+ 191              	 .loc 1 79 0 discriminator 4
+ 192 00f8 94F818A0 	 ldrb r10,[r4,#24]
+  62:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eTrig2PinDriveMode;
+ 193              	 .loc 1 62 0 discriminator 4
+ 194 00fc 8DF808C0 	 strb ip,[sp,#8]
+  65:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eModPinDriveMode;
+ 195              	 .loc 1 65 0 discriminator 4
+ 196 0100 4BEACE0E 	 orr lr,fp,lr,lsl#3
+  72:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 26)] = (pSetup->uReferenceDivider >> 8) & 0xFF;
+ 197              	 .loc 1 72 0 discriminator 4
+ 198 0104 B4F808C0 	 ldrh ip,[r4,#8]
+  86:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 29)] |= (pSetup->uFastLockTimer >> 3) & 0xE0;
+  87:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  88:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup lock detection */
+  89:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 30)] =  pSetup->uChargePumpThresholdLo & 0x3F;
+ 199              	 .loc 1 89 0 discriminator 4
+ 200 0108 94F81BB0 	 ldrb fp,[r4,#27]
+  65:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eModPinDriveMode;
+ 201              	 .loc 1 65 0 discriminator 4
+ 202 010c 8DF807E0 	 strb lr,[sp,#7]
+  68:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eMUXoutPinDriveMode;
+ 203              	 .loc 1 68 0 discriminator 4
+ 204 0110 42EAC707 	 orr r7,r2,r7,lsl#3
+  86:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 29)] |= (pSetup->uFastLockTimer >> 3) & 0xE0;
+ 205              	 .loc 1 86 0 discriminator 4
+ 206 0114 DB08     	 lsrs r3,r3,#3
+  90:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 31)] =  pSetup->uChargePumpThresholdHi & 0x3F;
+ 207              	 .loc 1 90 0 discriminator 4
+ 208 0116 227F     	 ldrb r2,[r4,#28]
+  68:../BSP/Components/lmx249x/src/lmx249x.c ****     pSetup->eMUXoutPinDriveMode;
+ 209              	 .loc 1 68 0 discriminator 4
+ 210 0118 8DF80670 	 strb r7,[sp,#6]
+  86:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 211              	 .loc 1 86 0 discriminator 4
+ 212 011c 23F01F03 	 bic r3,r3,#31
+  78:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 28)] = ((pSetup->eChargePumpPolarity) << 5) |
+ 213              	 .loc 1 78 0 discriminator 4
+ 214 0120 C9B2     	 uxtb r1,r1
+  81:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 215              	 .loc 1 81 0 discriminator 4
+ 216 0122 06F01F06 	 and r6,r6,#31
+  79:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->uChargePumpCurrent & 0x1F);
+ 217              	 .loc 1 79 0 discriminator 4
+ 218 0126 00F01F00 	 and r0,r0,#31
+  84:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 32)]  = (pSetup->uFastLockTimer & 0xFF);
+ 219              	 .loc 1 84 0 discriminator 4
+ 220 012a 41EA4911 	 orr r1,r1,r9,lsl#5
+  86:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 221              	 .loc 1 86 0 discriminator 4
+ 222 012e 1E43     	 orrs r6,r6,r3
+  79:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->uChargePumpCurrent & 0x1F);
+ 223              	 .loc 1 79 0 discriminator 4
+ 224 0130 40EA4A10 	 orr r0,r0,r10,lsl#5
+  73:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 27)] =  pSetup->eReferenceDoubler |
+ 225              	 .loc 1 73 0 discriminator 4
+ 226 0134 4FEA1C23 	 lsr r3,ip,#8
+  91:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  92:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 33)] =  pSetup->uLockDetectNumGoodEdge;
+ 227              	 .loc 1 92 0 discriminator 4
+ 228 0138 94F822E0 	 ldrb lr,[r4,#34]
+  84:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 32)]  = (pSetup->uFastLockTimer & 0xFF);
+ 229              	 .loc 1 84 0 discriminator 4
+ 230 013c 8DF81210 	 strb r1,[sp,#18]
+  89:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 31)] =  pSetup->uChargePumpThresholdHi & 0x3F;
+ 231              	 .loc 1 89 0 discriminator 4
+ 232 0140 0BF03F07 	 and r7,fp,#63
+  90:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 233              	 .loc 1 90 0 discriminator 4
+ 234 0144 02F03F02 	 and r2,r2,#63
+  79:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->uChargePumpCurrent & 0x1F);
+ 235              	 .loc 1 79 0 discriminator 4
+ 236 0148 8DF81100 	 strb r0,[sp,#17]
+  72:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 26)] = (pSetup->uReferenceDivider >> 8) & 0xFF;
+ 237              	 .loc 1 72 0 discriminator 4
+ 238 014c 8DF814C0 	 strb ip,[sp,#20]
+  73:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 27)] =  pSetup->eReferenceDoubler |
+ 239              	 .loc 1 73 0 discriminator 4
+ 240 0150 8DF81330 	 strb r3,[sp,#19]
+  90:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 241              	 .loc 1 90 0 discriminator 4
+ 242 0154 8DF80E20 	 strb r2,[sp,#14]
+  86:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 243              	 .loc 1 86 0 discriminator 4
+ 244 0158 8DF81060 	 strb r6,[sp,#16]
+  89:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 31)] =  pSetup->uChargePumpThresholdHi & 0x3F;
+ 245              	 .loc 1 89 0 discriminator 4
+ 246 015c 8DF80F70 	 strb r7,[sp,#15]
+ 247              	 .loc 1 92 0 discriminator 4
+ 248 0160 8DF80CE0 	 strb lr,[sp,#12]
+  93:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(25, 15, 34)] = (pSetup->uLockDetectNumBadEdge & 0x1F) |
+ 249              	 .loc 1 93 0 discriminator 4
+ 250 0164 94F82330 	 ldrb r3,[r4,#35]
+  94:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->eLockDetectWindow << 5);
+ 251              	 .loc 1 94 0 discriminator 4
+ 252 0168 94F82420 	 ldrb r2,[r4,#36]
+  95:../BSP/Components/lmx249x/src/lmx249x.c ****   
+  96:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;
+ 253              	 .loc 1 96 0 discriminator 4
+ 254 016c 8DF80480 	 strb r8,[sp,#4]
+  93:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->eLockDetectWindow << 5);
+ 255              	 .loc 1 93 0 discriminator 4
+ 256 0170 03F01F03 	 and r3,r3,#31
+ 257 0174 43EA4213 	 orr r3,r3,r2,lsl#5
+  97:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 25 + 15 - 1;
+ 258              	 .loc 1 97 0 discriminator 4
+ 259 0178 2722     	 movs r2,#39
+  93:../BSP/Components/lmx249x/src/lmx249x.c ****     (pSetup->eLockDetectWindow << 5);
+ 260              	 .loc 1 93 0 discriminator 4
+ 261 017a 8DF80B30 	 strb r3,[sp,#11]
+ 262              	 .loc 1 97 0 discriminator 4
+ 263 017e 8DF80520 	 strb r2,[sp,#5]
+  98:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 15 + 2, pThis->pDataForSendSPI);
+ 264              	 .loc 1 98 0 discriminator 4
+ 265 0182 01A8     	 add r0,sp,#4
+ 266 0184 6B69     	 ldr r3,[r5,#20]
+ 267 0186 AA69     	 ldr r2,[r5,#24]
+ 268 0188 1121     	 movs r1,#17
+ 269 018a 9847     	 blx r3
+ 270              	.LVL11:
+  99:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 271              	 .loc 1 99 0 discriminator 4
+ 272 018c 07B0     	 add sp,sp,#28
+ 273              	.LCFI2:
+ 274              	 .cfi_remember_state
+ 275              	 .cfi_def_cfa_offset 36
+ 276              	 
+ 277 018e BDE8F08F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 278              	.LVL12:
+ 279              	.L3:
+ 280              	.LCFI3:
+ 281              	 .cfi_restore_state
+  41:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->uReg58 = 0;
+ 282              	 .loc 1 41 0
+ 283 0192 4FF08043 	 mov r3,#1073741824
+ 284 0196 4DE7     	 b .L2
+ 285              	.L7:
+ 286              	 .align 2
+ 287              	.L6:
+ 288 0198 0000F03F 	 .word 1072693248
+ 289              	 .cfi_endproc
+ 290              	.LFE470:
+ 292              	 .section .text.lmx249x_set_power_state,"ax",%progbits
+ 293              	 .align 2
+ 294              	 .global lmx249x_set_power_state
+ 295              	 .thumb
+ 296              	 .thumb_func
+ 298              	lmx249x_set_power_state:
+ 299              	.LFB471:
+ 100:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 101:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 102:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 103:../BSP/Components/lmx249x/src/lmx249x.c **** void lmx249x_set_power_state(Lmx249x_Object_t* pThis, Lmx249x_Power_State_t eState)
+ 104:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 300              	 .loc 1 104 0
+ 301              	 .cfi_startproc
+ 302              	 
+ 303              	 
+ 304              	.LVL13:
+ 305 0000 30B5     	 push {r4,r5,lr}
+ 306              	.LCFI4:
+ 307              	 .cfi_def_cfa_offset 12
+ 308              	 .cfi_offset 4,-12
+ 309              	 .cfi_offset 5,-8
+ 310              	 .cfi_offset 14,-4
+ 311 0002 83B0     	 sub sp,sp,#12
+ 312              	.LCFI5:
+ 313              	 .cfi_def_cfa_offset 24
+ 105:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[3];
+ 106:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;
+ 314              	 .loc 1 106 0
+ 315 0004 0025     	 movs r5,#0
+ 107:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 2;
+ 316              	 .loc 1 107 0
+ 317 0006 0224     	 movs r4,#2
+ 108:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = eState;
+ 318              	 .loc 1 108 0
+ 319 0008 8DF80610 	 strb r1,[sp,#6]
+ 109:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 3, pThis->pDataForSendSPI);
+ 320              	 .loc 1 109 0
+ 321 000c 4369     	 ldr r3,[r0,#20]
+ 322 000e 8269     	 ldr r2,[r0,#24]
+ 106:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 2;
+ 323              	 .loc 1 106 0
+ 324 0010 8DF80450 	 strb r5,[sp,#4]
+ 107:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = eState;
+ 325              	 .loc 1 107 0
+ 326 0014 8DF80540 	 strb r4,[sp,#5]
+ 327              	 .loc 1 109 0
+ 328 0018 01A8     	 add r0,sp,#4
+ 329              	.LVL14:
+ 330 001a 0321     	 movs r1,#3
+ 331              	.LVL15:
+ 332 001c 9847     	 blx r3
+ 333              	.LVL16:
+ 110:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 334              	 .loc 1 110 0
+ 335 001e 03B0     	 add sp,sp,#12
+ 336              	.LCFI6:
+ 337              	 .cfi_def_cfa_offset 12
+ 338              	 
+ 339 0020 30BD     	 pop {r4,r5,pc}
+ 340              	 .cfi_endproc
+ 341              	.LFE471:
+ 343              	 .global __aeabi_d2iz
+ 344              	 .global __aeabi_dsub
+ 345              	 .global __aeabi_dadd
+ 346              	 .global __aeabi_d2uiz
+ 347 0022 00BF     	 .section .text.lmx249x_set_frequency,"ax",%progbits
+ 348              	 .align 2
+ 349              	 .global lmx249x_set_frequency
+ 350              	 .thumb
+ 351              	 .thumb_func
+ 353              	lmx249x_set_frequency:
+ 354              	.LFB472:
+ 111:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 112:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 113:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 114:../BSP/Components/lmx249x/src/lmx249x.c **** Lmx249x_Error_Code_t lmx249x_set_frequency(Lmx249x_Object_t* pThis, double dBaseFrequency,
+ 115:../BSP/Components/lmx249x/src/lmx249x.c ****                                            Lmx249x_Frac_Order_t eFracOrder,
+ 116:../BSP/Components/lmx249x/src/lmx249x.c ****                                            Lmx249x_Frac_Dither_t eDitherMode)
+ 117:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 355              	 .loc 1 117 0
+ 356              	 .cfi_startproc
+ 357              	 
+ 358              	 
+ 359              	.LVL17:
+ 360 0000 2DE9F047 	 push {r4,r5,r6,r7,r8,r9,r10,lr}
+ 361              	.LCFI7:
+ 362              	 .cfi_def_cfa_offset 32
+ 363              	 .cfi_offset 4,-32
+ 364              	 .cfi_offset 5,-28
+ 365              	 .cfi_offset 6,-24
+ 366              	 .cfi_offset 7,-20
+ 367              	 .cfi_offset 8,-16
+ 368              	 .cfi_offset 9,-12
+ 369              	 .cfi_offset 10,-8
+ 370              	 .cfi_offset 14,-4
+ 371 0004 84B0     	 sub sp,sp,#16
+ 372              	.LCFI8:
+ 373              	 .cfi_def_cfa_offset 48
+ 118:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[11]; /* Data buffer that will be passed to the SPI interface */
+ 119:../BSP/Components/lmx249x/src/lmx249x.c ****   double dRelFrequency;
+ 120:../BSP/Components/lmx249x/src/lmx249x.c ****   uint32_t iFactorN;
+ 121:../BSP/Components/lmx249x/src/lmx249x.c ****   int32_t iFracDenominator;
+ 122:../BSP/Components/lmx249x/src/lmx249x.c ****   int32_t iFracNumarator;
+ 123:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 124:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Disable ramp (just in case a ramp is currently in progress) */
+ 125:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;
+ 374              	 .loc 1 125 0
+ 375 0006 0026     	 movs r6,#0
+ 126:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58;
+ 376              	 .loc 1 126 0
+ 377 0008 3A21     	 movs r1,#58
+ 117:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[11]; /* Data buffer that will be passed to the SPI interface */
+ 378              	 .loc 1 117 0
+ 379 000a 0446     	 mov r4,r0
+ 380 000c 9046     	 mov r8,r2
+ 381 000e 9946     	 mov r9,r3
+ 127:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = 0;
+ 128:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 3, pThis->pDataForSendSPI);
+ 382              	 .loc 1 128 0
+ 383 0010 8269     	 ldr r2,[r0,#24]
+ 384              	.LVL18:
+ 385 0012 4369     	 ldr r3,[r0,#20]
+ 126:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = 0;
+ 386              	 .loc 1 126 0
+ 387 0014 8DF80510 	 strb r1,[sp,#5]
+ 388              	 .loc 1 128 0
+ 389 0018 01A8     	 add r0,sp,#4
+ 390              	.LVL19:
+ 125:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58;
+ 391              	 .loc 1 125 0
+ 392 001a 8DF80460 	 strb r6,[sp,#4]
+ 127:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = 0;
+ 393              	 .loc 1 127 0
+ 394 001e 8DF80660 	 strb r6,[sp,#6]
+ 395              	 .loc 1 128 0
+ 396 0022 0321     	 movs r1,#3
+ 117:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[11]; /* Data buffer that will be passed to the SPI interface */
+ 397              	 .loc 1 117 0
+ 398 0024 9DF83070 	 ldrb r7,[sp,#48]
+ 399 0028 9DF83450 	 ldrb r5,[sp,#52]
+ 400              	 .loc 1 128 0
+ 401 002c 9847     	 blx r3
+ 402              	.LVL20:
+ 129:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 130:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup frequency */
+ 131:../BSP/Components/lmx249x/src/lmx249x.c ****   dRelFrequency = dBaseFrequency * pThis->dExternalDivideFactor * pThis->dPFDCycleTime;  /* divider
+ 403              	 .loc 1 131 0
+ 404 002e D4E90023 	 ldrd r2,[r4]
+ 405 0032 4046     	 mov r0,r8
+ 406 0034 4946     	 mov r1,r9
+ 407 0036 FFF7FEFF 	 bl __aeabi_dmul
+ 408              	.LVL21:
+ 409 003a D4E90223 	 ldrd r2,[r4,#8]
+ 410 003e FFF7FEFF 	 bl __aeabi_dmul
+ 411              	.LVL22:
+ 412 0042 8946     	 mov r9,r1
+ 413 0044 8046     	 mov r8,r0
+ 414              	.LVL23:
+ 132:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 133:../BSP/Components/lmx249x/src/lmx249x.c ****   iFactorN = (int32_t)dRelFrequency;
+ 415              	 .loc 1 133 0
+ 416 0046 FFF7FEFF 	 bl __aeabi_d2iz
+ 417              	.LVL24:
+ 418 004a 8246     	 mov r10,r0
+ 419              	.LVL25:
+ 134:../BSP/Components/lmx249x/src/lmx249x.c ****   dRelFrequency -= iFactorN;
+ 420              	 .loc 1 134 0
+ 421 004c FFF7FEFF 	 bl __aeabi_ui2d
+ 422              	.LVL26:
+ 423 0050 0246     	 mov r2,r0
+ 424 0052 0B46     	 mov r3,r1
+ 425 0054 4046     	 mov r0,r8
+ 426 0056 4946     	 mov r1,r9
+ 427 0058 FFF7FEFF 	 bl __aeabi_dsub
+ 428              	.LVL27:
+ 135:../BSP/Components/lmx249x/src/lmx249x.c ****   iFracDenominator = 1<<24;
+ 136:../BSP/Components/lmx249x/src/lmx249x.c ****   iFracNumarator = (uint32_t)(dRelFrequency * iFracDenominator + 0.5);
+ 429              	 .loc 1 136 0
+ 430 005c 0022     	 movs r2,#0
+ 431 005e 1A4B     	 ldr r3,.L12
+ 432 0060 FFF7FEFF 	 bl __aeabi_dmul
+ 433              	.LVL28:
+ 434 0064 0022     	 movs r2,#0
+ 435 0066 194B     	 ldr r3,.L12+4
+ 436 0068 FFF7FEFF 	 bl __aeabi_dadd
+ 437              	.LVL29:
+ 438 006c FFF7FEFF 	 bl __aeabi_d2uiz
+ 439              	.LVL30:
+ 137:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 138:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 16)] = (int8_t) ((iFactorN >>  0) & 0xFF);
+ 139:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 17)] = (int8_t) ((iFactorN >>  8) & 0xFF);
+ 140:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 18)] = (int8_t) ((iFactorN >> 16) & 0x03) |
+ 141:../BSP/Components/lmx249x/src/lmx249x.c ****     (eFracOrder << 4)        |
+ 142:../BSP/Components/lmx249x/src/lmx249x.c ****       (eDitherMode << 2);
+ 440              	 .loc 1 142 0
+ 441 0070 AD00     	 lsls r5,r5,#2
+ 442 0072 45EA0717 	 orr r7,r5,r7,lsl#4
+ 140:../BSP/Components/lmx249x/src/lmx249x.c ****     (eFracOrder << 4)        |
+ 443              	 .loc 1 140 0
+ 444 0076 CAF30145 	 ubfx r5,r10,#16,#2
+ 143:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 144:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 19)] = (iFracNumarator >>  0) & 0xFF;
+ 145:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 20)] = (iFracNumarator >>  8) & 0xFF;
+ 146:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 21)] = (iFracNumarator >> 16) & 0xFF;
+ 147:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 148:../BSP/Components/lmx249x/src/lmx249x.c ****   iFracDenominator -= 1;
+ 149:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 22)] = (iFracDenominator >>  0) & 0xFF;
+ 445              	 .loc 1 149 0
+ 446 007a FF23     	 movs r3,#255
+ 140:../BSP/Components/lmx249x/src/lmx249x.c ****     (eFracOrder << 4)        |
+ 447              	 .loc 1 140 0
+ 448 007c 2F43     	 orrs r7,r7,r5
+ 139:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 18)] = (int8_t) ((iFactorN >> 16) & 0x03) |
+ 449              	 .loc 1 139 0
+ 450 007e 4FEA1A2E 	 lsr lr,r10,#8
+ 145:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 21)] = (iFracNumarator >> 16) & 0xFF;
+ 451              	 .loc 1 145 0
+ 452 0082 0512     	 asrs r5,r0,#8
+ 146:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 453              	 .loc 1 146 0
+ 454 0084 0214     	 asrs r2,r0,#16
+ 150:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 23)] = (iFracDenominator >>  8) & 0xFF;
+ 151:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 24)] = (iFracDenominator >> 16) & 0xFF;
+ 152:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 153:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Send register sequence to PLL */
+ 154:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;
+ 155:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 16 + 9 - 1;
+ 455              	 .loc 1 155 0
+ 456 0086 1821     	 movs r1,#24
+ 144:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 20)] = (iFracNumarator >>  8) & 0xFF;
+ 457              	 .loc 1 144 0
+ 458 0088 8DF80B00 	 strb r0,[sp,#11]
+ 145:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 21)] = (iFracNumarator >> 16) & 0xFF;
+ 459              	 .loc 1 145 0
+ 460 008c 8DF80A50 	 strb r5,[sp,#10]
+ 156:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 9 + 2, pThis->pDataForSendSPI);
+ 461              	 .loc 1 156 0
+ 462 0090 01A8     	 add r0,sp,#4
+ 463              	.LVL31:
+ 146:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 464              	 .loc 1 146 0
+ 465 0092 8DF80920 	 strb r2,[sp,#9]
+ 466              	.LVL32:
+ 155:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 9 + 2, pThis->pDataForSendSPI);
+ 467              	 .loc 1 155 0
+ 468 0096 8DF80510 	 strb r1,[sp,#5]
+ 138:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 17)] = (int8_t) ((iFactorN >>  8) & 0xFF);
+ 469              	 .loc 1 138 0
+ 470 009a 8DF80EA0 	 strb r10,[sp,#14]
+ 154:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 16 + 9 - 1;
+ 471              	 .loc 1 154 0
+ 472 009e 8DF80460 	 strb r6,[sp,#4]
+ 140:../BSP/Components/lmx249x/src/lmx249x.c ****     (eFracOrder << 4)        |
+ 473              	 .loc 1 140 0
+ 474 00a2 8DF80C70 	 strb r7,[sp,#12]
+ 139:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 18)] = (int8_t) ((iFactorN >> 16) & 0x03) |
+ 475              	 .loc 1 139 0
+ 476 00a6 8DF80DE0 	 strb lr,[sp,#13]
+ 477              	 .loc 1 156 0
+ 478 00aa 6569     	 ldr r5,[r4,#20]
+ 479 00ac A269     	 ldr r2,[r4,#24]
+ 149:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 23)] = (iFracDenominator >>  8) & 0xFF;
+ 480              	 .loc 1 149 0
+ 481 00ae 8DF80830 	 strb r3,[sp,#8]
+ 150:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 24)] = (iFracDenominator >> 16) & 0xFF;
+ 482              	 .loc 1 150 0
+ 483 00b2 8DF80730 	 strb r3,[sp,#7]
+ 151:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 484              	 .loc 1 151 0
+ 485 00b6 8DF80630 	 strb r3,[sp,#6]
+ 486              	 .loc 1 156 0
+ 487 00ba 0B21     	 movs r1,#11
+ 488 00bc A847     	 blx r5
+ 489              	.LVL33:
+ 157:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 158:../BSP/Components/lmx249x/src/lmx249x.c ****   return (LMX249x_ERROR_CODE_OK);
+ 159:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 490              	 .loc 1 159 0
+ 491 00be 3046     	 mov r0,r6
+ 492 00c0 04B0     	 add sp,sp,#16
+ 493              	.LCFI9:
+ 494              	 .cfi_def_cfa_offset 32
+ 495              	 
+ 496 00c2 BDE8F087 	 pop {r4,r5,r6,r7,r8,r9,r10,pc}
+ 497              	.LVL34:
+ 498              	.L13:
+ 499 00c6 00BF     	 .align 2
+ 500              	.L12:
+ 501 00c8 00007041 	 .word 1097859072
+ 502 00cc 0000E03F 	 .word 1071644672
+ 503              	 .cfi_endproc
+ 504              	.LFE472:
+ 506              	 .global __aeabi_d2lz
+ 507              	 .section .text.lmx249x_configure_ramps,"ax",%progbits
+ 508              	 .align 2
+ 509              	 .global lmx249x_configure_ramps
+ 510              	 .thumb
+ 511              	 .thumb_func
+ 513              	lmx249x_configure_ramps:
+ 514              	.LFB473:
+ 160:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 161:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 162:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 163:../BSP/Components/lmx249x/src/lmx249x.c **** Lmx249x_Error_Code_t lmx249x_configure_ramps(Lmx249x_Object_t* pThis,
+ 164:../BSP/Components/lmx249x/src/lmx249x.c ****                                              const Lmx249x_Ramp_Global_t* pGlobalSettings,
+ 165:../BSP/Components/lmx249x/src/lmx249x.c ****                                              const Lmx249x_Ramp_Section_t* pRampSections,
+ 166:../BSP/Components/lmx249x/src/lmx249x.c ****                                              uint8_t uNumSections)
+ 167:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 515              	 .loc 1 167 0
+ 516              	 .cfi_startproc
+ 517              	 
+ 518              	 
+ 519              	.LVL35:
+ 520 0000 2DE9F04F 	 push {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+ 521              	.LCFI10:
+ 522              	 .cfi_def_cfa_offset 36
+ 523              	 .cfi_offset 4,-36
+ 524              	 .cfi_offset 5,-32
+ 525              	 .cfi_offset 6,-28
+ 526              	 .cfi_offset 7,-24
+ 527              	 .cfi_offset 8,-20
+ 528              	 .cfi_offset 9,-16
+ 529              	 .cfi_offset 10,-12
+ 530              	 .cfi_offset 11,-8
+ 531              	 .cfi_offset 14,-4
+ 168:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[29];  /* Data buffer that will be passed to the SPI interface */
+ 169:../BSP/Components/lmx249x/src/lmx249x.c ****   const double dFrequencyToNFactor = pThis->dExternalDivideFactor * pThis->dPFDCycleTime;
+ 170:../BSP/Components/lmx249x/src/lmx249x.c ****   const double dFracDenominator = (double)(1<<24);
+ 171:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uComparator0Enable = 0;
+ 172:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uComparator1Enable = 0;
+ 173:../BSP/Components/lmx249x/src/lmx249x.c ****   int8_t uIdx;
+ 174:../BSP/Components/lmx249x/src/lmx249x.c ****   uint16_t uBaseRegister;
+ 175:../BSP/Components/lmx249x/src/lmx249x.c ****   const uint8_t uNumRegs = 7;
+ 176:../BSP/Components/lmx249x/src/lmx249x.c ****   const Lmx249x_Ramp_Section_t* pThisSection;
+ 177:../BSP/Components/lmx249x/src/lmx249x.c ****   uint32_t uRampLength;
+ 178:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uDelayFlag = 0;
+ 179:../BSP/Components/lmx249x/src/lmx249x.c ****   int32_t uCounterInc;
+ 180:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uCompEnMask;
+ 181:../BSP/Components/lmx249x/src/lmx249x.c ****   double dRelFrequency;
+ 182:../BSP/Components/lmx249x/src/lmx249x.c ****   uint32_t iFactorN;
+ 183:../BSP/Components/lmx249x/src/lmx249x.c ****   int32_t iFracNumarator;
+ 184:../BSP/Components/lmx249x/src/lmx249x.c ****   int64_t iRampComp0;
+ 185:../BSP/Components/lmx249x/src/lmx249x.c ****   int64_t iRampComp1;
+ 186:../BSP/Components/lmx249x/src/lmx249x.c ****   int64_t iRampLimitLow;
+ 187:../BSP/Components/lmx249x/src/lmx249x.c ****   int64_t iRampLimitHigh;
+ 188:../BSP/Components/lmx249x/src/lmx249x.c ****   int64_t iFSKDev;
+ 189:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 190:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Check if the number of range is in a valid range */
+ 191:../BSP/Components/lmx249x/src/lmx249x.c ****   if ((uNumSections < 1) || (uNumSections > 8))
+ 532              	 .loc 1 191 0
+ 533 0004 03F1FF3E 	 add lr,r3,#-1
+ 534 0008 BEF1070F 	 cmp lr,#7
+ 167:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[29];  /* Data buffer that will be passed to the SPI interface */
+ 535              	 .loc 1 167 0
+ 536 000c 95B0     	 sub sp,sp,#84
+ 537              	.LCFI11:
+ 538              	 .cfi_def_cfa_offset 120
+ 169:../BSP/Components/lmx249x/src/lmx249x.c ****   const double dFracDenominator = (double)(1<<24);
+ 539              	 .loc 1 169 0
+ 540 000e D0E90067 	 ldrd r6,[r0]
+ 541 0012 D0E90245 	 ldrd r4,[r0,#8]
+ 542              	.LVL36:
+ 543              	 .loc 1 191 0
+ 544 0016 03D9     	 bls .L33
+ 192:../BSP/Components/lmx249x/src/lmx249x.c ****     return (LMX249x_ERROR_CODE_INVALID_NUMBER_OF_RAMPS);
+ 545              	 .loc 1 192 0
+ 546 0018 0120     	 movs r0,#1
+ 547              	.LVL37:
+ 193:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 194:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Disable ramp (just in case a ramp is currently in progress) */
+ 195:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;
+ 196:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58;
+ 197:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = 0;
+ 198:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 3, pThis->pDataForSendSPI);
+ 199:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 200:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup up the ramp sections */
+ 201:../BSP/Components/lmx249x/src/lmx249x.c ****   for (uIdx = 0; uIdx < uNumSections; ++uIdx)
+ 202:../BSP/Components/lmx249x/src/lmx249x.c ****   {
+ 203:../BSP/Components/lmx249x/src/lmx249x.c ****     /* Setup register buffer */
+ 204:../BSP/Components/lmx249x/src/lmx249x.c ****     uBaseRegister = (86 + uIdx * 7);
+ 205:../BSP/Components/lmx249x/src/lmx249x.c ****     pThisSection = &pRampSections[uIdx];
+ 206:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 207:../BSP/Components/lmx249x/src/lmx249x.c ****     /* Convert given ramp parameters to counter values */
+ 208:../BSP/Components/lmx249x/src/lmx249x.c ****     uRampLength =  (int32_t) ((pThisSection->dTramp) / pThis->dPFDCycleTime);
+ 209:../BSP/Components/lmx249x/src/lmx249x.c ****     if (uRampLength > 0xFFFF)
+ 210:../BSP/Components/lmx249x/src/lmx249x.c ****     {
+ 211:../BSP/Components/lmx249x/src/lmx249x.c ****       /* If the ramp is too long, divide ramp length by two and set the delay flag which doubles th
+ 212:../BSP/Components/lmx249x/src/lmx249x.c ****       uRampLength >>= 1;
+ 213:../BSP/Components/lmx249x/src/lmx249x.c ****       uDelayFlag = 0x80;
+ 214:../BSP/Components/lmx249x/src/lmx249x.c ****     }
+ 215:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 216:../BSP/Components/lmx249x/src/lmx249x.c ****     /* If the transition to the next sections is triggered by the length of this section, the lengt
+ 217:../BSP/Components/lmx249x/src/lmx249x.c ****     * at least 1, otherwise the counter seems to wrap around and the section will be longer than ex
+ 218:../BSP/Components/lmx249x/src/lmx249x.c ****     */
+ 219:../BSP/Components/lmx249x/src/lmx249x.c ****     if ((uRampLength == 0) && (pThisSection->eNextTrig == LMX249x_RAMP_NEXT_TRIG_RAMPX_LEN))
+ 220:../BSP/Components/lmx249x/src/lmx249x.c ****       uRampLength = 1;
+ 221:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 222:../BSP/Components/lmx249x/src/lmx249x.c ****     uCounterInc =  (int32_t) (pThisSection->dFreqShift * dFrequencyToNFactor * dFracDenominator / (
+ 223:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 224:../BSP/Components/lmx249x/src/lmx249x.c ****     /* Set ramp_increment */
+ 225:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 0)] = (uint8_t) ((uCounterInc >>  0) & 0xFF);
+ 226:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 1)] = (uint8_t) ((uCounterInc >>  8) & 0xFF);
+ 227:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 2)] = (uint8_t) ((uCounterInc >> 16) & 0xFF);
+ 228:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 229:../BSP/Components/lmx249x/src/lmx249x.c ****     /* Set flags and increment */
+ 230:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 3)] = uDelayFlag |
+ 231:../BSP/Components/lmx249x/src/lmx249x.c ****       (uint8_t) ((pThisSection->eFastlock) << 6) |
+ 232:../BSP/Components/lmx249x/src/lmx249x.c ****         (uint8_t) ((uCounterInc >> 24) & 0x3F);
+ 233:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 234:../BSP/Components/lmx249x/src/lmx249x.c ****     /* Set ramp_length */
+ 235:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 4)] = ((uRampLength >> 0) & 0xFF);
+ 236:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 5)] = ((uRampLength >> 8) & 0xFF);
+ 237:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 238:../BSP/Components/lmx249x/src/lmx249x.c ****     /* Set flags */
+ 239:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 6)] = ((int8_t) ((pThisSection->uNext &0x07)  << 5)) |
+ 240:../BSP/Components/lmx249x/src/lmx249x.c ****       ((int8_t)  (pThisSection->eNextTrig << 3)) |
+ 241:../BSP/Components/lmx249x/src/lmx249x.c ****         ((int8_t)  (pThisSection->eReset    << 2)) |
+ 242:../BSP/Components/lmx249x/src/lmx249x.c ****           ((int8_t)  (pThisSection->eFlag   << 0));
+ 243:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 244:../BSP/Components/lmx249x/src/lmx249x.c ****     /* Set comparator enable bit */
+ 245:../BSP/Components/lmx249x/src/lmx249x.c ****     uCompEnMask = 1 << uIdx;
+ 246:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator0Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 247:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator1Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 248:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 249:../BSP/Components/lmx249x/src/lmx249x.c ****     /* Write the register data to the chip, write highest address (the one of the register written 
+ 250:../BSP/Components/lmx249x/src/lmx249x.c ****     * beginning of the data buffer.
+ 251:../BSP/Components/lmx249x/src/lmx249x.c ****     */
+ 252:../BSP/Components/lmx249x/src/lmx249x.c ****     uBaseRegister += uNumRegs - 1;
+ 253:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[0] = (uint8_t)((uBaseRegister >> 8) & 0xFF);
+ 254:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[1] = (uint8_t)((uBaseRegister >> 0) & 0xFF);
+ 255:../BSP/Components/lmx249x/src/lmx249x.c ****     pThis->sendSPI(uSPIData, uNumRegs + 2, pThis->pDataForSendSPI);
+ 256:../BSP/Components/lmx249x/src/lmx249x.c ****   }
+ 257:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 258:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Wet comparator enable bits */
+ 259:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 64)] = uComparator0Enable;
+ 260:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 69)] = uComparator1Enable;
+ 261:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 262:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup base frequency */
+ 263:../BSP/Components/lmx249x/src/lmx249x.c ****   dRelFrequency = pGlobalSettings->dBaseFrequency * dFrequencyToNFactor;  /* divider ratio between 
+ 264:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 265:../BSP/Components/lmx249x/src/lmx249x.c ****   iFactorN = (int32_t)dRelFrequency;
+ 266:../BSP/Components/lmx249x/src/lmx249x.c ****   dRelFrequency -= iFactorN;
+ 267:../BSP/Components/lmx249x/src/lmx249x.c ****   iFracNumarator = (uint32_t) (dRelFrequency * dFracDenominator);
+ 268:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 269:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 16)] = (int8_t) ((iFactorN >>  0) & 0xFF);
+ 270:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 17)] = (int8_t) ((iFactorN >>  8) & 0xFF);
+ 271:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 272:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 18)] = (int8_t) (((iFactorN >> 16) & 0x03) | (pGlobalSettings->eF
+ 273:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 274:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 19)] = (iFracNumarator >>  0) & 0xFF;
+ 275:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 20)] = (iFracNumarator >>  8) & 0xFF;
+ 276:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 21)] = (iFracNumarator >> 16) & 0xFF;
+ 277:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 278:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Fractional denominator is always 0xFFFFFF when ramp generator is active */
+ 279:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 22)] = 0xFF;
+ 280:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 23)] = 0xFF;
+ 281:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 24)] = 0xFF;
+ 282:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 283:../BSP/Components/lmx249x/src/lmx249x.c ****   /*Send register sequence to PLL */
+ 284:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;
+ 285:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 16 + 9 - 1;
+ 286:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 9 + 2, pThis->pDataForSendSPI);
+ 287:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 288:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup ramp range and comparator values */
+ 289:../BSP/Components/lmx249x/src/lmx249x.c ****   /* The formula in the LMX249x data sheet for the following settings is very misleading. The used 
+ 290:../BSP/Components/lmx249x/src/lmx249x.c ****   * found by debugging. The essence here is to specify the limits as the difference (limFreq - base
+ 291:../BSP/Components/lmx249x/src/lmx249x.c ****   * limFreq is the N factor with fractional part, but baseFreq must be the integer N factor (no rou
+ 292:../BSP/Components/lmx249x/src/lmx249x.c ****   */
+ 293:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampComp0     = (int64_t) ((pGlobalSettings->dComp0Freq    * dFrequencyToNFactor - iFactorN) * d
+ 294:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampComp1     = (int64_t) ((pGlobalSettings->dComp1Freq    * dFrequencyToNFactor - iFactorN) * d
+ 295:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitLow  = (int64_t) ((pGlobalSettings->dMinFrequency * dFrequencyToNFactor - iFactorN) * d
+ 296:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitHigh = (int64_t) ((pGlobalSettings->dMaxFrequency * dFrequencyToNFactor - iFactorN) * d
+ 297:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 298:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 60)] = (iRampComp0 >>  0) & 0xFF;
+ 299:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 61)] = (iRampComp0 >>  8) & 0xFF;
+ 300:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 62)] = (iRampComp0 >> 16) & 0xFF;
+ 301:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 63)] = (iRampComp0 >> 24) & 0xFF;
+ 302:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 303:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 65)] = (iRampComp1 >>  0) & 0xFF;
+ 304:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 66)] = (iRampComp1 >>  8) & 0xFF;
+ 305:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 67)] = (iRampComp1 >> 16) & 0xFF;
+ 306:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 68)] = (iRampComp1 >> 24) & 0xFF;
+ 307:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 308:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 75)] = (iRampLimitLow >>  0) & 0xFF;
+ 309:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 76)] = (iRampLimitLow >>  8) & 0xFF;
+ 310:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 77)] = (iRampLimitLow >> 16) & 0xFF;
+ 311:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 78)] = (iRampLimitLow >> 24) & 0xFF;
+ 312:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 313:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 79)] = (iRampLimitHigh >>  0) & 0xFF;
+ 314:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 80)] = (iRampLimitHigh >>  8) & 0xFF;
+ 315:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 81)] = (iRampLimitHigh >> 16) & 0xFF;
+ 316:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 82)] = (iRampLimitHigh >> 24) & 0xFF;
+ 317:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 70)] = ((iRampComp0    & 0x100000000) ? 1 << 0 : 0) |
+ 319:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 320:../BSP/Components/lmx249x/src/lmx249x.c ****       ((iRampLimitLow   & 0x100000000) ? 1 << 3 : 0) |
+ 321:../BSP/Components/lmx249x/src/lmx249x.c ****         ((iRampLimitHigh  & 0x100000000) ? 1 << 4 : 0);
+ 322:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 323:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Define FSK deviation */
+ 324:../BSP/Components/lmx249x/src/lmx249x.c ****   iFSKDev = (int64_t) ((pGlobalSettings->dDeviationFrequency - pGlobalSettings->dBaseFrequency)
+ 325:../BSP/Components/lmx249x/src/lmx249x.c ****                        * dFrequencyToNFactor * (1 << 24));
+ 326:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 327:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 71)] = (iFSKDev >>  0) & 0xFF;
+ 328:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 72)] = (iFSKDev >>  8) & 0xFF;
+ 329:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 73)] = (iFSKDev >> 16) & 0xFF;
+ 330:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 74)] = (iFSKDev >> 24) & 0xFF;
+ 331:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 332:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 70)] |= ((iFSKDev    & 0x100000000) ? 1 << 2 : 0)
+ 333:../BSP/Components/lmx249x/src/lmx249x.c ****     | (pGlobalSettings->eDevTrigger << 5);
+ 334:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 335:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Define Ramp Trigger Sources and Modulation type */
+ 336:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->uReg58 = (pGlobalSettings->eRampClock) /* 0 << 1) */  | /* internal or external clock */
+ 337:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eModulation) /* 0 << 2) */ | /* phase or frequency modulation */
+ 338:../BSP/Components/lmx249x/src/lmx249x.c ****       (pGlobalSettings->eTriggerA << 4);          /* Trigger A source */
+ 339:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 58)] = pThis->uReg58;
+ 340:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 341:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 59)] = (pGlobalSettings->eTriggerB)   | /* Trigger B source */
+ 342:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eTriggerC << 4);   /* Trigger C source */
+ 343:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 344:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Setup ramp counter */
+ 345:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 83)] = (pGlobalSettings->uNumRamps & 0xFF);
+ 346:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 84)] = ((pGlobalSettings->uNumRamps >> 8)& 0x1F)  |
+ 347:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eAutoOff << 5)     |
+ 348:../BSP/Components/lmx249x/src/lmx249x.c ****       (pGlobalSettings->eRampCountTrigger << 6);
+ 349:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 350:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Send register sequence to PLL */
+ 351:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;
+ 352:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58 + 27 - 1;
+ 353:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 27 + 2, pThis->pDataForSendSPI);
+ 354:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 355:../BSP/Components/lmx249x/src/lmx249x.c ****   return (LMX249x_ERROR_CODE_OK);
+ 356:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 548              	 .loc 1 356 0
+ 549 001a 15B0     	 add sp,sp,#84
+ 550              	.LCFI12:
+ 551              	 .cfi_remember_state
+ 552              	 .cfi_def_cfa_offset 36
+ 553              	 
+ 554 001c BDE8F08F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 555              	.LVL38:
+ 556              	.L33:
+ 557              	.LCFI13:
+ 558              	 .cfi_restore_state
+ 559 0020 8346     	 mov fp,r0
+ 560 0022 0A92     	 str r2,[sp,#40]
+ 561 0024 0B91     	 str r1,[sp,#44]
+ 562 0026 0993     	 str r3,[sp,#36]
+ 169:../BSP/Components/lmx249x/src/lmx249x.c ****   const double dFracDenominator = (double)(1<<24);
+ 563              	 .loc 1 169 0
+ 564 0028 3946     	 mov r1,r7
+ 565              	.LVL39:
+ 566 002a 2B46     	 mov r3,r5
+ 567              	.LVL40:
+ 568 002c 2246     	 mov r2,r4
+ 569              	.LVL41:
+ 570 002e 3046     	 mov r0,r6
+ 571              	.LVL42:
+ 572 0030 FFF7FEFF 	 bl __aeabi_dmul
+ 573              	.LVL43:
+ 195:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58;
+ 574              	 .loc 1 195 0
+ 575 0034 0027     	 movs r7,#0
+ 196:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = 0;
+ 576              	 .loc 1 196 0
+ 577 0036 3A23     	 movs r3,#58
+ 169:../BSP/Components/lmx249x/src/lmx249x.c ****   const double dFracDenominator = (double)(1<<24);
+ 578              	 .loc 1 169 0
+ 579 0038 CDE90401 	 strd r0,[sp,#16]
+ 196:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = 0;
+ 580              	 .loc 1 196 0
+ 581 003c 8DF83130 	 strb r3,[sp,#49]
+ 195:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58;
+ 582              	 .loc 1 195 0
+ 583 0040 8DF83070 	 strb r7,[sp,#48]
+ 197:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 3, pThis->pDataForSendSPI);
+ 584              	 .loc 1 197 0
+ 585 0044 8DF83270 	 strb r7,[sp,#50]
+ 198:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 586              	 .loc 1 198 0
+ 587 0048 0CA8     	 add r0,sp,#48
+ 588 004a DBF81430 	 ldr r3,[fp,#20]
+ 589 004e DBF81820 	 ldr r2,[fp,#24]
+ 590 0052 0321     	 movs r1,#3
+ 201:../BSP/Components/lmx249x/src/lmx249x.c ****   {
+ 591              	 .loc 1 201 0
+ 592 0054 B846     	 mov r8,r7
+ 198:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 593              	 .loc 1 198 0
+ 594 0056 9847     	 blx r3
+ 595              	.LVL44:
+ 596 0058 3D46     	 mov r5,r7
+ 201:../BSP/Components/lmx249x/src/lmx249x.c ****   {
+ 597              	 .loc 1 201 0
+ 598 005a 0797     	 str r7,[sp,#28]
+ 599 005c 0897     	 str r7,[sp,#32]
+ 600 005e 0097     	 str r7,[sp]
+ 601 0060 C246     	 mov r10,r8
+ 602 0062 66E0     	 b .L20
+ 603              	.LVL45:
+ 604              	.L35:
+ 213:../BSP/Components/lmx249x/src/lmx249x.c ****     }
+ 605              	 .loc 1 213 0
+ 606 0064 8023     	 movs r3,#128
+ 607 0066 94F81A90 	 ldrb r9,[r4,#26]
+ 608 006a 0793     	 str r3,[sp,#28]
+ 609              	.LVL46:
+ 212:../BSP/Components/lmx249x/src/lmx249x.c ****       uDelayFlag = 0x80;
+ 610              	 .loc 1 212 0
+ 611 006c 4508     	 lsrs r5,r0,#1
+ 612              	.LVL47:
+ 613              	.L17:
+ 222:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 614              	 .loc 1 222 0
+ 615 006e D4E90023 	 ldrd r2,[r4]
+ 616 0072 DDE90401 	 ldrd r0,[sp,#16]
+ 617 0076 FFF7FEFF 	 bl __aeabi_dmul
+ 618              	.LVL48:
+ 619 007a 0022     	 movs r2,#0
+ 620 007c 3B4B     	 ldr r3,.L36
+ 621 007e FFF7FEFF 	 bl __aeabi_dmul
+ 622              	.LVL49:
+ 623 0082 0646     	 mov r6,r0
+ 624 0084 2846     	 mov r0,r5
+ 625 0086 0F46     	 mov r7,r1
+ 626 0088 FFF7FEFF 	 bl __aeabi_ui2d
+ 627              	.LVL50:
+ 628 008c 0246     	 mov r2,r0
+ 629 008e 0B46     	 mov r3,r1
+ 630 0090 3046     	 mov r0,r6
+ 631 0092 3946     	 mov r1,r7
+ 632 0094 FFF7FEFF 	 bl __aeabi_ddiv
+ 633              	.LVL51:
+ 634 0098 FFF7FEFF 	 bl __aeabi_d2iz
+ 635              	.LVL52:
+ 241:../BSP/Components/lmx249x/src/lmx249x.c ****           ((int8_t)  (pThisSection->eFlag   << 0));
+ 636              	 .loc 1 241 0
+ 637 009c 637E     	 ldrb r3,[r4,#25]
+ 239:../BSP/Components/lmx249x/src/lmx249x.c ****       ((int8_t)  (pThisSection->eNextTrig << 3)) |
+ 638              	 .loc 1 239 0
+ 639 009e E67E     	 ldrb r6,[r4,#27]
+ 231:../BSP/Components/lmx249x/src/lmx249x.c ****         (uint8_t) ((uCounterInc >> 24) & 0x3F);
+ 640              	 .loc 1 231 0
+ 641 00a0 227A     	 ldrb r2,[r4,#8]
+ 642 00a2 217E     	 ldrb r1,[r4,#24]
+ 246:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator1Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 643              	 .loc 1 246 0
+ 644 00a4 247F     	 ldrb r4,[r4,#28]
+ 645              	.LVL53:
+ 225:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 1)] = (uint8_t) ((uCounterInc >>  8) & 0xFF);
+ 646              	 .loc 1 225 0
+ 647 00a6 8DF83800 	 strb r0,[sp,#56]
+ 241:../BSP/Components/lmx249x/src/lmx249x.c ****           ((int8_t)  (pThisSection->eFlag   << 0));
+ 648              	 .loc 1 241 0
+ 649 00aa 9B00     	 lsls r3,r3,#2
+ 650 00ac 43EA4616 	 orr r6,r3,r6,lsl#5
+ 230:../BSP/Components/lmx249x/src/lmx249x.c ****       (uint8_t) ((pThisSection->eFastlock) << 6) |
+ 651              	 .loc 1 230 0
+ 652 00b0 079B     	 ldr r3,[sp,#28]
+ 235:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 5)] = ((uRampLength >> 8) & 0xFF);
+ 653              	 .loc 1 235 0
+ 654 00b2 8DF83450 	 strb r5,[sp,#52]
+ 230:../BSP/Components/lmx249x/src/lmx249x.c ****       (uint8_t) ((pThisSection->eFastlock) << 6) |
+ 655              	 .loc 1 230 0
+ 656 00b6 43EA8212 	 orr r2,r3,r2,lsl#6
+ 245:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator0Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 657              	 .loc 1 245 0
+ 658 00ba 009B     	 ldr r3,[sp]
+ 659 00bc 3143     	 orrs r1,r1,r6
+ 230:../BSP/Components/lmx249x/src/lmx249x.c ****       (uint8_t) ((pThisSection->eFastlock) << 6) |
+ 660              	 .loc 1 230 0
+ 661 00be C0F3056E 	 ubfx lr,r0,#24,#6
+ 245:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator0Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 662              	 .loc 1 245 0
+ 663 00c2 0127     	 movs r7,#1
+ 664 00c4 9F40     	 lsls r7,r7,r3
+ 226:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 2)] = (uint8_t) ((uCounterInc >> 16) & 0xFF);
+ 665              	 .loc 1 226 0
+ 666 00c6 0612     	 asrs r6,r0,#8
+ 236:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 667              	 .loc 1 236 0
+ 668 00c8 2B0A     	 lsrs r3,r5,#8
+ 239:../BSP/Components/lmx249x/src/lmx249x.c ****       ((int8_t)  (pThisSection->eNextTrig << 3)) |
+ 669              	 .loc 1 239 0
+ 670 00ca 41EAC901 	 orr r1,r1,r9,lsl#3
+ 230:../BSP/Components/lmx249x/src/lmx249x.c ****       (uint8_t) ((pThisSection->eFastlock) << 6) |
+ 671              	 .loc 1 230 0
+ 672 00ce 4EEA0202 	 orr r2,lr,r2
+ 246:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator1Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 673              	 .loc 1 246 0
+ 674 00d2 04F00204 	 and r4,r4,#2
+ 227:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 675              	 .loc 1 227 0
+ 676 00d6 0014     	 asrs r0,r0,#16
+ 677              	.LVL54:
+ 236:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 678              	 .loc 1 236 0
+ 679 00d8 8DF83330 	 strb r3,[sp,#51]
+ 246:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator1Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 680              	 .loc 1 246 0
+ 681 00dc FFB2     	 uxtb r7,r7
+ 239:../BSP/Components/lmx249x/src/lmx249x.c ****       ((int8_t)  (pThisSection->eNextTrig << 3)) |
+ 682              	 .loc 1 239 0
+ 683 00de 8DF83210 	 strb r1,[sp,#50]
+ 684              	.LVL55:
+ 230:../BSP/Components/lmx249x/src/lmx249x.c ****       (uint8_t) ((pThisSection->eFastlock) << 6) |
+ 685              	 .loc 1 230 0
+ 686 00e2 8DF83520 	 strb r2,[sp,#53]
+ 246:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator1Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 687              	 .loc 1 246 0
+ 688 00e6 04F0FF03 	 and r3,r4,#255
+ 226:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[LMX249x_REG_IDX(0, uNumRegs, 2)] = (uint8_t) ((uCounterInc >> 16) & 0xFF);
+ 689              	 .loc 1 226 0
+ 690 00ea 8DF83760 	 strb r6,[sp,#55]
+ 227:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 691              	 .loc 1 227 0
+ 692 00ee 8DF83600 	 strb r0,[sp,#54]
+ 246:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator1Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 693              	 .loc 1 246 0
+ 694 00f2 002C     	 cmp r4,#0
+ 695 00f4 38D0     	 beq .L26
+ 246:../BSP/Components/lmx249x/src/lmx249x.c ****     uComparator1Enable |= (pThisSection->eComparators & LMX249x_RAMP_USE_COMPARATOR_1) ? uCompEnMas
+ 696              	 .loc 1 246 0 is_stmt 0 discriminator 1
+ 697 00f6 089B     	 ldr r3,[sp,#32]
+ 698 00f8 3B43     	 orrs r3,r3,r7
+ 699 00fa 0893     	 str r3,[sp,#32]
+ 700              	.LVL56:
+ 701              	.L19:
+ 252:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[0] = (uint8_t)((uBaseRegister >> 8) & 0xFF);
+ 702              	 .loc 1 252 0 is_stmt 1 discriminator 4
+ 703 00fc 029B     	 ldr r3,[sp,#8]
+ 704 00fe 5C33     	 adds r3,r3,#92
+ 705 0100 9BB2     	 uxth r3,r3
+ 253:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[1] = (uint8_t)((uBaseRegister >> 0) & 0xFF);
+ 706              	 .loc 1 253 0 discriminator 4
+ 707 0102 1A0A     	 lsrs r2,r3,#8
+ 254:../BSP/Components/lmx249x/src/lmx249x.c ****     pThis->sendSPI(uSPIData, uNumRegs + 2, pThis->pDataForSendSPI);
+ 708              	 .loc 1 254 0 discriminator 4
+ 709 0104 8DF83130 	 strb r3,[sp,#49]
+ 253:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[1] = (uint8_t)((uBaseRegister >> 0) & 0xFF);
+ 710              	 .loc 1 253 0 discriminator 4
+ 711 0108 8DF83020 	 strb r2,[sp,#48]
+ 255:../BSP/Components/lmx249x/src/lmx249x.c ****   }
+ 712              	 .loc 1 255 0 discriminator 4
+ 713 010c DBF81430 	 ldr r3,[fp,#20]
+ 714 0110 DBF81820 	 ldr r2,[fp,#24]
+ 715 0114 0921     	 movs r1,#9
+ 716 0116 0CA8     	 add r0,sp,#48
+ 717 0118 08F10108 	 add r8,r8,#1
+ 718              	.LVL57:
+ 719 011c 9847     	 blx r3
+ 720              	.LVL58:
+ 721 011e 5FFA88F8 	 uxtb r8,r8
+ 201:../BSP/Components/lmx249x/src/lmx249x.c ****   {
+ 722              	 .loc 1 201 0 discriminator 4
+ 723 0122 099B     	 ldr r3,[sp,#36]
+ 724 0124 4FFA88F5 	 sxtb r5,r8
+ 725              	.LVL59:
+ 726 0128 9D42     	 cmp r5,r3
+ 247:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 727              	 .loc 1 247 0 discriminator 4
+ 728 012a 47EA0A0A 	 orr r10,r7,r10
+ 729              	.LVL60:
+ 201:../BSP/Components/lmx249x/src/lmx249x.c ****   {
+ 730              	 .loc 1 201 0 discriminator 4
+ 731 012e 0095     	 str r5,[sp]
+ 732              	.LVL61:
+ 733 0130 1EDA     	 bge .L34
+ 734              	.LVL62:
+ 735              	.L20:
+ 205:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 736              	 .loc 1 205 0
+ 737 0132 0A9B     	 ldr r3,[sp,#40]
+ 738 0134 03EB4514 	 add r4,r3,r5,lsl#5
+ 204:../BSP/Components/lmx249x/src/lmx249x.c ****     pThisSection = &pRampSections[uIdx];
+ 739              	 .loc 1 204 0
+ 740 0138 C5EBC505 	 rsb r5,r5,r5,lsl#3
+ 208:../BSP/Components/lmx249x/src/lmx249x.c ****     if (uRampLength > 0xFFFF)
+ 741              	 .loc 1 208 0
+ 742 013c DBE90223 	 ldrd r2,[fp,#8]
+ 204:../BSP/Components/lmx249x/src/lmx249x.c ****     pThisSection = &pRampSections[uIdx];
+ 743              	 .loc 1 204 0
+ 744 0140 ADB2     	 uxth r5,r5
+ 208:../BSP/Components/lmx249x/src/lmx249x.c ****     if (uRampLength > 0xFFFF)
+ 745              	 .loc 1 208 0
+ 746 0142 D4E90401 	 ldrd r0,[r4,#16]
+ 204:../BSP/Components/lmx249x/src/lmx249x.c ****     pThisSection = &pRampSections[uIdx];
+ 747              	 .loc 1 204 0
+ 748 0146 0295     	 str r5,[sp,#8]
+ 749              	.LVL63:
+ 208:../BSP/Components/lmx249x/src/lmx249x.c ****     if (uRampLength > 0xFFFF)
+ 750              	 .loc 1 208 0
+ 751 0148 FFF7FEFF 	 bl __aeabi_ddiv
+ 752              	.LVL64:
+ 753 014c FFF7FEFF 	 bl __aeabi_d2iz
+ 754              	.LVL65:
+ 209:../BSP/Components/lmx249x/src/lmx249x.c ****     {
+ 755              	 .loc 1 209 0
+ 756 0150 B0F5803F 	 cmp r0,#65536
+ 208:../BSP/Components/lmx249x/src/lmx249x.c ****     if (uRampLength > 0xFFFF)
+ 757              	 .loc 1 208 0
+ 758 0154 0546     	 mov r5,r0
+ 759              	.LVL66:
+ 209:../BSP/Components/lmx249x/src/lmx249x.c ****     {
+ 760              	 .loc 1 209 0
+ 761 0156 85D2     	 bcs .L35
+ 219:../BSP/Components/lmx249x/src/lmx249x.c ****       uRampLength = 1;
+ 762              	 .loc 1 219 0
+ 763 0158 94F81A90 	 ldrb r9,[r4,#26]
+ 764 015c 0028     	 cmp r0,#0
+ 765 015e 86D1     	 bne .L17
+ 219:../BSP/Components/lmx249x/src/lmx249x.c ****       uRampLength = 1;
+ 766              	 .loc 1 219 0 is_stmt 0 discriminator 1
+ 767 0160 B9FA89F5 	 clz r5,r9
+ 768 0164 6D09     	 lsrs r5,r5,#5
+ 769 0166 82E7     	 b .L17
+ 770              	.LVL67:
+ 771              	.L26:
+ 247:../BSP/Components/lmx249x/src/lmx249x.c ****     
+ 772              	 .loc 1 247 0 is_stmt 1
+ 773 0168 1F46     	 mov r7,r3
+ 774 016a C7E7     	 b .L19
+ 775              	.L37:
+ 776              	 .align 2
+ 777              	.L36:
+ 778 016c 00007041 	 .word 1097859072
+ 779              	.LVL68:
+ 780              	.L34:
+ 263:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 781              	 .loc 1 263 0
+ 782 0170 0B9B     	 ldr r3,[sp,#44]
+ 259:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 69)] = uComparator1Enable;
+ 783              	 .loc 1 259 0
+ 784 0172 9DF82040 	 ldrb r4,[sp,#32]
+ 785 0176 8DF84640 	 strb r4,[sp,#70]
+ 263:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 786              	 .loc 1 263 0
+ 787 017a D3E90023 	 ldrd r2,[r3]
+ 788 017e DDE90401 	 ldrd r0,[sp,#16]
+ 260:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 789              	 .loc 1 260 0
+ 790 0182 8DF841A0 	 strb r10,[sp,#65]
+ 263:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 791              	 .loc 1 263 0
+ 792 0186 FFF7FEFF 	 bl __aeabi_dmul
+ 793              	.LVL69:
+ 794 018a 0F46     	 mov r7,r1
+ 795 018c 0646     	 mov r6,r0
+ 796              	.LVL70:
+ 265:../BSP/Components/lmx249x/src/lmx249x.c ****   dRelFrequency -= iFactorN;
+ 797              	 .loc 1 265 0
+ 798 018e FFF7FEFF 	 bl __aeabi_d2iz
+ 799              	.LVL71:
+ 800 0192 8046     	 mov r8,r0
+ 801              	.LVL72:
+ 266:../BSP/Components/lmx249x/src/lmx249x.c ****   iFracNumarator = (uint32_t) (dRelFrequency * dFracDenominator);
+ 802              	 .loc 1 266 0
+ 803 0194 FFF7FEFF 	 bl __aeabi_ui2d
+ 804              	.LVL73:
+ 805 0198 0446     	 mov r4,r0
+ 806 019a 0D46     	 mov r5,r1
+ 807              	.LVL74:
+ 808 019c 2246     	 mov r2,r4
+ 809 019e 2B46     	 mov r3,r5
+ 810 01a0 3046     	 mov r0,r6
+ 811 01a2 3946     	 mov r1,r7
+ 812 01a4 FFF7FEFF 	 bl __aeabi_dsub
+ 813              	.LVL75:
+ 267:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 814              	 .loc 1 267 0
+ 815 01a8 0022     	 movs r2,#0
+ 816 01aa A24B     	 ldr r3,.L38
+ 817 01ac FFF7FEFF 	 bl __aeabi_dmul
+ 818              	.LVL76:
+ 819 01b0 FFF7FEFF 	 bl __aeabi_d2uiz
+ 820              	.LVL77:
+ 272:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 821              	 .loc 1 272 0
+ 822 01b4 0B99     	 ldr r1,[sp,#44]
+ 269:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 17)] = (int8_t) ((iFactorN >>  8) & 0xFF);
+ 823              	 .loc 1 269 0
+ 824 01b6 8DF83A80 	 strb r8,[sp,#58]
+ 272:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 825              	 .loc 1 272 0
+ 826 01ba 91F83A30 	 ldrb r3,[r1,#58]
+ 827 01be 91F83B20 	 ldrb r2,[r1,#59]
+ 274:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 20)] = (iFracNumarator >>  8) & 0xFF;
+ 828              	 .loc 1 274 0
+ 829 01c2 8DF83700 	 strb r0,[sp,#55]
+ 272:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 830              	 .loc 1 272 0
+ 831 01c6 1B01     	 lsls r3,r3,#4
+ 832 01c8 43EA8203 	 orr r3,r3,r2,lsl#2
+ 833 01cc C8F30141 	 ubfx r1,r8,#16,#2
+ 275:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 21)] = (iFracNumarator >> 16) & 0xFF;
+ 834              	 .loc 1 275 0
+ 835 01d0 4FEA202E 	 asr lr,r0,#8
+ 279:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 23)] = 0xFF;
+ 836              	 .loc 1 279 0
+ 837 01d4 FF22     	 movs r2,#255
+ 272:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 838              	 .loc 1 272 0
+ 839 01d6 1943     	 orrs r1,r1,r3
+ 276:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 840              	 .loc 1 276 0
+ 841 01d8 0714     	 asrs r7,r0,#16
+ 270:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 842              	 .loc 1 270 0
+ 843 01da 4FEA1823 	 lsr r3,r8,#8
+ 285:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 9 + 2, pThis->pDataForSendSPI);
+ 844              	 .loc 1 285 0
+ 845 01de 1826     	 movs r6,#24
+ 846              	.LVL78:
+ 284:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 16 + 9 - 1;
+ 847              	 .loc 1 284 0
+ 848 01e0 4FF00008 	 mov r8,#0
+ 849              	.LVL79:
+ 275:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 21)] = (iFracNumarator >> 16) & 0xFF;
+ 850              	 .loc 1 275 0
+ 851 01e4 8DF836E0 	 strb lr,[sp,#54]
+ 272:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 852              	 .loc 1 272 0
+ 853 01e8 8DF83810 	 strb r1,[sp,#56]
+ 270:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 854              	 .loc 1 270 0
+ 855 01ec 8DF83930 	 strb r3,[sp,#57]
+ 276:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 856              	 .loc 1 276 0
+ 857 01f0 8DF83570 	 strb r7,[sp,#53]
+ 279:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 23)] = 0xFF;
+ 858              	 .loc 1 279 0
+ 859 01f4 8DF83420 	 strb r2,[sp,#52]
+ 280:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(16, 9, 24)] = 0xFF;
+ 860              	 .loc 1 280 0
+ 861 01f8 8DF83320 	 strb r2,[sp,#51]
+ 281:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 862              	 .loc 1 281 0
+ 863 01fc 8DF83220 	 strb r2,[sp,#50]
+ 285:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 9 + 2, pThis->pDataForSendSPI);
+ 864              	 .loc 1 285 0
+ 865 0200 8DF83160 	 strb r6,[sp,#49]
+ 286:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 866              	 .loc 1 286 0
+ 867 0204 DBF81430 	 ldr r3,[fp,#20]
+ 868 0208 DBF81820 	 ldr r2,[fp,#24]
+ 284:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 16 + 9 - 1;
+ 869              	 .loc 1 284 0
+ 870 020c 8DF83080 	 strb r8,[sp,#48]
+ 286:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 871              	 .loc 1 286 0
+ 872 0210 0CA8     	 add r0,sp,#48
+ 873              	.LVL80:
+ 874 0212 0B21     	 movs r1,#11
+ 875 0214 9847     	 blx r3
+ 876              	.LVL81:
+ 293:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampComp1     = (int64_t) ((pGlobalSettings->dComp1Freq    * dFrequencyToNFactor - iFactorN) * d
+ 877              	 .loc 1 293 0
+ 878 0216 0B9E     	 ldr r6,[sp,#44]
+ 879 0218 DDE90401 	 ldrd r0,[sp,#16]
+ 880 021c D6E90823 	 ldrd r2,[r6,#32]
+ 881 0220 FFF7FEFF 	 bl __aeabi_dmul
+ 882              	.LVL82:
+ 883 0224 2246     	 mov r2,r4
+ 884 0226 2B46     	 mov r3,r5
+ 885 0228 FFF7FEFF 	 bl __aeabi_dsub
+ 886              	.LVL83:
+ 887 022c 0022     	 movs r2,#0
+ 888 022e 814B     	 ldr r3,.L38
+ 889 0230 FFF7FEFF 	 bl __aeabi_dmul
+ 890              	.LVL84:
+ 891 0234 FFF7FEFF 	 bl __aeabi_d2lz
+ 892              	.LVL85:
+ 294:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitLow  = (int64_t) ((pGlobalSettings->dMinFrequency * dFrequencyToNFactor - iFactorN) * d
+ 893              	 .loc 1 294 0
+ 894 0238 D6E90A23 	 ldrd r2,[r6,#40]
+ 293:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampComp1     = (int64_t) ((pGlobalSettings->dComp1Freq    * dFrequencyToNFactor - iFactorN) * d
+ 895              	 .loc 1 293 0
+ 896 023c 8146     	 mov r9,r0
+ 897 023e 8A46     	 mov r10,r1
+ 898              	.LVL86:
+ 294:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitLow  = (int64_t) ((pGlobalSettings->dMinFrequency * dFrequencyToNFactor - iFactorN) * d
+ 899              	 .loc 1 294 0
+ 900 0240 DDE90401 	 ldrd r0,[sp,#16]
+ 901              	.LVL87:
+ 902 0244 FFF7FEFF 	 bl __aeabi_dmul
+ 903              	.LVL88:
+ 904 0248 2246     	 mov r2,r4
+ 905 024a 2B46     	 mov r3,r5
+ 906 024c FFF7FEFF 	 bl __aeabi_dsub
+ 907              	.LVL89:
+ 908 0250 0022     	 movs r2,#0
+ 909 0252 784B     	 ldr r3,.L38
+ 910 0254 FFF7FEFF 	 bl __aeabi_dmul
+ 911              	.LVL90:
+ 912 0258 FFF7FEFF 	 bl __aeabi_d2lz
+ 913              	.LVL91:
+ 295:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitHigh = (int64_t) ((pGlobalSettings->dMaxFrequency * dFrequencyToNFactor - iFactorN) * d
+ 914              	 .loc 1 295 0
+ 915 025c D6E90423 	 ldrd r2,[r6,#16]
+ 294:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitLow  = (int64_t) ((pGlobalSettings->dMinFrequency * dFrequencyToNFactor - iFactorN) * d
+ 916              	 .loc 1 294 0
+ 917 0260 CDE90201 	 strd r0,[sp,#8]
+ 918              	.LVL92:
+ 295:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitHigh = (int64_t) ((pGlobalSettings->dMaxFrequency * dFrequencyToNFactor - iFactorN) * d
+ 919              	 .loc 1 295 0
+ 920 0264 DDE90401 	 ldrd r0,[sp,#16]
+ 921 0268 0B96     	 str r6,[sp,#44]
+ 922              	.LVL93:
+ 923 026a FFF7FEFF 	 bl __aeabi_dmul
+ 924              	.LVL94:
+ 925 026e 2246     	 mov r2,r4
+ 926 0270 2B46     	 mov r3,r5
+ 927 0272 FFF7FEFF 	 bl __aeabi_dsub
+ 928              	.LVL95:
+ 929 0276 0022     	 movs r2,#0
+ 930 0278 6E4B     	 ldr r3,.L38
+ 931 027a FFF7FEFF 	 bl __aeabi_dmul
+ 932              	.LVL96:
+ 933 027e FFF7FEFF 	 bl __aeabi_d2lz
+ 934              	.LVL97:
+ 296:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 935              	 .loc 1 296 0
+ 936 0282 0B9B     	 ldr r3,[sp,#44]
+ 295:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitHigh = (int64_t) ((pGlobalSettings->dMaxFrequency * dFrequencyToNFactor - iFactorN) * d
+ 937              	 .loc 1 295 0
+ 938 0284 0646     	 mov r6,r0
+ 296:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 939              	 .loc 1 296 0
+ 940 0286 D3E90623 	 ldrd r2,[r3,#24]
+ 295:../BSP/Components/lmx249x/src/lmx249x.c ****   iRampLimitHigh = (int64_t) ((pGlobalSettings->dMaxFrequency * dFrequencyToNFactor - iFactorN) * d
+ 941              	 .loc 1 295 0
+ 942 028a 0F46     	 mov r7,r1
+ 943              	.LVL98:
+ 296:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 944              	 .loc 1 296 0
+ 945 028c DDE90401 	 ldrd r0,[sp,#16]
+ 946 0290 FFF7FEFF 	 bl __aeabi_dmul
+ 947              	.LVL99:
+ 948 0294 2246     	 mov r2,r4
+ 949 0296 2B46     	 mov r3,r5
+ 950 0298 FFF7FEFF 	 bl __aeabi_dsub
+ 951              	.LVL100:
+ 952 029c 0022     	 movs r2,#0
+ 953 029e 654B     	 ldr r3,.L38
+ 954 02a0 FFF7FEFF 	 bl __aeabi_dmul
+ 955              	.LVL101:
+ 956 02a4 FFF7FEFF 	 bl __aeabi_d2lz
+ 957              	.LVL102:
+ 319:../BSP/Components/lmx249x/src/lmx249x.c ****       ((iRampLimitLow   & 0x100000000) ? 1 << 3 : 0) |
+ 958              	 .loc 1 319 0
+ 959 02a8 DDE90245 	 ldrd r4,[sp,#8]
+ 296:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 960              	 .loc 1 296 0
+ 961 02ac CDE90001 	 strd r0,[sp]
+ 962              	.LVL103:
+ 319:../BSP/Components/lmx249x/src/lmx249x.c ****       ((iRampLimitLow   & 0x100000000) ? 1 << 3 : 0) |
+ 963              	 .loc 1 319 0
+ 964 02b0 05F00103 	 and r3,r5,#1
+ 965 02b4 0022     	 movs r2,#0
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 966              	 .loc 1 318 0
+ 967 02b6 52EA0301 	 orrs r1,r2,r3
+ 320:../BSP/Components/lmx249x/src/lmx249x.c ****         ((iRampLimitHigh  & 0x100000000) ? 1 << 4 : 0);
+ 968              	 .loc 1 320 0
+ 969 02ba 07F00103 	 and r3,r7,#1
+ 970 02be 4FF00002 	 mov r2,#0
+ 313:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 80)] = (iRampLimitHigh >>  8) & 0xFF;
+ 971              	 .loc 1 313 0
+ 972 02c2 9DF80050 	 ldrb r5,[sp]
+ 298:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 61)] = (iRampComp0 >>  8) & 0xFF;
+ 973              	 .loc 1 298 0
+ 974 02c6 8DF84A90 	 strb r9,[sp,#74]
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 975              	 .loc 1 318 0
+ 976 02ca 0CBF     	 ite eq
+ 977 02cc 4146     	 moveq r1,r8
+ 978 02ce 0221     	 movne r1,#2
+ 979 02d0 52EA030E 	 orrs lr,r2,r3
+ 980 02d4 0791     	 str r1,[sp,#28]
+ 981              	.LVL104:
+ 303:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 66)] = (iRampComp1 >>  8) & 0xFF;
+ 982              	 .loc 1 303 0
+ 983 02d6 8DF84540 	 strb r4,[sp,#69]
+ 308:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 76)] = (iRampLimitLow >>  8) & 0xFF;
+ 984              	 .loc 1 308 0
+ 985 02da 8DF83B60 	 strb r6,[sp,#59]
+ 313:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 80)] = (iRampLimitHigh >>  8) & 0xFF;
+ 986              	 .loc 1 313 0
+ 987 02de 8DF83750 	 strb r5,[sp,#55]
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 988              	 .loc 1 318 0
+ 989 02e2 0CBF     	 ite eq
+ 990 02e4 4546     	 moveq r5,r8
+ 991 02e6 0825     	 movne r5,#8
+ 304:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 67)] = (iRampComp1 >> 16) & 0xFF;
+ 992              	 .loc 1 304 0
+ 993 02e8 230A     	 lsrs r3,r4,#8
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 994              	 .loc 1 318 0
+ 995 02ea 0895     	 str r5,[sp,#32]
+ 996              	.LVL105:
+ 305:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 68)] = (iRampComp1 >> 24) & 0xFF;
+ 997              	 .loc 1 305 0
+ 998 02ec DDE90245 	 ldrd r4,[sp,#8]
+ 999 02f0 4FEA144C 	 lsr ip,r4,#16
+ 306:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1000              	 .loc 1 306 0
+ 1001 02f4 4FEA146E 	 lsr lr,r4,#24
+ 314:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 81)] = (iRampLimitHigh >> 16) & 0xFF;
+ 1002              	 .loc 1 314 0
+ 1003 02f8 009C     	 ldr r4,[sp]
+ 304:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 67)] = (iRampComp1 >> 16) & 0xFF;
+ 1004              	 .loc 1 304 0
+ 1005 02fa 8DF84430 	 strb r3,[sp,#68]
+ 314:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 81)] = (iRampLimitHigh >> 16) & 0xFF;
+ 1006              	 .loc 1 314 0
+ 1007 02fe 270A     	 lsrs r7,r4,#8
+ 321:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1008              	 .loc 1 321 0
+ 1009 0300 DDE90045 	 ldrd r4,[sp]
+ 299:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 62)] = (iRampComp0 >> 16) & 0xFF;
+ 1010              	 .loc 1 299 0
+ 1011 0304 4FEA1920 	 lsr r0,r9,#8
+ 301:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1012              	 .loc 1 301 0
+ 1013 0308 4FEA1962 	 lsr r2,r9,#24
+ 300:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 63)] = (iRampComp0 >> 24) & 0xFF;
+ 1014              	 .loc 1 300 0
+ 1015 030c 4FEA1941 	 lsr r1,r9,#16
+ 299:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 62)] = (iRampComp0 >> 16) & 0xFF;
+ 1016              	 .loc 1 299 0
+ 1017 0310 8DF84900 	 strb r0,[sp,#73]
+ 301:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1018              	 .loc 1 301 0
+ 1019 0314 8DF84720 	 strb r2,[sp,#71]
+ 309:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 77)] = (iRampLimitLow >> 16) & 0xFF;
+ 1020              	 .loc 1 309 0
+ 1021 0318 300A     	 lsrs r0,r6,#8
+ 321:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1022              	 .loc 1 321 0
+ 1023 031a 05F00103 	 and r3,r5,#1
+ 314:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 81)] = (iRampLimitHigh >> 16) & 0xFF;
+ 1024              	 .loc 1 314 0
+ 1025 031e 8DF83670 	 strb r7,[sp,#54]
+ 321:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1026              	 .loc 1 321 0
+ 1027 0322 0022     	 movs r2,#0
+ 324:../BSP/Components/lmx249x/src/lmx249x.c ****                        * dFrequencyToNFactor * (1 << 24));
+ 1028              	 .loc 1 324 0
+ 1029 0324 0B9F     	 ldr r7,[sp,#44]
+ 309:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 77)] = (iRampLimitLow >> 16) & 0xFF;
+ 1030              	 .loc 1 309 0
+ 1031 0326 8DF83A00 	 strb r0,[sp,#58]
+ 300:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 63)] = (iRampComp0 >> 24) & 0xFF;
+ 1032              	 .loc 1 300 0
+ 1033 032a 8DF84810 	 strb r1,[sp,#72]
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 1034              	 .loc 1 318 0
+ 1035 032e 52EA0300 	 orrs r0,r2,r3
+ 310:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 78)] = (iRampLimitLow >> 24) & 0xFF;
+ 1036              	 .loc 1 310 0
+ 1037 0332 4FEA1641 	 lsr r1,r6,#16
+ 311:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1038              	 .loc 1 311 0
+ 1039 0336 4FEA1666 	 lsr r6,r6,#24
+ 1040              	.LVL106:
+ 324:../BSP/Components/lmx249x/src/lmx249x.c ****                        * dFrequencyToNFactor * (1 << 24));
+ 1041              	 .loc 1 324 0
+ 1042 033a D7E90023 	 ldrd r2,[r7]
+ 310:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 78)] = (iRampLimitLow >> 24) & 0xFF;
+ 1043              	 .loc 1 310 0
+ 1044 033e 8DF83910 	 strb r1,[sp,#57]
+ 311:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1045              	 .loc 1 311 0
+ 1046 0342 8DF83860 	 strb r6,[sp,#56]
+ 324:../BSP/Components/lmx249x/src/lmx249x.c ****                        * dFrequencyToNFactor * (1 << 24));
+ 1047              	 .loc 1 324 0
+ 1048 0346 D7E90201 	 ldrd r0,[r7,#8]
+ 315:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 82)] = (iRampLimitHigh >> 24) & 0xFF;
+ 1049              	 .loc 1 315 0
+ 1050 034a 4FEA1446 	 lsr r6,r4,#16
+ 316:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1051              	 .loc 1 316 0
+ 1052 034e 4FEA1465 	 lsr r5,r4,#24
+ 324:../BSP/Components/lmx249x/src/lmx249x.c ****                        * dFrequencyToNFactor * (1 << 24));
+ 1053              	 .loc 1 324 0
+ 1054 0352 3C46     	 mov r4,r7
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 1055              	 .loc 1 318 0
+ 1056 0354 0CBF     	 ite eq
+ 1057 0356 4446     	 moveq r4,r8
+ 1058 0358 1024     	 movne r4,#16
+ 305:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 68)] = (iRampComp1 >> 24) & 0xFF;
+ 1059              	 .loc 1 305 0
+ 1060 035a 8DF843C0 	 strb ip,[sp,#67]
+ 306:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1061              	 .loc 1 306 0
+ 1062 035e 8DF842E0 	 strb lr,[sp,#66]
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 1063              	 .loc 1 318 0
+ 1064 0362 0094     	 str r4,[sp]
+ 315:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 82)] = (iRampLimitHigh >> 24) & 0xFF;
+ 1065              	 .loc 1 315 0
+ 1066 0364 8DF83560 	 strb r6,[sp,#53]
+ 316:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1067              	 .loc 1 316 0
+ 1068 0368 8DF83450 	 strb r5,[sp,#52]
+ 324:../BSP/Components/lmx249x/src/lmx249x.c ****                        * dFrequencyToNFactor * (1 << 24));
+ 1069              	 .loc 1 324 0
+ 1070 036c FFF7FEFF 	 bl __aeabi_dsub
+ 1071              	.LVL107:
+ 325:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1072              	 .loc 1 325 0
+ 1073 0370 DDE90423 	 ldrd r2,[sp,#16]
+ 1074 0374 FFF7FEFF 	 bl __aeabi_dmul
+ 1075              	.LVL108:
+ 1076 0378 0022     	 movs r2,#0
+ 1077 037a 2E4B     	 ldr r3,.L38
+ 1078 037c FFF7FEFF 	 bl __aeabi_dmul
+ 1079              	.LVL109:
+ 324:../BSP/Components/lmx249x/src/lmx249x.c ****                        * dFrequencyToNFactor * (1 << 24));
+ 1080              	 .loc 1 324 0
+ 1081 0380 FFF7FEFF 	 bl __aeabi_d2lz
+ 1082              	.LVL110:
+ 336:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eModulation) /* 0 << 2) */ | /* phase or frequency modulation */
+ 1083              	 .loc 1 336 0
+ 1084 0384 97F83350 	 ldrb r5,[r7,#51]
+ 1085 0388 97F83430 	 ldrb r3,[r7,#52]
+ 338:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 58)] = pThis->uReg58;
+ 1086              	 .loc 1 338 0
+ 1087 038c 97F83020 	 ldrb r2,[r7,#48]
+ 333:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1088              	 .loc 1 333 0
+ 1089 0390 97F83960 	 ldrb r6,[r7,#57]
+ 1090 0394 089C     	 ldr r4,[sp,#32]
+ 327:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 72)] = (iFSKDev >>  8) & 0xFF;
+ 1091              	 .loc 1 327 0
+ 1092 0396 8DF83F00 	 strb r0,[sp,#63]
+ 336:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eModulation) /* 0 << 2) */ | /* phase or frequency modulation */
+ 1093              	 .loc 1 336 0
+ 1094 039a 2B43     	 orrs r3,r3,r5
+ 1095 039c 43EA0213 	 orr r3,r3,r2,lsl#4
+ 318:../BSP/Components/lmx249x/src/lmx249x.c ****     ((iRampComp1    & 0x100000000) ? 1 << 1 : 0) |
+ 1096              	 .loc 1 318 0
+ 1097 03a0 0AF00102 	 and r2,r10,#1
+ 336:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eModulation) /* 0 << 2) */ | /* phase or frequency modulation */
+ 1098              	 .loc 1 336 0
+ 1099 03a4 DBB2     	 uxtb r3,r3
+ 1100 03a6 42EA4612 	 orr r2,r2,r6,lsl#5
+ 1101 03aa 079E     	 ldr r6,[sp,#28]
+ 1102 03ac 8BF81030 	 strb r3,[fp,#16]
+ 345:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 84)] = ((pGlobalSettings->uNumRamps >> 8)& 0x1F)  |
+ 1103              	 .loc 1 345 0
+ 1104 03b0 FD8E     	 ldrh r5,[r7,#54]
+ 341:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eTriggerC << 4);   /* Trigger C source */
+ 1105              	 .loc 1 341 0
+ 1106 03b2 97F831A0 	 ldrb r10,[r7,#49]
+ 1107              	.LVL111:
+ 347:../BSP/Components/lmx249x/src/lmx249x.c ****       (pGlobalSettings->eRampCountTrigger << 6);
+ 1108              	 .loc 1 347 0
+ 1109 03b6 97F83590 	 ldrb r9,[r7,#53]
+ 348:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1110              	 .loc 1 348 0
+ 1111 03ba 97F838C0 	 ldrb ip,[r7,#56]
+ 342:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1112              	 .loc 1 342 0
+ 1113 03be 97F832E0 	 ldrb lr,[r7,#50]
+ 339:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1114              	 .loc 1 339 0
+ 1115 03c2 8DF84C30 	 strb r3,[sp,#76]
+ 332:../BSP/Components/lmx249x/src/lmx249x.c ****     | (pGlobalSettings->eDevTrigger << 5);
+ 1116              	 .loc 1 332 0
+ 1117 03c6 01F00107 	 and r7,r1,#1
+ 1118 03ca 3243     	 orrs r2,r2,r6
+ 1119 03cc 0026     	 movs r6,#0
+ 1120 03ce 2243     	 orrs r2,r2,r4
+ 1121 03d0 56EA0704 	 orrs r4,r6,r7
+ 1122 03d4 009C     	 ldr r4,[sp]
+ 351:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58 + 27 - 1;
+ 1123              	 .loc 1 351 0
+ 1124 03d6 8DF83080 	 strb r8,[sp,#48]
+ 346:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eAutoOff << 5)     |
+ 1125              	 .loc 1 346 0
+ 1126 03da C5F30421 	 ubfx r1,r5,#8,#5
+ 1127 03de 44EA0204 	 orr r4,r4,r2
+ 1128 03e2 41EA4919 	 orr r9,r1,r9,lsl#5
+ 332:../BSP/Components/lmx249x/src/lmx249x.c ****     | (pGlobalSettings->eDevTrigger << 5);
+ 1129              	 .loc 1 332 0
+ 1130 03e6 14BF     	 ite ne
+ 1131 03e8 0422     	 movne r2,#4
+ 1132 03ea 4246     	 moveq r2,r8
+ 1133 03ec 1443     	 orrs r4,r4,r2
+ 346:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eAutoOff << 5)     |
+ 1134              	 .loc 1 346 0
+ 1135 03ee 49EA8C1C 	 orr ip,r9,ip,lsl#6
+ 341:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eTriggerC << 4);   /* Trigger C source */
+ 1136              	 .loc 1 341 0
+ 1137 03f2 4AEA0E1E 	 orr lr,r10,lr,lsl#4
+ 328:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 73)] = (iFSKDev >> 16) & 0xFF;
+ 1138              	 .loc 1 328 0
+ 1139 03f6 070A     	 lsrs r7,r0,#8
+ 329:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 74)] = (iFSKDev >> 24) & 0xFF;
+ 1140              	 .loc 1 329 0
+ 1141 03f8 060C     	 lsrs r6,r0,#16
+ 330:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1142              	 .loc 1 330 0
+ 1143 03fa 010E     	 lsrs r1,r0,#24
+ 352:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 27 + 2, pThis->pDataForSendSPI);
+ 1144              	 .loc 1 352 0
+ 1145 03fc 5422     	 movs r2,#84
+ 353:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1146              	 .loc 1 353 0
+ 1147 03fe 0CA8     	 add r0,sp,#48
+ 1148              	.LVL112:
+ 346:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eAutoOff << 5)     |
+ 1149              	 .loc 1 346 0
+ 1150 0400 8DF832C0 	 strb ip,[sp,#50]
+ 341:../BSP/Components/lmx249x/src/lmx249x.c ****     (pGlobalSettings->eTriggerC << 4);   /* Trigger C source */
+ 1151              	 .loc 1 341 0
+ 1152 0404 8DF84BE0 	 strb lr,[sp,#75]
+ 332:../BSP/Components/lmx249x/src/lmx249x.c ****     | (pGlobalSettings->eDevTrigger << 5);
+ 1153              	 .loc 1 332 0
+ 1154 0408 8DF84040 	 strb r4,[sp,#64]
+ 345:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 84)] = ((pGlobalSettings->uNumRamps >> 8)& 0x1F)  |
+ 1155              	 .loc 1 345 0
+ 1156 040c 8DF83350 	 strb r5,[sp,#51]
+ 328:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 73)] = (iFSKDev >> 16) & 0xFF;
+ 1157              	 .loc 1 328 0
+ 1158 0410 8DF83E70 	 strb r7,[sp,#62]
+ 329:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[LMX249x_REG_IDX(58, 27, 74)] = (iFSKDev >> 24) & 0xFF;
+ 1159              	 .loc 1 329 0
+ 1160 0414 8DF83D60 	 strb r6,[sp,#61]
+ 330:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1161              	 .loc 1 330 0
+ 1162 0418 8DF83C10 	 strb r1,[sp,#60]
+ 352:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 27 + 2, pThis->pDataForSendSPI);
+ 1163              	 .loc 1 352 0
+ 1164 041c 8DF83120 	 strb r2,[sp,#49]
+ 353:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1165              	 .loc 1 353 0
+ 1166 0420 DBF81430 	 ldr r3,[fp,#20]
+ 1167 0424 DBF81820 	 ldr r2,[fp,#24]
+ 1168 0428 1D21     	 movs r1,#29
+ 1169 042a 9847     	 blx r3
+ 1170              	.LVL113:
+ 355:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 1171              	 .loc 1 355 0
+ 1172 042c 4046     	 mov r0,r8
+ 1173              	 .loc 1 356 0
+ 1174 042e 15B0     	 add sp,sp,#84
+ 1175              	.LCFI14:
+ 1176              	 .cfi_def_cfa_offset 36
+ 1177              	 
+ 1178 0430 BDE8F08F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 1179              	.LVL114:
+ 1180              	.L39:
+ 1181              	 .align 2
+ 1182              	.L38:
+ 1183 0434 00007041 	 .word 1097859072
+ 1184              	 .cfi_endproc
+ 1185              	.LFE473:
+ 1187              	 .section .text.lmx249x_enable_ramps,"ax",%progbits
+ 1188              	 .align 2
+ 1189              	 .global lmx249x_enable_ramps
+ 1190              	 .thumb
+ 1191              	 .thumb_func
+ 1193              	lmx249x_enable_ramps:
+ 1194              	.LFB474:
+ 357:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 358:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 359:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 360:../BSP/Components/lmx249x/src/lmx249x.c **** void lmx249x_enable_ramps(Lmx249x_Object_t* pThis, uint8_t bEnable)
+ 361:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 1195              	 .loc 1 361 0
+ 1196              	 .cfi_startproc
+ 1197              	 
+ 1198              	 
+ 1199              	.LVL115:
+ 1200 0000 10B5     	 push {r4,lr}
+ 1201              	.LCFI15:
+ 1202              	 .cfi_def_cfa_offset 8
+ 1203              	 .cfi_offset 4,-8
+ 1204              	 .cfi_offset 14,-4
+ 1205 0002 82B0     	 sub sp,sp,#8
+ 1206              	.LCFI16:
+ 1207              	 .cfi_def_cfa_offset 16
+ 362:../BSP/Components/lmx249x/src/lmx249x.c ****   uint8_t uSPIData[4];
+ 363:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[0] = 0;              /* High address byte */
+ 1208              	 .loc 1 363 0
+ 1209 0004 0024     	 movs r4,#0
+ 364:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58;             /* Low address byte */
+ 1210              	 .loc 1 364 0
+ 1211 0006 3A22     	 movs r2,#58
+ 365:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[2] = pThis->uReg58;  /* Configuration of register 58 */
+ 1212              	 .loc 1 365 0
+ 1213 0008 037C     	 ldrb r3,[r0,#16]
+ 363:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58;             /* Low address byte */
+ 1214              	 .loc 1 363 0
+ 1215 000a 8DF80440 	 strb r4,[sp,#4]
+ 364:../BSP/Components/lmx249x/src/lmx249x.c ****   uSPIData[1] = 58;             /* Low address byte */
+ 1216              	 .loc 1 364 0
+ 1217 000e 8DF80520 	 strb r2,[sp,#5]
+ 366:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 367:../BSP/Components/lmx249x/src/lmx249x.c ****   /* enable ramps */
+ 368:../BSP/Components/lmx249x/src/lmx249x.c ****   if (bEnable != 0)
+ 1218              	 .loc 1 368 0
+ 1219 0012 51B9     	 cbnz r1,.L44
+ 369:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[2] |= 1;
+ 370:../BSP/Components/lmx249x/src/lmx249x.c ****   else
+ 371:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[2] &= 0xFE;
+ 1220              	 .loc 1 371 0
+ 1221 0014 03F0FE03 	 and r3,r3,#254
+ 1222              	.L42:
+ 1223 0018 8DF80630 	 strb r3,[sp,#6]
+ 372:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 373:../BSP/Components/lmx249x/src/lmx249x.c ****   pThis->sendSPI(uSPIData, 3, pThis->pDataForSendSPI);
+ 1224              	 .loc 1 373 0
+ 1225 001c 8269     	 ldr r2,[r0,#24]
+ 1226 001e 4369     	 ldr r3,[r0,#20]
+ 1227 0020 0321     	 movs r1,#3
+ 1228              	.LVL116:
+ 1229 0022 01A8     	 add r0,sp,#4
+ 1230              	.LVL117:
+ 1231 0024 9847     	 blx r3
+ 1232              	.LVL118:
+ 374:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 1233              	 .loc 1 374 0
+ 1234 0026 02B0     	 add sp,sp,#8
+ 1235              	.LCFI17:
+ 1236              	 .cfi_remember_state
+ 1237              	 .cfi_def_cfa_offset 8
+ 1238              	 
+ 1239 0028 10BD     	 pop {r4,pc}
+ 1240              	.LVL119:
+ 1241              	.L44:
+ 1242              	.LCFI18:
+ 1243              	 .cfi_restore_state
+ 369:../BSP/Components/lmx249x/src/lmx249x.c ****     uSPIData[2] |= 1;
+ 1244              	 .loc 1 369 0
+ 1245 002a 43F00103 	 orr r3,r3,#1
+ 1246 002e F3E7     	 b .L42
+ 1247              	 .cfi_endproc
+ 1248              	.LFE474:
+ 1250              	 .section .text.lmx249x_get_real_frequency_shift,"ax",%progbits
+ 1251              	 .align 2
+ 1252              	 .global lmx249x_get_real_frequency_shift
+ 1253              	 .thumb
+ 1254              	 .thumb_func
+ 1256              	lmx249x_get_real_frequency_shift:
+ 1257              	.LFB475:
+ 375:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 376:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 377:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 378:../BSP/Components/lmx249x/src/lmx249x.c **** double lmx249x_get_real_frequency_shift(Lmx249x_Object_t* pThis, double FreqShift_MHz, uint32_t Fre
+ 379:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 1258              	 .loc 1 379 0
+ 1259              	 .cfi_startproc
+ 1260              	 
+ 1261              	 
+ 1262              	.LVL120:
+ 1263 0000 2DE9F84F 	 push {r3,r4,r5,r6,r7,r8,r9,r10,fp,lr}
+ 1264              	.LCFI19:
+ 1265              	 .cfi_def_cfa_offset 40
+ 1266              	 .cfi_offset 3,-40
+ 1267              	 .cfi_offset 4,-36
+ 1268              	 .cfi_offset 5,-32
+ 1269              	 .cfi_offset 6,-28
+ 1270              	 .cfi_offset 7,-24
+ 1271              	 .cfi_offset 8,-20
+ 1272              	 .cfi_offset 9,-16
+ 1273              	 .cfi_offset 10,-12
+ 1274              	 .cfi_offset 11,-8
+ 1275              	 .cfi_offset 14,-4
+ 380:../BSP/Components/lmx249x/src/lmx249x.c ****   double RealFreqShift;
+ 381:../BSP/Components/lmx249x/src/lmx249x.c ****   const double FracDenominator = (double)(1<<24);
+ 382:../BSP/Components/lmx249x/src/lmx249x.c ****   uint32_t FreqShiftSteps;
+ 383:../BSP/Components/lmx249x/src/lmx249x.c ****   double FreqShiftPerStep;
+ 384:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 385:../BSP/Components/lmx249x/src/lmx249x.c ****   FreqShiftSteps =  (uint32_t) (FreqShift_time_usec / pThis->dPFDCycleTime);
+ 1276              	 .loc 1 385 0
+ 1277 0004 D0E90245 	 ldrd r4,[r0,#8]
+ 1278              	.LVL121:
+ 379:../BSP/Components/lmx249x/src/lmx249x.c ****   double RealFreqShift;
+ 1279              	 .loc 1 379 0
+ 1280 0008 0146     	 mov r1,r0
+ 1281              	 .loc 1 385 0
+ 1282 000a 0A98     	 ldr r0,[sp,#40]
+ 1283              	.LVL122:
+ 386:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 387:../BSP/Components/lmx249x/src/lmx249x.c ****   FreqShiftPerStep = (FreqShift_MHz * pThis->dExternalDivideFactor) / FreqShiftSteps;
+ 1284              	 .loc 1 387 0
+ 1285 000c D1E90067 	 ldrd r6,[r1]
+ 379:../BSP/Components/lmx249x/src/lmx249x.c ****   double RealFreqShift;
+ 1286              	 .loc 1 379 0
+ 1287 0010 9246     	 mov r10,r2
+ 1288 0012 9B46     	 mov fp,r3
+ 385:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 1289              	 .loc 1 385 0
+ 1290 0014 FFF7FEFF 	 bl __aeabi_ui2d
+ 1291              	.LVL123:
+ 1292 0018 2246     	 mov r2,r4
+ 1293 001a 2B46     	 mov r3,r5
+ 1294 001c FFF7FEFF 	 bl __aeabi_ddiv
+ 1295              	.LVL124:
+ 1296 0020 FFF7FEFF 	 bl __aeabi_d2uiz
+ 1297              	.LVL125:
+ 1298              	 .loc 1 387 0
+ 1299 0024 FFF7FEFF 	 bl __aeabi_ui2d
+ 1300              	.LVL126:
+ 1301 0028 5246     	 mov r2,r10
+ 1302 002a 8046     	 mov r8,r0
+ 1303 002c 8946     	 mov r9,r1
+ 1304              	.LVL127:
+ 1305 002e 5B46     	 mov r3,fp
+ 1306 0030 3046     	 mov r0,r6
+ 1307 0032 3946     	 mov r1,r7
+ 1308 0034 FFF7FEFF 	 bl __aeabi_dmul
+ 1309              	.LVL128:
+ 1310 0038 4246     	 mov r2,r8
+ 1311 003a 4B46     	 mov r3,r9
+ 1312 003c FFF7FEFF 	 bl __aeabi_ddiv
+ 1313              	.LVL129:
+ 388:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 389:../BSP/Components/lmx249x/src/lmx249x.c ****   FreqShiftPerStep = ((uint32_t)((FreqShiftPerStep * FracDenominator) * pThis->dPFDCycleTime) ) / F
+ 1314              	 .loc 1 389 0
+ 1315 0040 0022     	 movs r2,#0
+ 1316 0042 104B     	 ldr r3,.L47
+ 1317 0044 FFF7FEFF 	 bl __aeabi_dmul
+ 1318              	.LVL130:
+ 1319 0048 0246     	 mov r2,r0
+ 1320 004a 0B46     	 mov r3,r1
+ 1321 004c 2046     	 mov r0,r4
+ 1322 004e 2946     	 mov r1,r5
+ 1323 0050 FFF7FEFF 	 bl __aeabi_dmul
+ 1324              	.LVL131:
+ 1325 0054 FFF7FEFF 	 bl __aeabi_d2uiz
+ 1326              	.LVL132:
+ 1327 0058 FFF7FEFF 	 bl __aeabi_ui2d
+ 1328              	.LVL133:
+ 1329 005c 0022     	 movs r2,#0
+ 1330 005e 0A4B     	 ldr r3,.L47+4
+ 1331 0060 FFF7FEFF 	 bl __aeabi_dmul
+ 1332              	.LVL134:
+ 1333 0064 2246     	 mov r2,r4
+ 1334 0066 2B46     	 mov r3,r5
+ 1335 0068 FFF7FEFF 	 bl __aeabi_ddiv
+ 1336              	.LVL135:
+ 1337 006c 0246     	 mov r2,r0
+ 1338 006e 0B46     	 mov r3,r1
+ 390:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 391:../BSP/Components/lmx249x/src/lmx249x.c ****   RealFreqShift = FreqShiftPerStep * FreqShiftSteps /  pThis->dExternalDivideFactor;
+ 1339              	 .loc 1 391 0
+ 1340 0070 4046     	 mov r0,r8
+ 1341 0072 4946     	 mov r1,r9
+ 1342 0074 FFF7FEFF 	 bl __aeabi_dmul
+ 1343              	.LVL136:
+ 1344 0078 3246     	 mov r2,r6
+ 1345 007a 3B46     	 mov r3,r7
+ 1346 007c FFF7FEFF 	 bl __aeabi_ddiv
+ 1347              	.LVL137:
+ 392:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 393:../BSP/Components/lmx249x/src/lmx249x.c ****   return (RealFreqShift);
+ 394:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 1348              	 .loc 1 394 0
+ 1349 0080 BDE8F88F 	 pop {r3,r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 1350              	.LVL138:
+ 1351              	.L48:
+ 1352              	 .align 2
+ 1353              	.L47:
+ 1354 0084 00007041 	 .word 1097859072
+ 1355 0088 0000703E 	 .word 1047527424
+ 1356              	 .cfi_endproc
+ 1357              	.LFE475:
+ 1359              	 .section .text.lmx249x_trigger_ramp,"ax",%progbits
+ 1360              	 .align 2
+ 1361              	 .global lmx249x_trigger_ramp
+ 1362              	 .thumb
+ 1363              	 .thumb_func
+ 1365              	lmx249x_trigger_ramp:
+ 1366              	.LFB476:
+ 395:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 396:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 397:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 398:../BSP/Components/lmx249x/src/lmx249x.c **** void lmx249x_trigger_ramp(void)
+ 399:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 1367              	 .loc 1 399 0
+ 1368              	 .cfi_startproc
+ 1369              	 
+ 1370              	 
+ 1371              	 
+ 1372 0000 074B     	 ldr r3,.L52
+ 1373 0002 187C     	 ldrb r0,[r3,#16]
+ 1374 0004 1968     	 ldr r1,[r3]
+ 1375 0006 0122     	 movs r2,#1
+ 1376 0008 8240     	 lsls r2,r2,r0
+ 1377              	.L50:
+ 1378              	.LVL139:
+ 1379              	.LBB34:
+ 1380              	.LBB35:
+ 1381              	.LBB36:
+ 1382              	 .file 2 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_gpio.h"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @file xmc_gpio.h
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @date 2015-06-20
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @cond
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMClib v2.1.16 - XMC Peripheral Driver Library 
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Copyright (c) 2015-2017, Infineon Technologies AG
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * All rights reserved.                        
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                             
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * following conditions are met:   
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer.                        
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * products derived from this software without specific prior written permission.                  
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Change History
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * --------------
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-02-20:
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Initial draft<br>
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Documentation improved <br>
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *      
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-06-20:
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @endcond
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #ifndef XMC_GPIO_H
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_H
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * HEADER FILES
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc_common.h"
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup XMClib XMC Peripheral Library
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @{
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup GPIO
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @brief General Purpose Input Output (GPIO) driver for the XMC microcontroller family.
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * GPIO driver provide a generic and very flexible software interface for all standard digital I/O 
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Each port slice has individual interfaces for the operation as General Purpose I/O and it furthe
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * connectivity to the on-chip periphery and the control for the pad characteristics. 
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * The driver is divided into Input and Output mode.
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Input mode features:
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Configuration structure XMC_GPIO_CONFIG_t and initialization function XMC_GPIO_Init()
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of weak pull-up or pull-down device. Configuration structure XMC_GPIO_MO
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of input hysteresis. XMC_GPIO_SetInputHysteresis()
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Output mode features:
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of push pull/open drain and Alternate output. Configuration structure XM
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of pad driver strength. Configuration structure XMC_GPIO_OUTPUT_STRENGTH
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of initial output level. Configuration structure XMC_GPIO_OUTPUT_LEVEL_t
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *@{
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * MACROS
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Pos PORT0_IOCR0_PC0_Pos
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Msk PORT0_IOCR0_PC0_Msk
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Size 				(8U)
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 											
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_OUTPUT_LEVEL(level) ((level == XMC_GPIO_OUTPUT_LEVEL_LOW) || \
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             (level == XMC_GPIO_OUTPUT_LEVEL_HIGH))
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_HWCTRL(hwctrl) ((hwctrl == XMC_GPIO_HWCTRL_DISABLED) || \
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL1) || \
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL2))                    
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * ENUMS
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines output level of a pin. Use type \a XMC_GPIO_OUTPUT_LEVEL_t for this enum.
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_OUTPUT_LEVEL
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_LOW  = 0x10000U, /**<  Reset bit */
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_HIGH = 0x1U, 	/**< Set bit  */
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_OUTPUT_LEVEL_t;
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines direct hardware control characteristics of the pin . Use type \a XMC_GPIO_HWCTRL_t for t
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_HWCTRL
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_DISABLED     = 0x0U, /**<  Software control only */
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL1  = 0x1U, /**<  HWI0/HWO0 control path can override the software confi
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL2  = 0x2U  /**<  HWI1/HWO1 control path can override the software confi
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_HWCTRL_t;
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * DEVICE FAMILY EXTENSIONS
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  #if UC_FAMILY == XMC1
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc1_gpio.h"
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #elif UC_FAMILY == XMC4
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc4_gpio.h"
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #else
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #error "xmc_gpio.h: family device not supported"
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * API PROTOTYPES
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #ifdef __cplusplus
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** extern "C" {
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	  Constant pointer pointing to GPIO port, to access port registers like Pn_OUT,Pn_O
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	  Port pin number.
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  config GPIO configuration data structure. Refer data structure @ref XMC_GPIO_CONFIG_t fo
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,hysteresis, push pull
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for a selected \a po
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \a config provides selected I/O settings. It configures hardware registers Pn_IOCR,Pn_OUT, Pn_OM
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,push pull /open drain
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for selected \a port
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * It configures hardware registers Pn_IOCR,Pn_OUT,Pn_OMR,Pn_PDISC and Pn_PDR.\n
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * This API is called in definition of DAVE_init by code generation and therefore should not be exp
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * for the normal operation. Use other APIs only after DAVE_init is called successfully (returns DA
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_Init(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_CONFIG_t *const c
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	Constant pointer pointing to GPIO port, to access hardware register Pn_IOCR.
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  mode input / output functionality selection. Refer @ref XMC_GPIO_MODE_t for valid values
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets digital input and output driver functionality and characteristics of a GPIO port pin. It co
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * registers Pn_IOCR. \a mode is initially configured during initialization in XMC_GPIO_Init(). Cal
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * the port direction functionality as needed later in the program.
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_SetMode(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_MODE_t mode);
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	 Constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	 Port pin number.
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  level output level selection. Refer @ref XMC_GPIO_OUTPUT_LEVEL_t for valid values.
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Set port pin output level to high or low.It configures hardware registers Pn_OMR.\a level is ini
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * configured during initialization in XMC_GPIO_Init(). Call this API to alter output level as need
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLevel(XMC_GPIO_PORT_t *const port, const uint8_t pin, const 
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid output level", XMC_GPIO_CHECK_OUTPUT_LEVEL(level));
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)level << pin;
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  Sets port pin output to high. It configures hardware registers Pn_OMR.
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  \par<b>Related APIs:</b><BR>
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputLow()
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().\n
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputHigh: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)0x1U << pin;
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	port pin number.
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return  None
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Description:</b><br>
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets port pin output to low. It configures hardware registers Pn_OMR.\n
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>>
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMC_GPIO_SetOutputHigh()
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Note:</b><br>
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLow(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLow: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = 0x10000U << pin;
+ 287:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 288:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 289:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 290:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 291:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param port constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 292:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param pin  port pin number.
+ 293:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 294:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 295:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 296:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 297:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Configures port pin output to Toggle. It configures hardware registers Pn_OMR.
+ 298:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 299:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 300:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 301:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 302:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 303:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode(). Regis
+ 304:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * and does not contain any flip-flop. A read action delivers the value of 0.
+ 305:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 306:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 307:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 308:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_ToggleOutput(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 309:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 310:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_ToggleOutput: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 311:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 312:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = 0x10001U << pin;
+ 313:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 314:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 315:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 316:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 317:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param port constant pointer pointing to GPIO port, to access hardware register Pn_IN.
+ 318:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param pin  Port pin number.
+ 319:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 320:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return uint32_t pin logic level status.
+ 321:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 322:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Description:</b><br>
+ 323:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Reads the Pn_IN register and returns the current logical value at the GPIO pin.
+ 324:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 325:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 326:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * None
+ 327:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 328:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 329:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to input mode using XMC_GPIO_SetMode().
+ 330:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 331:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 332:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 333:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE uint32_t XMC_GPIO_GetInput(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 334:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 335:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_GetInput: Invalid port", XMC_GPIO_CHECK_PORT(port));
+ 336:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 337:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   return (((port->IN) >> pin) & 0x1U);
+ 1383              	 .loc 2 337 0 discriminator 1
+ 1384 000a 4B6A     	 ldr r3,[r1,#36]
+ 1385              	.LBE36:
+ 1386              	.LBE35:
+ 1387              	.LBE34:
+ 400:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Wait until PLL is ready to generate the next chirp */
+ 401:../BSP/Components/lmx249x/src/lmx249x.c ****   while (DIGITAL_IO_GetInput(&DIGITAL_IO_PLL_MOD) != 0);
+ 1388              	 .loc 1 401 0 discriminator 1
+ 1389 000c 1A42     	 tst r2,r3
+ 1390 000e FCD1     	 bne .L50
+ 1391 0010 044B     	 ldr r3,.L52+4
+ 1392              	.LBB37:
+ 1393              	.LBB38:
+ 1394              	.LBB39:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 1395              	 .loc 2 260 0
+ 1396 0012 197C     	 ldrb r1,[r3,#16]
+ 1397              	.LVL140:
+ 1398 0014 1A68     	 ldr r2,[r3]
+ 1399              	.LVL141:
+ 1400 0016 0123     	 movs r3,#1
+ 1401 0018 8B40     	 lsls r3,r3,r1
+ 1402 001a 5360     	 str r3,[r2,#4]
+ 1403 001c 7047     	 bx lr
+ 1404              	.L53:
+ 1405 001e 00BF     	 .align 2
+ 1406              	.L52:
+ 1407 0020 00000000 	 .word DIGITAL_IO_PLL_MOD
+ 1408 0024 00000000 	 .word DIGITAL_IO_PLL_TRIG2
+ 1409              	.LBE39:
+ 1410              	.LBE38:
+ 1411              	.LBE37:
+ 1412              	 .cfi_endproc
+ 1413              	.LFE476:
+ 1415              	 .section .text.lmx249x_release_ramp_trigger,"ax",%progbits
+ 1416              	 .align 2
+ 1417              	 .global lmx249x_release_ramp_trigger
+ 1418              	 .thumb
+ 1419              	 .thumb_func
+ 1421              	lmx249x_release_ramp_trigger:
+ 1422              	.LFB477:
+ 402:../BSP/Components/lmx249x/src/lmx249x.c ****   
+ 403:../BSP/Components/lmx249x/src/lmx249x.c ****   /* Start the chirp */
+ 404:../BSP/Components/lmx249x/src/lmx249x.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_PLL_TRIG2);
+ 405:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 406:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 407:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 408:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 409:../BSP/Components/lmx249x/src/lmx249x.c **** void lmx249x_release_ramp_trigger(void)
+ 410:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 1423              	 .loc 1 410 0
+ 1424              	 .cfi_startproc
+ 1425              	 
+ 1426              	 
+ 1427              	 
+ 1428 0000 034B     	 ldr r3,.L55
+ 1429              	.LBB40:
+ 1430              	.LBB41:
+ 1431              	.LBB42:
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 1432              	 .loc 2 286 0
+ 1433 0002 197C     	 ldrb r1,[r3,#16]
+ 1434 0004 1A68     	 ldr r2,[r3]
+ 1435              	.LVL142:
+ 1436 0006 4FF48033 	 mov r3,#65536
+ 1437 000a 8B40     	 lsls r3,r3,r1
+ 1438 000c 5360     	 str r3,[r2,#4]
+ 1439 000e 7047     	 bx lr
+ 1440              	.L56:
+ 1441              	 .align 2
+ 1442              	.L55:
+ 1443 0010 00000000 	 .word DIGITAL_IO_PLL_TRIG2
+ 1444              	.LBE42:
+ 1445              	.LBE41:
+ 1446              	.LBE40:
+ 1447              	 .cfi_endproc
+ 1448              	.LFE477:
+ 1450              	 .section .text.lmx249x_power_up,"ax",%progbits
+ 1451              	 .align 2
+ 1452              	 .global lmx249x_power_up
+ 1453              	 .thumb
+ 1454              	 .thumb_func
+ 1456              	lmx249x_power_up:
+ 1457              	.LFB478:
+ 411:../BSP/Components/lmx249x/src/lmx249x.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_PLL_TRIG2);
+ 412:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 413:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 414:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 415:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 416:../BSP/Components/lmx249x/src/lmx249x.c **** void lmx249x_power_up(void)
+ 417:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 1458              	 .loc 1 417 0
+ 1459              	 .cfi_startproc
+ 1460              	 
+ 1461              	 
+ 1462              	 
+ 1463 0000 034B     	 ldr r3,.L58
+ 1464              	.LBB43:
+ 1465              	.LBB44:
+ 1466              	.LBB45:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 1467              	 .loc 2 260 0
+ 1468 0002 197C     	 ldrb r1,[r3,#16]
+ 1469 0004 1A68     	 ldr r2,[r3]
+ 1470              	.LVL143:
+ 1471 0006 0123     	 movs r3,#1
+ 1472 0008 8B40     	 lsls r3,r3,r1
+ 1473 000a 5360     	 str r3,[r2,#4]
+ 1474 000c 7047     	 bx lr
+ 1475              	.L59:
+ 1476 000e 00BF     	 .align 2
+ 1477              	.L58:
+ 1478 0010 00000000 	 .word DIGITAL_IO_PLL_CE
+ 1479              	.LBE45:
+ 1480              	.LBE44:
+ 1481              	.LBE43:
+ 1482              	 .cfi_endproc
+ 1483              	.LFE478:
+ 1485              	 .section .text.lmx249x_power_down,"ax",%progbits
+ 1486              	 .align 2
+ 1487              	 .global lmx249x_power_down
+ 1488              	 .thumb
+ 1489              	 .thumb_func
+ 1491              	lmx249x_power_down:
+ 1492              	.LFB479:
+ 418:../BSP/Components/lmx249x/src/lmx249x.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_PLL_CE);
+ 419:../BSP/Components/lmx249x/src/lmx249x.c **** }
+ 420:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 421:../BSP/Components/lmx249x/src/lmx249x.c **** //============================================================================
+ 422:../BSP/Components/lmx249x/src/lmx249x.c **** 
+ 423:../BSP/Components/lmx249x/src/lmx249x.c **** void lmx249x_power_down(void)
+ 424:../BSP/Components/lmx249x/src/lmx249x.c **** {
+ 1493              	 .loc 1 424 0
+ 1494              	 .cfi_startproc
+ 1495              	 
+ 1496              	 
+ 1497              	 
+ 1498 0000 034B     	 ldr r3,.L61
+ 1499              	.LBB46:
+ 1500              	.LBB47:
+ 1501              	.LBB48:
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 1502              	 .loc 2 286 0
+ 1503 0002 197C     	 ldrb r1,[r3,#16]
+ 1504 0004 1A68     	 ldr r2,[r3]
+ 1505              	.LVL144:
+ 1506 0006 4FF48033 	 mov r3,#65536
+ 1507 000a 8B40     	 lsls r3,r3,r1
+ 1508 000c 5360     	 str r3,[r2,#4]
+ 1509 000e 7047     	 bx lr
+ 1510              	.L62:
+ 1511              	 .align 2
+ 1512              	.L61:
+ 1513 0010 00000000 	 .word DIGITAL_IO_PLL_CE
+ 1514              	.LBE48:
+ 1515              	.LBE47:
+ 1516              	.LBE46:
+ 1517              	 .cfi_endproc
+ 1518              	.LFE479:
+ 1520              	 .text
+ 1521              	.Letext0:
+ 1522              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1523              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1524              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 1525              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 1526              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 1527              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io.h"
+ 1528              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 1529              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 1530              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 1531              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Components/lmx249x/inc/lmx249x.h"
+ 1532              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 1533              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 1534              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 1535              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io_extern.h"
+ 1536              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 lmx249x.c
+    {standard input}:24     .text.lmx249x_init:00000000 $t
+    {standard input}:29     .text.lmx249x_init:00000000 lmx249x_init
+    {standard input}:288    .text.lmx249x_init:00000198 $d
+    {standard input}:293    .text.lmx249x_set_power_state:00000000 $t
+    {standard input}:298    .text.lmx249x_set_power_state:00000000 lmx249x_set_power_state
+    {standard input}:348    .text.lmx249x_set_frequency:00000000 $t
+    {standard input}:353    .text.lmx249x_set_frequency:00000000 lmx249x_set_frequency
+    {standard input}:501    .text.lmx249x_set_frequency:000000c8 $d
+    {standard input}:508    .text.lmx249x_configure_ramps:00000000 $t
+    {standard input}:513    .text.lmx249x_configure_ramps:00000000 lmx249x_configure_ramps
+    {standard input}:778    .text.lmx249x_configure_ramps:0000016c $d
+    {standard input}:782    .text.lmx249x_configure_ramps:00000170 $t
+    {standard input}:1183   .text.lmx249x_configure_ramps:00000434 $d
+    {standard input}:1188   .text.lmx249x_enable_ramps:00000000 $t
+    {standard input}:1193   .text.lmx249x_enable_ramps:00000000 lmx249x_enable_ramps
+    {standard input}:1251   .text.lmx249x_get_real_frequency_shift:00000000 $t
+    {standard input}:1256   .text.lmx249x_get_real_frequency_shift:00000000 lmx249x_get_real_frequency_shift
+    {standard input}:1354   .text.lmx249x_get_real_frequency_shift:00000084 $d
+    {standard input}:1360   .text.lmx249x_trigger_ramp:00000000 $t
+    {standard input}:1365   .text.lmx249x_trigger_ramp:00000000 lmx249x_trigger_ramp
+    {standard input}:1407   .text.lmx249x_trigger_ramp:00000020 $d
+    {standard input}:1416   .text.lmx249x_release_ramp_trigger:00000000 $t
+    {standard input}:1421   .text.lmx249x_release_ramp_trigger:00000000 lmx249x_release_ramp_trigger
+    {standard input}:1443   .text.lmx249x_release_ramp_trigger:00000010 $d
+    {standard input}:1451   .text.lmx249x_power_up:00000000 $t
+    {standard input}:1456   .text.lmx249x_power_up:00000000 lmx249x_power_up
+    {standard input}:1478   .text.lmx249x_power_up:00000010 $d
+    {standard input}:1486   .text.lmx249x_power_down:00000000 $t
+    {standard input}:1491   .text.lmx249x_power_down:00000000 lmx249x_power_down
+    {standard input}:1513   .text.lmx249x_power_down:00000010 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_ui2d
+__aeabi_ddiv
+__aeabi_dmul
+__aeabi_i2d
+__aeabi_d2iz
+__aeabi_dsub
+__aeabi_dadd
+__aeabi_d2uiz
+__aeabi_d2lz
+DIGITAL_IO_PLL_MOD
+DIGITAL_IO_PLL_TRIG2
+DIGITAL_IO_PLL_CE

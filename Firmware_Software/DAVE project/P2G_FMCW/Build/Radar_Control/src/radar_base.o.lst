@@ -1,0 +1,1631 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "radar_base.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.radar_get_driver_version,"ax",%progbits
+  20              	 .align 2
+  21              	 .global radar_get_driver_version
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	radar_get_driver_version:
+  26              	.LFB470:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src/radar_base.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     @file: radar_base.c
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     @brief: This file contains the basic driver API for Infineon radar sensors.
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** */
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** /* ===========================================================================
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ** All rights reserved.
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ** ===========================================================================
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** **
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ** ===========================================================================
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ** Passing on and copying of this document, and communication of its contents
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ** is not permitted without Infineon's prior written authorization.
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ** ===========================================================================
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** */
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** /*
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ==============================================================================
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****    1. INCLUDE FILES
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ==============================================================================
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****  */
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #include "version.h"
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #include "radar_api.h"
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #include "radar_control.h"
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #include "ds_radar_interface.h"
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #include "position2go_bsp.h"
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** /*
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ==============================================================================
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****    2. DATA
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ==============================================================================
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****  */
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** size_t frame_size = 0;
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** /* Global Data Buffer used to store the raw IQ data samples for FMCW chirps,
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****    first (SAMPLES_PER_CHIRP * 2) samples are for I&Q data for RX1,
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****    followed by (SAMPLES_PER_CHIRP * 2) samples for I&Q data for RX2 */
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint32_t data_fifo[BSP_MAX_ADC_BUFFER_SIZE_BYTES/sizeof(uint32_t)];  
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****                                    					 	 	 	 	 	
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** static const Driver_Version_t driver_version_s =
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /*.uMajor    =*/ FW_VERSION_MAJOR,
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /*.uMinor    =*/ FW_VERSION_MINOR,
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /*.uRevision =*/ FW_VERSION_REVISION
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** };
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** /*
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ==============================================================================
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****    3. EXPORTED FUNCTIONS
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** ==============================================================================
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****  */
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** const Driver_Version_t* radar_get_driver_version(void)
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+  28              	 .loc 1 59 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	 
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (&driver_version_s);
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+  33              	 .loc 1 61 0
+  34 0000 0048     	 ldr r0,.L2
+  35 0002 7047     	 bx lr
+  36              	.L3:
+  37              	 .align 2
+  38              	.L2:
+  39 0004 00000000 	 .word .LANCHOR0
+  40              	 .cfi_endproc
+  41              	.LFE470:
+  43              	 .section .text.radar_get_number_of_available_devices,"ax",%progbits
+  44              	 .align 2
+  45              	 .global radar_get_number_of_available_devices
+  46              	 .thumb
+  47              	 .thumb_func
+  49              	radar_get_number_of_available_devices:
+  50              	.LFB471:
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint8_t radar_get_number_of_available_devices(void)
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+  51              	 .loc 1 66 0
+  52              	 .cfi_startproc
+  53              	 
+  54              	 
+  55              	 
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return bsp_get_number_of_available_radar_devices();
+  56              	 .loc 1 67 0
+  57 0000 FFF7FEBF 	 b bsp_get_number_of_available_radar_devices
+  58              	.LVL0:
+  59              	 .cfi_endproc
+  60              	.LFE471:
+  62              	 .section .text.radar_open_device,"ax",%progbits
+  63              	 .align 2
+  64              	 .global radar_open_device
+  65              	 .thumb
+  66              	 .thumb_func
+  68              	radar_open_device:
+  69              	.LFB472:
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_open_device(int32_t device_number, Radar_Handle_t* device)
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+  70              	 .loc 1 73 0
+  71              	 .cfi_startproc
+  72              	 
+  73              	 
+  74              	.LVL1:
+  75 0000 2DE9F041 	 push {r4,r5,r6,r7,r8,lr}
+  76              	.LCFI0:
+  77              	 .cfi_def_cfa_offset 24
+  78              	 .cfi_offset 4,-24
+  79              	 .cfi_offset 5,-20
+  80              	 .cfi_offset 6,-16
+  81              	 .cfi_offset 7,-12
+  82              	 .cfi_offset 8,-8
+  83              	 .cfi_offset 14,-4
+  84 0004 9AB0     	 sub sp,sp,#104
+  85              	.LCFI1:
+  86              	 .cfi_def_cfa_offset 128
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device_number); /* Suppress compiler warnings of unused variable */
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   Frame_Format_t frame_format;
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   uint16_t retValue = RADAR_ERR_OK;
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   int32_t status = 0;
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   uint16_t num_of_bytes;
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   void* calibration_data_ptr = NULL;
+  87              	 .loc 1 80 0
+  88 0006 0024     	 movs r4,#0
+  89 0008 1AAE     	 add r6,sp,#104
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   acq_buf_obj acq_buf = { .status = not_initialized } ;
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Initialize the driver instance with NULL, until it was successfully initialized */
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   *device = NULL;
+  90              	 .loc 1 84 0
+  91 000a 0C60     	 str r4,[r1]
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device_number); /* Suppress compiler warnings of unused variable */
+  92              	 .loc 1 73 0
+  93 000c 0F46     	 mov r7,r1
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   acq_buf_obj acq_buf = { .status = not_initialized } ;
+  94              	 .loc 1 80 0
+  95 000e 46F8404D 	 str r4,[r6,#-64]!
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Initialize driver data structure */
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* -------------------------------- */
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   status = ds_init();
+  96              	 .loc 1 88 0
+  97 0012 FFF7FEFF 	 bl ds_init
+  98              	.LVL2:
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   status |= radar_read_calibration(device, CALIBRATION_TARGET_FLASH, CALIBRATION_DATA_ADC, &calibra
+  99              	 .loc 1 89 0
+ 100 0016 0DF1260E 	 add lr,sp,#38
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   status |= radar_read_calibration(device, CALIBRATION_TARGET_FLASH, CALIBRATION_DATA_ADC, &calibra
+ 101              	 .loc 1 88 0
+ 102 001a 0546     	 mov r5,r0
+ 103              	.LVL3:
+ 104              	 .loc 1 89 0
+ 105 001c 3346     	 mov r3,r6
+ 106 001e 3846     	 mov r0,r7
+ 107              	.LVL4:
+ 108 0020 2146     	 mov r1,r4
+ 109 0022 2246     	 mov r2,r4
+ 110 0024 CDF800E0 	 str lr,[sp]
+ 111 0028 FFF7FEFF 	 bl radar_read_calibration
+ 112              	.LVL5:
+ 113 002c 2843     	 orrs r0,r0,r5
+ 114              	.LVL6:
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if(status > 0)
+ 115              	 .loc 1 90 0
+ 116 002e A042     	 cmp r0,r4
+ 117 0030 03DD     	 ble .L6
+ 118              	.L8:
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 119              	 .loc 1 92 0
+ 120 0032 0820     	 movs r0,#8
+ 121              	.LVL7:
+ 122              	.L7:
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   //========================================================================
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   //------------------------- Frame Format configurations ------------------
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   //========================================================================
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   ds_ep_fetch_frame_format(&frame_format);
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   //=========================================================================
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   //------------------------- General configurations ------------------------
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   //=========================================================================
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   radar_set_data_acq_mode(RADAR_MANUAL_TRIGGER);
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* If the frame format contains a 0, this makes no sense. */
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if ((frame_format.rx_mask == 0) ||
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       (frame_format.num_chirps_per_frame  == 0) ||
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****         (frame_format.num_samples_per_chirp == 0) ||
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****           (frame_format.num_chirps_per_frame  > BSP_MAX_NUM_CHIRPS_PER_FRAME) ||
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****             (frame_format.num_samples_per_chirp > BSP_MAX_NUM_SAMPLES_PER_CHIRP))
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Check frame memory limits */
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* ------------------------- */
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_size = frame_format.num_chirps_per_frame * frame_format.num_samples_per_chirp *
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * 2U * sizeof(uint16_t); // complex IQ samples per ant
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (frame_size > BSP_MAX_ADC_BUFFER_SIZE_BYTES)
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Initialize sensor hardware */
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* -------------------------- */
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   acq_buf = create_acq_data_buffer_obj((uint8_t*) data_fifo, BSP_MAX_ADC_BUFFER_SIZE_BYTES,
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****                                        frame_format.num_chirps_per_frame,
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****                                        frame_format.num_samples_per_chirp, 2, 2, 12);
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   ds_set_active_acq_buf(acq_buf);
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   ds_device_get_settings()->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Set the number of samples to captured during each chirp
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   This value will be used in BSP to configure the DMA block size and destination address */
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   bsp_set_num_samples_per_dma_transfer(ds_device_get_settings()->num_samples_per_chirp);
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   ds_device_get_settings()->pll_num_of_chirps_per_frame = frame_format.num_chirps_per_frame;
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Set the number of chirps count per frame */
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   bsp_set_num_chirps_per_frame(frame_format.num_chirps_per_frame);
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* BGT, PLL, DMA, Timers & Calibration initialization */
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* -------------------------------------------------- */
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   retValue = radar_init(device);
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   g_adc_sampling_completed = false;
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (retValue);
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 123              	 .loc 1 151 0
+ 124 0034 1AB0     	 add sp,sp,#104
+ 125              	.LCFI2:
+ 126              	 .cfi_remember_state
+ 127              	 .cfi_def_cfa_offset 24
+ 128              	 
+ 129 0036 BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 130              	.LVL8:
+ 131              	.L6:
+ 132              	.LCFI3:
+ 133              	 .cfi_restore_state
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 134              	 .loc 1 98 0
+ 135 003a 0BA8     	 add r0,sp,#44
+ 136 003c FFF7FEFF 	 bl ds_ep_fetch_frame_format
+ 137              	.LVL9:
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 138              	 .loc 1 103 0
+ 139 0040 2046     	 mov r0,r4
+ 140 0042 FFF7FEFF 	 bl radar_set_data_acq_mode
+ 141              	.LVL10:
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       (frame_format.num_chirps_per_frame  == 0) ||
+ 142              	 .loc 1 106 0
+ 143 0046 9DF83430 	 ldrb r3,[sp,#52]
+ 144 004a 002B     	 cmp r3,#0
+ 145 004c F1D0     	 beq .L8
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****         (frame_format.num_samples_per_chirp == 0) ||
+ 146              	 .loc 1 107 0 discriminator 1
+ 147 004e 0C9B     	 ldr r3,[sp,#48]
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       (frame_format.num_chirps_per_frame  == 0) ||
+ 148              	 .loc 1 106 0 discriminator 1
+ 149 0050 002B     	 cmp r3,#0
+ 150 0052 EED0     	 beq .L8
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****           (frame_format.num_chirps_per_frame  > BSP_MAX_NUM_CHIRPS_PER_FRAME) ||
+ 151              	 .loc 1 108 0
+ 152 0054 0B9A     	 ldr r2,[sp,#44]
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****         (frame_format.num_samples_per_chirp == 0) ||
+ 153              	 .loc 1 107 0
+ 154 0056 511E     	 subs r1,r2,#1
+ 155 0058 FF29     	 cmp r1,#255
+ 156 005a EAD8     	 bhi .L8
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****           (frame_format.num_chirps_per_frame  > BSP_MAX_NUM_CHIRPS_PER_FRAME) ||
+ 157              	 .loc 1 108 0
+ 158 005c 402B     	 cmp r3,#64
+ 159 005e E8D8     	 bhi .L8
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * 2U * sizeof(uint16_t); // complex IQ samples per ant
+ 160              	 .loc 1 117 0
+ 161 0060 02FB03F5 	 mul r5,r2,r3
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 162              	 .loc 1 118 0
+ 163 0064 FFF7FEFF 	 bl ds_ep_get_device_info
+ 164              	.LVL11:
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * 2U * sizeof(uint16_t); // complex IQ samples per ant
+ 165              	 .loc 1 117 0
+ 166 0068 427B     	 ldrb r2,[r0,#13]
+ 167 006a 1E49     	 ldr r1,.L17
+ 168 006c AB00     	 lsls r3,r5,#2
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 169              	 .loc 1 118 0
+ 170 006e 02FB03F3 	 mul r3,r2,r3
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 171              	 .loc 1 120 0
+ 172 0072 B3F5004F 	 cmp r3,#32768
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * 2U * sizeof(uint16_t); // complex IQ samples per ant
+ 173              	 .loc 1 117 0
+ 174 0076 0B60     	 str r3,[r1]
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 175              	 .loc 1 120 0
+ 176 0078 DBD8     	 bhi .L8
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****                                        frame_format.num_chirps_per_frame,
+ 177              	 .loc 1 127 0
+ 178 007a BDF82C20 	 ldrh r2,[sp,#44]
+ 179 007e 0092     	 str r2,[sp]
+ 180 0080 0DF13808 	 add r8,sp,#56
+ 181 0084 0222     	 movs r2,#2
+ 182 0086 0C21     	 movs r1,#12
+ 183 0088 BDF83030 	 ldrh r3,[sp,#48]
+ 184 008c 0192     	 str r2,[sp,#4]
+ 185 008e 4046     	 mov r0,r8
+ 186 0090 0292     	 str r2,[sp,#8]
+ 187 0092 0391     	 str r1,[sp,#12]
+ 188 0094 4FF40042 	 mov r2,#32768
+ 189 0098 1349     	 ldr r1,.L17+4
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 190              	 .loc 1 131 0
+ 191 009a 12AE     	 add r6,sp,#72
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****                                        frame_format.num_chirps_per_frame,
+ 192              	 .loc 1 127 0
+ 193 009c FFF7FEFF 	 bl create_acq_data_buffer_obj
+ 194              	.LVL12:
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 195              	 .loc 1 131 0
+ 196 00a0 0FCE     	 ldmia r6!,{r0,r1,r2,r3}
+ 197 00a2 6D46     	 mov r5,sp
+ 198 00a4 0FC5     	 stmia r5!,{r0,r1,r2,r3}
+ 199 00a6 96E80F00 	 ldmia r6,{r0,r1,r2,r3}
+ 200 00aa 85E80F00 	 stmia r5,{r0,r1,r2,r3}
+ 201 00ae 98E80F00 	 ldmia r8,{r0,r1,r2,r3}
+ 202 00b2 FFF7FEFF 	 bl ds_set_active_acq_buf
+ 203              	.LVL13:
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 204              	 .loc 1 133 0
+ 205 00b6 FFF7FEFF 	 bl ds_device_get_settings
+ 206              	.LVL14:
+ 207 00ba 0B9B     	 ldr r3,[sp,#44]
+ 208 00bc C362     	 str r3,[r0,#44]
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 209              	 .loc 1 137 0
+ 210 00be FFF7FEFF 	 bl ds_device_get_settings
+ 211              	.LVL15:
+ 212 00c2 C06A     	 ldr r0,[r0,#44]
+ 213 00c4 FFF7FEFF 	 bl bsp_set_num_samples_per_dma_transfer
+ 214              	.LVL16:
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 215              	 .loc 1 139 0
+ 216 00c8 FFF7FEFF 	 bl ds_device_get_settings
+ 217              	.LVL17:
+ 218 00cc 0C9B     	 ldr r3,[sp,#48]
+ 219 00ce 4361     	 str r3,[r0,#20]
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 220              	 .loc 1 142 0
+ 221 00d0 1846     	 mov r0,r3
+ 222 00d2 FFF7FEFF 	 bl bsp_set_num_chirps_per_frame
+ 223              	.LVL18:
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 224              	 .loc 1 146 0
+ 225 00d6 3846     	 mov r0,r7
+ 226 00d8 FFF7FEFF 	 bl radar_init
+ 227              	.LVL19:
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 228              	 .loc 1 148 0
+ 229 00dc 034B     	 ldr r3,.L17+8
+ 230 00de 1C60     	 str r4,[r3]
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 231              	 .loc 1 150 0
+ 232 00e0 A8E7     	 b .L7
+ 233              	.L18:
+ 234 00e2 00BF     	 .align 2
+ 235              	.L17:
+ 236 00e4 00000000 	 .word .LANCHOR1
+ 237 00e8 00000000 	 .word data_fifo
+ 238 00ec 00000000 	 .word g_adc_sampling_completed
+ 239              	 .cfi_endproc
+ 240              	.LFE472:
+ 242              	 .section .text.radar_close_device,"ax",%progbits
+ 243              	 .align 2
+ 244              	 .global radar_close_device
+ 245              	 .thumb
+ 246              	 .thumb_func
+ 248              	radar_close_device:
+ 249              	.LFB473:
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** void radar_close_device(Radar_Handle_t device)
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 250              	 .loc 1 156 0
+ 251              	 .cfi_startproc
+ 252              	 
+ 253              	 
+ 254              	 
+ 255              	.LVL20:
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   bgt_stop_tx();
+ 256              	 .loc 1 159 0
+ 257 0000 FFF7FEBF 	 b bgt_stop_tx
+ 258              	.LVL21:
+ 259              	 .cfi_endproc
+ 260              	.LFE473:
+ 262              	 .section .text.radar_get_device_info,"ax",%progbits
+ 263              	 .align 2
+ 264              	 .global radar_get_device_info
+ 265              	 .thumb
+ 266              	 .thumb_func
+ 268              	radar_get_device_info:
+ 269              	.LFB474:
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_get_device_info(Radar_Handle_t device, Device_Info_t* device_info)
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 270              	 .loc 1 165 0
+ 271              	 .cfi_startproc
+ 272              	 
+ 273              	 
+ 274              	.LVL22:
+ 275 0000 38B5     	 push {r3,r4,r5,lr}
+ 276              	.LCFI4:
+ 277              	 .cfi_def_cfa_offset 16
+ 278              	 .cfi_offset 3,-16
+ 279              	 .cfi_offset 4,-12
+ 280              	 .cfi_offset 5,-8
+ 281              	 .cfi_offset 14,-4
+ 282              	 .loc 1 165 0
+ 283 0002 0C46     	 mov r4,r1
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Get device information:
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       - Sensor description
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       - Hardware Version information
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       - Sensor features
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       - Data format
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   */
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   *device_info = *ds_ep_get_device_info();
+ 284              	 .loc 1 174 0
+ 285 0004 FFF7FEFF 	 bl ds_ep_get_device_info
+ 286              	.LVL23:
+ 287 0008 0546     	 mov r5,r0
+ 288 000a 0FCD     	 ldmia r5!,{r0,r1,r2,r3}
+ 289 000c 0FC4     	 stmia r4!,{r0,r1,r2,r3}
+ 290              	.LVL24:
+ 291 000e 2B68     	 ldr r3,[r5]
+ 292 0010 2360     	 str r3,[r4]
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****    
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_OK);
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 293              	 .loc 1 177 0
+ 294 0012 0020     	 movs r0,#0
+ 295 0014 38BD     	 pop {r3,r4,r5,pc}
+ 296              	 .cfi_endproc
+ 297              	.LFE474:
+ 299 0016 00BF     	 .section .text.radar_get_temperature,"ax",%progbits
+ 300              	 .align 2
+ 301              	 .global radar_get_temperature
+ 302              	 .thumb
+ 303              	 .thumb_func
+ 305              	radar_get_temperature:
+ 306              	.LFB475:
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_get_temperature(Radar_Handle_t device, uint8_t temp_sensor, int32_t* temperature_001
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 307              	 .loc 1 182 0
+ 308              	 .cfi_startproc
+ 309              	 
+ 310              	 
+ 311              	.LVL25:
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Check temperature sensor, only single sensor supported */
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (temp_sensor == 0)
+ 312              	 .loc 1 186 0
+ 313 0000 09B1     	 cbz r1,.L27
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     *temperature_001C = (int32_t) (bsp_bgt_get_temp_value() * 1000.0f);	// (expected value is actua
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_OK);
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   else
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_SENSOR_DOES_NOT_EXIST);
+ 314              	 .loc 1 194 0
+ 315 0002 0720     	 movs r0,#7
+ 316              	.LVL26:
+ 317 0004 7047     	 bx lr
+ 318              	.LVL27:
+ 319              	.L27:
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 320              	 .loc 1 182 0
+ 321 0006 38B5     	 push {r3,r4,r5,lr}
+ 322              	.LCFI5:
+ 323              	 .cfi_def_cfa_offset 16
+ 324              	 .cfi_offset 3,-16
+ 325              	 .cfi_offset 4,-12
+ 326              	 .cfi_offset 5,-8
+ 327              	 .cfi_offset 14,-4
+ 328 0008 0C46     	 mov r4,r1
+ 329 000a 1546     	 mov r5,r2
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 330              	 .loc 1 188 0
+ 331 000c FFF7FEFF 	 bl bsp_bgt_get_temp_value
+ 332              	.LVL28:
+ 333 0010 DFED057A 	 flds s15,.L28
+ 334 0014 07EE100A 	 fmsr s14,r0
+ 335 0018 67EE277A 	 fmuls s15,s14,s15
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 336              	 .loc 1 190 0
+ 337 001c 2046     	 mov r0,r4
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 338              	 .loc 1 188 0
+ 339 001e FDEEE77A 	 ftosizs s15,s15
+ 340 0022 C5ED007A 	 fsts s15,[r5]
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 341              	 .loc 1 190 0
+ 342 0026 38BD     	 pop {r3,r4,r5,pc}
+ 343              	.LVL29:
+ 344              	.L29:
+ 345              	 .align 2
+ 346              	.L28:
+ 347 0028 00007A44 	 .word 1148846080
+ 348              	 .cfi_endproc
+ 349              	.LFE475:
+ 351              	 .section .text.radar_get_tx_power,"ax",%progbits
+ 352              	 .align 2
+ 353              	 .global radar_get_tx_power
+ 354              	 .thumb
+ 355              	 .thumb_func
+ 357              	radar_get_tx_power:
+ 358              	.LFB476:
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_get_tx_power(Radar_Handle_t device, uint8_t tx_antenna, int32_t* tx_power_001dBm)
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 359              	 .loc 1 201 0
+ 360              	 .cfi_startproc
+ 361              	 
+ 362              	 
+ 363              	.LVL30:
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Check number of TX antenna */
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (tx_antenna == 0)
+ 364              	 .loc 1 205 0
+ 365 0000 09B1     	 cbz r1,.L35
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     *tx_power_001dBm = (int32_t)(bsp_bgt_get_txpower_value() * 1000.0f); // return TX power
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_OK);
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_ANTENNA_DOES_NOT_EXIST);
+ 366              	 .loc 1 212 0
+ 367 0002 0620     	 movs r0,#6
+ 368              	.LVL31:
+ 369 0004 7047     	 bx lr
+ 370              	.LVL32:
+ 371              	.L35:
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 372              	 .loc 1 201 0
+ 373 0006 38B5     	 push {r3,r4,r5,lr}
+ 374              	.LCFI6:
+ 375              	 .cfi_def_cfa_offset 16
+ 376              	 .cfi_offset 3,-16
+ 377              	 .cfi_offset 4,-12
+ 378              	 .cfi_offset 5,-8
+ 379              	 .cfi_offset 14,-4
+ 380 0008 0C46     	 mov r4,r1
+ 381 000a 1546     	 mov r5,r2
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 382              	 .loc 1 207 0
+ 383 000c FFF7FEFF 	 bl bsp_bgt_get_txpower_value
+ 384              	.LVL33:
+ 385 0010 DFED057A 	 flds s15,.L36
+ 386 0014 07EE100A 	 fmsr s14,r0
+ 387 0018 67EE277A 	 fmuls s15,s14,s15
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 388              	 .loc 1 209 0
+ 389 001c 2046     	 mov r0,r4
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 390              	 .loc 1 207 0
+ 391 001e FDEEE77A 	 ftosizs s15,s15
+ 392 0022 C5ED007A 	 fsts s15,[r5]
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 393              	 .loc 1 209 0
+ 394 0026 38BD     	 pop {r3,r4,r5,pc}
+ 395              	.LVL34:
+ 396              	.L37:
+ 397              	 .align 2
+ 398              	.L36:
+ 399 0028 00007A44 	 .word 1148846080
+ 400              	 .cfi_endproc
+ 401              	.LFE476:
+ 403              	 .section .text.radar_get_chirp_duration,"ax",%progbits
+ 404              	 .align 2
+ 405              	 .global radar_get_chirp_duration
+ 406              	 .thumb
+ 407              	 .thumb_func
+ 409              	radar_get_chirp_duration:
+ 410              	.LFB477:
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_get_chirp_duration(Radar_Handle_t device, uint32_t* chirp_duration_nsec)
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 411              	 .loc 1 218 0
+ 412              	 .cfi_startproc
+ 413              	 
+ 414              	 
+ 415              	.LVL35:
+ 416 0000 10B5     	 push {r4,lr}
+ 417              	.LCFI7:
+ 418              	 .cfi_def_cfa_offset 8
+ 419              	 .cfi_offset 4,-8
+ 420              	 .cfi_offset 14,-4
+ 421              	 .loc 1 218 0
+ 422 0002 0C46     	 mov r4,r1
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Calculate chirp timing from current settings */
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* -------------------------------------------- */
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Unit is ns. (factor 10^9 is distributed to denominator and denominator for fixed point precisi
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   *chirp_duration_nsec = (ds_device_get_settings()->pll_chirp_time_usec * 1000U);
+ 423              	 .loc 1 225 0
+ 424 0004 FFF7FEFF 	 bl ds_device_get_settings
+ 425              	.LVL36:
+ 426 0008 0268     	 ldr r2,[r0]
+ 427 000a 4FF47A73 	 mov r3,#1000
+ 428 000e 03FB02F3 	 mul r3,r3,r2
+ 429 0012 2360     	 str r3,[r4]
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_OK);
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 430              	 .loc 1 228 0
+ 431 0014 0020     	 movs r0,#0
+ 432 0016 10BD     	 pop {r4,pc}
+ 433              	 .cfi_endproc
+ 434              	.LFE477:
+ 436              	 .section .text.radar_get_min_frame_interval,"ax",%progbits
+ 437              	 .align 2
+ 438              	 .global radar_get_min_frame_interval
+ 439              	 .thumb
+ 440              	 .thumb_func
+ 442              	radar_get_min_frame_interval:
+ 443              	.LFB478:
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_get_min_frame_interval(Radar_Handle_t device, uint32_t* min_frame_interval_usec)
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 444              	 .loc 1 233 0
+ 445              	 .cfi_startproc
+ 446              	 
+ 447              	 
+ 448              	.LVL37:
+ 449 0000 70B5     	 push {r4,r5,r6,lr}
+ 450              	.LCFI8:
+ 451              	 .cfi_def_cfa_offset 16
+ 452              	 .cfi_offset 4,-16
+ 453              	 .cfi_offset 5,-12
+ 454              	 .cfi_offset 6,-8
+ 455              	 .cfi_offset 14,-4
+ 456              	 .loc 1 233 0
+ 457 0002 0D46     	 mov r5,r1
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   uint32_t bgt_duty_cycle_delay_usec;
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if(ds_device_get_settings()->power_duty_cycle_enable_flag == true)
+ 458              	 .loc 1 237 0
+ 459 0004 FFF7FEFF 	 bl ds_device_get_settings
+ 460              	.LVL38:
+ 461 0008 90F82420 	 ldrb r2,[r0,#36]
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     bgt_duty_cycle_delay_usec = 3000U; /* approximate value calculated from bgt power up sequence 1
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   else
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     bgt_duty_cycle_delay_usec = 1000U; /* approximate delay to accommodate processing time */
+ 462              	 .loc 1 243 0
+ 463 000c 40F6B833 	 movw r3,#3000
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 464              	 .loc 1 237 0
+ 465 0010 012A     	 cmp r2,#1
+ 466              	 .loc 1 243 0
+ 467 0012 0CBF     	 ite eq
+ 468 0014 1C46     	 moveq r4,r3
+ 469 0016 4FF47A74 	 movne r4,#1000
+ 470              	.LVL39:
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #if defined (FMCW_SUPPORTED) && defined (DOPPLER_SUPPORTED)
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * (ds_device_get
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ((SAMPLES_PER_CHIRP * 1000U / DOPPLER_SAMPLING_FREQ_HZ) * 1000U) + 2 * ALGO_PROCESS_TIME_USEC; 
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #elif defined (FMCW_SUPPORTED)
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * (ds_device_get
+ 471              	 .loc 1 252 0
+ 472 001a FFF7FEFF 	 bl ds_device_get_settings
+ 473              	.LVL40:
+ 474 001e 4669     	 ldr r6,[r0,#20]
+ 475 0020 FFF7FEFF 	 bl ds_device_get_settings
+ 476              	.LVL41:
+ 477 0024 0268     	 ldr r2,[r0]
+ 478 0026 C832     	 adds r2,r2,#200
+ 479 0028 06FB0243 	 mla r3,r6,r2,r4
+ 480 002c 03F53B53 	 add r3,r3,#11968
+ 481 0030 2033     	 adds r3,r3,#32
+ 482 0032 2B60     	 str r3,[r5]
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #elif defined (DOPPLER_SUPPORTED)
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * ((ds_device_ge
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #else
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if(ds_device_get_settings()->pll_modulation_mode == MODULATION_FMCW)
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * (ds_device_g
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   else /* Doppler modulation */
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     /* min_frame_interval_usec = Sampling period x No. of chirps x No. of samples per chirp x 10000
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     Sampling period =  1 / DOPPLER_SAMPLING_FREQ_Hz */
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * ((ds_device_
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** #endif
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_OK);
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 483              	 .loc 1 273 0
+ 484 0034 0020     	 movs r0,#0
+ 485 0036 70BD     	 pop {r4,r5,r6,pc}
+ 486              	 .cfi_endproc
+ 487              	.LFE478:
+ 489              	 .section .text.radar_set_frame_format,"ax",%progbits
+ 490              	 .align 2
+ 491              	 .global radar_set_frame_format
+ 492              	 .thumb
+ 493              	 .thumb_func
+ 495              	radar_set_frame_format:
+ 496              	.LFB479:
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_set_frame_format(Radar_Handle_t device, const Frame_Format_t* frame_format)
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 497              	 .loc 1 278 0
+ 498              	 .cfi_startproc
+ 499              	 
+ 500              	 
+ 501              	.LVL42:
+ 502 0000 70B5     	 push {r4,r5,r6,lr}
+ 503              	.LCFI9:
+ 504              	 .cfi_def_cfa_offset 16
+ 505              	 .cfi_offset 4,-16
+ 506              	 .cfi_offset 5,-12
+ 507              	 .cfi_offset 6,-8
+ 508              	 .cfi_offset 14,-4
+ 509              	 .loc 1 278 0
+ 510 0002 0546     	 mov r5,r0
+ 511 0004 0C46     	 mov r4,r1
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Configuration change is only allowed while automatic trigger is not working */
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (radar_get_data_acq_mode() != RADAR_MANUAL_TRIGGER)
+ 512              	 .loc 1 282 0
+ 513 0006 FFF7FEFF 	 bl radar_get_data_acq_mode
+ 514              	.LVL43:
+ 515 000a 08B1     	 cbz r0,.L66
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_BUSY);
+ 516              	 .loc 1 284 0
+ 517 000c 0220     	 movs r0,#2
+ 518 000e 70BD     	 pop {r4,r5,r6,pc}
+ 519              	.LVL44:
+ 520              	.L66:
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 287:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Check if configuration is valid */
+ 288:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* ------------------------------- */
+ 289:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 290:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* This sensor can only acquire real signal data */
+ 291:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (frame_format->signal_part != RADAR_SIGNAL_I_AND_Q)
+ 521              	 .loc 1 291 0
+ 522 0010 637A     	 ldrb r3,[r4,#9]
+ 523 0012 022B     	 cmp r3,#2
+ 524 0014 01D0     	 beq .L67
+ 292:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 293:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_UNAVAILABLE_SIGNAL_PART);
+ 525              	 .loc 1 293 0
+ 526 0016 0B20     	 movs r0,#11
+ 527 0018 70BD     	 pop {r4,r5,r6,pc}
+ 528              	.LVL45:
+ 529              	.L67:
+ 294:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 295:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* This sensor support RX1, RX2 and both at the same time antennas enabled */
+ 296:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (frame_format->rx_mask > BSP_RX_ANTENNA_MASK )
+ 530              	 .loc 1 296 0
+ 531 001a 237A     	 ldrb r3,[r4,#8]
+ 532 001c 032B     	 cmp r3,#3
+ 533 001e 01D9     	 bls .L68
+ 297:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 298:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_ANTENNA_DOES_NOT_EXIST);
+ 534              	 .loc 1 298 0
+ 535 0020 0620     	 movs r0,#6
+ 536 0022 70BD     	 pop {r4,r5,r6,pc}
+ 537              	.LVL46:
+ 538              	.L68:
+ 299:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 300:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* LMX2491 supports only a limited number of ramps before auto turn off. */
+ 301:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if ((frame_format->num_chirps_per_frame == 0) || (frame_format->num_chirps_per_frame > BSP_MAX_NU
+ 539              	 .loc 1 301 0
+ 540 0024 6368     	 ldr r3,[r4,#4]
+ 541 0026 5A1E     	 subs r2,r3,#1
+ 542 0028 3F2A     	 cmp r2,#63
+ 543 002a 01D9     	 bls .L46
+ 544              	.LVL47:
+ 545              	.L47:
+ 302:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 303:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 546              	 .loc 1 303 0
+ 547 002c 0820     	 movs r0,#8
+ 548 002e 70BD     	 pop {r4,r5,r6,pc}
+ 549              	.LVL48:
+ 550              	.L46:
+ 304:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 305:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 306:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* BGT can store only a limited number of samples per chirp */
+ 307:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if ((frame_format->num_samples_per_chirp == 0) || (frame_format->num_samples_per_chirp > BSP_MAX_
+ 551              	 .loc 1 307 0
+ 552 0030 2668     	 ldr r6,[r4]
+ 553 0032 721E     	 subs r2,r6,#1
+ 554 0034 FF2A     	 cmp r2,#255
+ 555 0036 F9D8     	 bhi .L47
+ 308:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 309:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 310:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 311:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 312:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* For Doppler modulation mode the number of chirp must be 1 */
+ 313:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if ((frame_format->num_chirps_per_frame != 1) && (ds_device_get_settings()->pll_modulation_mode =
+ 556              	 .loc 1 313 0
+ 557 0038 012B     	 cmp r3,#1
+ 558 003a 05D0     	 beq .L51
+ 559              	 .loc 1 313 0 is_stmt 0 discriminator 1
+ 560 003c FFF7FEFF 	 bl ds_device_get_settings
+ 561              	.LVL49:
+ 562 0040 8369     	 ldr r3,[r0,#24]
+ 563 0042 002B     	 cmp r3,#0
+ 564 0044 F2D0     	 beq .L47
+ 565 0046 2668     	 ldr r6,[r4]
+ 566              	.L51:
+ 314:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 315:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 316:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 317:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 318:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Check if samples per chirp are in [32,64,128,256] range */
+ 319:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if ((frame_format->num_samples_per_chirp != 256U) &&
+ 567              	 .loc 1 319 0 is_stmt 1
+ 568 0048 B6F5807F 	 cmp r6,#256
+ 569 004c 07D0     	 beq .L50
+ 570              	 .loc 1 319 0 is_stmt 0 discriminator 1
+ 571 004e 802E     	 cmp r6,#128
+ 572 0050 05D0     	 beq .L50
+ 320:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       (frame_format->num_samples_per_chirp != 128U) &&
+ 573              	 .loc 1 320 0 is_stmt 1
+ 574 0052 402E     	 cmp r6,#64
+ 575 0054 03D0     	 beq .L50
+ 321:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****         (frame_format->num_samples_per_chirp != 64U)  &&
+ 576              	 .loc 1 321 0
+ 577 0056 202E     	 cmp r6,#32
+ 578 0058 01D0     	 beq .L50
+ 322:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****           (frame_format->num_samples_per_chirp != 32U))
+ 323:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 324:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_SAMPLERATE_OUT_OF_RANGE);
+ 579              	 .loc 1 324 0
+ 580 005a 5020     	 movs r0,#80
+ 325:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 326:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 327:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   uint32_t temp_samplerate_Hz = (uint32_t) (((float)frame_format->num_samples_per_chirp * 1000000.0
+ 328:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   radar_set_sampling_freq(device, MODULATION_FMCW, temp_samplerate_Hz);
+ 329:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 330:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Check frame memory limits */
+ 331:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* ------------------------- */
+ 332:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_size = frame_format->num_chirps_per_frame * frame_format->num_samples_per_chirp * 2U *
+ 333:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * sizeof(uint16_t); // complex IQ samples per antenna
+ 334:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 335:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (frame_size > BSP_MAX_ADC_BUFFER_SIZE_BYTES)
+ 336:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 337:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 338:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 339:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 340:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Store new frame format in store */
+ 341:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   ds_ep_store_frame_format(frame_format);
+ 342:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 343:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   g_adc_sampling_completed = false;
+ 344:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 345:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_OK);
+ 346:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 581              	 .loc 1 346 0
+ 582 005c 70BD     	 pop {r4,r5,r6,pc}
+ 583              	.LVL50:
+ 584              	.L50:
+ 327:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   radar_set_sampling_freq(device, MODULATION_FMCW, temp_samplerate_Hz);
+ 585              	 .loc 1 327 0
+ 586 005e FFF7FEFF 	 bl ds_device_get_settings
+ 587              	.LVL51:
+ 588 0062 07EE906A 	 fmsr s15,r6
+ 589 0066 9FED166A 	 flds s12,.L69
+ 590 006a B8EE677A 	 fuitos s14,s15
+ 591 006e D0ED007A 	 flds s15,[r0]
+ 592 0072 F8EE676A 	 fuitos s13,s15
+ 593 0076 67EE067A 	 fmuls s15,s14,s12
+ 328:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 594              	 .loc 1 328 0
+ 595 007a 0121     	 movs r1,#1
+ 327:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   radar_set_sampling_freq(device, MODULATION_FMCW, temp_samplerate_Hz);
+ 596              	 .loc 1 327 0
+ 597 007c C7EEA67A 	 fdivs s15,s15,s13
+ 328:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 598              	 .loc 1 328 0
+ 599 0080 2846     	 mov r0,r5
+ 600              	.LVL52:
+ 327:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   radar_set_sampling_freq(device, MODULATION_FMCW, temp_samplerate_Hz);
+ 601              	 .loc 1 327 0
+ 602 0082 FCEEE77A 	 ftouizs s15,s15
+ 328:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 603              	 .loc 1 328 0
+ 604 0086 F8EE677A 	 fuitos s15,s15
+ 605 008a 17EE902A 	 fmrs r2,s15
+ 606 008e FFF7FEFF 	 bl radar_set_sampling_freq
+ 607              	.LVL53:
+ 332:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * sizeof(uint16_t); // complex IQ samples per antenna
+ 608              	 .loc 1 332 0
+ 609 0092 94E82800 	 ldmia r4,{r3,r5}
+ 610              	.LVL54:
+ 611 0096 03FB05F5 	 mul r5,r3,r5
+ 333:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 612              	 .loc 1 333 0
+ 613 009a FFF7FEFF 	 bl ds_ep_get_device_info
+ 614              	.LVL55:
+ 332:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * sizeof(uint16_t); // complex IQ samples per antenna
+ 615              	 .loc 1 332 0
+ 616 009e 427B     	 ldrb r2,[r0,#13]
+ 617 00a0 0849     	 ldr r1,.L69+4
+ 618 00a2 AB00     	 lsls r3,r5,#2
+ 333:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 619              	 .loc 1 333 0
+ 620 00a4 02FB03F3 	 mul r3,r2,r3
+ 335:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 621              	 .loc 1 335 0
+ 622 00a8 B3F5004F 	 cmp r3,#32768
+ 332:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * sizeof(uint16_t); // complex IQ samples per antenna
+ 623              	 .loc 1 332 0
+ 624 00ac 0B60     	 str r3,[r1]
+ 335:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 625              	 .loc 1 335 0
+ 626 00ae BDD8     	 bhi .L47
+ 341:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 627              	 .loc 1 341 0
+ 628 00b0 2046     	 mov r0,r4
+ 629 00b2 FFF7FEFF 	 bl ds_ep_store_frame_format
+ 630              	.LVL56:
+ 343:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 631              	 .loc 1 343 0
+ 632 00b6 044B     	 ldr r3,.L69+8
+ 633 00b8 0020     	 movs r0,#0
+ 634 00ba 1860     	 str r0,[r3]
+ 345:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 635              	 .loc 1 345 0
+ 636 00bc 70BD     	 pop {r4,r5,r6,pc}
+ 637              	.LVL57:
+ 638              	.L70:
+ 639 00be 00BF     	 .align 2
+ 640              	.L69:
+ 641 00c0 00247449 	 .word 1232348160
+ 642 00c4 00000000 	 .word .LANCHOR1
+ 643 00c8 00000000 	 .word g_adc_sampling_completed
+ 644              	 .cfi_endproc
+ 645              	.LFE479:
+ 647              	 .section .text.radar_get_frame_format,"ax",%progbits
+ 648              	 .align 2
+ 649              	 .global radar_get_frame_format
+ 650              	 .thumb
+ 651              	 .thumb_func
+ 653              	radar_get_frame_format:
+ 654              	.LFB480:
+ 347:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 348:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 349:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 350:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_get_frame_format(Radar_Handle_t device, Frame_Format_t* p_frame_format)
+ 351:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 655              	 .loc 1 351 0
+ 656              	 .cfi_startproc
+ 657              	 
+ 658              	 
+ 659              	.LVL58:
+ 660 0000 08B5     	 push {r3,lr}
+ 661              	.LCFI10:
+ 662              	 .cfi_def_cfa_offset 8
+ 663              	 .cfi_offset 3,-8
+ 664              	 .cfi_offset 14,-4
+ 352:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 353:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 354:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Return current frame format of driver object */
+ 355:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   ds_ep_fetch_frame_format(p_frame_format);
+ 665              	 .loc 1 355 0
+ 666 0002 0846     	 mov r0,r1
+ 667              	.LVL59:
+ 668 0004 FFF7FEFF 	 bl ds_ep_fetch_frame_format
+ 669              	.LVL60:
+ 356:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 357:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_OK);
+ 358:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 670              	 .loc 1 358 0
+ 671 0008 0020     	 movs r0,#0
+ 672 000a 08BD     	 pop {r3,pc}
+ 673              	 .cfi_endproc
+ 674              	.LFE480:
+ 676              	 .section .text.radar_get_frame,"ax",%progbits
+ 677              	 .align 2
+ 678              	 .global radar_get_frame
+ 679              	 .thumb
+ 680              	 .thumb_func
+ 682              	radar_get_frame:
+ 683              	.LFB481:
+ 359:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 360:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 361:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 362:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_get_frame(Radar_Handle_t device, Frame_Info_t* frame_info, uint8_t wait_for_data)
+ 363:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 684              	 .loc 1 363 0
+ 685              	 .cfi_startproc
+ 686              	 
+ 687              	 
+ 688              	.LVL61:
+ 689 0000 70B5     	 push {r4,r5,r6,lr}
+ 690              	.LCFI11:
+ 691              	 .cfi_def_cfa_offset 16
+ 692              	 .cfi_offset 4,-16
+ 693              	 .cfi_offset 5,-12
+ 694              	 .cfi_offset 6,-8
+ 695              	 .cfi_offset 14,-4
+ 696 0002 84B0     	 sub sp,sp,#16
+ 697              	.LCFI12:
+ 698              	 .cfi_def_cfa_offset 32
+ 364:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 365:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 366:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   Frame_Format_t frame_format;
+ 367:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 368:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   ds_ep_fetch_frame_format(&frame_format);
+ 699              	 .loc 1 368 0
+ 700 0004 01A8     	 add r0,sp,#4
+ 701              	.LVL62:
+ 363:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 702              	 .loc 1 363 0
+ 703 0006 0D46     	 mov r5,r1
+ 704 0008 1446     	 mov r4,r2
+ 705              	 .loc 1 368 0
+ 706 000a FFF7FEFF 	 bl ds_ep_fetch_frame_format
+ 707              	.LVL63:
+ 369:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 370:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   acq_buf_obj *p_acq_buf = ds_get_active_acq_buf();
+ 708              	 .loc 1 370 0
+ 709 000e FFF7FEFF 	 bl ds_get_active_acq_buf
+ 710              	.LVL64:
+ 711 0012 0646     	 mov r6,r0
+ 712              	.LVL65:
+ 371:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 372:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (radar_get_data_acq_mode() != RADAR_AUTO_TRIGGER)	// without automaticFrameTrigger
+ 713              	 .loc 1 372 0
+ 714 0014 FFF7FEFF 	 bl radar_get_data_acq_mode
+ 715              	.LVL66:
+ 716 0018 0128     	 cmp r0,#1
+ 717 001a 2FD0     	 beq .L74
+ 373:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 374:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     bsp_trigger_new_frame();
+ 718              	 .loc 1 374 0
+ 719 001c FFF7FEFF 	 bl bsp_trigger_new_frame
+ 720              	.LVL67:
+ 721 0020 1B4A     	 ldr r2,.L84
+ 722              	.L77:
+ 375:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 376:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   else // with automaticFrameTrigger
+ 377:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 378:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     if ((!wait_for_data) && (!g_adc_sampling_completed))
+ 379:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     {
+ 380:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       return (RADAR_ERR_TIMEOUT);
+ 381:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     }
+ 382:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 383:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 384:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   while (g_adc_sampling_completed == false); // block GetFrame if data is not ready
+ 723              	 .loc 1 384 0 discriminator 1
+ 724 0022 1368     	 ldr r3,[r2]
+ 725 0024 1A4C     	 ldr r4,.L84
+ 726 0026 002B     	 cmp r3,#0
+ 727 0028 FBD0     	 beq .L77
+ 385:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 386:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Data acquired */
+ 387:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* ------------- */
+ 388:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   //memcpy(transport_buffer, p_acq_buf->p_acq_buf, frame_size);	// copy ADC buffer to be send to av
+ 389:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 390:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->sample_data           = p_acq_buf->p_acq_buf;
+ 728              	 .loc 1 390 0
+ 729 002a B36A     	 ldr r3,[r6,#40]
+ 730 002c 2B60     	 str r3,[r5]
+ 391:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_rx_antennas       = ds_ep_get_device_info()->num_rx_antennas;
+ 731              	 .loc 1 391 0
+ 732 002e FFF7FEFF 	 bl ds_ep_get_device_info
+ 733              	.LVL68:
+ 392:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_chirps            = frame_format.num_chirps_per_frame;
+ 734              	 .loc 1 392 0
+ 735 0032 029A     	 ldr r2,[sp,#8]
+ 391:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_rx_antennas       = ds_ep_get_device_info()->num_rx_antennas;
+ 736              	 .loc 1 391 0
+ 737 0034 417B     	 ldrb r1,[r0,#13]
+ 393:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->rx_mask               = frame_format.rx_mask;
+ 738              	 .loc 1 393 0
+ 739 0036 9DF80C30 	 ldrb r3,[sp,#12]
+ 391:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_rx_antennas       = ds_ep_get_device_info()->num_rx_antennas;
+ 740              	 .loc 1 391 0
+ 741 003a 2973     	 strb r1,[r5,#12]
+ 392:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_chirps            = frame_format.num_chirps_per_frame;
+ 742              	 .loc 1 392 0
+ 743 003c AA60     	 str r2,[r5,#8]
+ 744              	 .loc 1 393 0
+ 745 003e 2B76     	 strb r3,[r5,#24]
+ 394:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->adc_resolution        = ds_device_get_settings()->adc_resolution;
+ 746              	 .loc 1 394 0
+ 747 0040 FFF7FEFF 	 bl ds_device_get_settings
+ 748              	.LVL69:
+ 395:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->interleaved_rx        = 0;
+ 749              	 .loc 1 395 0
+ 750 0044 0026     	 movs r6,#0
+ 751              	.LVL70:
+ 394:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->adc_resolution        = ds_device_get_settings()->adc_resolution;
+ 752              	 .loc 1 394 0
+ 753 0046 90F82030 	 ldrb r3,[r0,#32]
+ 754 004a 6B76     	 strb r3,[r5,#25]
+ 755              	 .loc 1 395 0
+ 756 004c AE76     	 strb r6,[r5,#26]
+ 396:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->frame_number          = bsp_get_frame_counter();
+ 757              	 .loc 1 396 0
+ 758 004e FFF7FEFF 	 bl bsp_get_frame_counter
+ 759              	.LVL71:
+ 397:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->data_format           = RADAR_RX_DATA_COMPLEX;
+ 760              	 .loc 1 397 0
+ 761 0052 0123     	 movs r3,#1
+ 762 0054 EB76     	 strb r3,[r5,#27]
+ 396:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->frame_number          = bsp_get_frame_counter();
+ 763              	 .loc 1 396 0
+ 764 0056 6860     	 str r0,[r5,#4]
+ 398:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->temperature_001C      = (int32_t) (bsp_bgt_get_temp_value() * 1000);	// (expected val
+ 765              	 .loc 1 398 0
+ 766 0058 FFF7FEFF 	 bl bsp_bgt_get_temp_value
+ 767              	.LVL72:
+ 768 005c DFED0D7A 	 flds s15,.L84+4
+ 399:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 769              	 .loc 1 399 0
+ 770 0060 019B     	 ldr r3,[sp,#4]
+ 400:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 401:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   g_adc_sampling_completed          = false;
+ 771              	 .loc 1 401 0
+ 772 0062 2660     	 str r6,[r4]
+ 398:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 773              	 .loc 1 398 0
+ 774 0064 07EE100A 	 fmsr s14,r0
+ 775 0068 67EE277A 	 fmuls s15,s14,s15
+ 402:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 403:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_OK);
+ 776              	 .loc 1 403 0
+ 777 006c 3046     	 mov r0,r6
+ 398:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 778              	 .loc 1 398 0
+ 779 006e FDEEE77A 	 ftosizs s15,s15
+ 399:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 780              	 .loc 1 399 0
+ 781 0072 2B61     	 str r3,[r5,#16]
+ 398:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   frame_info->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 782              	 .loc 1 398 0
+ 783 0074 C5ED057A 	 fsts s15,[r5,#20]
+ 404:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 784              	 .loc 1 404 0
+ 785 0078 04B0     	 add sp,sp,#16
+ 786              	.LCFI13:
+ 787              	 .cfi_remember_state
+ 788              	 .cfi_def_cfa_offset 16
+ 789              	 
+ 790 007a 70BD     	 pop {r4,r5,r6,pc}
+ 791              	.LVL73:
+ 792              	.L74:
+ 793              	.LCFI14:
+ 794              	 .cfi_restore_state
+ 378:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     {
+ 795              	 .loc 1 378 0
+ 796 007c 044A     	 ldr r2,.L84
+ 797 007e 002C     	 cmp r4,#0
+ 798 0080 CFD1     	 bne .L77
+ 378:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     {
+ 799              	 .loc 1 378 0 is_stmt 0 discriminator 1
+ 800 0082 1368     	 ldr r3,[r2]
+ 801 0084 002B     	 cmp r3,#0
+ 802 0086 CCD1     	 bne .L77
+ 380:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     }
+ 803              	 .loc 1 380 0 is_stmt 1
+ 804 0088 0420     	 movs r0,#4
+ 805              	 .loc 1 404 0
+ 806 008a 04B0     	 add sp,sp,#16
+ 807              	.LCFI15:
+ 808              	 .cfi_def_cfa_offset 16
+ 809              	 
+ 810 008c 70BD     	 pop {r4,r5,r6,pc}
+ 811              	.LVL74:
+ 812              	.L85:
+ 813 008e 00BF     	 .align 2
+ 814              	.L84:
+ 815 0090 00000000 	 .word g_adc_sampling_completed
+ 816 0094 00007A44 	 .word 1148846080
+ 817              	 .cfi_endproc
+ 818              	.LFE481:
+ 820              	 .section .text.radar_set_automatic_frame_trigger,"ax",%progbits
+ 821              	 .align 2
+ 822              	 .global radar_set_automatic_frame_trigger
+ 823              	 .thumb
+ 824              	 .thumb_func
+ 826              	radar_set_automatic_frame_trigger:
+ 827              	.LFB482:
+ 405:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 406:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 407:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 408:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_set_automatic_frame_trigger(Radar_Handle_t device, uint32_t frame_interval_usec)
+ 409:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 828              	 .loc 1 409 0
+ 829              	 .cfi_startproc
+ 830              	 
+ 831              	 
+ 832              	.LVL75:
+ 833 0000 70B5     	 push {r4,r5,r6,lr}
+ 834              	.LCFI16:
+ 835              	 .cfi_def_cfa_offset 16
+ 836              	 .cfi_offset 4,-16
+ 837              	 .cfi_offset 5,-12
+ 838              	 .cfi_offset 6,-8
+ 839              	 .cfi_offset 14,-4
+ 410:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Stop trigger timer first  */
+ 411:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* ------------------------- */
+ 412:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   bsp_timer_stop_clear(&TIMER_FRAME_TRIG);
+ 840              	 .loc 1 412 0
+ 841 0002 1E48     	 ldr r0,.L95
+ 842              	.LVL76:
+ 409:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Stop trigger timer first  */
+ 843              	 .loc 1 409 0
+ 844 0004 0C46     	 mov r4,r1
+ 845              	 .loc 1 412 0
+ 846 0006 FFF7FEFF 	 bl bsp_timer_stop_clear
+ 847              	.LVL77:
+ 413:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 414:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   radar_set_data_acq_mode(RADAR_MANUAL_TRIGGER);
+ 848              	 .loc 1 414 0
+ 849 000a 0020     	 movs r0,#0
+ 850 000c FFF7FEFF 	 bl radar_set_data_acq_mode
+ 851              	.LVL78:
+ 415:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 416:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Restart trigger timer */
+ 417:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* --------------------- */
+ 418:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   if (frame_interval_usec > 0)
+ 852              	 .loc 1 418 0
+ 853 0010 0CB9     	 cbnz r4,.L94
+ 419:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 420:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     uint32_t min_frame_interval_usec;
+ 421:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 422:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     radar_get_min_frame_interval(device, &min_frame_interval_usec);
+ 423:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 424:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     if (frame_interval_usec < min_frame_interval_usec)
+ 425:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     {
+ 426:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       return (RADAR_ERR_UNSUPPORTED_FRAME_INTERVAL);
+ 427:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     }
+ 428:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 429:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     /* Update time period of Automatic Trigger */
+ 430:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     if (TIMER_SetTimeInterval(&TIMER_FRAME_TRIG, frame_interval_usec * 100U) != TIMER_STATUS_SUCCES
+ 431:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     {
+ 432:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****       return (RADAR_ERR_UNSUPPORTED_FRAME_INTERVAL);
+ 433:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     }
+ 434:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 435:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     ds_device_get_settings()->frame_period_usec = frame_interval_usec;
+ 436:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 437:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     /* Reset the current frame counter */
+ 438:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     bsp_reset_frame_counter();
+ 439:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 440:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     g_adc_sampling_completed = false;
+ 441:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 442:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     radar_set_data_acq_mode(RADAR_AUTO_TRIGGER);
+ 443:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 444:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     bsp_timer_start(&TIMER_FRAME_TRIG);
+ 445:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 446:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 447:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_OK);
+ 854              	 .loc 1 447 0
+ 855 0012 2046     	 mov r0,r4
+ 448:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 856              	 .loc 1 448 0
+ 857 0014 70BD     	 pop {r4,r5,r6,pc}
+ 858              	.LVL79:
+ 859              	.L94:
+ 860              	.LBB5:
+ 861              	.LBB6:
+ 862              	.LBB7:
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   {
+ 863              	 .loc 1 237 0
+ 864 0016 FFF7FEFF 	 bl ds_device_get_settings
+ 865              	.LVL80:
+ 866 001a 90F82420 	 ldrb r2,[r0,#36]
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 867              	 .loc 1 243 0
+ 868 001e 40F6B833 	 movw r3,#3000
+ 869 0022 012A     	 cmp r2,#1
+ 870 0024 0CBF     	 ite eq
+ 871 0026 1D46     	 moveq r5,r3
+ 872 0028 4FF47A75 	 movne r5,#1000
+ 873              	.LVL81:
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 874              	 .loc 1 252 0
+ 875 002c FFF7FEFF 	 bl ds_device_get_settings
+ 876              	.LVL82:
+ 877 0030 4669     	 ldr r6,[r0,#20]
+ 878 0032 FFF7FEFF 	 bl ds_device_get_settings
+ 879              	.LVL83:
+ 880 0036 0268     	 ldr r2,[r0]
+ 881 0038 C832     	 adds r2,r2,#200
+ 882 003a 06FB0253 	 mla r3,r6,r2,r5
+ 883 003e 03F53B53 	 add r3,r3,#11968
+ 884 0042 2033     	 adds r3,r3,#32
+ 885              	.LBE7:
+ 886              	.LBE6:
+ 424:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     {
+ 887              	 .loc 1 424 0
+ 888 0044 9C42     	 cmp r4,r3
+ 889 0046 01D2     	 bcs .L89
+ 890              	.LVL84:
+ 891              	.L90:
+ 892              	.LBB9:
+ 893              	.LBB8:
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 894              	 .loc 1 243 0
+ 895 0048 0520     	 movs r0,#5
+ 896 004a 70BD     	 pop {r4,r5,r6,pc}
+ 897              	.LVL85:
+ 898              	.L89:
+ 899              	.LBE8:
+ 900              	.LBE9:
+ 430:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     {
+ 901              	 .loc 1 430 0
+ 902 004c 6421     	 movs r1,#100
+ 903 004e 01FB04F1 	 mul r1,r1,r4
+ 904 0052 0A48     	 ldr r0,.L95
+ 905              	.LVL86:
+ 906 0054 FFF7FEFF 	 bl TIMER_SetTimeInterval
+ 907              	.LVL87:
+ 908 0058 0546     	 mov r5,r0
+ 909              	.LVL88:
+ 910 005a 0028     	 cmp r0,#0
+ 911 005c F4D1     	 bne .L90
+ 435:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 912              	 .loc 1 435 0
+ 913 005e FFF7FEFF 	 bl ds_device_get_settings
+ 914              	.LVL89:
+ 915 0062 8462     	 str r4,[r0,#40]
+ 438:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 916              	 .loc 1 438 0
+ 917 0064 FFF7FEFF 	 bl bsp_reset_frame_counter
+ 918              	.LVL90:
+ 440:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 919              	 .loc 1 440 0
+ 920 0068 054B     	 ldr r3,.L95+4
+ 442:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 921              	 .loc 1 442 0
+ 922 006a 0120     	 movs r0,#1
+ 440:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 923              	 .loc 1 440 0
+ 924 006c 1D60     	 str r5,[r3]
+ 442:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****     
+ 925              	 .loc 1 442 0
+ 926 006e FFF7FEFF 	 bl radar_set_data_acq_mode
+ 927              	.LVL91:
+ 444:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   }
+ 928              	 .loc 1 444 0
+ 929 0072 0248     	 ldr r0,.L95
+ 930 0074 FFF7FEFF 	 bl bsp_timer_start
+ 931              	.LVL92:
+ 932              	.LBE5:
+ 447:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 933              	 .loc 1 447 0
+ 934 0078 2846     	 mov r0,r5
+ 935              	.LBB10:
+ 936 007a 70BD     	 pop {r4,r5,r6,pc}
+ 937              	.LVL93:
+ 938              	.L96:
+ 939              	 .align 2
+ 940              	.L95:
+ 941 007c 00000000 	 .word TIMER_FRAME_TRIG
+ 942 0080 00000000 	 .word g_adc_sampling_completed
+ 943              	.LBE10:
+ 944              	 .cfi_endproc
+ 945              	.LFE482:
+ 947              	 .section .text.radar_test_antennas,"ax",%progbits
+ 948              	 .align 2
+ 949              	 .global radar_test_antennas
+ 950              	 .thumb
+ 951              	 .thumb_func
+ 953              	radar_test_antennas:
+ 954              	.LFB483:
+ 449:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 450:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 451:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 452:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** uint16_t radar_test_antennas(Radar_Handle_t device, uint8_t tx_antenna_mask, uint8_t rx_antenna_mas
+ 453:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 955              	 .loc 1 453 0
+ 956              	 .cfi_startproc
+ 957              	 
+ 958              	 
+ 959              	 
+ 960              	.LVL94:
+ 454:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   /* Suppress compiler warnings of unused variables */
+ 455:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(device);
+ 456:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(tx_antenna_mask);
+ 457:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(rx_antenna_mask);
+ 458:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(frequency_kHz);
+ 459:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   XMC_UNUSED_ARG(tx_power);
+ 460:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   
+ 461:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c ****   return (RADAR_ERR_FEATURE_UNAVAILABLE);
+ 462:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** }
+ 961              	 .loc 1 462 0
+ 962 0000 4FF40040 	 mov r0,#32768
+ 963              	.LVL95:
+ 964 0004 7047     	 bx lr
+ 965              	 .cfi_endproc
+ 966              	.LFE483:
+ 968 0006 00BF     	 .section .text.radar_get_fft_configuration,"ax",%progbits
+ 969              	 .align 2
+ 970              	 .global radar_get_fft_configuration
+ 971              	 .thumb
+ 972              	 .thumb_func
+ 974              	radar_get_fft_configuration:
+ 975              	.LFB484:
+ 463:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 464:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** //============================================================================
+ 465:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 466:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** void radar_get_fft_configuration(Radar_Handle_t device, FFT_configuration_t *p_fft_config)
+ 467:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** {
+ 976              	 .loc 1 467 0
+ 977              	 .cfi_startproc
+ 978              	 
+ 979              	 
+ 980              	 
+ 981              	.LVL96:
+ 468:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 	XMC_UNUSED_ARG(device);
+ 469:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 
+ 470:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_base.c **** 	ds_ep_fetch_fft_config(p_fft_config);
+ 982              	 .loc 1 470 0
+ 983 0000 0846     	 mov r0,r1
+ 984              	.LVL97:
+ 985 0002 FFF7FEBF 	 b ds_ep_fetch_fft_config
+ 986              	.LVL98:
+ 987              	 .cfi_endproc
+ 988              	.LFE484:
+ 990              	 .comm data_fifo,32768,4
+ 991              	 .global frame_size
+ 992 0006 00BF     	 .section .rodata.driver_version_s,"a",%progbits
+ 993              	 .align 2
+ 994              	 .set .LANCHOR0,.+0
+ 997              	driver_version_s:
+ 998 0000 01       	 .byte 1
+ 999 0001 00       	 .byte 0
+ 1000 0002 03       	 .byte 3
+ 1001 0003 00       	 .section .bss.frame_size,"aw",%nobits
+ 1002              	 .align 2
+ 1003              	 .set .LANCHOR1,.+0
+ 1006              	frame_size:
+ 1007 0000 00000000 	 .space 4
+ 1008              	 .text
+ 1009              	.Letext0:
+ 1010              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1011              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1012              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\lib\\gcc\\arm-none-eabi\\4.9.3\\include\\stddef.h"
+ 1013              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/acq_buffer.h"
+ 1014              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 1015              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 1016              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 1017              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc4_scu.h"
+ 1018              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 1019              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/arm_math.h"
+ 1020              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_ccu8.h"
+ 1021              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/GLOBAL_CCU8/global_ccu8.h"
+ 1022              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_ccu4.h"
+ 1023              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/GLOBAL_CCU4/global_ccu4.h"
+ 1024              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/TIMER/timer.h"
+ 1025              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 1026              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 1027              	 .file 19 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 1028              	 .file 20 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 1029              	 .file 21 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 1030              	 .file 22 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 1031              	 .file 23 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 1032              	 .file 24 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/TIMER/timer_extern.h"
+ 1033              	 .file 25 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 1034              	 .file 26 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/inc/position2go_bsp.h"
+ 1035              	 .file 27 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/ds_radar_interface.h"
+ 1036              	 .file 28 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/inc/position2go_bgt.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 radar_base.c
+    {standard input}:20     .text.radar_get_driver_version:00000000 $t
+    {standard input}:25     .text.radar_get_driver_version:00000000 radar_get_driver_version
+    {standard input}:39     .text.radar_get_driver_version:00000004 $d
+    {standard input}:44     .text.radar_get_number_of_available_devices:00000000 $t
+    {standard input}:49     .text.radar_get_number_of_available_devices:00000000 radar_get_number_of_available_devices
+    {standard input}:63     .text.radar_open_device:00000000 $t
+    {standard input}:68     .text.radar_open_device:00000000 radar_open_device
+    {standard input}:236    .text.radar_open_device:000000e4 $d
+                            *COM*:00008000 data_fifo
+    {standard input}:243    .text.radar_close_device:00000000 $t
+    {standard input}:248    .text.radar_close_device:00000000 radar_close_device
+    {standard input}:263    .text.radar_get_device_info:00000000 $t
+    {standard input}:268    .text.radar_get_device_info:00000000 radar_get_device_info
+    {standard input}:300    .text.radar_get_temperature:00000000 $t
+    {standard input}:305    .text.radar_get_temperature:00000000 radar_get_temperature
+    {standard input}:347    .text.radar_get_temperature:00000028 $d
+    {standard input}:352    .text.radar_get_tx_power:00000000 $t
+    {standard input}:357    .text.radar_get_tx_power:00000000 radar_get_tx_power
+    {standard input}:399    .text.radar_get_tx_power:00000028 $d
+    {standard input}:404    .text.radar_get_chirp_duration:00000000 $t
+    {standard input}:409    .text.radar_get_chirp_duration:00000000 radar_get_chirp_duration
+    {standard input}:437    .text.radar_get_min_frame_interval:00000000 $t
+    {standard input}:442    .text.radar_get_min_frame_interval:00000000 radar_get_min_frame_interval
+    {standard input}:490    .text.radar_set_frame_format:00000000 $t
+    {standard input}:495    .text.radar_set_frame_format:00000000 radar_set_frame_format
+    {standard input}:641    .text.radar_set_frame_format:000000c0 $d
+    {standard input}:648    .text.radar_get_frame_format:00000000 $t
+    {standard input}:653    .text.radar_get_frame_format:00000000 radar_get_frame_format
+    {standard input}:677    .text.radar_get_frame:00000000 $t
+    {standard input}:682    .text.radar_get_frame:00000000 radar_get_frame
+    {standard input}:815    .text.radar_get_frame:00000090 $d
+    {standard input}:821    .text.radar_set_automatic_frame_trigger:00000000 $t
+    {standard input}:826    .text.radar_set_automatic_frame_trigger:00000000 radar_set_automatic_frame_trigger
+    {standard input}:941    .text.radar_set_automatic_frame_trigger:0000007c $d
+    {standard input}:948    .text.radar_test_antennas:00000000 $t
+    {standard input}:953    .text.radar_test_antennas:00000000 radar_test_antennas
+    {standard input}:969    .text.radar_get_fft_configuration:00000000 $t
+    {standard input}:974    .text.radar_get_fft_configuration:00000000 radar_get_fft_configuration
+    {standard input}:1006   .bss.frame_size:00000000 frame_size
+    {standard input}:993    .rodata.driver_version_s:00000000 $d
+    {standard input}:997    .rodata.driver_version_s:00000000 driver_version_s
+    {standard input}:1002   .bss.frame_size:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+bsp_get_number_of_available_radar_devices
+ds_init
+radar_read_calibration
+ds_ep_fetch_frame_format
+radar_set_data_acq_mode
+ds_ep_get_device_info
+create_acq_data_buffer_obj
+ds_set_active_acq_buf
+ds_device_get_settings
+bsp_set_num_samples_per_dma_transfer
+bsp_set_num_chirps_per_frame
+radar_init
+g_adc_sampling_completed
+bgt_stop_tx
+bsp_bgt_get_temp_value
+bsp_bgt_get_txpower_value
+radar_get_data_acq_mode
+radar_set_sampling_freq
+ds_ep_store_frame_format
+ds_get_active_acq_buf
+bsp_trigger_new_frame
+bsp_get_frame_counter
+bsp_timer_stop_clear
+TIMER_SetTimeInterval
+bsp_reset_frame_counter
+bsp_timer_start
+TIMER_FRAME_TRIG
+ds_ep_fetch_fft_config

@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "protocol_internal.h": "c",
+        "protocol_knownendpoints.h": "c",
+        "protocol.h": "c"
+    }
+}

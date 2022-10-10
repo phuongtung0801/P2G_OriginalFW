@@ -1,0 +1,713 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu vfp
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "EndpointRadarIndustrial.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.ep_radar_industrial_handle_message,"ax",%progbits
+  20              	 .align 2
+  21              	 .global ep_radar_industrial_handle_message
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	ep_radar_industrial_handle_message:
+  26              	.LFB486:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src/EndpointRadarIndustrial.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  * \file EndpointRadarIndustrial.c
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  *
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  * \brief Radar endpoint containing functionality pertinent to Industrial 
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  *        radar demo kits, e.g. Distance2Go, Position2Go etc.
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  */
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** /* ===========================================================================
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ** Copyright (C) 2018 Infineon Technologies AG
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ** All rights reserved.
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ** ===========================================================================
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** **
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ** ===========================================================================
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ** Passing on and copying of this document, and communication of its contents
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ** is not permitted without Infineon's prior written authorisation.
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ** ===========================================================================
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** */
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** /*
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ==============================================================================
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****    1. INCLUDE FILES
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ==============================================================================
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** */
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #include "EndpointRadarIndustrial.h"
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #include "EndpointRadarChangeCodes.h"
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #include "PayloadHelper.h"
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** /*
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ==============================================================================
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****    2. LOCAL DEFINITIONS
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ==============================================================================
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** */
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** /**
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  * \defgroup MessageTypes
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  *
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  * \brief This end point knows these message types.
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  *
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  * The first payload byte of every message is one of these codes.
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  *
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  * @{
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  */
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****  
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #define MSG_DISABLE_DUTY_CYCLE 			0x00  	/**< A message to disable duty cycle. */
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 											   
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #define MSG_ENABLE_DUTY_CYCLE			0x01  	/**< A message to enable duty cycle. */	
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #define MSG_IS_ENABLE_DUTY_CYCLE		0x02  	/**< A message to check the status of duty cycle. */
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #define MSG_DISABLE_BGT_LNA 			0x03  	/**< A message to disable BGT Rx LNA gain. */
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 											   
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #define MSG_ENABLE_BGT_LNA				0x04  	/**< A message to enable BGT Rx LNA gain. */
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** #define MSG_IS_ENABLE_BGT_LNA			0x05  	/**< A message to check the status of BGT Rx LNA gain. */
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 											   
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** /** @} */
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** /*
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ==============================================================================
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****    3. EXPORTED FUNCTIONS
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** ==============================================================================
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** */
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** uint16_t ep_radar_industrial_handle_message(uint8_t endpoint, uint8_t* message_data,
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 											uint16_t num_bytes,	void* context)
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** {
+  28              	 .loc 1 66 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 30B5     	 push {r4,r5,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 12
+  36              	 .cfi_offset 4,-12
+  37              	 .cfi_offset 5,-8
+  38              	 .cfi_offset 14,-4
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	uint16_t error_code = 0;
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     switch (message_data[0])
+  39              	 .loc 1 71 0
+  40 0002 0C78     	 ldrb r4,[r1]
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+  41              	 .loc 1 66 0
+  42 0004 83B0     	 sub sp,sp,#12
+  43              	.LCFI1:
+  44              	 .cfi_def_cfa_offset 24
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+  45              	 .loc 1 66 0
+  46 0006 0546     	 mov r5,r0
+  47              	.LVL1:
+  48              	 .loc 1 71 0
+  49 0008 052C     	 cmp r4,#5
+  50 000a 06D8     	 bhi .L16
+  51 000c DFE804F0 	 tbb [pc,r4]
+  52              	.LVL2:
+  53              	.L4:
+  54 0010 09       	 .byte (.L3-.L4)/2
+  55 0011 10       	 .byte (.L5-.L4)/2
+  56 0012 17       	 .byte (.L6-.L4)/2
+  57 0013 31       	 .byte (.L7-.L4)/2
+  58 0014 38       	 .byte (.L8-.L4)/2
+  59 0015 03       	 .byte (.L9-.L4)/2
+  60              	 .p2align 1
+  61              	.L9:
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     {
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     case MSG_DISABLE_DUTY_CYCLE:
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         if (num_bytes == 1)
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         {
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			error_code = radar_set_duty_cycle(radar_driver, 0);
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****             return error_code;
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         }
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         break;
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	case MSG_ENABLE_DUTY_CYCLE:
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         if (num_bytes == 1)
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         {
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			error_code = radar_set_duty_cycle(radar_driver, 1);
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****             return error_code;
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         }
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         break;
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	case MSG_IS_ENABLE_DUTY_CYCLE:
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		if (num_bytes == 1)
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		{
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			uint8_t message[2];
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			uint8_t flag;
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			radar_get_duty_cycle(radar_driver, &flag);
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			/* compile message */
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			wr_payload_u8(message, 0, MSG_IS_ENABLE_DUTY_CYCLE);
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			wr_payload_u8(message, 1, flag);
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			/* send message */
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_header(endpoint, sizeof(message));
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_payload(message, sizeof(message));
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_tail();
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			return RADAR_ERR_OK;
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		}
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		break;
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     case MSG_DISABLE_BGT_LNA:
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         if (num_bytes == 1)
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         {    		
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         	radar_disable_lna_gain(radar_driver);
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****             return RADAR_ERR_OK;
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         }
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         break;
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	case MSG_ENABLE_BGT_LNA:
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         if (num_bytes == 1)
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         {    		
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         	radar_enable_lna_gain(radar_driver);
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****             return RADAR_ERR_OK;
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         }
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         break;
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	case MSG_IS_ENABLE_BGT_LNA:
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		if (num_bytes == 1)
+  62              	 .loc 1 140 0
+  63 0016 012A     	 cmp r2,#1
+  64 0018 39D0     	 beq .L19
+  65              	.L16:
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		{
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			uint8_t message[2];
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			uint8_t flag;
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			flag = radar_get_lna_gain_enable_status(radar_driver);
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			/* compile message */
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			wr_payload_u8(message, 0, MSG_IS_ENABLE_BGT_LNA);
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			wr_payload_u8(message, 1, flag);
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			/* send message */
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_header(endpoint, sizeof(message));
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_payload(message, sizeof(message));
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_tail();
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			return RADAR_ERR_OK;
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		}
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		break;
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     default:
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 	
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		break;
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     }
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****     return PROTOCOL_STATUS_INVALID_PAYLOAD;
+  66              	 .loc 1 165 0
+  67 001a 4FF6FF70 	 movw r0,#65535
+  68              	.LVL3:
+  69              	.L2:
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** }
+  70              	 .loc 1 166 0 discriminator 1
+  71 001e 03B0     	 add sp,sp,#12
+  72              	.LCFI2:
+  73              	 .cfi_remember_state
+  74              	 .cfi_def_cfa_offset 12
+  75              	 
+  76 0020 30BD     	 pop {r4,r5,pc}
+  77              	.LVL4:
+  78              	.L3:
+  79              	.LCFI3:
+  80              	 .cfi_restore_state
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         {
+  81              	 .loc 1 76 0
+  82 0022 012A     	 cmp r2,#1
+  83 0024 F9D1     	 bne .L16
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			
+  84              	 .loc 1 78 0
+  85 0026 1846     	 mov r0,r3
+  86              	.LVL5:
+  87 0028 0021     	 movs r1,#0
+  88 002a FFF7FEFF 	 bl radar_set_duty_cycle
+  89              	.LVL6:
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         }
+  90              	 .loc 1 80 0
+  91 002e F6E7     	 b .L2
+  92              	.LVL7:
+  93              	.L5:
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         {
+  94              	 .loc 1 86 0
+  95 0030 012A     	 cmp r2,#1
+  96 0032 F2D1     	 bne .L16
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			
+  97              	 .loc 1 88 0
+  98 0034 1846     	 mov r0,r3
+  99              	.LVL8:
+ 100 0036 1146     	 mov r1,r2
+ 101 0038 FFF7FEFF 	 bl radar_set_duty_cycle
+ 102              	.LVL9:
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         }
+ 103              	 .loc 1 90 0
+ 104 003c EFE7     	 b .L2
+ 105              	.LVL10:
+ 106              	.L6:
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		{
+ 107              	 .loc 1 96 0
+ 108 003e 012A     	 cmp r2,#1
+ 109 0040 EBD1     	 bne .L16
+ 110              	.LBB12:
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 111              	 .loc 1 102 0
+ 112 0042 1846     	 mov r0,r3
+ 113              	.LVL11:
+ 114              	.LBB13:
+ 115              	.LBB14:
+ 116              	 .file 2 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src/PayloadHelper.h"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ﻿/**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \file PayloadHelper.h
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief This file defines an internal protocol API to be used by endpoint
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        implementations.
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * This file defines some light weight function that help to access data in
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * protocol payload. Different implementation allow to adapt to the
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * capabilities of the target machine. Special implementations can be chosen
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * by defining the according compile time switch. If none of the available
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * compile time switches is chosen, the default implementation will be used.
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The default implementation is safe on all target machines and can handle
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * both, big endian CPUs and little endian CPUs. It may be slower than other
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * special implementations.
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * If the compile time switch COMLIB_ALLOW_PAYLOAD_CASTS is set, a special
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * implementation for little endian machines is used, that can access data
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * faster by casting data to the right data type. This implementation works
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * only for CPUs that have no alignment requirement for 16 bit and 32 bit
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * integers.
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /* ===========================================================================
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** Copyright (C) 2016-2018 Infineon Technologies AG
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** All rights reserved.
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** ===========================================================================
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** **
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** ===========================================================================
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** This document contains proprietary information of Infineon Technologies AG.
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** Passing on and copying of this document, and communication of its contents
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** is not permitted without Infineon's prior written authorisation.
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ** ===========================================================================
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** */
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** #ifndef HOSTCOMMUNICATION_PAYLOAD_HELPER_H_
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** #define HOSTCOMMUNICATION_PAYLOAD_HELPER_H_
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /*
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****    1. INCLUDE FILES
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** */
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** #include <stdint.h>
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /*
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****    2. FUNCTION PROTOTYPES AND INLINE FUNCTIONS
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** ==============================================================================
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** */
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts a signed 8 bit integer from a payload buffer.
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads one byte from the given payload buffer at the requested
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * position and interprets it as a signed 8 bit integer value, which will be
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * returned.
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int8_t rd_payload_i8(const uint8_t* payload, uint16_t offset)
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return (int8_t)payload[offset];
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts an unsigned 8 bit integer from a payload
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads one byte from the given payload buffer at the requested
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * position and interprets it as an unsigned 8 bit integer value, which will
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * be returned.
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint8_t rd_payload_u8(const uint8_t* payload, uint16_t offset)
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     return payload[offset];
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts a signed 16 bit integer from a payload buffer.
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads two bytes from the given payload buffer starting at the
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as a signed 16 bit integer value,
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int16_t rd_payload_i16(const uint8_t* payload, uint16_t offset);
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts an unsigned 16 bit integer from a payload
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads two bytes from the given payload buffer starting at the
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as an unsigned 16 bit integer value,
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint16_t rd_payload_u16(const uint8_t* payload,
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                       uint16_t offset);
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts a signed 32 bit integer from a payload buffer.
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as a signed 32 bit integer value,
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int32_t rd_payload_i32(const uint8_t* payload, uint16_t offset);
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts an unsigned 32 bit integer from a payload
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as an unsigned 32 bit integer value,
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint32_t rd_payload_u32(const uint8_t* payload,
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                       uint16_t offset);
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts a signed 64 bit integer from a payload buffer.
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as a signed 64 bit integer value,
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline int64_t rd_payload_i64(const uint8_t* payload, uint16_t offset);
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function extracts an unsigned 64 bit integer from a payload
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position and interprets them as an unsigned 64 bit integer value,
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     starts.
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline uint64_t rd_payload_u64(const uint8_t* payload,
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                       uint16_t offset);
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes a signed 8 bit integer value to a payload
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position.
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_i8(uint8_t* payload, uint16_t offset,
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                  int8_t value)
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset] = (uint8_t)value;
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** }
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** 
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** /**
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \internal
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \brief The function writes an unsigned 8 bit integer value to a payload
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *        buffer.
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * requested position.
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  *                     to.
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****  */
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** static inline void wr_payload_u8(uint8_t* payload, uint16_t offset,
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****                                  uint8_t value)
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h **** {
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\PayloadHelper.h ****     payload[offset] = value;
+ 117              	 .loc 2 234 0
+ 118 0044 0224     	 movs r4,#2
+ 119              	.LBE14:
+ 120              	.LBE13:
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 121              	 .loc 1 102 0
+ 122 0046 0DF10301 	 add r1,sp,#3
+ 123 004a FFF7FEFF 	 bl radar_get_duty_cycle
+ 124              	.LVL12:
+ 125              	.LBB16:
+ 126              	.LBB17:
+ 127              	 .loc 2 234 0
+ 128 004e 9DF80330 	 ldrb r3,[sp,#3]
+ 129 0052 8DF80530 	 strb r3,[sp,#5]
+ 130              	.LBE17:
+ 131              	.LBE16:
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_payload(message, sizeof(message));
+ 132              	 .loc 1 109 0
+ 133 0056 2846     	 mov r0,r5
+ 134 0058 2146     	 mov r1,r4
+ 135              	.LBB18:
+ 136              	.LBB15:
+ 137              	 .loc 2 234 0
+ 138 005a 8DF80440 	 strb r4,[sp,#4]
+ 139              	.LVL13:
+ 140              	.LBE15:
+ 141              	.LBE18:
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_payload(message, sizeof(message));
+ 142              	 .loc 1 109 0
+ 143 005e FFF7FEFF 	 bl protocol_send_header
+ 144              	.LVL14:
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_tail();
+ 145              	 .loc 1 110 0
+ 146 0062 01A8     	 add r0,sp,#4
+ 147              	.LVL15:
+ 148 0064 2146     	 mov r1,r4
+ 149 0066 FFF7FEFF 	 bl protocol_send_payload
+ 150              	.LVL16:
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 151              	 .loc 1 111 0
+ 152 006a FFF7FEFF 	 bl protocol_send_tail
+ 153              	.LVL17:
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		}
+ 154              	 .loc 1 113 0
+ 155 006e 0020     	 movs r0,#0
+ 156 0070 D5E7     	 b .L2
+ 157              	.LVL18:
+ 158              	.L7:
+ 159              	.LBE12:
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         {    		
+ 160              	 .loc 1 120 0
+ 161 0072 012A     	 cmp r2,#1
+ 162 0074 D1D1     	 bne .L16
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			
+ 163              	 .loc 1 122 0
+ 164 0076 1846     	 mov r0,r3
+ 165              	.LVL19:
+ 166 0078 FFF7FEFF 	 bl radar_disable_lna_gain
+ 167              	.LVL20:
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         }
+ 168              	 .loc 1 124 0
+ 169 007c 0020     	 movs r0,#0
+ 170 007e CEE7     	 b .L2
+ 171              	.LVL21:
+ 172              	.L8:
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         {    		
+ 173              	 .loc 1 130 0
+ 174 0080 012A     	 cmp r2,#1
+ 175 0082 CAD1     	 bne .L16
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 176              	 .loc 1 132 0
+ 177 0084 1846     	 mov r0,r3
+ 178              	.LVL22:
+ 179 0086 FFF7FEFF 	 bl radar_enable_lna_gain
+ 180              	.LVL23:
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****         }
+ 181              	 .loc 1 134 0
+ 182 008a 0020     	 movs r0,#0
+ 183 008c C7E7     	 b .L2
+ 184              	.LVL24:
+ 185              	.L19:
+ 186              	.LBB19:
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			/* compile message */
+ 187              	 .loc 1 145 0
+ 188 008e 1846     	 mov r0,r3
+ 189              	.LVL25:
+ 190 0090 FFF7FEFF 	 bl radar_get_lna_gain_enable_status
+ 191              	.LVL26:
+ 192              	.LBB20:
+ 193              	.LBB21:
+ 194              	 .loc 2 234 0
+ 195 0094 0523     	 movs r3,#5
+ 196              	.LBE21:
+ 197              	.LBE20:
+ 198              	.LBB23:
+ 199              	.LBB24:
+ 200 0096 8DF80500 	 strb r0,[sp,#5]
+ 201              	.LBE24:
+ 202              	.LBE23:
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_payload(message, sizeof(message));
+ 203              	 .loc 1 151 0
+ 204 009a 0221     	 movs r1,#2
+ 205 009c 2846     	 mov r0,r5
+ 206              	.LVL27:
+ 207              	.LBB25:
+ 208              	.LBB22:
+ 209              	 .loc 2 234 0
+ 210 009e 8DF80430 	 strb r3,[sp,#4]
+ 211              	.LVL28:
+ 212              	.LBE22:
+ 213              	.LBE25:
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_payload(message, sizeof(message));
+ 214              	 .loc 1 151 0
+ 215 00a2 FFF7FEFF 	 bl protocol_send_header
+ 216              	.LVL29:
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 			protocol_send_tail();
+ 217              	 .loc 1 152 0
+ 218 00a6 01A8     	 add r0,sp,#4
+ 219              	.LVL30:
+ 220 00a8 0221     	 movs r1,#2
+ 221 00aa FFF7FEFF 	 bl protocol_send_payload
+ 222              	.LVL31:
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 223              	 .loc 1 153 0
+ 224 00ae FFF7FEFF 	 bl protocol_send_tail
+ 225              	.LVL32:
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 		}
+ 226              	 .loc 1 155 0
+ 227 00b2 0020     	 movs r0,#0
+ 228 00b4 B3E7     	 b .L2
+ 229              	.LBE19:
+ 230              	 .cfi_endproc
+ 231              	.LFE486:
+ 233 00b6 00BF     	 .section .text.ep_radar_industrial_handle_change,"ax",%progbits
+ 234              	 .align 2
+ 235              	 .global ep_radar_industrial_handle_change
+ 236              	 .thumb
+ 237              	 .thumb_func
+ 239              	ep_radar_industrial_handle_change:
+ 240              	.LFB487:
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** 
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** void ep_radar_industrial_handle_change(uint8_t endpoint, void* context,
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c ****                                   	   uint32_t what)
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/src\EndpointRadarIndustrial.c **** {
+ 241              	 .loc 1 170 0
+ 242              	 .cfi_startproc
+ 243              	 
+ 244              	 
+ 245              	 
+ 246              	.LVL33:
+ 247 0000 7047     	 bx lr
+ 248              	 .cfi_endproc
+ 249              	.LFE487:
+ 251 0002 00BF     	 .text
+ 252              	.Letext0:
+ 253              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 254              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 255              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 256              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 257              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 258              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 259              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 260              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 261              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 262              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 263              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 264              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 265              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 266              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/include/Protocol.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 EndpointRadarIndustrial.c
+    {standard input}:20     .text.ep_radar_industrial_handle_message:00000000 $t
+    {standard input}:25     .text.ep_radar_industrial_handle_message:00000000 ep_radar_industrial_handle_message
+    {standard input}:54     .text.ep_radar_industrial_handle_message:00000010 $d
+    {standard input}:60     .text.ep_radar_industrial_handle_message:00000016 $t
+    {standard input}:234    .text.ep_radar_industrial_handle_change:00000000 $t
+    {standard input}:239    .text.ep_radar_industrial_handle_change:00000000 ep_radar_industrial_handle_change
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+radar_set_duty_cycle
+radar_get_duty_cycle
+protocol_send_header
+protocol_send_payload
+protocol_send_tail
+radar_disable_lna_gain
+radar_enable_lna_gain
+radar_get_lna_gain_enable_status

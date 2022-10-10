@@ -1,0 +1,1382 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "application.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.system_reset,"ax",%progbits
+  20              	 .align 2
+  21              	 .global system_reset
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	system_reset:
+  26              	.LFB477:
+  27              	 .file 1 "../Application/src/application.c"
+   1:../Application/src/application.c **** /**
+   2:../Application/src/application.c ****     @file: application.c
+   3:../Application/src/application.c **** 
+   4:../Application/src/application.c ****     @brief: This file includes the functions for the Position2Go
+   5:../Application/src/application.c ****             RangeDoppler Application Layer.
+   6:../Application/src/application.c **** */
+   7:../Application/src/application.c **** 
+   8:../Application/src/application.c **** /* ===========================================================================
+   9:../Application/src/application.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../Application/src/application.c **** ** All rights reserved.
+  11:../Application/src/application.c **** ** ===========================================================================
+  12:../Application/src/application.c **** **
+  13:../Application/src/application.c **** ** ===========================================================================
+  14:../Application/src/application.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../Application/src/application.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../Application/src/application.c **** ** is not permitted without Infineon's prior written authorization.
+  17:../Application/src/application.c **** ** ===========================================================================
+  18:../Application/src/application.c **** */
+  19:../Application/src/application.c **** 
+  20:../Application/src/application.c **** /*
+  21:../Application/src/application.c **** ==============================================================================
+  22:../Application/src/application.c ****    1. INCLUDE FILES
+  23:../Application/src/application.c **** ==============================================================================
+  24:../Application/src/application.c ****  */
+  25:../Application/src/application.c **** 
+  26:../Application/src/application.c **** #include "application.h"
+  27:../Application/src/application.c **** #include "datastore.h"
+  28:../Application/src/application.c **** #include "acq_buffer.h"
+  29:../Application/src/application.c **** 
+  30:../Application/src/application.c **** /*
+  31:../Application/src/application.c **** ==============================================================================
+  32:../Application/src/application.c ****    2. DEFINITIONS
+  33:../Application/src/application.c **** ==============================================================================
+  34:../Application/src/application.c ****  */
+  35:../Application/src/application.c **** 
+  36:../Application/src/application.c **** /* Define the number of supported endpoints */
+  37:../Application/src/application.c **** #define NUMBER_SUPPORTED_ENDPOINTS         (8U)
+  38:../Application/src/application.c **** 
+  39:../Application/src/application.c **** /*
+  40:../Application/src/application.c **** ==============================================================================
+  41:../Application/src/application.c ****    3. DATA
+  42:../Application/src/application.c **** ==============================================================================
+  43:../Application/src/application.c ****  */
+  44:../Application/src/application.c **** 
+  45:../Application/src/application.c **** /* Firmware version declaration */
+  46:../Application/src/application.c **** Firmware_Information_t firmware_information =
+  47:../Application/src/application.c **** {
+  48:../Application/src/application.c **** 	"Position2Go BGT24MTR12 Demo Radar Board",
+  49:../Application/src/application.c **** 	FW_VERSION_MAJOR,
+  50:../Application/src/application.c **** 	FW_VERSION_MINOR,
+  51:../Application/src/application.c **** 	FW_VERSION_REVISION
+  52:../Application/src/application.c **** };
+  53:../Application/src/application.c **** 
+  54:../Application/src/application.c **** /* Radar handler declaration */
+  55:../Application/src/application.c **** Radar_Handle_t h_radar_device = NULL;
+  56:../Application/src/application.c **** 
+  57:../Application/src/application.c **** /* A global buffer to hold all endpoints used by Host Communication library */
+  58:../Application/src/application.c **** Endpoint_t endpoint_list[NUMBER_SUPPORTED_ENDPOINTS];
+  59:../Application/src/application.c **** 
+  60:../Application/src/application.c **** /* Global variable to store the state if USB initialization, used with Radar GUI */
+  61:../Application/src/application.c **** volatile uint8_t g_usb_init = false;
+  62:../Application/src/application.c **** 
+  63:../Application/src/application.c **** /* Radar application demo global state */
+  64:../Application/src/application.c **** Radar_App_State_t radar_app_state = APP_IDLE;
+  65:../Application/src/application.c **** 
+  66:../Application/src/application.c **** /*
+  67:../Application/src/application.c **** ==============================================================================
+  68:../Application/src/application.c ****    4. USER CALLBACK FUNCTION PROTOTYPES
+  69:../Application/src/application.c **** ==============================================================================
+  70:../Application/src/application.c ****  */
+  71:../Application/src/application.c **** 
+  72:../Application/src/application.c **** /* This callback function...
+  73:../Application/src/application.c ****  *
+  74:../Application/src/application.c ****  */
+  75:../Application/src/application.c **** void acq_completed_cb(void);
+  76:../Application/src/application.c **** 
+  77:../Application/src/application.c **** /* This callback function...
+  78:../Application/src/application.c ****  *
+  79:../Application/src/application.c ****  */
+  80:../Application/src/application.c **** void algo_completed_cb(void);
+  81:../Application/src/application.c **** 
+  82:../Application/src/application.c **** /* This callback function will be executed by radar control when starting data acquisition process
+  83:../Application/src/application.c ****  * it is used to get information about the beginning of data acquisition.
+  84:../Application/src/application.c ****  */
+  85:../Application/src/application.c **** void app_data_acq_started_cb(void *parameter);
+  86:../Application/src/application.c **** 
+  87:../Application/src/application.c **** /* This callback function will be executed by radar control at the end of data acquisition,
+  88:../Application/src/application.c ****  * it is used to inform upper layers that data sampling is done and data is ready in user buffer.
+  89:../Application/src/application.c ****  */
+  90:../Application/src/application.c **** void app_data_acq_done_cb(void *parameter);
+  91:../Application/src/application.c **** 
+  92:../Application/src/application.c **** /* This function will be executed at the end of data acquisition.
+  93:../Application/src/application.c ****  * This function pointer should be set to the assigned algorithm before starting data processing.
+  94:../Application/src/application.c ****  */
+  95:../Application/src/application.c **** static algorithm algo_processing_function = NULL;
+  96:../Application/src/application.c **** 
+  97:../Application/src/application.c **** /* This callback function...
+  98:../Application/src/application.c ****  *
+  99:../Application/src/application.c ****  */
+ 100:../Application/src/application.c **** static void do_algo_helper(void);
+ 101:../Application/src/application.c **** 
+ 102:../Application/src/application.c **** /*
+ 103:../Application/src/application.c **** ==============================================================================
+ 104:../Application/src/application.c ****    5. EXPORTED FUNCTIONS
+ 105:../Application/src/application.c **** ==============================================================================
+ 106:../Application/src/application.c ****  */
+ 107:../Application/src/application.c **** 
+ 108:../Application/src/application.c **** void app_init(void)
+ 109:../Application/src/application.c **** {
+ 110:../Application/src/application.c ****   /* Initialize USB */
+ 111:../Application/src/application.c ****   if(bsp_usb_init(BSP_USB_TIMEOUT) == 0)
+ 112:../Application/src/application.c ****   {
+ 113:../Application/src/application.c ****     g_usb_init = true;
+ 114:../Application/src/application.c ****   }
+ 115:../Application/src/application.c **** 
+ 116:../Application/src/application.c ****   /* Open the available radar device */
+ 117:../Application/src/application.c ****   if(radar_open_device(0, &h_radar_device) != RADAR_ERR_OK)
+ 118:../Application/src/application.c ****   {
+ 119:../Application/src/application.c ****     XMC_DEBUG("Opening Radar device failed\n");
+ 120:../Application/src/application.c ****     while(1U);
+ 121:../Application/src/application.c ****   }
+ 122:../Application/src/application.c **** 
+ 123:../Application/src/application.c ****   /* Register user callback functions */
+ 124:../Application/src/application.c ****   radar_register_callback(RADAR_ACQUISITION_STARTED_CB_ID, app_data_acq_started_cb);
+ 125:../Application/src/application.c ****   radar_register_callback(RADAR_ACQUISITION_DONE_CB_ID, app_data_acq_done_cb);
+ 126:../Application/src/application.c **** 
+ 127:../Application/src/application.c ****   /* Register all endpoints to the communication protocol */
+ 128:../Application/src/application.c ****   Endpoint_t ep_list[NUMBER_SUPPORTED_ENDPOINTS] =
+ 129:../Application/src/application.c ****   {
+ 130:../Application/src/application.c ****     EP_RADAR_BASE_ENDPOINT_LIST_ENTRY(h_radar_device),
+ 131:../Application/src/application.c ****     EP_RADAR_ADCXMC_ENDPOINT_LIST_ENTRY(h_radar_device),
+ 132:../Application/src/application.c ****     EP_RADAR_FMCW_ENDPOINT_LIST_ENTRY(h_radar_device),
+ 133:../Application/src/application.c ****     EP_RADAR_DOPPLER_ENDPOINT_LIST_ENTRY(h_radar_device),
+ 134:../Application/src/application.c ****     EP_RADAR_INDUSTRIAL_ENDPOINT_LIST_ENTRY(h_radar_device),
+ 135:../Application/src/application.c ****     EP_RADAR_P2G_ENDPOINT_LIST_ENTRY(h_radar_device),
+ 136:../Application/src/application.c ****     EP_CALIBRATION_ENDPOINT_LIST_ENTRY(h_radar_device),
+ 137:../Application/src/application.c ****     EP_TARGET_DETECTION_ENDPOINT_LIST_ENTRY(h_radar_device)
+ 138:../Application/src/application.c ****   };
+ 139:../Application/src/application.c **** 
+ 140:../Application/src/application.c ****   memcpy(endpoint_list, ep_list, NUMBER_SUPPORTED_ENDPOINTS * sizeof(Endpoint_t));
+ 141:../Application/src/application.c **** 
+ 142:../Application/src/application.c ****   /* Initialize the internal protocol state and the communication interface */
+ 143:../Application/src/application.c ****   protocol_init(endpoint_list, sizeof(endpoint_list)/sizeof(endpoint_list[0]), SYSTIMER_GetTime, BS
+ 144:../Application/src/application.c **** 
+ 145:../Application/src/application.c ****   /* Start data acquisition at the defined frame interval */
+ 146:../Application/src/application.c ****   if (radar_start_acquisition(h_radar_device) != RADAR_ERR_OK)
+ 147:../Application/src/application.c ****   {
+ 148:../Application/src/application.c ****     XMC_DEBUG("Starting Radar data acquisition failed\n");
+ 149:../Application/src/application.c ****     while(1U);
+ 150:../Application/src/application.c ****   }
+ 151:../Application/src/application.c **** }
+ 152:../Application/src/application.c **** 
+ 153:../Application/src/application.c **** //===========================================================================
+ 154:../Application/src/application.c **** 
+ 155:../Application/src/application.c **** void app_register_algo_process(algorithm algo_processor)
+ 156:../Application/src/application.c **** {
+ 157:../Application/src/application.c ****   /* Register algorithm processing function */
+ 158:../Application/src/application.c ****   algo_processing_function = algo_processor;
+ 159:../Application/src/application.c **** }
+ 160:../Application/src/application.c **** 
+ 161:../Application/src/application.c **** //===========================================================================
+ 162:../Application/src/application.c **** 
+ 163:../Application/src/application.c **** void app_process(void)
+ 164:../Application/src/application.c **** {
+ 165:../Application/src/application.c ****   if (g_usb_init == true)
+ 166:../Application/src/application.c ****   {
+ 167:../Application/src/application.c ****     /* Run communication protocol */
+ 168:../Application/src/application.c ****     protocol_run();
+ 169:../Application/src/application.c ****   }
+ 170:../Application/src/application.c ****   else
+ 171:../Application/src/application.c ****   {
+ 172:../Application/src/application.c ****     /* Initialize the USB low layer driver and start USB data communication */
+ 173:../Application/src/application.c ****     if(bsp_usb_init(BSP_USB_TIMEOUT) == 0)
+ 174:../Application/src/application.c ****     {
+ 175:../Application/src/application.c ****       g_usb_init = true;
+ 176:../Application/src/application.c ****     }
+ 177:../Application/src/application.c ****   }
+ 178:../Application/src/application.c **** 
+ 179:../Application/src/application.c ****   /* Main radar application process */
+ 180:../Application/src/application.c ****   radar_app_process();
+ 181:../Application/src/application.c **** }
+ 182:../Application/src/application.c **** 
+ 183:../Application/src/application.c **** //===========================================================================
+ 184:../Application/src/application.c **** 
+ 185:../Application/src/application.c **** void radar_app_process(void)
+ 186:../Application/src/application.c **** {
+ 187:../Application/src/application.c ****   switch(radar_app_state)
+ 188:../Application/src/application.c ****   {
+ 189:../Application/src/application.c ****   case APP_IDLE:
+ 190:../Application/src/application.c ****     break;
+ 191:../Application/src/application.c **** 
+ 192:../Application/src/application.c ****   case APP_RADAR_DATA_ACQUISITION_COMPLETED:
+ 193:../Application/src/application.c ****     #if defined(FMCW_SUPPORTED) || defined(DOPPLER_SUPPORTED)
+ 194:../Application/src/application.c ****       if (g_do_processing)
+ 195:../Application/src/application.c ****       {
+ 196:../Application/src/application.c ****         /* Start the processing of the algorithm assigned in the function pointer 'algo_processor' 
+ 197:../Application/src/application.c ****     	if (algo_processing_function != NULL)
+ 198:../Application/src/application.c ****     	{
+ 199:../Application/src/application.c ****     		do_algo_helper();
+ 200:../Application/src/application.c ****     	}
+ 201:../Application/src/application.c ****       }
+ 202:../Application/src/application.c ****     #endif
+ 203:../Application/src/application.c **** 
+ 204:../Application/src/application.c ****     /* Check if a new hardware settings are required */
+ 205:../Application/src/application.c ****     radar_app_state = APP_CHECK_FOR_SETTINGS_UPDATE;
+ 206:../Application/src/application.c ****     break;
+ 207:../Application/src/application.c **** 
+ 208:../Application/src/application.c ****    case APP_CHECK_FOR_SETTINGS_UPDATE:
+ 209:../Application/src/application.c **** 	/* Check if a new hardware settings are required */
+ 210:../Application/src/application.c ****     if(ds_is_device_settings_updated())
+ 211:../Application/src/application.c **** 	{
+ 212:../Application/src/application.c **** 	  radar_app_state = APP_APPLY_DEVICE_SETTINGS;
+ 213:../Application/src/application.c **** 	}
+ 214:../Application/src/application.c **** 	else
+ 215:../Application/src/application.c **** 	{
+ 216:../Application/src/application.c **** 	  radar_app_state = APP_IDLE;
+ 217:../Application/src/application.c **** 	}
+ 218:../Application/src/application.c **** 	break;
+ 219:../Application/src/application.c ****   case APP_APPLY_DEVICE_SETTINGS:
+ 220:../Application/src/application.c ****     if(ds_is_device_settings_updated())
+ 221:../Application/src/application.c **** 	{
+ 222:../Application/src/application.c **** 	  device_settings_t *p_dev_settings = ds_device_get_settings();
+ 223:../Application/src/application.c **** 
+ 224:../Application/src/application.c **** 	  if(radar_apply_hw_settings(h_radar_device, UPDATE, p_dev_settings) == RADAR_ERR_OK)
+ 225:../Application/src/application.c **** 	  {
+ 226:../Application/src/application.c **** 	    ds_device_settings_copy_to_shadow();
+ 227:../Application/src/application.c **** 	  }
+ 228:../Application/src/application.c **** 	}
+ 229:../Application/src/application.c ****     radar_app_state = APP_IDLE;
+ 230:../Application/src/application.c ****     break;
+ 231:../Application/src/application.c **** 
+ 232:../Application/src/application.c ****   default:
+ 233:../Application/src/application.c ****     break;
+ 234:../Application/src/application.c ****   }
+ 235:../Application/src/application.c **** }
+ 236:../Application/src/application.c **** 
+ 237:../Application/src/application.c **** //===========================================================================
+ 238:../Application/src/application.c **** 
+ 239:../Application/src/application.c **** void app_destructor(void)
+ 240:../Application/src/application.c **** {
+ 241:../Application/src/application.c ****   /* Unregister user callback functions */
+ 242:../Application/src/application.c ****   radar_unregister_callback(RADAR_ACQUISITION_STARTED_CB_ID);
+ 243:../Application/src/application.c ****   radar_unregister_callback(RADAR_ACQUISITION_DONE_CB_ID);
+ 244:../Application/src/application.c **** }
+ 245:../Application/src/application.c **** 
+ 246:../Application/src/application.c **** /*
+ 247:../Application/src/application.c **** ==============================================================================
+ 248:../Application/src/application.c ****    6. USER CALLBACK FUNCTIONS
+ 249:../Application/src/application.c **** ==============================================================================
+ 250:../Application/src/application.c ****  */
+ 251:../Application/src/application.c **** 
+ 252:../Application/src/application.c **** /* Here an example of user callback implementation */
+ 253:../Application/src/application.c **** 
+ 254:../Application/src/application.c **** /* This callback function will be executed by radar control when starting data acquisition process
+ 255:../Application/src/application.c ****  *  it can be used to get information about the beginning of data acquisition
+ 256:../Application/src/application.c ****  */
+ 257:../Application/src/application.c **** void app_data_acq_started_cb(void *parameter)
+ 258:../Application/src/application.c **** {
+ 259:../Application/src/application.c ****   /* Turn On LED at the beginning of data acquisition */
+ 260:../Application/src/application.c ****   bsp_led_on();
+ 261:../Application/src/application.c **** }
+ 262:../Application/src/application.c **** 
+ 263:../Application/src/application.c **** //===========================================================================
+ 264:../Application/src/application.c **** 
+ 265:../Application/src/application.c **** /* This callback function will be executed by radar control at the end of data acquisition,
+ 266:../Application/src/application.c ****  * it is used to inform upper layers that data sampling is done and data is ready in user buffer
+ 267:../Application/src/application.c ****  */
+ 268:../Application/src/application.c **** void app_data_acq_done_cb(void *parameter)
+ 269:../Application/src/application.c **** {
+ 270:../Application/src/application.c ****   /* Turn Off LED at the end of data acquisition */
+ 271:../Application/src/application.c ****   bsp_led_off();
+ 272:../Application/src/application.c **** 
+ 273:../Application/src/application.c ****   /* Set the main application state at the end of data acquisition */
+ 274:../Application/src/application.c ****   g_adc_sampling_completed = true;
+ 275:../Application/src/application.c ****   radar_app_state = APP_RADAR_DATA_ACQUISITION_COMPLETED;
+ 276:../Application/src/application.c ****   acq_completed_cb();
+ 277:../Application/src/application.c **** }
+ 278:../Application/src/application.c **** 
+ 279:../Application/src/application.c **** //===========================================================================
+ 280:../Application/src/application.c **** 
+ 281:../Application/src/application.c **** /* This function yet to be filled in case of software reset */
+ 282:../Application/src/application.c **** void system_reset(void)
+ 283:../Application/src/application.c **** {
+  28              	 .loc 1 283 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	 
+  33 0000 7047     	 bx lr
+  34              	 .cfi_endproc
+  35              	.LFE477:
+  37 0002 00BF     	 .section .text.app_data_acq_started_cb,"ax",%progbits
+  38              	 .align 2
+  39              	 .global app_data_acq_started_cb
+  40              	 .thumb
+  41              	 .thumb_func
+  43              	app_data_acq_started_cb:
+  44              	.LFB475:
+ 258:../Application/src/application.c ****   /* Turn On LED at the beginning of data acquisition */
+  45              	 .loc 1 258 0
+  46              	 .cfi_startproc
+  47              	 
+  48              	 
+  49              	 
+  50              	.LVL0:
+ 260:../Application/src/application.c **** }
+  51              	 .loc 1 260 0
+  52 0000 FFF7FEBF 	 b bsp_led_on
+  53              	.LVL1:
+  54              	 .cfi_endproc
+  55              	.LFE475:
+  57              	 .section .text.app_data_acq_done_cb,"ax",%progbits
+  58              	 .align 2
+  59              	 .global app_data_acq_done_cb
+  60              	 .thumb
+  61              	 .thumb_func
+  63              	app_data_acq_done_cb:
+  64              	.LFB476:
+ 269:../Application/src/application.c ****   /* Turn Off LED at the end of data acquisition */
+  65              	 .loc 1 269 0
+  66              	 .cfi_startproc
+  67              	 
+  68              	 
+  69              	.LVL2:
+  70 0000 08B5     	 push {r3,lr}
+  71              	.LCFI0:
+  72              	 .cfi_def_cfa_offset 8
+  73              	 .cfi_offset 3,-8
+  74              	 .cfi_offset 14,-4
+ 271:../Application/src/application.c **** 
+  75              	 .loc 1 271 0
+  76 0002 FFF7FEFF 	 bl bsp_led_off
+  77              	.LVL3:
+ 275:../Application/src/application.c ****   acq_completed_cb();
+  78              	 .loc 1 275 0
+  79 0006 054B     	 ldr r3,.L5
+ 274:../Application/src/application.c ****   radar_app_state = APP_RADAR_DATA_ACQUISITION_COMPLETED;
+  80              	 .loc 1 274 0
+  81 0008 0549     	 ldr r1,.L5+4
+ 275:../Application/src/application.c ****   acq_completed_cb();
+  82              	 .loc 1 275 0
+  83 000a 0322     	 movs r2,#3
+ 274:../Application/src/application.c ****   radar_app_state = APP_RADAR_DATA_ACQUISITION_COMPLETED;
+  84              	 .loc 1 274 0
+  85 000c 0120     	 movs r0,#1
+ 275:../Application/src/application.c ****   acq_completed_cb();
+  86              	 .loc 1 275 0
+  87 000e 1A70     	 strb r2,[r3]
+ 277:../Application/src/application.c **** 
+  88              	 .loc 1 277 0
+  89 0010 BDE80840 	 pop {r3,lr}
+  90              	.LCFI1:
+  91              	 .cfi_restore 14
+  92              	 .cfi_restore 3
+  93              	 .cfi_def_cfa_offset 0
+ 274:../Application/src/application.c ****   radar_app_state = APP_RADAR_DATA_ACQUISITION_COMPLETED;
+  94              	 .loc 1 274 0
+  95 0014 0860     	 str r0,[r1]
+ 276:../Application/src/application.c **** }
+  96              	 .loc 1 276 0
+  97 0016 FFF7FEBF 	 b acq_completed_cb
+  98              	.LVL4:
+  99              	.L6:
+ 100 001a 00BF     	 .align 2
+ 101              	.L5:
+ 102 001c 00000000 	 .word .LANCHOR0
+ 103 0020 00000000 	 .word g_adc_sampling_completed
+ 104              	 .cfi_endproc
+ 105              	.LFE476:
+ 107              	 .section .text.app_init,"ax",%progbits
+ 108              	 .align 2
+ 109              	 .global app_init
+ 110              	 .thumb
+ 111              	 .thumb_func
+ 113              	app_init:
+ 114              	.LFB470:
+ 109:../Application/src/application.c ****   /* Initialize USB */
+ 115              	 .loc 1 109 0
+ 116              	 .cfi_startproc
+ 117              	 
+ 118              	 
+ 119 0000 2DE9F04F 	 push {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+ 120              	.LCFI2:
+ 121              	 .cfi_def_cfa_offset 36
+ 122              	 .cfi_offset 4,-36
+ 123              	 .cfi_offset 5,-32
+ 124              	 .cfi_offset 6,-28
+ 125              	 .cfi_offset 7,-24
+ 126              	 .cfi_offset 8,-20
+ 127              	 .cfi_offset 9,-16
+ 128              	 .cfi_offset 10,-12
+ 129              	 .cfi_offset 11,-8
+ 130              	 .cfi_offset 14,-4
+ 111:../Application/src/application.c ****   {
+ 131              	 .loc 1 111 0
+ 132 0004 40F6FF70 	 movw r0,#4095
+ 109:../Application/src/application.c ****   /* Initialize USB */
+ 133              	 .loc 1 109 0
+ 134 0008 83B0     	 sub sp,sp,#12
+ 135              	.LCFI3:
+ 136              	 .cfi_def_cfa_offset 48
+ 111:../Application/src/application.c ****   {
+ 137              	 .loc 1 111 0
+ 138 000a FFF7FEFF 	 bl bsp_usb_init
+ 139              	.LVL5:
+ 140 000e 10B9     	 cbnz r0,.L8
+ 113:../Application/src/application.c ****   }
+ 141              	 .loc 1 113 0
+ 142 0010 484B     	 ldr r3,.L17
+ 143 0012 0122     	 movs r2,#1
+ 144 0014 1A70     	 strb r2,[r3]
+ 145              	.L8:
+ 117:../Application/src/application.c ****   {
+ 146              	 .loc 1 117 0
+ 147 0016 484F     	 ldr r7,.L17+4
+ 148 0018 0020     	 movs r0,#0
+ 149 001a 3946     	 mov r1,r7
+ 150 001c FFF7FEFF 	 bl radar_open_device
+ 151              	.LVL6:
+ 152 0020 00B1     	 cbz r0,.L9
+ 153              	.L13:
+ 120:../Application/src/application.c ****   }
+ 154              	 .loc 1 120 0 discriminator 1
+ 155 0022 FEE7     	 b .L13
+ 156              	.L9:
+ 124:../Application/src/application.c ****   radar_register_callback(RADAR_ACQUISITION_DONE_CB_ID, app_data_acq_done_cb);
+ 157              	 .loc 1 124 0
+ 158 0024 4549     	 ldr r1,.L17+8
+ 140:../Application/src/application.c **** 
+ 159              	 .loc 1 140 0
+ 160 0026 464C     	 ldr r4,.L17+12
+ 161 0028 DFF848A1 	 ldr r10,.L17+64
+ 162 002c DFF84891 	 ldr r9,.L17+68
+ 163 0030 DFF84881 	 ldr r8,.L17+72
+ 164 0034 434E     	 ldr r6,.L17+16
+ 165 0036 444D     	 ldr r5,.L17+20
+ 166 0038 DFF844B1 	 ldr fp,.L17+76
+ 124:../Application/src/application.c ****   radar_register_callback(RADAR_ACQUISITION_DONE_CB_ID, app_data_acq_done_cb);
+ 167              	 .loc 1 124 0
+ 168 003c 0120     	 movs r0,#1
+ 169 003e FFF7FEFF 	 bl radar_register_callback
+ 170              	.LVL7:
+ 125:../Application/src/application.c **** 
+ 171              	 .loc 1 125 0
+ 172 0042 4249     	 ldr r1,.L17+24
+ 173 0044 0220     	 movs r0,#2
+ 174 0046 FFF7FEFF 	 bl radar_register_callback
+ 175              	.LVL8:
+ 140:../Application/src/application.c **** 
+ 176              	 .loc 1 140 0
+ 177 004a DFF838C1 	 ldr ip,.L17+80
+ 178 004e 4049     	 ldr r1,.L17+28
+ 179 0050 DFF834E1 	 ldr lr,.L17+84
+ 180 0054 3F48     	 ldr r0,.L17+32
+ 181 0056 404A     	 ldr r2,.L17+36
+ 182 0058 404B     	 ldr r3,.L17+40
+ 183 005a C4F800A0 	 str r10,[r4]
+ 184 005e C4F814C0 	 str ip,[r4,#20]
+ 185 0062 A162     	 str r1,[r4,#40]
+ 186 0064 0AF5E12A 	 add r10,r10,#460800
+ 187 0068 0CF56E2C 	 add ip,ip,#974848
+ 188 006c A1F54231 	 sub r1,r1,#198656
+ 189 0070 C4F80890 	 str r9,[r4,#8]
+ 190 0074 C4F81080 	 str r8,[r4,#16]
+ 191 0078 DFF81091 	 ldr r9,.L17+88
+ 192 007c DFF81081 	 ldr r8,.L17+92
+ 193 0080 C4F81CE0 	 str lr,[r4,#28]
+ 194 0084 0CF6EF5C 	 addw ip,ip,#3567
+ 195 0088 DFF808E1 	 ldr lr,.L17+96
+ 196 008c 6062     	 str r0,[r4,#36]
+ 197 008e A1F2F731 	 subw r1,r1,#1015
+ 198 0092 3348     	 ldr r0,.L17+44
+ 199 0094 2663     	 str r6,[r4,#48]
+ 200 0096 A563     	 str r5,[r4,#56]
+ 201 0098 0126     	 movs r6,#1
+ 128:../Application/src/application.c ****   {
+ 202              	 .loc 1 128 0
+ 203 009a 3D68     	 ldr r5,[r7]
+ 204              	.LVL9:
+ 140:../Application/src/application.c **** 
+ 205              	 .loc 1 140 0
+ 206 009c E263     	 str r2,[r4,#60]
+ 207 009e 6364     	 str r3,[r4,#68]
+ 208 00a0 304A     	 ldr r2,.L17+48
+ 143:../Application/src/application.c **** 
+ 209              	 .loc 1 143 0
+ 210 00a2 314B     	 ldr r3,.L17+52
+ 140:../Application/src/application.c **** 
+ 211              	 .loc 1 140 0
+ 212 00a4 C4F85890 	 str r9,[r4,#88]
+ 213 00a8 0AF2F14A 	 addw r10,r10,#1265
+ 214 00ac C4F86080 	 str r8,[r4,#96]
+ 215 00b0 C4F864C0 	 str ip,[r4,#100]
+ 216 00b4 C4F86CE0 	 str lr,[r4,#108]
+ 217 00b8 6067     	 str r0,[r4,#116]
+ 218 00ba A167     	 str r1,[r4,#120]
+ 219 00bc DFF8D8C0 	 ldr ip,.L17+100
+ 220 00c0 DFF8D8E0 	 ldr lr,.L17+104
+ 221 00c4 C4F84CB0 	 str fp,[r4,#76]
+ 143:../Application/src/application.c **** 
+ 222              	 .loc 1 143 0
+ 223 00c8 2046     	 mov r0,r4
+ 140:../Application/src/application.c **** 
+ 224              	 .loc 1 140 0
+ 225 00ca C4F850A0 	 str r10,[r4,#80]
+ 226 00ce A680     	 strh r6,[r4,#4]
+ 227 00d0 2683     	 strh r6,[r4,#24]
+ 228 00d2 A685     	 strh r6,[r4,#44]
+ 229 00d4 A4F84060 	 strh r6,[r4,#64]
+ 230 00d8 A4F85460 	 strh r6,[r4,#84]
+ 231 00dc A4F86860 	 strh r6,[r4,#104]
+ 232 00e0 A4F87C60 	 strh r6,[r4,#124]
+ 233 00e4 E560     	 str r5,[r4,#12]
+ 234 00e6 2562     	 str r5,[r4,#32]
+ 235 00e8 6563     	 str r5,[r4,#52]
+ 236 00ea A564     	 str r5,[r4,#72]
+ 237 00ec E565     	 str r5,[r4,#92]
+ 238 00ee 2567     	 str r5,[r4,#112]
+ 239 00f0 DFF8AC90 	 ldr r9,.L17+108
+ 240 00f4 C4F88020 	 str r2,[r4,#128]
+ 241 00f8 DFF8A880 	 ldr r8,.L17+112
+ 143:../Application/src/application.c **** 
+ 242              	 .loc 1 143 0
+ 243 00fc 0093     	 str r3,[sp]
+ 244 00fe 0821     	 movs r1,#8
+ 245 0100 1A4A     	 ldr r2,.L17+56
+ 246 0102 1B4B     	 ldr r3,.L17+60
+ 140:../Application/src/application.c **** 
+ 247              	 .loc 1 140 0
+ 248 0104 C4F88450 	 str r5,[r4,#132]
+ 249 0108 A4F89060 	 strh r6,[r4,#144]
+ 250 010c C4F89850 	 str r5,[r4,#152]
+ 251 0110 C4F88890 	 str r9,[r4,#136]
+ 252 0114 C4F88C80 	 str r8,[r4,#140]
+ 253 0118 C4F894C0 	 str ip,[r4,#148]
+ 254 011c C4F89CE0 	 str lr,[r4,#156]
+ 143:../Application/src/application.c **** 
+ 255              	 .loc 1 143 0
+ 256 0120 FFF7FEFF 	 bl protocol_init
+ 257              	.LVL10:
+ 146:../Application/src/application.c ****   {
+ 258              	 .loc 1 146 0
+ 259 0124 3868     	 ldr r0,[r7]
+ 260 0126 FFF7FEFF 	 bl radar_start_acquisition
+ 261              	.LVL11:
+ 262 012a 00B1     	 cbz r0,.L7
+ 263              	.L14:
+ 149:../Application/src/application.c ****   }
+ 264              	 .loc 1 149 0 discriminator 2
+ 265 012c FEE7     	 b .L14
+ 266              	.L7:
+ 151:../Application/src/application.c **** 
+ 267              	 .loc 1 151 0
+ 268 012e 03B0     	 add sp,sp,#12
+ 269              	.LCFI4:
+ 270              	 .cfi_def_cfa_offset 36
+ 271              	 
+ 272 0130 BDE8F08F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 273              	.LVL12:
+ 274              	.L18:
+ 275              	 .align 2
+ 276              	.L17:
+ 277 0134 00000000 	 .word .LANCHOR1
+ 278 0138 00000000 	 .word .LANCHOR2
+ 279 013c 00000000 	 .word app_data_acq_started_cb
+ 280 0140 00000000 	 .word endpoint_list
+ 281 0144 00000000 	 .word ep_radar_fmcw_handle_message
+ 282 0148 00000000 	 .word ep_radar_fmcw_handle_change
+ 283 014c 00000000 	 .word app_data_acq_done_cb
+ 284 0150 434D4652 	 .word 1380339011
+ 285 0154 00000000 	 .word ep_radar_adcxmc_handle_change
+ 286 0158 4C504452 	 .word 1380208716
+ 287 015c 00000000 	 .word ep_radar_doppler_handle_message
+ 288 0160 00000000 	 .word ep_radar_p2g_handle_change
+ 289 0164 00000000 	 .word ep_calibration_handle_message
+ 290 0168 00000000 	 .word system_reset
+ 291 016c 00000000 	 .word SYSTIMER_GetTime
+ 292 0170 80969800 	 .word 10000000
+ 293 0174 53414252 	 .word 1380073811
+ 294 0178 00000000 	 .word ep_radar_base_handle_message
+ 295 017c 00000000 	 .word ep_radar_base_handle_change
+ 296 0180 00000000 	 .word ep_radar_doppler_handle_change
+ 297 0184 58444152 	 .word 1380009048
+ 298 0188 00000000 	 .word ep_radar_adcxmc_handle_message
+ 299 018c 00000000 	 .word ep_radar_industrial_handle_message
+ 300 0190 00000000 	 .word ep_radar_industrial_handle_change
+ 301 0194 00000000 	 .word ep_radar_p2g_handle_message
+ 302 0198 00000000 	 .word ep_target_detection_handle_message
+ 303 019c 00000000 	 .word ep_target_detection_handle_change
+ 304 01a0 00000000 	 .word ep_calibration_handle_change
+ 305 01a4 43445452 	 .word 1381254211
+ 306              	 .cfi_endproc
+ 307              	.LFE470:
+ 309              	 .section .text.app_register_algo_process,"ax",%progbits
+ 310              	 .align 2
+ 311              	 .global app_register_algo_process
+ 312              	 .thumb
+ 313              	 .thumb_func
+ 315              	app_register_algo_process:
+ 316              	.LFB471:
+ 156:../Application/src/application.c ****   /* Register algorithm processing function */
+ 317              	 .loc 1 156 0
+ 318              	 .cfi_startproc
+ 319              	 
+ 320              	 
+ 321              	 
+ 322              	.LVL13:
+ 158:../Application/src/application.c **** }
+ 323              	 .loc 1 158 0
+ 324 0000 014B     	 ldr r3,.L20
+ 325 0002 1860     	 str r0,[r3]
+ 326 0004 7047     	 bx lr
+ 327              	.L21:
+ 328 0006 00BF     	 .align 2
+ 329              	.L20:
+ 330 0008 00000000 	 .word .LANCHOR3
+ 331              	 .cfi_endproc
+ 332              	.LFE471:
+ 334              	 .section .text.app_process,"ax",%progbits
+ 335              	 .align 2
+ 336              	 .global app_process
+ 337              	 .thumb
+ 338              	 .thumb_func
+ 340              	app_process:
+ 341              	.LFB472:
+ 164:../Application/src/application.c ****   if (g_usb_init == true)
+ 342              	 .loc 1 164 0
+ 343              	 .cfi_startproc
+ 344              	 
+ 345              	 
+ 346 0000 2DE9F041 	 push {r4,r5,r6,r7,r8,lr}
+ 347              	.LCFI5:
+ 348              	 .cfi_def_cfa_offset 24
+ 349              	 .cfi_offset 4,-24
+ 350              	 .cfi_offset 5,-20
+ 351              	 .cfi_offset 6,-16
+ 352              	 .cfi_offset 7,-12
+ 353              	 .cfi_offset 8,-8
+ 354              	 .cfi_offset 14,-4
+ 165:../Application/src/application.c ****   {
+ 355              	 .loc 1 165 0
+ 356 0004 334C     	 ldr r4,.L48
+ 357 0006 2378     	 ldrb r3,[r4]
+ 358 0008 012B     	 cmp r3,#1
+ 164:../Application/src/application.c ****   if (g_usb_init == true)
+ 359              	 .loc 1 164 0
+ 360 000a 82B0     	 sub sp,sp,#8
+ 361              	.LCFI6:
+ 362              	 .cfi_def_cfa_offset 32
+ 165:../Application/src/application.c ****   {
+ 363              	 .loc 1 165 0
+ 364 000c 5ED0     	 beq .L45
+ 173:../Application/src/application.c ****     {
+ 365              	 .loc 1 173 0
+ 366 000e 40F6FF70 	 movw r0,#4095
+ 367 0012 FFF7FEFF 	 bl bsp_usb_init
+ 368              	.LVL14:
+ 369 0016 08B9     	 cbnz r0,.L24
+ 175:../Application/src/application.c ****     }
+ 370              	 .loc 1 175 0
+ 371 0018 0123     	 movs r3,#1
+ 372 001a 2370     	 strb r3,[r4]
+ 373              	.L24:
+ 374              	.LBB10:
+ 375              	.LBB11:
+ 187:../Application/src/application.c ****   {
+ 376              	 .loc 1 187 0
+ 377 001c 2E4C     	 ldr r4,.L48+4
+ 378 001e 2378     	 ldrb r3,[r4]
+ 379 0020 032B     	 cmp r3,#3
+ 380 0022 18D0     	 beq .L26
+ 381 0024 042B     	 cmp r3,#4
+ 382 0026 0DD0     	 beq .L27
+ 383 0028 022B     	 cmp r3,#2
+ 384 002a 02D0     	 beq .L46
+ 385              	.LBE11:
+ 386              	.LBE10:
+ 181:../Application/src/application.c **** 
+ 387              	 .loc 1 181 0
+ 388 002c 02B0     	 add sp,sp,#8
+ 389              	.LCFI7:
+ 390              	 .cfi_remember_state
+ 391              	 .cfi_def_cfa_offset 24
+ 392              	 
+ 393 002e BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 394              	.L46:
+ 395              	.LCFI8:
+ 396              	 .cfi_restore_state
+ 397              	.LBB23:
+ 398              	.LBB19:
+ 399              	.LBB12:
+ 400              	.LBB13:
+ 220:../Application/src/application.c **** 	{
+ 401              	 .loc 1 220 0
+ 402 0032 FFF7FEFF 	 bl ds_is_device_settings_updated
+ 403              	.LVL15:
+ 404 0036 0028     	 cmp r0,#0
+ 405 0038 3BD1     	 bne .L47
+ 406              	.L31:
+ 407              	.LBE13:
+ 408              	.LBE12:
+ 216:../Application/src/application.c **** 	}
+ 409              	 .loc 1 216 0
+ 410 003a 0123     	 movs r3,#1
+ 411 003c 2370     	 strb r3,[r4]
+ 412              	.LBE19:
+ 413              	.LBE23:
+ 181:../Application/src/application.c **** 
+ 414              	 .loc 1 181 0
+ 415 003e 02B0     	 add sp,sp,#8
+ 416              	.LCFI9:
+ 417              	 .cfi_remember_state
+ 418              	 .cfi_def_cfa_offset 24
+ 419              	 
+ 420 0040 BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 421              	.L27:
+ 422              	.LCFI10:
+ 423              	 .cfi_restore_state
+ 424              	.LBB24:
+ 425              	.LBB20:
+ 210:../Application/src/application.c **** 	{
+ 426              	 .loc 1 210 0
+ 427 0044 FFF7FEFF 	 bl ds_is_device_settings_updated
+ 428              	.LVL16:
+ 429 0048 0028     	 cmp r0,#0
+ 430 004a F6D0     	 beq .L31
+ 212:../Application/src/application.c **** 	}
+ 431              	 .loc 1 212 0
+ 432 004c 0223     	 movs r3,#2
+ 433 004e 2370     	 strb r3,[r4]
+ 434              	.LBE20:
+ 435              	.LBE24:
+ 181:../Application/src/application.c **** 
+ 436              	 .loc 1 181 0
+ 437 0050 02B0     	 add sp,sp,#8
+ 438              	.LCFI11:
+ 439              	 .cfi_remember_state
+ 440              	 .cfi_def_cfa_offset 24
+ 441              	 
+ 442 0052 BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 443              	.L26:
+ 444              	.LCFI12:
+ 445              	 .cfi_restore_state
+ 446              	.LBB25:
+ 447              	.LBB21:
+ 194:../Application/src/application.c ****       {
+ 448              	 .loc 1 194 0
+ 449 0056 214B     	 ldr r3,.L48+8
+ 450 0058 1B68     	 ldr r3,[r3]
+ 451 005a 2BB3     	 cbz r3,.L29
+ 197:../Application/src/application.c ****     	{
+ 452              	 .loc 1 197 0
+ 453 005c 204D     	 ldr r5,.L48+12
+ 454 005e 2B68     	 ldr r3,[r5]
+ 455 0060 13B3     	 cbz r3,.L29
+ 456              	.LBB16:
+ 457              	.LBB17:
+ 284:../Application/src/application.c **** 
+ 285:../Application/src/application.c **** }
+ 286:../Application/src/application.c **** 
+ 287:../Application/src/application.c **** //===========================================================================
+ 288:../Application/src/application.c **** 
+ 289:../Application/src/application.c **** void do_algo_helper(void)
+ 290:../Application/src/application.c **** {
+ 291:../Application/src/application.c ****   static uint32_t median_filter_len = 0;
+ 292:../Application/src/application.c **** 
+ 293:../Application/src/application.c ****   acq_buf_obj *p_acq_buf = ds_get_active_acq_buf();
+ 458              	 .loc 1 293 0
+ 459 0062 FFF7FEFF 	 bl ds_get_active_acq_buf
+ 460              	.LVL17:
+ 461 0066 0746     	 mov r7,r0
+ 462              	.LVL18:
+ 294:../Application/src/application.c **** 
+ 295:../Application/src/application.c ****   algo_settings_t *p_algo_settings;
+ 296:../Application/src/application.c ****   device_settings_t *p_dev_settings;
+ 297:../Application/src/application.c **** 
+ 298:../Application/src/application.c ****   p_algo_settings = ds_algo_get_settings();
+ 463              	 .loc 1 298 0
+ 464 0068 FFF7FEFF 	 bl ds_algo_get_settings
+ 465              	.LVL19:
+ 466 006c 0646     	 mov r6,r0
+ 467              	.LVL20:
+ 299:../Application/src/application.c **** 
+ 300:../Application/src/application.c ****   /* the shadow remains unchanged during algorithm execution, so we do not need to copy into a extr
+ 301:../Application/src/application.c ****   p_dev_settings = ds_device_get_shadow_settings();
+ 468              	 .loc 1 301 0
+ 469 006e FFF7FEFF 	 bl ds_device_get_shadow_settings
+ 470              	.LVL21:
+ 302:../Application/src/application.c **** 
+ 303:../Application/src/application.c ****   // tests for updated values
+ 304:../Application/src/application.c ****   if(median_filter_len != p_algo_settings->median_filter_len)
+ 471              	 .loc 1 304 0
+ 472 0072 1C49     	 ldr r1,.L48+16
+ 473 0074 B369     	 ldr r3,[r6,#24]
+ 474 0076 0A68     	 ldr r2,[r1]
+ 475 0078 9342     	 cmp r3,r2
+ 301:../Application/src/application.c **** 
+ 476              	 .loc 1 301 0
+ 477 007a 8046     	 mov r8,r0
+ 478              	.LVL22:
+ 479              	 .loc 1 304 0
+ 480 007c 03D0     	 beq .L30
+ 305:../Application/src/application.c ****   {
+ 306:../Application/src/application.c **** 	  /* To re-init the median filter, if the setting is changed, is a duty of the algorithm module, n
+ 307:../Application/src/application.c **** 	  median_filter_len = p_algo_settings->median_filter_len;
+ 308:../Application/src/application.c **** 	  median_filter_init(median_filter_len);
+ 481              	 .loc 1 308 0
+ 482 007e 1846     	 mov r0,r3
+ 483              	.LVL23:
+ 307:../Application/src/application.c **** 	  median_filter_init(median_filter_len);
+ 484              	 .loc 1 307 0
+ 485 0080 0B60     	 str r3,[r1]
+ 486              	 .loc 1 308 0
+ 487 0082 FFF7FEFF 	 bl median_filter_init
+ 488              	.LVL24:
+ 489              	.L30:
+ 309:../Application/src/application.c ****   }
+ 310:../Application/src/application.c **** 
+ 311:../Application/src/application.c ****   static algo_target_list_t target_list = { .max_num_of_targets = MAX_NUM_OF_TARGETS, .num_of_targe
+ 312:../Application/src/application.c **** 
+ 313:../Application/src/application.c ****   algo_result_t algo_result;
+ 314:../Application/src/application.c **** 
+ 315:../Application/src/application.c ****   target_list.num_of_targets = 0;
+ 490              	 .loc 1 315 0
+ 491 0086 184B     	 ldr r3,.L48+20
+ 316:../Application/src/application.c ****   algo_result.p_target_list  = &target_list;
+ 492              	 .loc 1 316 0
+ 493 0088 0193     	 str r3,[sp,#4]
+ 315:../Application/src/application.c ****   algo_result.p_target_list  = &target_list;
+ 494              	 .loc 1 315 0
+ 495 008a 4FF0000E 	 mov lr,#0
+ 496 008e C3F800E0 	 str lr,[r3]
+ 317:../Application/src/application.c **** 
+ 318:../Application/src/application.c ****   algo_processing_function(p_acq_buf, p_algo_settings, p_dev_settings, &algo_result);
+ 497              	 .loc 1 318 0
+ 498 0092 3846     	 mov r0,r7
+ 499 0094 3146     	 mov r1,r6
+ 500 0096 4246     	 mov r2,r8
+ 501 0098 6B46     	 mov r3,sp
+ 502 009a 2D68     	 ldr r5,[r5]
+ 503 009c A847     	 blx r5
+ 504              	.LVL25:
+ 319:../Application/src/application.c **** 
+ 320:../Application/src/application.c ****   store_algo_result(&algo_result);
+ 505              	 .loc 1 320 0
+ 506 009e 6846     	 mov r0,sp
+ 507 00a0 FFF7FEFF 	 bl store_algo_result
+ 508              	.LVL26:
+ 321:../Application/src/application.c ****   algo_completed_cb();
+ 509              	 .loc 1 321 0
+ 510 00a4 FFF7FEFF 	 bl algo_completed_cb
+ 511              	.LVL27:
+ 512              	.L29:
+ 513              	.LBE17:
+ 514              	.LBE16:
+ 205:../Application/src/application.c ****     break;
+ 515              	 .loc 1 205 0
+ 516 00a8 0423     	 movs r3,#4
+ 517 00aa 2370     	 strb r3,[r4]
+ 518              	.LBE21:
+ 519              	.LBE25:
+ 181:../Application/src/application.c **** 
+ 520              	 .loc 1 181 0
+ 521 00ac 02B0     	 add sp,sp,#8
+ 522              	.LCFI13:
+ 523              	 .cfi_remember_state
+ 524              	 .cfi_def_cfa_offset 24
+ 525              	 
+ 526 00ae BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 527              	.L47:
+ 528              	.LCFI14:
+ 529              	 .cfi_restore_state
+ 530              	.LBB26:
+ 531              	.LBB22:
+ 532              	.LBB18:
+ 533              	.LBB15:
+ 534              	.LBB14:
+ 222:../Application/src/application.c **** 
+ 535              	 .loc 1 222 0
+ 536 00b2 FFF7FEFF 	 bl ds_device_get_settings
+ 537              	.LVL28:
+ 224:../Application/src/application.c **** 	  {
+ 538              	 .loc 1 224 0
+ 539 00b6 0D4B     	 ldr r3,.L48+24
+ 222:../Application/src/application.c **** 
+ 540              	 .loc 1 222 0
+ 541 00b8 0246     	 mov r2,r0
+ 542              	.LVL29:
+ 224:../Application/src/application.c **** 	  {
+ 543              	 .loc 1 224 0
+ 544 00ba 0421     	 movs r1,#4
+ 545 00bc 1868     	 ldr r0,[r3]
+ 546              	.LVL30:
+ 547 00be FFF7FEFF 	 bl radar_apply_hw_settings
+ 548              	.LVL31:
+ 549 00c2 0028     	 cmp r0,#0
+ 550 00c4 B9D1     	 bne .L31
+ 226:../Application/src/application.c **** 	  }
+ 551              	 .loc 1 226 0
+ 552 00c6 FFF7FEFF 	 bl ds_device_settings_copy_to_shadow
+ 553              	.LVL32:
+ 554 00ca B6E7     	 b .L31
+ 555              	.L45:
+ 556              	.LBE14:
+ 557              	.LBE15:
+ 558              	.LBE18:
+ 559              	.LBE22:
+ 560              	.LBE26:
+ 168:../Application/src/application.c ****   }
+ 561              	 .loc 1 168 0
+ 562 00cc FFF7FEFF 	 bl protocol_run
+ 563              	.LVL33:
+ 564 00d0 A4E7     	 b .L24
+ 565              	.L49:
+ 566 00d2 00BF     	 .align 2
+ 567              	.L48:
+ 568 00d4 00000000 	 .word .LANCHOR1
+ 569 00d8 00000000 	 .word .LANCHOR0
+ 570 00dc 00000000 	 .word g_do_processing
+ 571 00e0 00000000 	 .word .LANCHOR3
+ 572 00e4 00000000 	 .word .LANCHOR4
+ 573 00e8 00000000 	 .word .LANCHOR5
+ 574 00ec 00000000 	 .word .LANCHOR2
+ 575              	 .cfi_endproc
+ 576              	.LFE472:
+ 578              	 .section .text.radar_app_process,"ax",%progbits
+ 579              	 .align 2
+ 580              	 .global radar_app_process
+ 581              	 .thumb
+ 582              	 .thumb_func
+ 584              	radar_app_process:
+ 585              	.LFB473:
+ 186:../Application/src/application.c ****   switch(radar_app_state)
+ 586              	 .loc 1 186 0
+ 587              	 .cfi_startproc
+ 588              	 
+ 589              	 
+ 590 0000 2DE9F041 	 push {r4,r5,r6,r7,r8,lr}
+ 591              	.LCFI15:
+ 592              	 .cfi_def_cfa_offset 24
+ 593              	 .cfi_offset 4,-24
+ 594              	 .cfi_offset 5,-20
+ 595              	 .cfi_offset 6,-16
+ 596              	 .cfi_offset 7,-12
+ 597              	 .cfi_offset 8,-8
+ 598              	 .cfi_offset 14,-4
+ 187:../Application/src/application.c ****   {
+ 599              	 .loc 1 187 0
+ 600 0004 2C4C     	 ldr r4,.L73
+ 601 0006 2378     	 ldrb r3,[r4]
+ 602 0008 032B     	 cmp r3,#3
+ 186:../Application/src/application.c ****   switch(radar_app_state)
+ 603              	 .loc 1 186 0
+ 604 000a 82B0     	 sub sp,sp,#8
+ 605              	.LCFI16:
+ 606              	 .cfi_def_cfa_offset 32
+ 187:../Application/src/application.c ****   {
+ 607              	 .loc 1 187 0
+ 608 000c 18D0     	 beq .L52
+ 609 000e 042B     	 cmp r3,#4
+ 610 0010 0DD0     	 beq .L53
+ 611 0012 022B     	 cmp r3,#2
+ 612 0014 02D0     	 beq .L71
+ 235:../Application/src/application.c **** 
+ 613              	 .loc 1 235 0
+ 614 0016 02B0     	 add sp,sp,#8
+ 615              	.LCFI17:
+ 616              	 .cfi_remember_state
+ 617              	 .cfi_def_cfa_offset 24
+ 618              	 
+ 619 0018 BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 620              	.L71:
+ 621              	.LCFI18:
+ 622              	 .cfi_restore_state
+ 623              	.LBB32:
+ 624              	.LBB33:
+ 220:../Application/src/application.c **** 	{
+ 625              	 .loc 1 220 0
+ 626 001c FFF7FEFF 	 bl ds_is_device_settings_updated
+ 627              	.LVL34:
+ 628 0020 0028     	 cmp r0,#0
+ 629 0022 3BD1     	 bne .L72
+ 630              	.L57:
+ 631              	.LBE33:
+ 632              	.LBE32:
+ 216:../Application/src/application.c **** 	}
+ 633              	 .loc 1 216 0
+ 634 0024 0123     	 movs r3,#1
+ 635 0026 2370     	 strb r3,[r4]
+ 235:../Application/src/application.c **** 
+ 636              	 .loc 1 235 0
+ 637 0028 02B0     	 add sp,sp,#8
+ 638              	.LCFI19:
+ 639              	 .cfi_remember_state
+ 640              	 .cfi_def_cfa_offset 24
+ 641              	 
+ 642 002a BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 643              	.L53:
+ 644              	.LCFI20:
+ 645              	 .cfi_restore_state
+ 210:../Application/src/application.c **** 	{
+ 646              	 .loc 1 210 0
+ 647 002e FFF7FEFF 	 bl ds_is_device_settings_updated
+ 648              	.LVL35:
+ 649 0032 0028     	 cmp r0,#0
+ 650 0034 F6D0     	 beq .L57
+ 212:../Application/src/application.c **** 	}
+ 651              	 .loc 1 212 0
+ 652 0036 0223     	 movs r3,#2
+ 653 0038 2370     	 strb r3,[r4]
+ 235:../Application/src/application.c **** 
+ 654              	 .loc 1 235 0
+ 655 003a 02B0     	 add sp,sp,#8
+ 656              	.LCFI21:
+ 657              	 .cfi_remember_state
+ 658              	 .cfi_def_cfa_offset 24
+ 659              	 
+ 660 003c BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 661              	.L52:
+ 662              	.LCFI22:
+ 663              	 .cfi_restore_state
+ 194:../Application/src/application.c ****       {
+ 664              	 .loc 1 194 0
+ 665 0040 1E4B     	 ldr r3,.L73+4
+ 666 0042 1B68     	 ldr r3,[r3]
+ 667 0044 2BB3     	 cbz r3,.L55
+ 197:../Application/src/application.c ****     	{
+ 668              	 .loc 1 197 0
+ 669 0046 1E4D     	 ldr r5,.L73+8
+ 670 0048 2B68     	 ldr r3,[r5]
+ 671 004a 13B3     	 cbz r3,.L55
+ 672              	.LBB36:
+ 673              	.LBB37:
+ 293:../Application/src/application.c **** 
+ 674              	 .loc 1 293 0
+ 675 004c FFF7FEFF 	 bl ds_get_active_acq_buf
+ 676              	.LVL36:
+ 677 0050 0746     	 mov r7,r0
+ 678              	.LVL37:
+ 298:../Application/src/application.c **** 
+ 679              	 .loc 1 298 0
+ 680 0052 FFF7FEFF 	 bl ds_algo_get_settings
+ 681              	.LVL38:
+ 682 0056 0646     	 mov r6,r0
+ 683              	.LVL39:
+ 301:../Application/src/application.c **** 
+ 684              	 .loc 1 301 0
+ 685 0058 FFF7FEFF 	 bl ds_device_get_shadow_settings
+ 686              	.LVL40:
+ 304:../Application/src/application.c ****   {
+ 687              	 .loc 1 304 0
+ 688 005c 1949     	 ldr r1,.L73+12
+ 689 005e B369     	 ldr r3,[r6,#24]
+ 690 0060 0A68     	 ldr r2,[r1]
+ 691 0062 9342     	 cmp r3,r2
+ 301:../Application/src/application.c **** 
+ 692              	 .loc 1 301 0
+ 693 0064 8046     	 mov r8,r0
+ 694              	.LVL41:
+ 304:../Application/src/application.c ****   {
+ 695              	 .loc 1 304 0
+ 696 0066 03D0     	 beq .L56
+ 308:../Application/src/application.c ****   }
+ 697              	 .loc 1 308 0
+ 698 0068 1846     	 mov r0,r3
+ 699              	.LVL42:
+ 307:../Application/src/application.c **** 	  median_filter_init(median_filter_len);
+ 700              	 .loc 1 307 0
+ 701 006a 0B60     	 str r3,[r1]
+ 308:../Application/src/application.c ****   }
+ 702              	 .loc 1 308 0
+ 703 006c FFF7FEFF 	 bl median_filter_init
+ 704              	.LVL43:
+ 705              	.L56:
+ 315:../Application/src/application.c ****   algo_result.p_target_list  = &target_list;
+ 706              	 .loc 1 315 0
+ 707 0070 154B     	 ldr r3,.L73+16
+ 316:../Application/src/application.c **** 
+ 708              	 .loc 1 316 0
+ 709 0072 0193     	 str r3,[sp,#4]
+ 315:../Application/src/application.c ****   algo_result.p_target_list  = &target_list;
+ 710              	 .loc 1 315 0
+ 711 0074 4FF0000E 	 mov lr,#0
+ 712 0078 C3F800E0 	 str lr,[r3]
+ 318:../Application/src/application.c **** 
+ 713              	 .loc 1 318 0
+ 714 007c 3846     	 mov r0,r7
+ 715 007e 3146     	 mov r1,r6
+ 716 0080 4246     	 mov r2,r8
+ 717 0082 6B46     	 mov r3,sp
+ 718 0084 2D68     	 ldr r5,[r5]
+ 719 0086 A847     	 blx r5
+ 720              	.LVL44:
+ 320:../Application/src/application.c ****   algo_completed_cb();
+ 721              	 .loc 1 320 0
+ 722 0088 6846     	 mov r0,sp
+ 723 008a FFF7FEFF 	 bl store_algo_result
+ 724              	.LVL45:
+ 725              	 .loc 1 321 0
+ 726 008e FFF7FEFF 	 bl algo_completed_cb
+ 727              	.LVL46:
+ 728              	.L55:
+ 729              	.LBE37:
+ 730              	.LBE36:
+ 205:../Application/src/application.c ****     break;
+ 731              	 .loc 1 205 0
+ 732 0092 0423     	 movs r3,#4
+ 733 0094 2370     	 strb r3,[r4]
+ 235:../Application/src/application.c **** 
+ 734              	 .loc 1 235 0
+ 735 0096 02B0     	 add sp,sp,#8
+ 736              	.LCFI23:
+ 737              	 .cfi_remember_state
+ 738              	 .cfi_def_cfa_offset 24
+ 739              	 
+ 740 0098 BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 741              	.L72:
+ 742              	.LCFI24:
+ 743              	 .cfi_restore_state
+ 744              	.LBB38:
+ 745              	.LBB35:
+ 746              	.LBB34:
+ 222:../Application/src/application.c **** 
+ 747              	 .loc 1 222 0
+ 748 009c FFF7FEFF 	 bl ds_device_get_settings
+ 749              	.LVL47:
+ 224:../Application/src/application.c **** 	  {
+ 750              	 .loc 1 224 0
+ 751 00a0 0A4B     	 ldr r3,.L73+20
+ 222:../Application/src/application.c **** 
+ 752              	 .loc 1 222 0
+ 753 00a2 0246     	 mov r2,r0
+ 754              	.LVL48:
+ 224:../Application/src/application.c **** 	  {
+ 755              	 .loc 1 224 0
+ 756 00a4 0421     	 movs r1,#4
+ 757 00a6 1868     	 ldr r0,[r3]
+ 758              	.LVL49:
+ 759 00a8 FFF7FEFF 	 bl radar_apply_hw_settings
+ 760              	.LVL50:
+ 761 00ac 0028     	 cmp r0,#0
+ 762 00ae B9D1     	 bne .L57
+ 226:../Application/src/application.c **** 	  }
+ 763              	 .loc 1 226 0
+ 764 00b0 FFF7FEFF 	 bl ds_device_settings_copy_to_shadow
+ 765              	.LVL51:
+ 766 00b4 B6E7     	 b .L57
+ 767              	.L74:
+ 768 00b6 00BF     	 .align 2
+ 769              	.L73:
+ 770 00b8 00000000 	 .word .LANCHOR0
+ 771 00bc 00000000 	 .word g_do_processing
+ 772 00c0 00000000 	 .word .LANCHOR3
+ 773 00c4 00000000 	 .word .LANCHOR4
+ 774 00c8 00000000 	 .word .LANCHOR5
+ 775 00cc 00000000 	 .word .LANCHOR2
+ 776              	.LBE34:
+ 777              	.LBE35:
+ 778              	.LBE38:
+ 779              	 .cfi_endproc
+ 780              	.LFE473:
+ 782              	 .section .text.app_destructor,"ax",%progbits
+ 783              	 .align 2
+ 784              	 .global app_destructor
+ 785              	 .thumb
+ 786              	 .thumb_func
+ 788              	app_destructor:
+ 789              	.LFB474:
+ 240:../Application/src/application.c ****   /* Unregister user callback functions */
+ 790              	 .loc 1 240 0
+ 791              	 .cfi_startproc
+ 792              	 
+ 793              	 
+ 794 0000 08B5     	 push {r3,lr}
+ 795              	.LCFI25:
+ 796              	 .cfi_def_cfa_offset 8
+ 797              	 .cfi_offset 3,-8
+ 798              	 .cfi_offset 14,-4
+ 242:../Application/src/application.c ****   radar_unregister_callback(RADAR_ACQUISITION_DONE_CB_ID);
+ 799              	 .loc 1 242 0
+ 800 0002 0120     	 movs r0,#1
+ 801 0004 FFF7FEFF 	 bl radar_unregister_callback
+ 802              	.LVL52:
+ 243:../Application/src/application.c **** }
+ 803              	 .loc 1 243 0
+ 804 0008 0220     	 movs r0,#2
+ 244:../Application/src/application.c **** 
+ 805              	 .loc 1 244 0
+ 806 000a BDE80840 	 pop {r3,lr}
+ 807              	.LCFI26:
+ 808              	 .cfi_restore 14
+ 809              	 .cfi_restore 3
+ 810              	 .cfi_def_cfa_offset 0
+ 243:../Application/src/application.c **** }
+ 811              	 .loc 1 243 0
+ 812 000e FFF7FEBF 	 b radar_unregister_callback
+ 813              	.LVL53:
+ 814              	 .cfi_endproc
+ 815              	.LFE474:
+ 817              	 .global radar_app_state
+ 818              	 .global g_usb_init
+ 819              	 .comm endpoint_list,160,4
+ 820              	 .global h_radar_device
+ 821              	 .global firmware_information
+ 822 0012 00BF     	 .section .bss.g_usb_init,"aw",%nobits
+ 823              	 .set .LANCHOR1,.+0
+ 826              	g_usb_init:
+ 827 0000 00       	 .space 1
+ 828              	 .section .data.target_list.18408,"aw",%progbits
+ 829              	 .align 2
+ 830              	 .set .LANCHOR5,.+0
+ 833              	target_list.18408:
+ 834 0000 00000000 	 .word 0
+ 835 0004 05000000 	 .word 5
+ 836 0008 00000000 	 .space 104
+ 836      00000000 
+ 836      00000000 
+ 836      00000000 
+ 836      00000000 
+ 837              	 .section .bss.algo_processing_function,"aw",%nobits
+ 838              	 .align 2
+ 839              	 .set .LANCHOR3,.+0
+ 842              	algo_processing_function:
+ 843 0000 00000000 	 .space 4
+ 844              	 .section .bss.h_radar_device,"aw",%nobits
+ 845              	 .align 2
+ 846              	 .set .LANCHOR2,.+0
+ 849              	h_radar_device:
+ 850 0000 00000000 	 .space 4
+ 851              	 .section .rodata.str1.4,"aMS",%progbits,1
+ 852              	 .align 2
+ 853              	.LC0:
+ 854 0000 506F7369 	 .ascii "Position2Go BGT24MTR12 Demo Radar Board\000"
+ 854      74696F6E 
+ 854      32476F20 
+ 854      42475432 
+ 854      344D5452 
+ 855              	 .section .data.firmware_information,"aw",%progbits
+ 856              	 .align 2
+ 859              	firmware_information:
+ 860 0000 00000000 	 .word .LC0
+ 861 0004 0100     	 .short 1
+ 862 0006 0000     	 .short 0
+ 863 0008 0300     	 .short 3
+ 864 000a 0000     	 .space 2
+ 865              	 .section .bss.median_filter_len.18404,"aw",%nobits
+ 866              	 .align 2
+ 867              	 .set .LANCHOR4,.+0
+ 870              	median_filter_len.18404:
+ 871 0000 00000000 	 .space 4
+ 872              	 .section .data.radar_app_state,"aw",%progbits
+ 873              	 .set .LANCHOR0,.+0
+ 876              	radar_app_state:
+ 877 0000 01       	 .byte 1
+ 878              	 .text
+ 879              	.Letext0:
+ 880              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\lib\\gcc\\arm-none-eabi\\4.9.3\\include\\stddef.h"
+ 881              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 882              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 883              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 884              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 885              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 886              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 887              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 888              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/acq_buffer.h"
+ 889              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 890              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 891              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/include/Protocol.h"
+ 892              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Application/inc/application.h"
+ 893              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 894              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 895              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 896              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 897              	 .file 19 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/inc/position2go_bsp.h"
+ 898              	 .file 20 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 899              	 .file 21 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Algorithm/inc/tracking.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 application.c
+    {standard input}:20     .text.system_reset:00000000 $t
+    {standard input}:25     .text.system_reset:00000000 system_reset
+    {standard input}:38     .text.app_data_acq_started_cb:00000000 $t
+    {standard input}:43     .text.app_data_acq_started_cb:00000000 app_data_acq_started_cb
+    {standard input}:58     .text.app_data_acq_done_cb:00000000 $t
+    {standard input}:63     .text.app_data_acq_done_cb:00000000 app_data_acq_done_cb
+    {standard input}:102    .text.app_data_acq_done_cb:0000001c $d
+    {standard input}:108    .text.app_init:00000000 $t
+    {standard input}:113    .text.app_init:00000000 app_init
+    {standard input}:277    .text.app_init:00000134 $d
+                            *COM*:000000a0 endpoint_list
+    {standard input}:310    .text.app_register_algo_process:00000000 $t
+    {standard input}:315    .text.app_register_algo_process:00000000 app_register_algo_process
+    {standard input}:330    .text.app_register_algo_process:00000008 $d
+    {standard input}:335    .text.app_process:00000000 $t
+    {standard input}:340    .text.app_process:00000000 app_process
+    {standard input}:568    .text.app_process:000000d4 $d
+    {standard input}:579    .text.radar_app_process:00000000 $t
+    {standard input}:584    .text.radar_app_process:00000000 radar_app_process
+    {standard input}:770    .text.radar_app_process:000000b8 $d
+    {standard input}:783    .text.app_destructor:00000000 $t
+    {standard input}:788    .text.app_destructor:00000000 app_destructor
+    {standard input}:876    .data.radar_app_state:00000000 radar_app_state
+    {standard input}:826    .bss.g_usb_init:00000000 g_usb_init
+    {standard input}:849    .bss.h_radar_device:00000000 h_radar_device
+    {standard input}:859    .data.firmware_information:00000000 firmware_information
+    {standard input}:827    .bss.g_usb_init:00000000 $d
+    {standard input}:829    .data.target_list.18408:00000000 $d
+    {standard input}:833    .data.target_list.18408:00000000 target_list.18408
+    {standard input}:838    .bss.algo_processing_function:00000000 $d
+    {standard input}:842    .bss.algo_processing_function:00000000 algo_processing_function
+    {standard input}:845    .bss.h_radar_device:00000000 $d
+    {standard input}:852    .rodata.str1.4:00000000 $d
+    {standard input}:856    .data.firmware_information:00000000 $d
+    {standard input}:866    .bss.median_filter_len.18404:00000000 $d
+    {standard input}:870    .bss.median_filter_len.18404:00000000 median_filter_len.18404
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+bsp_led_on
+bsp_led_off
+acq_completed_cb
+g_adc_sampling_completed
+bsp_usb_init
+radar_open_device
+radar_register_callback
+protocol_init
+radar_start_acquisition
+ep_radar_fmcw_handle_message
+ep_radar_fmcw_handle_change
+ep_radar_adcxmc_handle_change
+ep_radar_doppler_handle_message
+ep_radar_p2g_handle_change
+ep_calibration_handle_message
+SYSTIMER_GetTime
+ep_radar_base_handle_message
+ep_radar_base_handle_change
+ep_radar_doppler_handle_change
+ep_radar_adcxmc_handle_message
+ep_radar_industrial_handle_message
+ep_radar_industrial_handle_change
+ep_radar_p2g_handle_message
+ep_target_detection_handle_message
+ep_target_detection_handle_change
+ep_calibration_handle_change
+ds_is_device_settings_updated
+ds_get_active_acq_buf
+ds_algo_get_settings
+ds_device_get_shadow_settings
+median_filter_init
+store_algo_result
+algo_completed_cb
+ds_device_get_settings
+radar_apply_hw_settings
+ds_device_settings_copy_to_shadow
+protocol_run
+g_do_processing
+radar_unregister_callback

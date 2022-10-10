@@ -1,0 +1,463 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "radar_target_detection.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.radar_set_dsp_settings,"ax",%progbits
+  20              	 .align 2
+  21              	 .global radar_set_dsp_settings
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	radar_set_dsp_settings:
+  26              	.LFB470:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src/radar_target_detection.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****    @file radar_target_detection.c
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****    @brief This file contains the driver API for Target Detection of
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****           Infineon radar sensors.
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** */
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** /* ===========================================================================
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ** All rights reserved.
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ** ===========================================================================
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** **
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ** ===========================================================================
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ** Passing on and copying of this document, and communication of its contents
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ** is not permitted without Infineon's prior written authorisation.
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ** ===========================================================================
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** */
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** /*
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ==============================================================================
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****    1. INCLUDE FILES
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ==============================================================================
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****  */
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** #include "ds_radar_interface.h"
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** #include "radar_api.h"
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** /*
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ==============================================================================
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****    2. EXPORTED FUNCTIONS
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** ==============================================================================
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****  */
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** uint16_t radar_set_dsp_settings(Radar_Handle_t device, const DSP_Settings_t* configuration)
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** {
+  28              	 .loc 1 36 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 2DE9F047 	 push {r4,r5,r6,r7,r8,r9,r10,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 32
+  36              	 .cfi_offset 4,-32
+  37              	 .cfi_offset 5,-28
+  38              	 .cfi_offset 6,-24
+  39              	 .cfi_offset 7,-20
+  40              	 .cfi_offset 8,-16
+  41              	 .cfi_offset 9,-12
+  42              	 .cfi_offset 10,-8
+  43              	 .cfi_offset 14,-4
+  44 0004 94B0     	 sub sp,sp,#80
+  45              	.LCFI1:
+  46              	 .cfi_def_cfa_offset 112
+  47              	 .loc 1 36 0
+  48 0006 0C46     	 mov r4,r1
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   algo_settings_t new_settings;
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   memset(&new_settings, 0, sizeof(algo_settings_t));
+  49              	 .loc 1 39 0
+  50 0008 4C22     	 movs r2,#76
+  51 000a 0021     	 movs r1,#0
+  52              	.LVL1:
+  53 000c 01A8     	 add r0,sp,#4
+  54              	.LVL2:
+  55 000e FFF7FEFF 	 bl memset
+  56              	.LVL3:
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   /* Fetch the complete existing data, to update only partially the new data. */
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   ds_algo_fetch_settings(&new_settings);
+  57              	 .loc 1 42 0
+  58 0012 01A8     	 add r0,sp,#4
+  59 0014 FFF7FEFF 	 bl ds_algo_fetch_settings
+  60              	.LVL4:
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** #ifdef FMCW_SUPPORTED
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.tracking_enable 		  	 = configuration->enable_tracking;
+  61              	 .loc 1 45 0
+  62 0018 A07C     	 ldrb r0,[r4,#18]
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.mti_filter_enable	 	 = configuration->enable_mti_filter;
+  63              	 .loc 1 46 0
+  64 001a 94F815A0 	 ldrb r10,[r4,#21]
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.num_of_tracks			 = configuration->num_of_tracks;
+  65              	 .loc 1 47 0
+  66 001e 94F81390 	 ldrb r9,[r4,#19]
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.mti_filter_len			 = configuration->mti_filter_length;
+  67              	 .loc 1 48 0
+  68 0022 B4F81680 	 ldrh r8,[r4,#22]
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.median_filter_len		 = configuration->median_filter_length;
+  69              	 .loc 1 49 0
+  70 0026 94F814C0 	 ldrb ip,[r4,#20]
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.mvg_avg_len				 = configuration->range_mvg_avg_length;
+  71              	 .loc 1 50 0
+  72 002a 94F800E0 	 ldrb lr,[r4]
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.min_distance_cm			 = configuration->min_range_cm;
+  73              	 .loc 1 51 0
+  74 002e 6788     	 ldrh r7,[r4,#2]
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.max_distance_cm			 = configuration->max_range_cm;
+  75              	 .loc 1 52 0
+  76 0030 A688     	 ldrh r6,[r4,#4]
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.range_detection_threshold = configuration->range_threshold;
+  77              	 .loc 1 53 0
+  78 0032 E589     	 ldrh r5,[r4,#14]
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** #endif
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** #if defined(DOPPLER_SUPPORTED) || defined(FMCW_SUPPORTED)
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.min_speed_kmh = configuration->min_speed_kmh;
+  79              	 .loc 1 57 0
+  80 0034 E188     	 ldrh r1,[r4,#6]
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.max_speed_kmh = configuration->max_speed_kmh;
+  81              	 .loc 1 58 0
+  82 0036 2289     	 ldrh r2,[r4,#8]
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.speed_detection_threshold = configuration->speed_threshold;
+  83              	 .loc 1 59 0
+  84 0038 238A     	 ldrh r3,[r4,#16]
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.mti_filter_enable	 	 = configuration->enable_mti_filter;
+  85              	 .loc 1 45 0
+  86 003a 0490     	 str r0,[sp,#16]
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** #endif
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   /* Check for new settings */
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   if (ds_algo_check_settings(&new_settings) == 0)
+  87              	 .loc 1 63 0
+  88 003c 01A8     	 add r0,sp,#4
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.num_of_tracks			 = configuration->num_of_tracks;
+  89              	 .loc 1 46 0
+  90 003e CDF824A0 	 str r10,[sp,#36]
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.mti_filter_len			 = configuration->mti_filter_length;
+  91              	 .loc 1 47 0
+  92 0042 CDF81490 	 str r9,[sp,#20]
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.median_filter_len		 = configuration->median_filter_length;
+  93              	 .loc 1 48 0
+  94 0046 CDF82080 	 str r8,[sp,#32]
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.mvg_avg_len				 = configuration->range_mvg_avg_length;
+  95              	 .loc 1 49 0
+  96 004a CDF81CC0 	 str ip,[sp,#28]
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.min_distance_cm			 = configuration->min_range_cm;
+  97              	 .loc 1 50 0
+  98 004e CDF818E0 	 str lr,[sp,#24]
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.max_distance_cm			 = configuration->max_range_cm;
+  99              	 .loc 1 51 0
+ 100 0052 0C97     	 str r7,[sp,#48]
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.range_detection_threshold = configuration->range_threshold;
+ 101              	 .loc 1 52 0
+ 102 0054 0D96     	 str r6,[sp,#52]
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** #endif
+ 103              	 .loc 1 53 0
+ 104 0056 0E95     	 str r5,[sp,#56]
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.max_speed_kmh = configuration->max_speed_kmh;
+ 105              	 .loc 1 57 0
+ 106 0058 1091     	 str r1,[sp,#64]
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   new_settings.speed_detection_threshold = configuration->speed_threshold;
+ 107              	 .loc 1 58 0
+ 108 005a 1192     	 str r2,[sp,#68]
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** #endif
+ 109              	 .loc 1 59 0
+ 110 005c 0F93     	 str r3,[sp,#60]
+ 111              	 .loc 1 63 0
+ 112 005e FFF7FEFF 	 bl ds_algo_check_settings
+ 113              	.LVL5:
+ 114 0062 0446     	 mov r4,r0
+ 115              	.LVL6:
+ 116 0064 18B1     	 cbz r0,.L6
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   {
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****     /* Apply new settings */
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****     ds_algo_store_settings(&new_settings);
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****     return (RADAR_ERR_OK);
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   }
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   else
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   {
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****     return (RADAR_ERR_PARAMETER_OUT_OF_RANGE);
+ 117              	 .loc 1 71 0
+ 118 0066 0C20     	 movs r0,#12
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   }
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** }
+ 119              	 .loc 1 73 0
+ 120 0068 14B0     	 add sp,sp,#80
+ 121              	.LCFI2:
+ 122              	 .cfi_remember_state
+ 123              	 .cfi_def_cfa_offset 32
+ 124              	 
+ 125 006a BDE8F087 	 pop {r4,r5,r6,r7,r8,r9,r10,pc}
+ 126              	.L6:
+ 127              	.LCFI3:
+ 128              	 .cfi_restore_state
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****     return (RADAR_ERR_OK);
+ 129              	 .loc 1 66 0
+ 130 006e 01A8     	 add r0,sp,#4
+ 131 0070 FFF7FEFF 	 bl ds_algo_store_settings
+ 132              	.LVL7:
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   }
+ 133              	 .loc 1 67 0
+ 134 0074 2046     	 mov r0,r4
+ 135              	 .loc 1 73 0
+ 136 0076 14B0     	 add sp,sp,#80
+ 137              	.LCFI4:
+ 138              	 .cfi_def_cfa_offset 32
+ 139              	 
+ 140 0078 BDE8F087 	 pop {r4,r5,r6,r7,r8,r9,r10,pc}
+ 141              	 .cfi_endproc
+ 142              	.LFE470:
+ 144              	 .section .text.radar_get_dsp_settings,"ax",%progbits
+ 145              	 .align 2
+ 146              	 .global radar_get_dsp_settings
+ 147              	 .thumb
+ 148              	 .thumb_func
+ 150              	radar_get_dsp_settings:
+ 151              	.LFB471:
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** //============================================================================
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** uint16_t radar_get_dsp_settings(Radar_Handle_t device, DSP_Settings_t* configuration)
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** {
+ 152              	 .loc 1 78 0
+ 153              	 .cfi_startproc
+ 154              	 
+ 155              	 
+ 156              	.LVL8:
+ 157 0000 F8B5     	 push {r3,r4,r5,r6,r7,lr}
+ 158              	.LCFI5:
+ 159              	 .cfi_def_cfa_offset 24
+ 160              	 .cfi_offset 3,-24
+ 161              	 .cfi_offset 4,-20
+ 162              	 .cfi_offset 5,-16
+ 163              	 .cfi_offset 6,-12
+ 164              	 .cfi_offset 7,-8
+ 165              	 .cfi_offset 14,-4
+ 166              	 .loc 1 78 0
+ 167 0002 0C46     	 mov r4,r1
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   algo_settings_t *p_ds_config = ds_algo_get_settings();
+ 168              	 .loc 1 80 0
+ 169 0004 FFF7FEFF 	 bl ds_algo_get_settings
+ 170              	.LVL9:
+ 171 0008 0346     	 mov r3,r0
+ 172              	.LVL10:
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->enable_tracking      = p_ds_config->tracking_enable;
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->enable_mti_filter    = p_ds_config->mti_filter_enable;
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->num_of_tracks        = p_ds_config->num_of_tracks;
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->mti_filter_length    = p_ds_config->mti_filter_len;
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->median_filter_length = p_ds_config->median_filter_len;
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->range_mvg_avg_length = p_ds_config->mvg_avg_len;
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->min_range_cm         = p_ds_config->min_distance_cm;
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->max_range_cm         = p_ds_config->max_distance_cm;
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->range_threshold      = p_ds_config->range_detection_threshold;
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->min_speed_kmh        = p_ds_config->min_speed_kmh;
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->max_speed_kmh        = p_ds_config->max_speed_kmh;
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->speed_threshold      = p_ds_config->speed_detection_threshold;
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   return (RADAR_ERR_OK);
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** }
+ 173              	 .loc 1 97 0
+ 174 000a 0020     	 movs r0,#0
+ 175              	.LVL11:
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->enable_mti_filter    = p_ds_config->mti_filter_enable;
+ 176              	 .loc 1 82 0
+ 177 000c DA68     	 ldr r2,[r3,#12]
+ 178 000e A274     	 strb r2,[r4,#18]
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->num_of_tracks        = p_ds_config->num_of_tracks;
+ 179              	 .loc 1 83 0
+ 180 0010 1A6A     	 ldr r2,[r3,#32]
+ 181 0012 6275     	 strb r2,[r4,#21]
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->mti_filter_length    = p_ds_config->mti_filter_len;
+ 182              	 .loc 1 84 0
+ 183 0014 1A69     	 ldr r2,[r3,#16]
+ 184 0016 E274     	 strb r2,[r4,#19]
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->range_mvg_avg_length = p_ds_config->mvg_avg_len;
+ 185              	 .loc 1 86 0
+ 186 0018 9A69     	 ldr r2,[r3,#24]
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->median_filter_length = p_ds_config->median_filter_len;
+ 187              	 .loc 1 85 0
+ 188 001a D3F81CE0 	 ldr lr,[r3,#28]
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->range_mvg_avg_length = p_ds_config->mvg_avg_len;
+ 189              	 .loc 1 86 0
+ 190 001e 2275     	 strb r2,[r4,#20]
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->min_range_cm         = p_ds_config->min_distance_cm;
+ 191              	 .loc 1 87 0
+ 192 0020 5A69     	 ldr r2,[r3,#20]
+ 193 0022 2270     	 strb r2,[r4]
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->max_range_cm         = p_ds_config->max_distance_cm;
+ 194              	 .loc 1 88 0
+ 195 0024 DF6A     	 ldr r7,[r3,#44]
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->range_threshold      = p_ds_config->range_detection_threshold;
+ 196              	 .loc 1 89 0
+ 197 0026 1E6B     	 ldr r6,[r3,#48]
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+ 198              	 .loc 1 90 0
+ 199 0028 5D6B     	 ldr r5,[r3,#52]
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->max_speed_kmh        = p_ds_config->max_speed_kmh;
+ 200              	 .loc 1 92 0
+ 201 002a D96B     	 ldr r1,[r3,#60]
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->speed_threshold      = p_ds_config->speed_detection_threshold;
+ 202              	 .loc 1 93 0
+ 203 002c 1A6C     	 ldr r2,[r3,#64]
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+ 204              	 .loc 1 94 0
+ 205 002e 9B6B     	 ldr r3,[r3,#56]
+ 206              	.LVL12:
+ 207 0030 2382     	 strh r3,[r4,#16]
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->median_filter_length = p_ds_config->median_filter_len;
+ 208              	 .loc 1 85 0
+ 209 0032 A4F816E0 	 strh lr,[r4,#22]
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->max_range_cm         = p_ds_config->max_distance_cm;
+ 210              	 .loc 1 88 0
+ 211 0036 6780     	 strh r7,[r4,#2]
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->range_threshold      = p_ds_config->range_detection_threshold;
+ 212              	 .loc 1 89 0
+ 213 0038 A680     	 strh r6,[r4,#4]
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   
+ 214              	 .loc 1 90 0
+ 215 003a E581     	 strh r5,[r4,#14]
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->max_speed_kmh        = p_ds_config->max_speed_kmh;
+ 216              	 .loc 1 92 0
+ 217 003c E180     	 strh r1,[r4,#6]
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   configuration->speed_threshold      = p_ds_config->speed_detection_threshold;
+ 218              	 .loc 1 93 0
+ 219 003e 2281     	 strh r2,[r4,#8]
+ 220              	 .loc 1 97 0
+ 221 0040 F8BD     	 pop {r3,r4,r5,r6,r7,pc}
+ 222              	 .cfi_endproc
+ 223              	.LFE471:
+ 225              	 .section .text.radar_get_target_info,"ax",%progbits
+ 226              	 .align 2
+ 227              	 .global radar_get_target_info
+ 228              	 .thumb
+ 229              	 .thumb_func
+ 231              	radar_get_target_info:
+ 232              	.LFB472:
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** //============================================================================
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** uint16_t radar_get_target_info(Radar_Handle_t device, Target_Info_t* target_info, uint8_t* target_c
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** {
+ 233              	 .loc 1 102 0
+ 234              	 .cfi_startproc
+ 235              	 
+ 236              	 
+ 237              	.LVL13:
+ 238 0000 08B5     	 push {r3,lr}
+ 239              	.LCFI6:
+ 240              	 .cfi_def_cfa_offset 8
+ 241              	 .cfi_offset 3,-8
+ 242              	 .cfi_offset 14,-4
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   ds_ep_fetch_target_list(target_info, target_count);
+ 243              	 .loc 1 105 0
+ 244 0002 0846     	 mov r0,r1
+ 245              	.LVL14:
+ 246 0004 1146     	 mov r1,r2
+ 247              	.LVL15:
+ 248 0006 FFF7FEFF 	 bl ds_ep_fetch_target_list
+ 249              	.LVL16:
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   return (RADAR_ERR_OK);
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** }
+ 250              	 .loc 1 107 0
+ 251 000a 0020     	 movs r0,#0
+ 252 000c 08BD     	 pop {r3,pc}
+ 253              	 .cfi_endproc
+ 254              	.LFE472:
+ 256 000e 00BF     	 .section .text.radar_get_range_detection_threshold,"ax",%progbits
+ 257              	 .align 2
+ 258              	 .global radar_get_range_detection_threshold
+ 259              	 .thumb
+ 260              	 .thumb_func
+ 262              	radar_get_range_detection_threshold:
+ 263              	.LFB473:
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** //============================================================================
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** uint16_t radar_get_range_detection_threshold(Radar_Handle_t device, uint16_t *threshold)
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** {
+ 264              	 .loc 1 112 0
+ 265              	 .cfi_startproc
+ 266              	 
+ 267              	 
+ 268              	.LVL17:
+ 269 0000 08B5     	 push {r3,lr}
+ 270              	.LCFI7:
+ 271              	 .cfi_def_cfa_offset 8
+ 272              	 .cfi_offset 3,-8
+ 273              	 .cfi_offset 14,-4
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** 
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   ds_ep_fetch_range_detection_threshold(threshold);
+ 274              	 .loc 1 115 0
+ 275 0002 0846     	 mov r0,r1
+ 276              	.LVL18:
+ 277 0004 FFF7FEFF 	 bl ds_ep_fetch_range_detection_threshold
+ 278              	.LVL19:
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c ****   return (RADAR_ERR_OK);
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_target_detection.c **** }
+ 279              	 .loc 1 117 0
+ 280 0008 0020     	 movs r0,#0
+ 281 000a 08BD     	 pop {r3,pc}
+ 282              	 .cfi_endproc
+ 283              	.LFE473:
+ 285              	 .text
+ 286              	.Letext0:
+ 287              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 288              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 289              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 290              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 291              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 292              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 293              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 294              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 295              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 296              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 297              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 298              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 299              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 300              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 301              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/ds_radar_interface.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 radar_target_detection.c
+    {standard input}:20     .text.radar_set_dsp_settings:00000000 $t
+    {standard input}:25     .text.radar_set_dsp_settings:00000000 radar_set_dsp_settings
+    {standard input}:145    .text.radar_get_dsp_settings:00000000 $t
+    {standard input}:150    .text.radar_get_dsp_settings:00000000 radar_get_dsp_settings
+    {standard input}:226    .text.radar_get_target_info:00000000 $t
+    {standard input}:231    .text.radar_get_target_info:00000000 radar_get_target_info
+    {standard input}:257    .text.radar_get_range_detection_threshold:00000000 $t
+    {standard input}:262    .text.radar_get_range_detection_threshold:00000000 radar_get_range_detection_threshold
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+memset
+ds_algo_fetch_settings
+ds_algo_check_settings
+ds_algo_store_settings
+ds_algo_get_settings
+ds_ep_fetch_target_list
+ds_ep_fetch_range_detection_threshold

@@ -1,0 +1,227 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "stream_interface_usb.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.com_init,"ax",%progbits
+  20              	 .align 2
+  21              	 .global com_init
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	com_init:
+  26              	.LFB470:
+  27              	 .file 1 "../BSP/Position2Go/src/stream_interface_usb.c"
+   1:../BSP/Position2Go/src/stream_interface_usb.c **** /**
+   2:../BSP/Position2Go/src/stream_interface_usb.c ****     @file: stream_interface_usb.c
+   3:../BSP/Position2Go/src/stream_interface_usb.c **** 
+   4:../BSP/Position2Go/src/stream_interface_usb.c ****   	@brief: This module implements the communication interface functions needed
+   5:../BSP/Position2Go/src/stream_interface_usb.c ****   	for the communication protocol from the header \ref StreamInterface.h. 
+   6:../BSP/Position2Go/src/stream_interface_usb.c ****   	Data is sent received through a virtual serial interface over a USB CDC Device.
+   7:../BSP/Position2Go/src/stream_interface_usb.c ****  */
+   8:../BSP/Position2Go/src/stream_interface_usb.c **** 
+   9:../BSP/Position2Go/src/stream_interface_usb.c **** /* ===========================================================================
+  10:../BSP/Position2Go/src/stream_interface_usb.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  11:../BSP/Position2Go/src/stream_interface_usb.c **** ** All rights reserved.
+  12:../BSP/Position2Go/src/stream_interface_usb.c **** ** ===========================================================================
+  13:../BSP/Position2Go/src/stream_interface_usb.c **** **
+  14:../BSP/Position2Go/src/stream_interface_usb.c **** ** ===========================================================================
+  15:../BSP/Position2Go/src/stream_interface_usb.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  16:../BSP/Position2Go/src/stream_interface_usb.c **** ** Passing on and copying of this document, and communication of its contents
+  17:../BSP/Position2Go/src/stream_interface_usb.c **** ** is not permitted without Infineon's prior written authorization.
+  18:../BSP/Position2Go/src/stream_interface_usb.c **** ** ===========================================================================
+  19:../BSP/Position2Go/src/stream_interface_usb.c **** */
+  20:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  21:../BSP/Position2Go/src/stream_interface_usb.c **** /*
+  22:../BSP/Position2Go/src/stream_interface_usb.c **** ==============================================================================
+  23:../BSP/Position2Go/src/stream_interface_usb.c ****    1. INCLUDE FILES
+  24:../BSP/Position2Go/src/stream_interface_usb.c **** ==============================================================================
+  25:../BSP/Position2Go/src/stream_interface_usb.c ****  */
+  26:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  27:../BSP/Position2Go/src/stream_interface_usb.c **** #include "StreamInterface.h"
+  28:../BSP/Position2Go/src/stream_interface_usb.c **** #include "USBD/usbd.h"
+  29:../BSP/Position2Go/src/stream_interface_usb.c **** #include "DAVE.h"
+  30:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  31:../BSP/Position2Go/src/stream_interface_usb.c **** /*
+  32:../BSP/Position2Go/src/stream_interface_usb.c **** ==============================================================================
+  33:../BSP/Position2Go/src/stream_interface_usb.c ****    2. EXPORTED FUNCTIONS
+  34:../BSP/Position2Go/src/stream_interface_usb.c **** ==============================================================================
+  35:../BSP/Position2Go/src/stream_interface_usb.c ****  */
+  36:../BSP/Position2Go/src/stream_interface_usb.c ****    
+  37:../BSP/Position2Go/src/stream_interface_usb.c **** void com_init(void)
+  38:../BSP/Position2Go/src/stream_interface_usb.c **** {
+  28              	 .loc 1 38 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	 
+  33 0000 7047     	 bx lr
+  34              	 .cfi_endproc
+  35              	.LFE470:
+  37 0002 00BF     	 .section .text.com_send_data,"ax",%progbits
+  38              	 .align 2
+  39              	 .global com_send_data
+  40              	 .thumb
+  41              	 .thumb_func
+  43              	com_send_data:
+  44              	.LFB471:
+  39:../BSP/Position2Go/src/stream_interface_usb.c ****   /* Don't do anything here as the init must have been done already when calling dave_init */
+  40:../BSP/Position2Go/src/stream_interface_usb.c **** }
+  41:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  42:../BSP/Position2Go/src/stream_interface_usb.c **** //============================================================================
+  43:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  44:../BSP/Position2Go/src/stream_interface_usb.c **** void com_send_data(const void* pData, uint16_t uNumBytes)
+  45:../BSP/Position2Go/src/stream_interface_usb.c **** {
+  45              	 .loc 1 45 0
+  46              	 .cfi_startproc
+  47              	 
+  48              	 
+  49              	 
+  50              	.LVL0:
+  46:../BSP/Position2Go/src/stream_interface_usb.c ****   USBD_VCOM_SendData(pData,uNumBytes);
+  51              	 .loc 1 46 0
+  52 0000 FFF7FEBF 	 b USBD_VCOM_SendData
+  53              	.LVL1:
+  54              	 .cfi_endproc
+  55              	.LFE471:
+  57              	 .section .text.com_get_data,"ax",%progbits
+  58              	 .align 2
+  59              	 .global com_get_data
+  60              	 .thumb
+  61              	 .thumb_func
+  63              	com_get_data:
+  64              	.LFB472:
+  47:../BSP/Position2Go/src/stream_interface_usb.c **** }
+  48:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  49:../BSP/Position2Go/src/stream_interface_usb.c **** //============================================================================
+  50:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  51:../BSP/Position2Go/src/stream_interface_usb.c **** uint16_t com_get_data(void* pData, uint16_t uNumBytes)
+  52:../BSP/Position2Go/src/stream_interface_usb.c **** {
+  65              	 .loc 1 52 0
+  66              	 .cfi_startproc
+  67              	 
+  68              	 
+  69              	.LVL2:
+  70 0000 38B5     	 push {r3,r4,r5,lr}
+  71              	.LCFI0:
+  72              	 .cfi_def_cfa_offset 16
+  73              	 .cfi_offset 3,-16
+  74              	 .cfi_offset 4,-12
+  75              	 .cfi_offset 5,-8
+  76              	 .cfi_offset 14,-4
+  77              	 .loc 1 52 0
+  78 0002 0C46     	 mov r4,r1
+  79 0004 0546     	 mov r5,r0
+  53:../BSP/Position2Go/src/stream_interface_usb.c ****   uint16_t bytes = 0;
+  54:../BSP/Position2Go/src/stream_interface_usb.c ****   
+  55:../BSP/Position2Go/src/stream_interface_usb.c ****   bytes = USBD_VCOM_BytesReceived();
+  80              	 .loc 1 55 0
+  81 0006 FFF7FEFF 	 bl USBD_VCOM_BytesReceived
+  82              	.LVL3:
+  56:../BSP/Position2Go/src/stream_interface_usb.c ****   
+  57:../BSP/Position2Go/src/stream_interface_usb.c ****   bytes = (bytes > uNumBytes) ? uNumBytes : bytes;
+  83              	 .loc 1 57 0
+  84 000a A042     	 cmp r0,r4
+  85 000c 28BF     	 it cs
+  86 000e 2046     	 movcs r0,r4
+  87              	.LVL4:
+  88 0010 84B2     	 uxth r4,r0
+  89              	.LVL5:
+  58:../BSP/Position2Go/src/stream_interface_usb.c ****   
+  59:../BSP/Position2Go/src/stream_interface_usb.c ****   if (bytes)
+  90              	 .loc 1 59 0
+  91 0012 1CB1     	 cbz r4,.L4
+  60:../BSP/Position2Go/src/stream_interface_usb.c ****   {
+  61:../BSP/Position2Go/src/stream_interface_usb.c ****     USBD_VCOM_ReceiveData((int8_t*)pData, bytes);
+  92              	 .loc 1 61 0
+  93 0014 2846     	 mov r0,r5
+  94 0016 2146     	 mov r1,r4
+  95 0018 FFF7FEFF 	 bl USBD_VCOM_ReceiveData
+  96              	.LVL6:
+  97              	.L4:
+  62:../BSP/Position2Go/src/stream_interface_usb.c ****   }
+  63:../BSP/Position2Go/src/stream_interface_usb.c ****   
+  64:../BSP/Position2Go/src/stream_interface_usb.c ****   return (bytes);
+  65:../BSP/Position2Go/src/stream_interface_usb.c **** }
+  98              	 .loc 1 65 0
+  99 001c 2046     	 mov r0,r4
+ 100 001e 38BD     	 pop {r3,r4,r5,pc}
+ 101              	 .cfi_endproc
+ 102              	.LFE472:
+ 104              	 .section .text.com_flush,"ax",%progbits
+ 105              	 .align 2
+ 106              	 .global com_flush
+ 107              	 .thumb
+ 108              	 .thumb_func
+ 110              	com_flush:
+ 111              	.LFB473:
+  66:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  67:../BSP/Position2Go/src/stream_interface_usb.c **** //============================================================================
+  68:../BSP/Position2Go/src/stream_interface_usb.c **** 
+  69:../BSP/Position2Go/src/stream_interface_usb.c **** void com_flush(void)
+  70:../BSP/Position2Go/src/stream_interface_usb.c **** {
+ 112              	 .loc 1 70 0
+ 113              	 .cfi_startproc
+ 114              	 
+ 115              	 
+ 116              	 
+  71:../BSP/Position2Go/src/stream_interface_usb.c ****   CDC_Device_USBTask(&USBD_VCOM_cdc_interface);	/* Do nothing as USBD VCOM already flushes the data
+ 117              	 .loc 1 71 0
+ 118 0000 0148     	 ldr r0,.L11
+ 119 0002 FFF7FEBF 	 b CDC_Device_USBTask
+ 120              	.LVL7:
+ 121              	.L12:
+ 122 0006 00BF     	 .align 2
+ 123              	.L11:
+ 124 0008 00000000 	 .word USBD_VCOM_cdc_interface
+ 125              	 .cfi_endproc
+ 126              	.LFE473:
+ 128              	 .text
+ 129              	.Letext0:
+ 130              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 131              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 132              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 133              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 134              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 135              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 136              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 137              	 .file 9 "e:\\nova\\assets\\ifx_p2g-hw-sw_v1.0.4\\firmware_software\\dave project\\p2g_fw\\dave\\generated\\usbd\\usb\\core\\endpoint.h"
+ 138              	 .file 10 "e:\\nova\\assets\\ifx_p2g-hw-sw_v1.0.4\\firmware_software\\dave project\\p2g_fw\\dave\\generated\\usbd_vcom\\class_driver\\common\\cdc_class_common.h"
+ 139              	 .file 11 "e:\\nova\\assets\\ifx_p2g-hw-sw_v1.0.4\\firmware_software\\dave project\\p2g_fw\\dave\\generated\\usbd_vcom\\class_driver\\device/cdc_class_device.h"
+ 140              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD_VCOM/usbd_vcom.h"
+ 141              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 142              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 143              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 144              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 145              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD_VCOM/usbd_vcom_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 stream_interface_usb.c
+    {standard input}:20     .text.com_init:00000000 $t
+    {standard input}:25     .text.com_init:00000000 com_init
+    {standard input}:38     .text.com_send_data:00000000 $t
+    {standard input}:43     .text.com_send_data:00000000 com_send_data
+    {standard input}:58     .text.com_get_data:00000000 $t
+    {standard input}:63     .text.com_get_data:00000000 com_get_data
+    {standard input}:105    .text.com_flush:00000000 $t
+    {standard input}:110    .text.com_flush:00000000 com_flush
+    {standard input}:124    .text.com_flush:00000008 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+USBD_VCOM_SendData
+USBD_VCOM_BytesReceived
+USBD_VCOM_ReceiveData
+CDC_Device_USBTask
+USBD_VCOM_cdc_interface

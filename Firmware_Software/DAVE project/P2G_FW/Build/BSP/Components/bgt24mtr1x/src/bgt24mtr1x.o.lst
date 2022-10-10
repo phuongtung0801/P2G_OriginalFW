@@ -1,0 +1,1798 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "bgt24mtr1x.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.bgt24mtr1x_init,"ax",%progbits
+  20              	 .align 2
+  21              	 .global bgt24mtr1x_init
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	bgt24mtr1x_init:
+  26              	.LFB470:
+  27              	 .file 1 "../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c"
+   1:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** /**
+   2:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     @file: bgt24mtr1x.c
+   3:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+   4:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     @brief: This file provides the BGT24MTR12 – 24GHz Radar IC low level driver.
+   5:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 	    It contains a set of functions to configure and use BGT24MTR12 Radar device.
+   6:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** */
+   7:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+   8:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** /* ===========================================================================
+   9:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ** All rights reserved.
+  11:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ** ===========================================================================
+  12:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** **
+  13:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ** ===========================================================================
+  14:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ** is not permitted without Infineon's prior written authorization.
+  17:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ** ===========================================================================
+  18:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** */
+  19:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  20:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** /*
+  21:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ==============================================================================
+  22:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****    1. INCLUDE FILES
+  23:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ==============================================================================
+  24:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****  */
+  25:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  26:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** #include "bgt24mtr1x.h"
+  27:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  28:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** /*
+  29:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ==============================================================================
+  30:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****    2. DATA
+  31:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ==============================================================================
+  32:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****  */
+  33:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  34:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** static volatile uint16_t bgt24mtr1x_ana_command = BGT24MTR1X_ANA_CMD_TX_POWER_REF; /**< Current ind
+  35:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  36:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** static volatile uint16_t bgt24mtr1x_global_config = BGT24MTR1X_BASE_CONF; /**< Current BGT24MTR1x c
+  37:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  38:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** static SPI_DIGITAL_IOs_t bgt24mtr1x_spi_pins; /**< SPI GPIOs used to configure BGT24MTR1x device */
+  39:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  40:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** /*
+  41:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ==============================================================================
+  42:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****    3. EXPORTED FUNCTIONS
+  43:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** ==============================================================================
+  44:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****  */
+  45:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  46:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_init(Bgt24mtr1x_LNAgain_t lna_gain, Bgt24mtr1x_Power_t power_level)
+  47:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+  28              	 .loc 1 47 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	 
+  33              	.LVL0:
+  48:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config = BGT24MTR1X_BASE_CONF;
+  49:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+  50:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Set the digital IOs used by SPI interface */
+  51:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_spi_pins.spi_device    = BGT_DEVICE;
+  34              	 .loc 1 51 0
+  35 0000 364A     	 ldr r2,.L17
+  48:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config = BGT24MTR1X_BASE_CONF;
+  36              	 .loc 1 48 0
+  37 0002 374B     	 ldr r3,.L17+4
+  47:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config = BGT24MTR1X_BASE_CONF;
+  38              	 .loc 1 47 0
+  39 0004 F0B4     	 push {r4,r5,r6,r7}
+  40              	.LCFI0:
+  41              	 .cfi_def_cfa_offset 16
+  42              	 .cfi_offset 4,-16
+  43              	 .cfi_offset 5,-12
+  44              	 .cfi_offset 6,-8
+  45              	 .cfi_offset 7,-4
+  52:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_spi_pins.gpio_cs_pin 	= (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_BGT24;
+  46              	 .loc 1 52 0
+  47 0006 374E     	 ldr r6,.L17+8
+  48 0008 5660     	 str r6,[r2,#4]
+  48:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config = BGT24MTR1X_BASE_CONF;
+  49              	 .loc 1 48 0
+  50 000a 41F24807 	 movw r7,#4168
+  53:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_spi_pins.gpio_data_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_DATA;
+  51              	 .loc 1 53 0
+  52 000e 364D     	 ldr r5,.L17+12
+  54:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_spi_pins.gpio_clk_pin 	= (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CLK;
+  53              	 .loc 1 54 0
+  54 0010 364C     	 ldr r4,.L17+16
+  48:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+  55              	 .loc 1 48 0
+  56 0012 1F80     	 strh r7,[r3]
+  51:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_spi_pins.gpio_cs_pin 	= (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_BGT24;
+  57              	 .loc 1 51 0
+  58 0014 0026     	 movs r6,#0
+  59 0016 1670     	 strb r6,[r2]
+  53:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_spi_pins.gpio_clk_pin 	= (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CLK;
+  60              	 .loc 1 53 0
+  61 0018 9560     	 str r5,[r2,#8]
+  62              	 .loc 1 54 0
+  63 001a D460     	 str r4,[r2,#12]
+  55:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+  56:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   if (lna_gain)
+  57:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   {
+  58:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config &= BGT24MTR1X_ENA_LNA_MASK;
+  64              	 .loc 1 58 0
+  65 001c 1A88     	 ldrh r2,[r3]
+  56:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   {
+  66              	 .loc 1 56 0
+  67 001e 98B9     	 cbnz r0,.L16
+  59:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   }
+  60:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   else
+  61:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   {
+  62:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_DIS_LNA_MASK;
+  68              	 .loc 1 62 0
+  69 0020 6FEA4242 	 mvn r2,r2,lsl#17
+  70 0024 6FEA5242 	 mvn r2,r2,lsr#17
+  71 0028 92B2     	 uxth r2,r2
+  72 002a 1A80     	 strh r2,[r3]
+  73              	.L3:
+  74              	.LVL1:
+  75              	.LBB36:
+  76              	.LBB37:
+  63:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   }
+  64:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+  65:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Configure BGT24MTR1x */
+  66:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_tx_power(power_level);
+  67:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+  68:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_ana_vref_tx();
+  69:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+  70:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  71:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+  72:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  73:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_start_tx(void)
+  74:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+  75:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_ENA_PA_MASK;
+  76:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config(bgt24mtr1x_global_config);
+  77:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+  78:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  79:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+  80:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  81:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_stop_tx(void)
+  82:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+  83:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config |= BGT24MTR1X_DIS_PA_MASK;
+  84:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config(bgt24mtr1x_global_config);
+  85:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+  86:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  87:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+  88:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  89:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_power_up(void)
+  90:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+  91:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* After turning on BGT, then We should keep CE pin high.
+  92:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****    * CE pin is active low, so it should keep high until it is activated.
+  93:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****    */
+  94:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_SPI_M_CS_BGT24);
+  95:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_BGT_POWER_ENABLE);
+  96:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+  97:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+  98:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+  99:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 100:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_power_down(void)
+ 101:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 102:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Before turning off BGT, we should keep SPI's signals low
+ 103:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   * to avoid offset voltage at BGT's VCC.
+ 104:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   *
+ 105:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   * If they are above 0.3V which is bias voltage inside BGT, then inside BGT turns on.
+ 106:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   * It makes offset voltage at BGT's VCC.
+ 107:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   */
+ 108:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_SPI_M_CS_BGT24);
+ 109:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_BGT_POWER_ENABLE);
+ 110:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 111:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 112:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 113:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 114:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_set_tx_power(Bgt24mtr1x_Power_t power_level)
+ 115:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 116:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Clear the last 3-bits */
+ 117:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= 0xFFF8;
+  77              	 .loc 1 117 0
+  78 002c 1A88     	 ldrh r2,[r3]
+  79 002e 22F00702 	 bic r2,r2,#7
+  80 0032 1204     	 lsls r2,r2,#16
+  81 0034 120C     	 lsrs r2,r2,#16
+  82 0036 1A80     	 strh r2,[r3]
+ 118:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 119:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   switch (power_level)
+  83              	 .loc 1 119 0
+  84 0038 0629     	 cmp r1,#6
+  85 003a 4AD8     	 bhi .L4
+  86 003c DFE801F0 	 tbb [pc,r1]
+  87              	.L6:
+  88 0040 25       	 .byte (.L5-.L6)/2
+  89 0041 2B       	 .byte (.L7-.L6)/2
+  90 0042 31       	 .byte (.L8-.L6)/2
+  91 0043 37       	 .byte (.L9-.L6)/2
+  92 0044 3D       	 .byte (.L10-.L6)/2
+  93 0045 43       	 .byte (.L11-.L6)/2
+  94 0046 08       	 .byte (.L12-.L6)/2
+  95              	.LVL2:
+  96 0047 00       	 .p2align 1
+  97              	.L16:
+  98              	.LBE37:
+  99              	.LBE36:
+  58:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   }
+ 100              	 .loc 1 58 0
+ 101 0048 C2F30E02 	 ubfx r2,r2,#0,#15
+ 102 004c 1A80     	 strh r2,[r3]
+ 103 004e EDE7     	 b .L3
+ 104              	.LVL3:
+ 105              	.L12:
+ 106              	.LBB45:
+ 107              	.LBB42:
+ 120:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   {
+ 121:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   case BGT24MTR1X_TX_MIN:
+ 122:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     /* Reduction by 9dBm */
+ 123:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_PC_PA_7;
+ 124:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 125:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 126:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   case BGT24MTR1X_TX_LEVEL_1:
+ 127:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     /* Reduction by 6dBm */
+ 128:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_PC_PA_6;
+ 129:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 130:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 131:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   case BGT24MTR1X_TX_LEVEL_2:
+ 132:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     /* Reduction by 4dBm */
+ 133:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_PC_PA_5;
+ 134:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 135:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 136:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   case BGT24MTR1X_TX_MID:
+ 137:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     /* Reduction by 2.5dBm */
+ 138:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_PC_PA_4;
+ 139:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 140:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 141:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   case BGT24MTR1X_TX_LEVEL_4:
+ 142:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     /* Reduction by 1.4dBm */
+ 143:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_PC_PA_3;
+ 144:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 145:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 146:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   case BGT24MTR1X_TX_LEVEL_5:
+ 147:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     /* Reduction by 0.8dBm */
+ 148:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_PC_PA_2;
+ 149:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 150:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 151:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   case BGT24MTR1X_TX_LEVEL_6:
+ 152:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     /* Reduction by 0.4dBm */
+ 153:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_PC_PA_1;
+ 108              	 .loc 1 153 0
+ 109 0050 1A88     	 ldrh r2,[r3]
+ 110 0052 92B2     	 uxth r2,r2
+ 111 0054 42F00102 	 orr r2,r2,#1
+ 112 0058 1A80     	 strh r2,[r3]
+ 113              	.L13:
+ 114              	.LBB38:
+ 115              	.LBB39:
+ 154:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 155:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 156:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   case BGT24MTR1X_TX_MAX:
+ 157:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   default:
+ 158:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     /* TX on with maximum power */
+ 159:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     bgt24mtr1x_global_config |= BGT24MTR1X_PC_PA_0;
+ 160:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   }
+ 161:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 162:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_ana_vout_tx();
+ 163:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 164:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 165:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 166:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 167:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** uint8_t bgt24mtr1x_get_tx_power(void)
+ 168:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 169:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* lower byte contains the Tx power levels info */
+ 170:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   return (uint8_t)(bgt24mtr1x_global_config & 0x07);
+ 171:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 172:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 173:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 174:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 175:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_lna_gain_enable(void)
+ 176:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 177:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_ENA_LNA_MASK;
+ 178:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 179:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 180:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 181:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 182:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_lna_gain_disable(void)
+ 183:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 184:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config |= BGT24MTR1X_DIS_LNA_MASK;
+ 185:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 186:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 187:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 188:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 189:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** uint8_t bgt24mtr1x_lna_gain_is_enable(void)
+ 190:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 191:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   return (uint8_t)((bgt24mtr1x_global_config & BGT24MTR1X_DIS_LNA_MASK) == 0 ? true : false);
+ 192:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 193:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 194:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 195:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 196:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_set_config(uint16_t config_val)
+ 197:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 198:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   uint16_t shuffled_data = 0;
+ 199:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 200:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Lower byte goes to upper byte position */
+ 201:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   shuffled_data  = (config_val << 8);
+ 202:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 203:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Upper byte goes to lower byte position */
+ 204:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   shuffled_data |= (config_val >> 8);
+ 205:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 206:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Transmit configuration data to BGT24MTR1x through SPI protocol */
+ 207:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   spi_transmit_data((uint8_t *)&shuffled_data , 2U, (void*) &bgt24mtr1x_spi_pins);
+ 208:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 209:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 210:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 211:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 212:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** uint16_t bgt24mtr1x_get_config(void)
+ 213:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 214:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   return (bgt24mtr1x_global_config);
+ 215:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 216:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 217:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 218:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 219:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_ana_temp(void)
+ 220:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 221:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_ana_command = BGT24MTR1X_ANA_CMD_TEMPERATURE;
+ 222:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 223:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_AMUX_VOUT_TX;
+ 224:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 225:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config |= BGT24MTR1X_AMUX_2;
+ 226:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 227:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 228:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 229:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 230:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_ana_vout_tx(void)
+ 231:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 232:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_ana_command = BGT24MTR1X_ANA_CMD_TX_POWER;
+ 116              	 .loc 1 232 0
+ 117 005a 2549     	 ldr r1,.L17+20
+ 118              	.LVL4:
+ 119 005c 0122     	 movs r2,#1
+ 120 005e 0A80     	 strh r2,[r1]
+ 233:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 234:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_AMUX_VOUT_TX;
+ 121              	 .loc 1 234 0
+ 122 0060 1A88     	 ldrh r2,[r3]
+ 123 0062 22F40652 	 bic r2,r2,#8576
+ 124 0066 1204     	 lsls r2,r2,#16
+ 125 0068 120C     	 lsrs r2,r2,#16
+ 126              	.LBE39:
+ 127              	.LBE38:
+ 128              	.LBE42:
+ 129              	.LBE45:
+ 130              	.LBB46:
+ 131              	.LBB47:
+ 235:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 236:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 237:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 238:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 239:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_ana_vref_tx(void)
+ 240:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 241:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_ana_command = BGT24MTR1X_ANA_CMD_TX_POWER_REF;
+ 132              	 .loc 1 241 0
+ 133 006a 0220     	 movs r0,#2
+ 134              	.LVL5:
+ 135              	.LBE47:
+ 136              	.LBE46:
+ 137              	.LBB49:
+ 138              	.LBB43:
+ 139              	.LBB41:
+ 140              	.LBB40:
+ 234:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 141              	 .loc 1 234 0
+ 142 006c 1A80     	 strh r2,[r3]
+ 143              	.LBE40:
+ 144              	.LBE41:
+ 145              	.LBE43:
+ 146              	.LBE49:
+ 147              	.LBB50:
+ 148              	.LBB48:
+ 149              	 .loc 1 241 0
+ 150 006e 0880     	 strh r0,[r1]
+ 242:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 243:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_AMUX_VOUT_TX;
+ 151              	 .loc 1 243 0
+ 152 0070 1A88     	 ldrh r2,[r3]
+ 153 0072 22F40652 	 bic r2,r2,#8576
+ 154 0076 1204     	 lsls r2,r2,#16
+ 155 0078 120C     	 lsrs r2,r2,#16
+ 156 007a 1A80     	 strh r2,[r3]
+ 244:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 245:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config |= BGT24MTR1X_AMUX_0;
+ 157              	 .loc 1 245 0
+ 158 007c 1A88     	 ldrh r2,[r3]
+ 159 007e 92B2     	 uxth r2,r2
+ 160 0080 42F08002 	 orr r2,r2,#128
+ 161 0084 1A80     	 strh r2,[r3]
+ 162              	.LBE48:
+ 163              	.LBE50:
+  69:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 164              	 .loc 1 69 0
+ 165 0086 F0BC     	 pop {r4,r5,r6,r7}
+ 166              	.LCFI1:
+ 167              	 .cfi_remember_state
+ 168              	 .cfi_restore 7
+ 169              	 .cfi_restore 6
+ 170              	 .cfi_restore 5
+ 171              	 .cfi_restore 4
+ 172              	 .cfi_def_cfa_offset 0
+ 173 0088 7047     	 bx lr
+ 174              	.LVL6:
+ 175              	.L5:
+ 176              	.LCFI2:
+ 177              	 .cfi_restore_state
+ 178              	.LBB51:
+ 179              	.LBB44:
+ 123:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 180              	 .loc 1 123 0
+ 181 008a 1A88     	 ldrh r2,[r3]
+ 182 008c 92B2     	 uxth r2,r2
+ 183 008e 42F00702 	 orr r2,r2,#7
+ 184 0092 1A80     	 strh r2,[r3]
+ 185 0094 E1E7     	 b .L13
+ 186              	.L7:
+ 128:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 187              	 .loc 1 128 0
+ 188 0096 1A88     	 ldrh r2,[r3]
+ 189 0098 92B2     	 uxth r2,r2
+ 190 009a 42F00602 	 orr r2,r2,#6
+ 191 009e 1A80     	 strh r2,[r3]
+ 192 00a0 DBE7     	 b .L13
+ 193              	.L8:
+ 133:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 194              	 .loc 1 133 0
+ 195 00a2 1A88     	 ldrh r2,[r3]
+ 196 00a4 92B2     	 uxth r2,r2
+ 197 00a6 42F00502 	 orr r2,r2,#5
+ 198 00aa 1A80     	 strh r2,[r3]
+ 199 00ac D5E7     	 b .L13
+ 200              	.L9:
+ 138:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 201              	 .loc 1 138 0
+ 202 00ae 1A88     	 ldrh r2,[r3]
+ 203 00b0 92B2     	 uxth r2,r2
+ 204 00b2 42F00402 	 orr r2,r2,#4
+ 205 00b6 1A80     	 strh r2,[r3]
+ 206 00b8 CFE7     	 b .L13
+ 207              	.L10:
+ 143:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 208              	 .loc 1 143 0
+ 209 00ba 1A88     	 ldrh r2,[r3]
+ 210 00bc 92B2     	 uxth r2,r2
+ 211 00be 42F00302 	 orr r2,r2,#3
+ 212 00c2 1A80     	 strh r2,[r3]
+ 213 00c4 C9E7     	 b .L13
+ 214              	.L11:
+ 148:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 215              	 .loc 1 148 0
+ 216 00c6 1A88     	 ldrh r2,[r3]
+ 217 00c8 92B2     	 uxth r2,r2
+ 218 00ca 42F00202 	 orr r2,r2,#2
+ 219 00ce 1A80     	 strh r2,[r3]
+ 220 00d0 C3E7     	 b .L13
+ 221              	.L4:
+ 159:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   }
+ 222              	 .loc 1 159 0
+ 223 00d2 1A88     	 ldrh r2,[r3]
+ 224 00d4 92B2     	 uxth r2,r2
+ 225 00d6 1A80     	 strh r2,[r3]
+ 226 00d8 BFE7     	 b .L13
+ 227              	.L18:
+ 228 00da 00BF     	 .align 2
+ 229              	.L17:
+ 230 00dc 00000000 	 .word .LANCHOR1
+ 231 00e0 00000000 	 .word .LANCHOR0
+ 232 00e4 00000000 	 .word DIGITAL_IO_SPI_M_CS_BGT24
+ 233 00e8 00000000 	 .word DIGITAL_IO_SPI_M_DATA
+ 234 00ec 00000000 	 .word DIGITAL_IO_SPI_M_CLK
+ 235 00f0 00000000 	 .word .LANCHOR2
+ 236              	.LBE44:
+ 237              	.LBE51:
+ 238              	 .cfi_endproc
+ 239              	.LFE470:
+ 241              	 .section .text.bgt24mtr1x_start_tx,"ax",%progbits
+ 242              	 .align 2
+ 243              	 .global bgt24mtr1x_start_tx
+ 244              	 .thumb
+ 245              	 .thumb_func
+ 247              	bgt24mtr1x_start_tx:
+ 248              	.LFB471:
+  74:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_ENA_PA_MASK;
+ 249              	 .loc 1 74 0
+ 250              	 .cfi_startproc
+ 251              	 
+ 252              	 
+  75:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config(bgt24mtr1x_global_config);
+ 253              	 .loc 1 75 0
+ 254 0000 0B49     	 ldr r1,.L21
+ 255              	.LBB54:
+ 256              	.LBB55:
+ 207:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 257              	 .loc 1 207 0
+ 258 0002 0C4A     	 ldr r2,.L21+4
+ 259              	.LBE55:
+ 260              	.LBE54:
+  75:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config(bgt24mtr1x_global_config);
+ 261              	 .loc 1 75 0
+ 262 0004 0B88     	 ldrh r3,[r1]
+ 263 0006 23F48053 	 bic r3,r3,#4096
+  74:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_ENA_PA_MASK;
+ 264              	 .loc 1 74 0
+ 265 000a 00B5     	 push {lr}
+ 266              	.LCFI3:
+ 267              	 .cfi_def_cfa_offset 4
+ 268              	 .cfi_offset 14,-4
+  75:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config(bgt24mtr1x_global_config);
+ 269              	 .loc 1 75 0
+ 270 000c 1B04     	 lsls r3,r3,#16
+ 271 000e 1B0C     	 lsrs r3,r3,#16
+ 272 0010 0B80     	 strh r3,[r1]
+  76:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 273              	 .loc 1 76 0
+ 274 0012 0B88     	 ldrh r3,[r1]
+  74:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_ENA_PA_MASK;
+ 275              	 .loc 1 74 0
+ 276 0014 83B0     	 sub sp,sp,#12
+ 277              	.LCFI4:
+ 278              	 .cfi_def_cfa_offset 16
+  76:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 279              	 .loc 1 76 0
+ 280 0016 9BB2     	 uxth r3,r3
+ 281              	.LVL7:
+ 282              	.LBB57:
+ 283              	.LBB56:
+ 204:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 284              	 .loc 1 204 0
+ 285 0018 02A8     	 add r0,sp,#8
+ 286 001a 190A     	 lsrs r1,r3,#8
+ 287 001c 41EA0323 	 orr r3,r1,r3,lsl#8
+ 288              	.LVL8:
+ 289 0020 20F8023D 	 strh r3,[r0,#-2]!
+ 207:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 290              	 .loc 1 207 0
+ 291 0024 0221     	 movs r1,#2
+ 292 0026 FFF7FEFF 	 bl spi_transmit_data
+ 293              	.LVL9:
+ 294              	.LBE56:
+ 295              	.LBE57:
+  77:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 296              	 .loc 1 77 0
+ 297 002a 03B0     	 add sp,sp,#12
+ 298              	.LCFI5:
+ 299              	 .cfi_def_cfa_offset 4
+ 300              	 
+ 301 002c 5DF804FB 	 ldr pc,[sp],#4
+ 302              	.L22:
+ 303              	 .align 2
+ 304              	.L21:
+ 305 0030 00000000 	 .word .LANCHOR0
+ 306 0034 00000000 	 .word .LANCHOR1
+ 307              	 .cfi_endproc
+ 308              	.LFE471:
+ 310              	 .section .text.bgt24mtr1x_stop_tx,"ax",%progbits
+ 311              	 .align 2
+ 312              	 .global bgt24mtr1x_stop_tx
+ 313              	 .thumb
+ 314              	 .thumb_func
+ 316              	bgt24mtr1x_stop_tx:
+ 317              	.LFB472:
+  82:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config |= BGT24MTR1X_DIS_PA_MASK;
+ 318              	 .loc 1 82 0
+ 319              	 .cfi_startproc
+ 320              	 
+ 321              	 
+  83:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config(bgt24mtr1x_global_config);
+ 322              	 .loc 1 83 0
+ 323 0000 0B49     	 ldr r1,.L25
+ 324              	.LBB60:
+ 325              	.LBB61:
+ 207:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 326              	 .loc 1 207 0
+ 327 0002 0C4A     	 ldr r2,.L25+4
+ 328              	.LBE61:
+ 329              	.LBE60:
+  83:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config(bgt24mtr1x_global_config);
+ 330              	 .loc 1 83 0
+ 331 0004 0B88     	 ldrh r3,[r1]
+  82:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config |= BGT24MTR1X_DIS_PA_MASK;
+ 332              	 .loc 1 82 0
+ 333 0006 00B5     	 push {lr}
+ 334              	.LCFI6:
+ 335              	 .cfi_def_cfa_offset 4
+ 336              	 .cfi_offset 14,-4
+  83:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config(bgt24mtr1x_global_config);
+ 337              	 .loc 1 83 0
+ 338 0008 9BB2     	 uxth r3,r3
+ 339 000a 43F48053 	 orr r3,r3,#4096
+ 340 000e 0B80     	 strh r3,[r1]
+  84:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 341              	 .loc 1 84 0
+ 342 0010 0B88     	 ldrh r3,[r1]
+  82:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config |= BGT24MTR1X_DIS_PA_MASK;
+ 343              	 .loc 1 82 0
+ 344 0012 83B0     	 sub sp,sp,#12
+ 345              	.LCFI7:
+ 346              	 .cfi_def_cfa_offset 16
+  84:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 347              	 .loc 1 84 0
+ 348 0014 9BB2     	 uxth r3,r3
+ 349              	.LVL10:
+ 350              	.LBB63:
+ 351              	.LBB62:
+ 204:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 352              	 .loc 1 204 0
+ 353 0016 02A8     	 add r0,sp,#8
+ 354 0018 190A     	 lsrs r1,r3,#8
+ 355 001a 41EA0323 	 orr r3,r1,r3,lsl#8
+ 356              	.LVL11:
+ 357 001e 20F8023D 	 strh r3,[r0,#-2]!
+ 207:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 358              	 .loc 1 207 0
+ 359 0022 0221     	 movs r1,#2
+ 360 0024 FFF7FEFF 	 bl spi_transmit_data
+ 361              	.LVL12:
+ 362              	.LBE62:
+ 363              	.LBE63:
+  85:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 364              	 .loc 1 85 0
+ 365 0028 03B0     	 add sp,sp,#12
+ 366              	.LCFI8:
+ 367              	 .cfi_def_cfa_offset 4
+ 368              	 
+ 369 002a 5DF804FB 	 ldr pc,[sp],#4
+ 370              	.L26:
+ 371 002e 00BF     	 .align 2
+ 372              	.L25:
+ 373 0030 00000000 	 .word .LANCHOR0
+ 374 0034 00000000 	 .word .LANCHOR1
+ 375              	 .cfi_endproc
+ 376              	.LFE472:
+ 378              	 .section .text.bgt24mtr1x_power_up,"ax",%progbits
+ 379              	 .align 2
+ 380              	 .global bgt24mtr1x_power_up
+ 381              	 .thumb
+ 382              	 .thumb_func
+ 384              	bgt24mtr1x_power_up:
+ 385              	.LFB473:
+  90:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* After turning on BGT, then We should keep CE pin high.
+ 386              	 .loc 1 90 0
+ 387              	 .cfi_startproc
+ 388              	 
+ 389              	 
+ 390              	 
+ 391 0000 30B4     	 push {r4,r5}
+ 392              	.LCFI9:
+ 393              	 .cfi_def_cfa_offset 8
+ 394              	 .cfi_offset 4,-8
+ 395              	 .cfi_offset 5,-4
+ 396 0002 074A     	 ldr r2,.L29
+ 397 0004 074B     	 ldr r3,.L29+4
+ 398              	.LBB64:
+ 399              	.LBB65:
+ 400              	.LBB66:
+ 401              	 .file 2 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_gpio.h"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @file xmc_gpio.h
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @date 2015-06-20
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @cond
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMClib v2.1.16 - XMC Peripheral Driver Library 
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Copyright (c) 2015-2017, Infineon Technologies AG
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * All rights reserved.                        
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                             
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * following conditions are met:   
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer.                        
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * products derived from this software without specific prior written permission.                  
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Change History
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * --------------
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-02-20:
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Initial draft<br>
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Documentation improved <br>
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *      
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-06-20:
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @endcond
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #ifndef XMC_GPIO_H
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_H
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * HEADER FILES
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc_common.h"
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup XMClib XMC Peripheral Library
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @{
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup GPIO
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @brief General Purpose Input Output (GPIO) driver for the XMC microcontroller family.
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * GPIO driver provide a generic and very flexible software interface for all standard digital I/O 
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Each port slice has individual interfaces for the operation as General Purpose I/O and it furthe
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * connectivity to the on-chip periphery and the control for the pad characteristics. 
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * The driver is divided into Input and Output mode.
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Input mode features:
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Configuration structure XMC_GPIO_CONFIG_t and initialization function XMC_GPIO_Init()
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of weak pull-up or pull-down device. Configuration structure XMC_GPIO_MO
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of input hysteresis. XMC_GPIO_SetInputHysteresis()
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Output mode features:
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of push pull/open drain and Alternate output. Configuration structure XM
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of pad driver strength. Configuration structure XMC_GPIO_OUTPUT_STRENGTH
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of initial output level. Configuration structure XMC_GPIO_OUTPUT_LEVEL_t
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *@{
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * MACROS
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Pos PORT0_IOCR0_PC0_Pos
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Msk PORT0_IOCR0_PC0_Msk
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Size 				(8U)
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 											
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_OUTPUT_LEVEL(level) ((level == XMC_GPIO_OUTPUT_LEVEL_LOW) || \
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             (level == XMC_GPIO_OUTPUT_LEVEL_HIGH))
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_HWCTRL(hwctrl) ((hwctrl == XMC_GPIO_HWCTRL_DISABLED) || \
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL1) || \
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL2))                    
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * ENUMS
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines output level of a pin. Use type \a XMC_GPIO_OUTPUT_LEVEL_t for this enum.
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_OUTPUT_LEVEL
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_LOW  = 0x10000U, /**<  Reset bit */
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_HIGH = 0x1U, 	/**< Set bit  */
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_OUTPUT_LEVEL_t;
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines direct hardware control characteristics of the pin . Use type \a XMC_GPIO_HWCTRL_t for t
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_HWCTRL
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_DISABLED     = 0x0U, /**<  Software control only */
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL1  = 0x1U, /**<  HWI0/HWO0 control path can override the software confi
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL2  = 0x2U  /**<  HWI1/HWO1 control path can override the software confi
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_HWCTRL_t;
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * DEVICE FAMILY EXTENSIONS
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  #if UC_FAMILY == XMC1
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc1_gpio.h"
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #elif UC_FAMILY == XMC4
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc4_gpio.h"
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #else
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #error "xmc_gpio.h: family device not supported"
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * API PROTOTYPES
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #ifdef __cplusplus
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** extern "C" {
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	  Constant pointer pointing to GPIO port, to access port registers like Pn_OUT,Pn_O
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	  Port pin number.
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  config GPIO configuration data structure. Refer data structure @ref XMC_GPIO_CONFIG_t fo
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,hysteresis, push pull
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for a selected \a po
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \a config provides selected I/O settings. It configures hardware registers Pn_IOCR,Pn_OUT, Pn_OM
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,push pull /open drain
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for selected \a port
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * It configures hardware registers Pn_IOCR,Pn_OUT,Pn_OMR,Pn_PDISC and Pn_PDR.\n
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * This API is called in definition of DAVE_init by code generation and therefore should not be exp
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * for the normal operation. Use other APIs only after DAVE_init is called successfully (returns DA
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_Init(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_CONFIG_t *const c
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	Constant pointer pointing to GPIO port, to access hardware register Pn_IOCR.
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  mode input / output functionality selection. Refer @ref XMC_GPIO_MODE_t for valid values
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets digital input and output driver functionality and characteristics of a GPIO port pin. It co
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * registers Pn_IOCR. \a mode is initially configured during initialization in XMC_GPIO_Init(). Cal
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * the port direction functionality as needed later in the program.
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_SetMode(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_MODE_t mode);
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	 Constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	 Port pin number.
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  level output level selection. Refer @ref XMC_GPIO_OUTPUT_LEVEL_t for valid values.
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Set port pin output level to high or low.It configures hardware registers Pn_OMR.\a level is ini
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * configured during initialization in XMC_GPIO_Init(). Call this API to alter output level as need
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLevel(XMC_GPIO_PORT_t *const port, const uint8_t pin, const 
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid output level", XMC_GPIO_CHECK_OUTPUT_LEVEL(level));
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)level << pin;
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  Sets port pin output to high. It configures hardware registers Pn_OMR.
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  \par<b>Related APIs:</b><BR>
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputLow()
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().\n
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputHigh: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)0x1U << pin;
+ 402              	 .loc 2 260 0
+ 403 0006 157C     	 ldrb r5,[r2,#16]
+ 404              	.LBE66:
+ 405              	.LBE65:
+ 406              	.LBE64:
+ 407              	.LBB73:
+ 408              	.LBB74:
+ 409              	.LBB75:
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	port pin number.
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return  None
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Description:</b><br>
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets port pin output to low. It configures hardware registers Pn_OMR.\n
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>>
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMC_GPIO_SetOutputHigh()
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Note:</b><br>
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLow(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLow: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = 0x10000U << pin;
+ 410              	 .loc 2 286 0
+ 411 0008 1C7C     	 ldrb r4,[r3,#16]
+ 412 000a 1068     	 ldr r0,[r2]
+ 413              	.LVL13:
+ 414 000c 1968     	 ldr r1,[r3]
+ 415              	.LVL14:
+ 416              	.LBE75:
+ 417              	.LBE74:
+ 418              	.LBE73:
+ 419              	.LBB82:
+ 420              	.LBB70:
+ 421              	.LBB67:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 422              	 .loc 2 260 0
+ 423 000e 0122     	 movs r2,#1
+ 424              	.LBE67:
+ 425              	.LBE70:
+ 426              	.LBE82:
+ 427              	.LBB83:
+ 428              	.LBB79:
+ 429              	.LBB76:
+ 430              	 .loc 2 286 0
+ 431 0010 4FF48033 	 mov r3,#65536
+ 432              	.LBE76:
+ 433              	.LBE79:
+ 434              	.LBE83:
+ 435              	.LBB84:
+ 436              	.LBB71:
+ 437              	.LBB68:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 438              	 .loc 2 260 0
+ 439 0014 AA40     	 lsls r2,r2,r5
+ 440              	.LBE68:
+ 441              	.LBE71:
+ 442              	.LBE84:
+ 443              	.LBB85:
+ 444              	.LBB80:
+ 445              	.LBB77:
+ 446              	 .loc 2 286 0
+ 447 0016 A340     	 lsls r3,r3,r4
+ 448              	.LBE77:
+ 449              	.LBE80:
+ 450              	.LBE85:
+ 451              	.LBB86:
+ 452              	.LBB72:
+ 453              	.LBB69:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 454              	 .loc 2 260 0
+ 455 0018 4260     	 str r2,[r0,#4]
+ 456              	.LBE69:
+ 457              	.LBE72:
+ 458              	.LBE86:
+  96:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 459              	 .loc 1 96 0
+ 460 001a 30BC     	 pop {r4,r5}
+ 461              	.LCFI10:
+ 462              	 .cfi_restore 5
+ 463              	 .cfi_restore 4
+ 464              	 .cfi_def_cfa_offset 0
+ 465              	.LBB87:
+ 466              	.LBB81:
+ 467              	.LBB78:
+ 468              	 .loc 2 286 0
+ 469 001c 4B60     	 str r3,[r1,#4]
+ 470              	.LBE78:
+ 471              	.LBE81:
+ 472              	.LBE87:
+  96:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 473              	 .loc 1 96 0
+ 474 001e 7047     	 bx lr
+ 475              	.L30:
+ 476              	 .align 2
+ 477              	.L29:
+ 478 0020 00000000 	 .word DIGITAL_IO_SPI_M_CS_BGT24
+ 479 0024 00000000 	 .word DIGITAL_IO_BGT_POWER_ENABLE
+ 480              	 .cfi_endproc
+ 481              	.LFE473:
+ 483              	 .section .text.bgt24mtr1x_power_down,"ax",%progbits
+ 484              	 .align 2
+ 485              	 .global bgt24mtr1x_power_down
+ 486              	 .thumb
+ 487              	 .thumb_func
+ 489              	bgt24mtr1x_power_down:
+ 490              	.LFB474:
+ 101:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Before turning off BGT, we should keep SPI's signals low
+ 491              	 .loc 1 101 0
+ 492              	 .cfi_startproc
+ 493              	 
+ 494              	 
+ 495              	 
+ 496 0000 30B4     	 push {r4,r5}
+ 497              	.LCFI11:
+ 498              	 .cfi_def_cfa_offset 8
+ 499              	 .cfi_offset 4,-8
+ 500              	 .cfi_offset 5,-4
+ 501 0002 074A     	 ldr r2,.L33
+ 502 0004 074B     	 ldr r3,.L33+4
+ 503              	.LBB88:
+ 504              	.LBB89:
+ 505              	.LBB90:
+ 506              	 .loc 2 286 0
+ 507 0006 157C     	 ldrb r5,[r2,#16]
+ 508              	.LBE90:
+ 509              	.LBE89:
+ 510              	.LBE88:
+ 511              	.LBB97:
+ 512              	.LBB98:
+ 513              	.LBB99:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 514              	 .loc 2 260 0
+ 515 0008 1C7C     	 ldrb r4,[r3,#16]
+ 516 000a 1068     	 ldr r0,[r2]
+ 517              	.LVL15:
+ 518 000c 1968     	 ldr r1,[r3]
+ 519              	.LVL16:
+ 520              	.LBE99:
+ 521              	.LBE98:
+ 522              	.LBE97:
+ 523              	.LBB106:
+ 524              	.LBB94:
+ 525              	.LBB91:
+ 526              	 .loc 2 286 0
+ 527 000e 4FF48032 	 mov r2,#65536
+ 528              	.LBE91:
+ 529              	.LBE94:
+ 530              	.LBE106:
+ 531              	.LBB107:
+ 532              	.LBB103:
+ 533              	.LBB100:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 534              	 .loc 2 260 0
+ 535 0012 0123     	 movs r3,#1
+ 536              	.LBE100:
+ 537              	.LBE103:
+ 538              	.LBE107:
+ 539              	.LBB108:
+ 540              	.LBB95:
+ 541              	.LBB92:
+ 542              	 .loc 2 286 0
+ 543 0014 AA40     	 lsls r2,r2,r5
+ 544              	.LBE92:
+ 545              	.LBE95:
+ 546              	.LBE108:
+ 547              	.LBB109:
+ 548              	.LBB104:
+ 549              	.LBB101:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 550              	 .loc 2 260 0
+ 551 0016 A340     	 lsls r3,r3,r4
+ 552              	.LBE101:
+ 553              	.LBE104:
+ 554              	.LBE109:
+ 555              	.LBB110:
+ 556              	.LBB96:
+ 557              	.LBB93:
+ 558              	 .loc 2 286 0
+ 559 0018 4260     	 str r2,[r0,#4]
+ 560              	.LBE93:
+ 561              	.LBE96:
+ 562              	.LBE110:
+ 110:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 563              	 .loc 1 110 0
+ 564 001a 30BC     	 pop {r4,r5}
+ 565              	.LCFI12:
+ 566              	 .cfi_restore 5
+ 567              	 .cfi_restore 4
+ 568              	 .cfi_def_cfa_offset 0
+ 569              	.LBB111:
+ 570              	.LBB105:
+ 571              	.LBB102:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 572              	 .loc 2 260 0
+ 573 001c 4B60     	 str r3,[r1,#4]
+ 574              	.LBE102:
+ 575              	.LBE105:
+ 576              	.LBE111:
+ 110:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 577              	 .loc 1 110 0
+ 578 001e 7047     	 bx lr
+ 579              	.L34:
+ 580              	 .align 2
+ 581              	.L33:
+ 582 0020 00000000 	 .word DIGITAL_IO_SPI_M_CS_BGT24
+ 583 0024 00000000 	 .word DIGITAL_IO_BGT_POWER_ENABLE
+ 584              	 .cfi_endproc
+ 585              	.LFE474:
+ 587              	 .section .text.bgt24mtr1x_set_tx_power,"ax",%progbits
+ 588              	 .align 2
+ 589              	 .global bgt24mtr1x_set_tx_power
+ 590              	 .thumb
+ 591              	 .thumb_func
+ 593              	bgt24mtr1x_set_tx_power:
+ 594              	.LFB475:
+ 115:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* Clear the last 3-bits */
+ 595              	 .loc 1 115 0
+ 596              	 .cfi_startproc
+ 597              	 
+ 598              	 
+ 599              	 
+ 600              	.LVL17:
+ 117:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 601              	 .loc 1 117 0
+ 602 0000 224A     	 ldr r2,.L46
+ 603 0002 1388     	 ldrh r3,[r2]
+ 604 0004 23F00703 	 bic r3,r3,#7
+ 605 0008 1B04     	 lsls r3,r3,#16
+ 606 000a 1B0C     	 lsrs r3,r3,#16
+ 607 000c 1380     	 strh r3,[r2]
+ 119:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   {
+ 608              	 .loc 1 119 0
+ 609 000e 0628     	 cmp r0,#6
+ 610 0010 38D8     	 bhi .L36
+ 611 0012 DFE800F0 	 tbb [pc,r0]
+ 612              	.L38:
+ 613 0016 13       	 .byte (.L37-.L38)/2
+ 614 0017 19       	 .byte (.L39-.L38)/2
+ 615 0018 1F       	 .byte (.L40-.L38)/2
+ 616 0019 25       	 .byte (.L41-.L38)/2
+ 617 001a 2B       	 .byte (.L42-.L38)/2
+ 618 001b 31       	 .byte (.L43-.L38)/2
+ 619 001c 04       	 .byte (.L44-.L38)/2
+ 620 001d 00       	 .p2align 1
+ 621              	.L44:
+ 153:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 622              	 .loc 1 153 0
+ 623 001e 1388     	 ldrh r3,[r2]
+ 624 0020 9BB2     	 uxth r3,r3
+ 625 0022 43F00103 	 orr r3,r3,#1
+ 626 0026 1380     	 strh r3,[r2]
+ 627              	.L45:
+ 628              	.LBB112:
+ 629              	.LBB113:
+ 232:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 630              	 .loc 1 232 0
+ 631 0028 194B     	 ldr r3,.L46+4
+ 632 002a 0121     	 movs r1,#1
+ 633 002c 1980     	 strh r1,[r3]
+ 234:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 634              	 .loc 1 234 0
+ 635 002e 1388     	 ldrh r3,[r2]
+ 636 0030 23F40653 	 bic r3,r3,#8576
+ 637 0034 1B04     	 lsls r3,r3,#16
+ 638 0036 1B0C     	 lsrs r3,r3,#16
+ 639 0038 1380     	 strh r3,[r2]
+ 640 003a 7047     	 bx lr
+ 641              	.L37:
+ 642              	.LBE113:
+ 643              	.LBE112:
+ 123:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 644              	 .loc 1 123 0
+ 645 003c 1388     	 ldrh r3,[r2]
+ 646 003e 9BB2     	 uxth r3,r3
+ 647 0040 43F00703 	 orr r3,r3,#7
+ 648 0044 1380     	 strh r3,[r2]
+ 124:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 649              	 .loc 1 124 0
+ 650 0046 EFE7     	 b .L45
+ 651              	.L39:
+ 128:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 652              	 .loc 1 128 0
+ 653 0048 1388     	 ldrh r3,[r2]
+ 654 004a 9BB2     	 uxth r3,r3
+ 655 004c 43F00603 	 orr r3,r3,#6
+ 656 0050 1380     	 strh r3,[r2]
+ 129:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 657              	 .loc 1 129 0
+ 658 0052 E9E7     	 b .L45
+ 659              	.L40:
+ 133:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 660              	 .loc 1 133 0
+ 661 0054 1388     	 ldrh r3,[r2]
+ 662 0056 9BB2     	 uxth r3,r3
+ 663 0058 43F00503 	 orr r3,r3,#5
+ 664 005c 1380     	 strh r3,[r2]
+ 134:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 665              	 .loc 1 134 0
+ 666 005e E3E7     	 b .L45
+ 667              	.L41:
+ 138:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 668              	 .loc 1 138 0
+ 669 0060 1388     	 ldrh r3,[r2]
+ 670 0062 9BB2     	 uxth r3,r3
+ 671 0064 43F00403 	 orr r3,r3,#4
+ 672 0068 1380     	 strh r3,[r2]
+ 139:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 673              	 .loc 1 139 0
+ 674 006a DDE7     	 b .L45
+ 675              	.L42:
+ 143:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 676              	 .loc 1 143 0
+ 677 006c 1388     	 ldrh r3,[r2]
+ 678 006e 9BB2     	 uxth r3,r3
+ 679 0070 43F00303 	 orr r3,r3,#3
+ 680 0074 1380     	 strh r3,[r2]
+ 144:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 681              	 .loc 1 144 0
+ 682 0076 D7E7     	 b .L45
+ 683              	.L43:
+ 148:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     break;
+ 684              	 .loc 1 148 0
+ 685 0078 1388     	 ldrh r3,[r2]
+ 686 007a 9BB2     	 uxth r3,r3
+ 687 007c 43F00203 	 orr r3,r3,#2
+ 688 0080 1380     	 strh r3,[r2]
+ 149:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****     
+ 689              	 .loc 1 149 0
+ 690 0082 D1E7     	 b .L45
+ 691              	.L36:
+ 159:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   }
+ 692              	 .loc 1 159 0
+ 693 0084 1388     	 ldrh r3,[r2]
+ 694 0086 9BB2     	 uxth r3,r3
+ 695 0088 1380     	 strh r3,[r2]
+ 696 008a CDE7     	 b .L45
+ 697              	.L47:
+ 698              	 .align 2
+ 699              	.L46:
+ 700 008c 00000000 	 .word .LANCHOR0
+ 701 0090 00000000 	 .word .LANCHOR2
+ 702              	 .cfi_endproc
+ 703              	.LFE475:
+ 705              	 .section .text.bgt24mtr1x_get_tx_power,"ax",%progbits
+ 706              	 .align 2
+ 707              	 .global bgt24mtr1x_get_tx_power
+ 708              	 .thumb
+ 709              	 .thumb_func
+ 711              	bgt24mtr1x_get_tx_power:
+ 712              	.LFB476:
+ 168:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   /* lower byte contains the Tx power levels info */
+ 713              	 .loc 1 168 0
+ 714              	 .cfi_startproc
+ 715              	 
+ 716              	 
+ 717              	 
+ 170:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 718              	 .loc 1 170 0
+ 719 0000 024B     	 ldr r3,.L49
+ 720 0002 1888     	 ldrh r0,[r3]
+ 171:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 721              	 .loc 1 171 0
+ 722 0004 00F00700 	 and r0,r0,#7
+ 723 0008 7047     	 bx lr
+ 724              	.L50:
+ 725 000a 00BF     	 .align 2
+ 726              	.L49:
+ 727 000c 00000000 	 .word .LANCHOR0
+ 728              	 .cfi_endproc
+ 729              	.LFE476:
+ 731              	 .section .text.bgt24mtr1x_lna_gain_enable,"ax",%progbits
+ 732              	 .align 2
+ 733              	 .global bgt24mtr1x_lna_gain_enable
+ 734              	 .thumb
+ 735              	 .thumb_func
+ 737              	bgt24mtr1x_lna_gain_enable:
+ 738              	.LFB477:
+ 176:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config &= BGT24MTR1X_ENA_LNA_MASK;
+ 739              	 .loc 1 176 0
+ 740              	 .cfi_startproc
+ 741              	 
+ 742              	 
+ 743              	 
+ 177:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 744              	 .loc 1 177 0
+ 745 0000 024A     	 ldr r2,.L52
+ 746 0002 1388     	 ldrh r3,[r2]
+ 747 0004 C3F30E03 	 ubfx r3,r3,#0,#15
+ 748 0008 1380     	 strh r3,[r2]
+ 749 000a 7047     	 bx lr
+ 750              	.L53:
+ 751              	 .align 2
+ 752              	.L52:
+ 753 000c 00000000 	 .word .LANCHOR0
+ 754              	 .cfi_endproc
+ 755              	.LFE477:
+ 757              	 .section .text.bgt24mtr1x_lna_gain_disable,"ax",%progbits
+ 758              	 .align 2
+ 759              	 .global bgt24mtr1x_lna_gain_disable
+ 760              	 .thumb
+ 761              	 .thumb_func
+ 763              	bgt24mtr1x_lna_gain_disable:
+ 764              	.LFB478:
+ 183:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_global_config |= BGT24MTR1X_DIS_LNA_MASK;
+ 765              	 .loc 1 183 0
+ 766              	 .cfi_startproc
+ 767              	 
+ 768              	 
+ 769              	 
+ 184:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 770              	 .loc 1 184 0
+ 771 0000 044A     	 ldr r2,.L55
+ 772 0002 1388     	 ldrh r3,[r2]
+ 773 0004 6FEA4343 	 mvn r3,r3,lsl#17
+ 774 0008 6FEA5343 	 mvn r3,r3,lsr#17
+ 775 000c 9BB2     	 uxth r3,r3
+ 776 000e 1380     	 strh r3,[r2]
+ 777 0010 7047     	 bx lr
+ 778              	.L56:
+ 779 0012 00BF     	 .align 2
+ 780              	.L55:
+ 781 0014 00000000 	 .word .LANCHOR0
+ 782              	 .cfi_endproc
+ 783              	.LFE478:
+ 785              	 .section .text.bgt24mtr1x_lna_gain_is_enable,"ax",%progbits
+ 786              	 .align 2
+ 787              	 .global bgt24mtr1x_lna_gain_is_enable
+ 788              	 .thumb
+ 789              	 .thumb_func
+ 791              	bgt24mtr1x_lna_gain_is_enable:
+ 792              	.LFB479:
+ 190:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   return (uint8_t)((bgt24mtr1x_global_config & BGT24MTR1X_DIS_LNA_MASK) == 0 ? true : false);
+ 793              	 .loc 1 190 0
+ 794              	 .cfi_startproc
+ 795              	 
+ 796              	 
+ 797              	 
+ 191:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 798              	 .loc 1 191 0
+ 799 0000 024B     	 ldr r3,.L58
+ 800 0002 1888     	 ldrh r0,[r3]
+ 801 0004 C043     	 mvns r0,r0
+ 192:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 802              	 .loc 1 192 0
+ 803 0006 C0F3C030 	 ubfx r0,r0,#15,#1
+ 804 000a 7047     	 bx lr
+ 805              	.L59:
+ 806              	 .align 2
+ 807              	.L58:
+ 808 000c 00000000 	 .word .LANCHOR0
+ 809              	 .cfi_endproc
+ 810              	.LFE479:
+ 812              	 .section .text.bgt24mtr1x_set_config,"ax",%progbits
+ 813              	 .align 2
+ 814              	 .global bgt24mtr1x_set_config
+ 815              	 .thumb
+ 816              	 .thumb_func
+ 818              	bgt24mtr1x_set_config:
+ 819              	.LFB480:
+ 197:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   uint16_t shuffled_data = 0;
+ 820              	 .loc 1 197 0
+ 821              	 .cfi_startproc
+ 822              	 
+ 823              	 
+ 824              	.LVL18:
+ 825 0000 00B5     	 push {lr}
+ 826              	.LCFI13:
+ 827              	 .cfi_def_cfa_offset 4
+ 828              	 .cfi_offset 14,-4
+ 829 0002 83B0     	 sub sp,sp,#12
+ 830              	.LCFI14:
+ 831              	 .cfi_def_cfa_offset 16
+ 204:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 832              	 .loc 1 204 0
+ 833 0004 02AB     	 add r3,sp,#8
+ 834 0006 020A     	 lsrs r2,r0,#8
+ 835 0008 42EA0020 	 orr r0,r2,r0,lsl#8
+ 836              	.LVL19:
+ 837 000c 23F8020D 	 strh r0,[r3,#-2]!
+ 207:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 838              	 .loc 1 207 0
+ 839 0010 0221     	 movs r1,#2
+ 840 0012 1846     	 mov r0,r3
+ 841 0014 024A     	 ldr r2,.L62
+ 842 0016 FFF7FEFF 	 bl spi_transmit_data
+ 843              	.LVL20:
+ 208:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 844              	 .loc 1 208 0
+ 845 001a 03B0     	 add sp,sp,#12
+ 846              	.LCFI15:
+ 847              	 .cfi_def_cfa_offset 4
+ 848              	 
+ 849 001c 5DF804FB 	 ldr pc,[sp],#4
+ 850              	.L63:
+ 851              	 .align 2
+ 852              	.L62:
+ 853 0020 00000000 	 .word .LANCHOR1
+ 854              	 .cfi_endproc
+ 855              	.LFE480:
+ 857              	 .section .text.bgt24mtr1x_get_config,"ax",%progbits
+ 858              	 .align 2
+ 859              	 .global bgt24mtr1x_get_config
+ 860              	 .thumb
+ 861              	 .thumb_func
+ 863              	bgt24mtr1x_get_config:
+ 864              	.LFB481:
+ 213:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   return (bgt24mtr1x_global_config);
+ 865              	 .loc 1 213 0
+ 866              	 .cfi_startproc
+ 867              	 
+ 868              	 
+ 869              	 
+ 214:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 870              	 .loc 1 214 0
+ 871 0000 014B     	 ldr r3,.L65
+ 872 0002 1888     	 ldrh r0,[r3]
+ 215:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 873              	 .loc 1 215 0
+ 874 0004 80B2     	 uxth r0,r0
+ 875 0006 7047     	 bx lr
+ 876              	.L66:
+ 877              	 .align 2
+ 878              	.L65:
+ 879 0008 00000000 	 .word .LANCHOR0
+ 880              	 .cfi_endproc
+ 881              	.LFE481:
+ 883              	 .section .text.bgt24mtr1x_ana_temp,"ax",%progbits
+ 884              	 .align 2
+ 885              	 .global bgt24mtr1x_ana_temp
+ 886              	 .thumb
+ 887              	 .thumb_func
+ 889              	bgt24mtr1x_ana_temp:
+ 890              	.LFB482:
+ 220:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_ana_command = BGT24MTR1X_ANA_CMD_TEMPERATURE;
+ 891              	 .loc 1 220 0
+ 892              	 .cfi_startproc
+ 893              	 
+ 894              	 
+ 895              	 
+ 221:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 896              	 .loc 1 221 0
+ 897 0000 074B     	 ldr r3,.L68
+ 223:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 898              	 .loc 1 223 0
+ 899 0002 084A     	 ldr r2,.L68+4
+ 221:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 900              	 .loc 1 221 0
+ 901 0004 0021     	 movs r1,#0
+ 902 0006 1980     	 strh r1,[r3]
+ 223:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 903              	 .loc 1 223 0
+ 904 0008 1388     	 ldrh r3,[r2]
+ 905 000a 23F40653 	 bic r3,r3,#8576
+ 906 000e 1B04     	 lsls r3,r3,#16
+ 907 0010 1B0C     	 lsrs r3,r3,#16
+ 908 0012 1380     	 strh r3,[r2]
+ 225:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 909              	 .loc 1 225 0
+ 910 0014 1388     	 ldrh r3,[r2]
+ 911 0016 9BB2     	 uxth r3,r3
+ 912 0018 43F40053 	 orr r3,r3,#8192
+ 913 001c 1380     	 strh r3,[r2]
+ 914 001e 7047     	 bx lr
+ 915              	.L69:
+ 916              	 .align 2
+ 917              	.L68:
+ 918 0020 00000000 	 .word .LANCHOR2
+ 919 0024 00000000 	 .word .LANCHOR0
+ 920              	 .cfi_endproc
+ 921              	.LFE482:
+ 923              	 .section .text.bgt24mtr1x_ana_vout_tx,"ax",%progbits
+ 924              	 .align 2
+ 925              	 .global bgt24mtr1x_ana_vout_tx
+ 926              	 .thumb
+ 927              	 .thumb_func
+ 929              	bgt24mtr1x_ana_vout_tx:
+ 930              	.LFB483:
+ 231:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_ana_command = BGT24MTR1X_ANA_CMD_TX_POWER;
+ 931              	 .loc 1 231 0
+ 932              	 .cfi_startproc
+ 933              	 
+ 934              	 
+ 935              	 
+ 232:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 936              	 .loc 1 232 0
+ 937 0000 054B     	 ldr r3,.L71
+ 234:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 938              	 .loc 1 234 0
+ 939 0002 064A     	 ldr r2,.L71+4
+ 232:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 940              	 .loc 1 232 0
+ 941 0004 0121     	 movs r1,#1
+ 942 0006 1980     	 strh r1,[r3]
+ 234:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 943              	 .loc 1 234 0
+ 944 0008 1388     	 ldrh r3,[r2]
+ 945 000a 23F40653 	 bic r3,r3,#8576
+ 946 000e 1B04     	 lsls r3,r3,#16
+ 947 0010 1B0C     	 lsrs r3,r3,#16
+ 948 0012 1380     	 strh r3,[r2]
+ 949 0014 7047     	 bx lr
+ 950              	.L72:
+ 951 0016 00BF     	 .align 2
+ 952              	.L71:
+ 953 0018 00000000 	 .word .LANCHOR2
+ 954 001c 00000000 	 .word .LANCHOR0
+ 955              	 .cfi_endproc
+ 956              	.LFE483:
+ 958              	 .section .text.bgt24mtr1x_ana_vref_tx,"ax",%progbits
+ 959              	 .align 2
+ 960              	 .global bgt24mtr1x_ana_vref_tx
+ 961              	 .thumb
+ 962              	 .thumb_func
+ 964              	bgt24mtr1x_ana_vref_tx:
+ 965              	.LFB484:
+ 240:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_ana_command = BGT24MTR1X_ANA_CMD_TX_POWER_REF;
+ 966              	 .loc 1 240 0
+ 967              	 .cfi_startproc
+ 968              	 
+ 969              	 
+ 970              	 
+ 241:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 971              	 .loc 1 241 0
+ 972 0000 074B     	 ldr r3,.L74
+ 243:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 973              	 .loc 1 243 0
+ 974 0002 084A     	 ldr r2,.L74+4
+ 241:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 975              	 .loc 1 241 0
+ 976 0004 0221     	 movs r1,#2
+ 977 0006 1980     	 strh r1,[r3]
+ 243:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 978              	 .loc 1 243 0
+ 979 0008 1388     	 ldrh r3,[r2]
+ 980 000a 23F40653 	 bic r3,r3,#8576
+ 981 000e 1B04     	 lsls r3,r3,#16
+ 982 0010 1B0C     	 lsrs r3,r3,#16
+ 983 0012 1380     	 strh r3,[r2]
+ 984              	 .loc 1 245 0
+ 985 0014 1388     	 ldrh r3,[r2]
+ 986 0016 9BB2     	 uxth r3,r3
+ 987 0018 43F08003 	 orr r3,r3,#128
+ 988 001c 1380     	 strh r3,[r2]
+ 989 001e 7047     	 bx lr
+ 990              	.L75:
+ 991              	 .align 2
+ 992              	.L74:
+ 993 0020 00000000 	 .word .LANCHOR2
+ 994 0024 00000000 	 .word .LANCHOR0
+ 995              	 .cfi_endproc
+ 996              	.LFE484:
+ 998              	 .section .text.bgt24mtr1x_get_ana_config,"ax",%progbits
+ 999              	 .align 2
+ 1000              	 .global bgt24mtr1x_get_ana_config
+ 1001              	 .thumb
+ 1002              	 .thumb_func
+ 1004              	bgt24mtr1x_get_ana_config:
+ 1005              	.LFB485:
+ 246:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 247:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 248:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 249:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 250:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** uint16_t bgt24mtr1x_get_ana_config(void)
+ 251:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 1006              	 .loc 1 251 0
+ 1007              	 .cfi_startproc
+ 1008              	 
+ 1009              	 
+ 1010              	 
+ 252:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   return (bgt24mtr1x_ana_command);
+ 1011              	 .loc 1 252 0
+ 1012 0000 014B     	 ldr r3,.L77
+ 1013 0002 1888     	 ldrh r0,[r3]
+ 253:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 1014              	 .loc 1 253 0
+ 1015 0004 80B2     	 uxth r0,r0
+ 1016 0006 7047     	 bx lr
+ 1017              	.L78:
+ 1018              	 .align 2
+ 1019              	.L77:
+ 1020 0008 00000000 	 .word .LANCHOR2
+ 1021              	 .cfi_endproc
+ 1022              	.LFE485:
+ 1024              	 .section .text.bgt24mtr1x_lowest_power_with_q2_disable,"ax",%progbits
+ 1025              	 .align 2
+ 1026              	 .global bgt24mtr1x_lowest_power_with_q2_disable
+ 1027              	 .thumb
+ 1028              	 .thumb_func
+ 1030              	bgt24mtr1x_lowest_power_with_q2_disable:
+ 1031              	.LFB486:
+ 254:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 255:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** //============================================================================
+ 256:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** 
+ 257:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** void bgt24mtr1x_lowest_power_with_q2_disable(void)
+ 258:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** {
+ 1032              	 .loc 1 258 0
+ 1033              	 .cfi_startproc
+ 1034              	 
+ 1035              	 
+ 1036              	.LVL21:
+ 1037 0000 00B5     	 push {lr}
+ 1038              	.LCFI16:
+ 1039              	 .cfi_def_cfa_offset 4
+ 1040              	 .cfi_offset 14,-4
+ 1041 0002 83B0     	 sub sp,sp,#12
+ 1042              	.LCFI17:
+ 1043              	 .cfi_def_cfa_offset 16
+ 1044              	.LBB116:
+ 1045              	.LBB117:
+ 204:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   
+ 1046              	 .loc 1 204 0
+ 1047 0004 02A8     	 add r0,sp,#8
+ 1048 0006 44F21073 	 movw r3,#18192
+ 1049 000a 20F8023D 	 strh r3,[r0,#-2]!
+ 207:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 1050              	 .loc 1 207 0
+ 1051 000e 0221     	 movs r1,#2
+ 1052 0010 024A     	 ldr r2,.L81
+ 1053 0012 FFF7FEFF 	 bl spi_transmit_data
+ 1054              	.LVL22:
+ 1055              	.LBE117:
+ 1056              	.LBE116:
+ 259:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c ****   bgt24mtr1x_set_config((uint16_t)BGT24MTR1X_POWER_CONF);
+ 260:../BSP/Components/bgt24mtr1x/src/bgt24mtr1x.c **** }
+ 1057              	 .loc 1 260 0
+ 1058 0016 03B0     	 add sp,sp,#12
+ 1059              	.LCFI18:
+ 1060              	 .cfi_def_cfa_offset 4
+ 1061              	 
+ 1062 0018 5DF804FB 	 ldr pc,[sp],#4
+ 1063              	.L82:
+ 1064              	 .align 2
+ 1065              	.L81:
+ 1066 001c 00000000 	 .word .LANCHOR1
+ 1067              	 .cfi_endproc
+ 1068              	.LFE486:
+ 1070              	 .section .data.bgt24mtr1x_global_config,"aw",%progbits
+ 1071              	 .align 1
+ 1072              	 .set .LANCHOR0,.+0
+ 1075              	bgt24mtr1x_global_config:
+ 1076 0000 4810     	 .short 4168
+ 1077              	 .section .bss.bgt24mtr1x_spi_pins,"aw",%nobits
+ 1078              	 .align 2
+ 1079              	 .set .LANCHOR1,.+0
+ 1082              	bgt24mtr1x_spi_pins:
+ 1083 0000 00000000 	 .space 16
+ 1083      00000000 
+ 1083      00000000 
+ 1083      00000000 
+ 1084              	 .section .data.bgt24mtr1x_ana_command,"aw",%progbits
+ 1085              	 .align 1
+ 1086              	 .set .LANCHOR2,.+0
+ 1089              	bgt24mtr1x_ana_command:
+ 1090 0000 0200     	 .short 2
+ 1091              	 .text
+ 1092              	.Letext0:
+ 1093              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1094              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1095              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 1096              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 1097              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 1098              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io.h"
+ 1099              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 1100              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 1101              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 1102              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/inc/bsp_common.h"
+ 1103              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Components/bgt24mtr1x/inc/bgt24mtr1x.h"
+ 1104              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 1105              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 1106              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 1107              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io_extern.h"
+ 1108              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 bgt24mtr1x.c
+    {standard input}:20     .text.bgt24mtr1x_init:00000000 $t
+    {standard input}:25     .text.bgt24mtr1x_init:00000000 bgt24mtr1x_init
+    {standard input}:88     .text.bgt24mtr1x_init:00000040 $d
+    {standard input}:230    .text.bgt24mtr1x_init:000000dc $d
+    {standard input}:242    .text.bgt24mtr1x_start_tx:00000000 $t
+    {standard input}:247    .text.bgt24mtr1x_start_tx:00000000 bgt24mtr1x_start_tx
+    {standard input}:305    .text.bgt24mtr1x_start_tx:00000030 $d
+    {standard input}:311    .text.bgt24mtr1x_stop_tx:00000000 $t
+    {standard input}:316    .text.bgt24mtr1x_stop_tx:00000000 bgt24mtr1x_stop_tx
+    {standard input}:373    .text.bgt24mtr1x_stop_tx:00000030 $d
+    {standard input}:379    .text.bgt24mtr1x_power_up:00000000 $t
+    {standard input}:384    .text.bgt24mtr1x_power_up:00000000 bgt24mtr1x_power_up
+    {standard input}:478    .text.bgt24mtr1x_power_up:00000020 $d
+    {standard input}:484    .text.bgt24mtr1x_power_down:00000000 $t
+    {standard input}:489    .text.bgt24mtr1x_power_down:00000000 bgt24mtr1x_power_down
+    {standard input}:582    .text.bgt24mtr1x_power_down:00000020 $d
+    {standard input}:588    .text.bgt24mtr1x_set_tx_power:00000000 $t
+    {standard input}:593    .text.bgt24mtr1x_set_tx_power:00000000 bgt24mtr1x_set_tx_power
+    {standard input}:613    .text.bgt24mtr1x_set_tx_power:00000016 $d
+    {standard input}:700    .text.bgt24mtr1x_set_tx_power:0000008c $d
+    {standard input}:706    .text.bgt24mtr1x_get_tx_power:00000000 $t
+    {standard input}:711    .text.bgt24mtr1x_get_tx_power:00000000 bgt24mtr1x_get_tx_power
+    {standard input}:727    .text.bgt24mtr1x_get_tx_power:0000000c $d
+    {standard input}:732    .text.bgt24mtr1x_lna_gain_enable:00000000 $t
+    {standard input}:737    .text.bgt24mtr1x_lna_gain_enable:00000000 bgt24mtr1x_lna_gain_enable
+    {standard input}:753    .text.bgt24mtr1x_lna_gain_enable:0000000c $d
+    {standard input}:758    .text.bgt24mtr1x_lna_gain_disable:00000000 $t
+    {standard input}:763    .text.bgt24mtr1x_lna_gain_disable:00000000 bgt24mtr1x_lna_gain_disable
+    {standard input}:781    .text.bgt24mtr1x_lna_gain_disable:00000014 $d
+    {standard input}:786    .text.bgt24mtr1x_lna_gain_is_enable:00000000 $t
+    {standard input}:791    .text.bgt24mtr1x_lna_gain_is_enable:00000000 bgt24mtr1x_lna_gain_is_enable
+    {standard input}:808    .text.bgt24mtr1x_lna_gain_is_enable:0000000c $d
+    {standard input}:813    .text.bgt24mtr1x_set_config:00000000 $t
+    {standard input}:818    .text.bgt24mtr1x_set_config:00000000 bgt24mtr1x_set_config
+    {standard input}:853    .text.bgt24mtr1x_set_config:00000020 $d
+    {standard input}:858    .text.bgt24mtr1x_get_config:00000000 $t
+    {standard input}:863    .text.bgt24mtr1x_get_config:00000000 bgt24mtr1x_get_config
+    {standard input}:879    .text.bgt24mtr1x_get_config:00000008 $d
+    {standard input}:884    .text.bgt24mtr1x_ana_temp:00000000 $t
+    {standard input}:889    .text.bgt24mtr1x_ana_temp:00000000 bgt24mtr1x_ana_temp
+    {standard input}:918    .text.bgt24mtr1x_ana_temp:00000020 $d
+    {standard input}:924    .text.bgt24mtr1x_ana_vout_tx:00000000 $t
+    {standard input}:929    .text.bgt24mtr1x_ana_vout_tx:00000000 bgt24mtr1x_ana_vout_tx
+    {standard input}:953    .text.bgt24mtr1x_ana_vout_tx:00000018 $d
+    {standard input}:959    .text.bgt24mtr1x_ana_vref_tx:00000000 $t
+    {standard input}:964    .text.bgt24mtr1x_ana_vref_tx:00000000 bgt24mtr1x_ana_vref_tx
+    {standard input}:993    .text.bgt24mtr1x_ana_vref_tx:00000020 $d
+    {standard input}:999    .text.bgt24mtr1x_get_ana_config:00000000 $t
+    {standard input}:1004   .text.bgt24mtr1x_get_ana_config:00000000 bgt24mtr1x_get_ana_config
+    {standard input}:1020   .text.bgt24mtr1x_get_ana_config:00000008 $d
+    {standard input}:1025   .text.bgt24mtr1x_lowest_power_with_q2_disable:00000000 $t
+    {standard input}:1030   .text.bgt24mtr1x_lowest_power_with_q2_disable:00000000 bgt24mtr1x_lowest_power_with_q2_disable
+    {standard input}:1066   .text.bgt24mtr1x_lowest_power_with_q2_disable:0000001c $d
+    {standard input}:1071   .data.bgt24mtr1x_global_config:00000000 $d
+    {standard input}:1075   .data.bgt24mtr1x_global_config:00000000 bgt24mtr1x_global_config
+    {standard input}:1078   .bss.bgt24mtr1x_spi_pins:00000000 $d
+    {standard input}:1082   .bss.bgt24mtr1x_spi_pins:00000000 bgt24mtr1x_spi_pins
+    {standard input}:1085   .data.bgt24mtr1x_ana_command:00000000 $d
+    {standard input}:1089   .data.bgt24mtr1x_ana_command:00000000 bgt24mtr1x_ana_command
+                     .debug_frame:00000010 $d
+    {standard input}:96     .text.bgt24mtr1x_init:00000047 $d
+    {standard input}:96     .text.bgt24mtr1x_init:00000048 $t
+    {standard input}:620    .text.bgt24mtr1x_set_tx_power:0000001d $d
+    {standard input}:620    .text.bgt24mtr1x_set_tx_power:0000001e $t
+
+UNDEFINED SYMBOLS
+DIGITAL_IO_SPI_M_CS_BGT24
+DIGITAL_IO_SPI_M_DATA
+DIGITAL_IO_SPI_M_CLK
+spi_transmit_data
+DIGITAL_IO_BGT_POWER_ENABLE

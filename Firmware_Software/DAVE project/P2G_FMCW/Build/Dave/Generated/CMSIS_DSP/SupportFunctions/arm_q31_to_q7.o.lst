@@ -1,0 +1,222 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "arm_q31_to_q7.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.arm_q31_to_q7,"ax",%progbits
+  20              	 .align 2
+  21              	 .global arm_q31_to_q7
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	arm_q31_to_q7:
+  26              	.LFB135:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions/arm_q31_to_q7.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** /* ----------------------------------------------------------------------
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * Project:      CMSIS DSP Library
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * Title:        arm_q31_to_q7.c
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * Description:  Converts the elements of the Q31 vector to Q7 vector
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * $Date:        27. January 2017
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * $Revision:    V.1.5.1
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * Target Processor: Cortex-M cores
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * -------------------------------------------------------------------- */
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** /*
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * Copyright (C) 2010-2017 ARM Limited or its affiliates. All rights reserved.
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * not use this file except in compliance with the License.
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * You may obtain a copy of the License at
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * See the License for the specific language governing permissions and
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * limitations under the License.
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  */
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** #include "CMSIS_DSP/cmsis_dsp.h"
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** /**
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * @ingroup groupSupport
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  */
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** /**
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * @addtogroup q31_to_x
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * @{
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  */
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** /**
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * @brief Converts the elements of the Q31 vector to Q7 vector.
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * @param[in]       *pSrc points to the Q31 input vector
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * @param[out]      *pDst points to the Q7 output vector
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * @param[in]       blockSize length of the input vector
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * @return none.
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * \par Description:
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * The equation used for the conversion process is:
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * <pre>
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * 	pDst[n] = (q7_t) pSrc[n] >> 24;   0 <= n < blockSize.
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  * </pre>
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  *
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****  */
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** void arm_q31_to_q7(
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   q31_t * pSrc,
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   q7_t * pDst,
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   uint32_t blockSize)
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** {
+  28              	 .loc 1 62 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 2DE9F041 	 push {r4,r5,r6,r7,r8,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 24
+  36              	 .cfi_offset 4,-24
+  37              	 .cfi_offset 5,-20
+  38              	 .cfi_offset 6,-16
+  39              	 .cfi_offset 7,-12
+  40              	 .cfi_offset 8,-8
+  41              	 .cfi_offset 14,-4
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   q31_t *pIn = pSrc;                             /* Src pointer */
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   uint32_t blkCnt;                               /* loop counter */
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** #if defined (ARM_MATH_DSP)
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   /* Run the below code for Cortex-M4 and Cortex-M3 */
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   q31_t in1, in2, in3, in4;
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   q7_t out1, out2, out3, out4;
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   /*loop Unrolling */
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   blkCnt = blockSize >> 2u;
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****    ** a second loop below computes the remaining 1 to 3 samples. */
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   while (blkCnt > 0u)
+  42              	 .loc 1 77 0
+  43 0004 5FEA9208 	 lsrs r8,r2,#2
+  44              	.LVL1:
+  45 0008 1BD0     	 beq .L2
+  46 000a 00F11005 	 add r5,r0,#16
+  47 000e 0F46     	 mov r7,r1
+  48 0010 4646     	 mov r6,r8
+  49              	.LVL2:
+  50              	.L3:
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   {
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     /* C = (q7_t) A >> 24 */
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     /* convert from q31 to q7 and then store the results in the destination buffer */
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     in1 = *pIn++;
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     in2 = *pIn++;
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     in3 = *pIn++;
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     in4 = *pIn++;
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     out1 = (q7_t) (in1 >> 24);
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     out2 = (q7_t) (in2 >> 24);
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     out3 = (q7_t) (in3 >> 24);
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     out4 = (q7_t) (in4 >> 24);
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     *__SIMD32(pDst)++ = __PACKq7(out1, out2, out3, out4);
+  51              	 .loc 1 91 0
+  52 0012 15F901CC 	 ldrsb ip,[r5,#-1]
+  53 0016 15F80D4C 	 ldrb r4,[r5,#-13]
+  54 001a 15F8093C 	 ldrb r3,[r5,#-9]
+  55 001e 15F805EC 	 ldrb lr,[r5,#-5]
+  56 0022 44EA0C64 	 orr r4,r4,ip,lsl#24
+  57 0026 44EA0323 	 orr r3,r4,r3,lsl#8
+  58 002a 43EA0E43 	 orr r3,r3,lr,lsl#16
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   {
+  59              	 .loc 1 77 0
+  60 002e 013E     	 subs r6,r6,#1
+  61              	.LVL3:
+  62              	 .loc 1 91 0
+  63 0030 47F8043B 	 str r3,[r7],#4
+  64              	.LVL4:
+  65 0034 05F11005 	 add r5,r5,#16
+  66              	.LVL5:
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   {
+  67              	 .loc 1 77 0
+  68 0038 EBD1     	 bne .L3
+  69 003a 00EB0810 	 add r0,r0,r8,lsl#4
+  70              	.LVL6:
+  71 003e 01EB8801 	 add r1,r1,r8,lsl#2
+  72              	.LVL7:
+  73              	.L2:
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     /* Decrement the loop counter */
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     blkCnt--;
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   }
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   /* If the blockSize is not a multiple of 4, compute any remaining output samples here.
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****    ** No loop unrolling is used. */
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   blkCnt = blockSize % 0x4u;
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** #else
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   /* Run the below code for Cortex-M0 */
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   /* Loop over blockSize number of values */
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   blkCnt = blockSize;
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** #endif /* #if defined (ARM_MATH_DSP) */
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c **** 
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   while (blkCnt > 0u)
+  74              	 .loc 1 110 0
+  75 0042 12F00302 	 ands r2,r2,#3
+  76              	.LVL8:
+  77 0046 07D0     	 beq .L1
+  78 0048 0A44     	 add r2,r2,r1
+  79              	.LVL9:
+  80              	.L5:
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   {
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     /* C = (q7_t) A >> 24 */
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     /* convert from q31 to q7 and then store the results in the destination buffer */
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****     *pDst++ = (q7_t) (*pIn++ >> 24);
+  81              	 .loc 1 114 0
+  82 004a 50F8043B 	 ldr r3,[r0],#4
+  83              	.LVL10:
+  84 004e 1B16     	 asrs r3,r3,#24
+  85 0050 01F8013B 	 strb r3,[r1],#1
+  86              	.LVL11:
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/SupportFunctions\arm_q31_to_q7.c ****   {
+  87              	 .loc 1 110 0
+  88 0054 9142     	 cmp r1,r2
+  89 0056 F8D1     	 bne .L5
+  90              	.LVL12:
+  91              	.L1:
+  92 0058 BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+  93              	 .cfi_endproc
+  94              	.LFE135:
+  96              	 .text
+  97              	.Letext0:
+  98              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  99              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 100              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/arm_math.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_q31_to_q7.c
+    {standard input}:20     .text.arm_q31_to_q7:00000000 $t
+    {standard input}:25     .text.arm_q31_to_q7:00000000 arm_q31_to_q7
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,393 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "radar_target_detection.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.radar_set_dsp_settings,"ax",%progbits
+  20              	 .align 2
+  21              	 .global radar_set_dsp_settings
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	radar_set_dsp_settings:
+  26              	.LFB470:
+  27              	 .file 1 "../Radar_Control/src/radar_target_detection.c"
+   1:../Radar_Control/src/radar_target_detection.c **** /**
+   2:../Radar_Control/src/radar_target_detection.c ****    @file radar_target_detection.c
+   3:../Radar_Control/src/radar_target_detection.c **** 
+   4:../Radar_Control/src/radar_target_detection.c ****    @brief This file contains the driver API for Target Detection of
+   5:../Radar_Control/src/radar_target_detection.c ****           Infineon radar sensors.
+   6:../Radar_Control/src/radar_target_detection.c **** */
+   7:../Radar_Control/src/radar_target_detection.c **** 
+   8:../Radar_Control/src/radar_target_detection.c **** /* ===========================================================================
+   9:../Radar_Control/src/radar_target_detection.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../Radar_Control/src/radar_target_detection.c **** ** All rights reserved.
+  11:../Radar_Control/src/radar_target_detection.c **** ** ===========================================================================
+  12:../Radar_Control/src/radar_target_detection.c **** **
+  13:../Radar_Control/src/radar_target_detection.c **** ** ===========================================================================
+  14:../Radar_Control/src/radar_target_detection.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../Radar_Control/src/radar_target_detection.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../Radar_Control/src/radar_target_detection.c **** ** is not permitted without Infineon's prior written authorisation.
+  17:../Radar_Control/src/radar_target_detection.c **** ** ===========================================================================
+  18:../Radar_Control/src/radar_target_detection.c **** */
+  19:../Radar_Control/src/radar_target_detection.c **** 
+  20:../Radar_Control/src/radar_target_detection.c **** /*
+  21:../Radar_Control/src/radar_target_detection.c **** ==============================================================================
+  22:../Radar_Control/src/radar_target_detection.c ****    1. INCLUDE FILES
+  23:../Radar_Control/src/radar_target_detection.c **** ==============================================================================
+  24:../Radar_Control/src/radar_target_detection.c ****  */
+  25:../Radar_Control/src/radar_target_detection.c **** 
+  26:../Radar_Control/src/radar_target_detection.c **** #include "ds_radar_interface.h"
+  27:../Radar_Control/src/radar_target_detection.c **** #include "radar_api.h"
+  28:../Radar_Control/src/radar_target_detection.c **** 
+  29:../Radar_Control/src/radar_target_detection.c **** /*
+  30:../Radar_Control/src/radar_target_detection.c **** ==============================================================================
+  31:../Radar_Control/src/radar_target_detection.c ****    2. EXPORTED FUNCTIONS
+  32:../Radar_Control/src/radar_target_detection.c **** ==============================================================================
+  33:../Radar_Control/src/radar_target_detection.c ****  */
+  34:../Radar_Control/src/radar_target_detection.c **** 
+  35:../Radar_Control/src/radar_target_detection.c **** uint16_t radar_set_dsp_settings(Radar_Handle_t device, const DSP_Settings_t* configuration)
+  36:../Radar_Control/src/radar_target_detection.c **** {
+  28              	 .loc 1 36 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 10B5     	 push {r4,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 8
+  36              	 .cfi_offset 4,-8
+  37              	 .cfi_offset 14,-4
+  38 0002 94B0     	 sub sp,sp,#80
+  39              	.LCFI1:
+  40              	 .cfi_def_cfa_offset 88
+  37:../Radar_Control/src/radar_target_detection.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  38:../Radar_Control/src/radar_target_detection.c ****   algo_settings_t new_settings;
+  39:../Radar_Control/src/radar_target_detection.c ****   memset(&new_settings, 0, sizeof(algo_settings_t));
+  41              	 .loc 1 39 0
+  42 0004 0021     	 movs r1,#0
+  43              	.LVL1:
+  44 0006 4C22     	 movs r2,#76
+  45 0008 01A8     	 add r0,sp,#4
+  46              	.LVL2:
+  47 000a FFF7FEFF 	 bl memset
+  48              	.LVL3:
+  40:../Radar_Control/src/radar_target_detection.c ****   
+  41:../Radar_Control/src/radar_target_detection.c ****   /* Fetch the complete existing data, to update only partially the new data. */
+  42:../Radar_Control/src/radar_target_detection.c ****   ds_algo_fetch_settings(&new_settings);
+  49              	 .loc 1 42 0
+  50 000e 01A8     	 add r0,sp,#4
+  51 0010 FFF7FEFF 	 bl ds_algo_fetch_settings
+  52              	.LVL4:
+  43:../Radar_Control/src/radar_target_detection.c ****   
+  44:../Radar_Control/src/radar_target_detection.c **** #ifdef FMCW_SUPPORTED
+  45:../Radar_Control/src/radar_target_detection.c ****   new_settings.tracking_enable 		  	 = configuration->enable_tracking;
+  46:../Radar_Control/src/radar_target_detection.c ****   new_settings.mti_filter_enable	 	 = configuration->enable_mti_filter;
+  47:../Radar_Control/src/radar_target_detection.c ****   new_settings.num_of_tracks			 = configuration->num_of_tracks;
+  48:../Radar_Control/src/radar_target_detection.c ****   new_settings.mti_filter_len			 = configuration->mti_filter_length;
+  49:../Radar_Control/src/radar_target_detection.c ****   new_settings.median_filter_len		 = configuration->median_filter_length;
+  50:../Radar_Control/src/radar_target_detection.c ****   new_settings.mvg_avg_len				 = configuration->range_mvg_avg_length;
+  51:../Radar_Control/src/radar_target_detection.c ****   new_settings.min_distance_cm			 = configuration->min_range_cm;
+  52:../Radar_Control/src/radar_target_detection.c ****   new_settings.max_distance_cm			 = configuration->max_range_cm;
+  53:../Radar_Control/src/radar_target_detection.c ****   new_settings.range_detection_threshold = configuration->range_threshold;
+  54:../Radar_Control/src/radar_target_detection.c **** #endif
+  55:../Radar_Control/src/radar_target_detection.c ****   
+  56:../Radar_Control/src/radar_target_detection.c **** #if defined(DOPPLER_SUPPORTED) || defined(FMCW_SUPPORTED)
+  57:../Radar_Control/src/radar_target_detection.c ****   new_settings.min_speed_kmh = configuration->min_speed_kmh;
+  58:../Radar_Control/src/radar_target_detection.c ****   new_settings.max_speed_kmh = configuration->max_speed_kmh;
+  59:../Radar_Control/src/radar_target_detection.c ****   new_settings.speed_detection_threshold = configuration->speed_threshold;
+  60:../Radar_Control/src/radar_target_detection.c **** #endif
+  61:../Radar_Control/src/radar_target_detection.c ****   
+  62:../Radar_Control/src/radar_target_detection.c ****   /* Check for new settings */
+  63:../Radar_Control/src/radar_target_detection.c ****   if (ds_algo_check_settings(&new_settings) == 0)
+  53              	 .loc 1 63 0
+  54 0014 01A8     	 add r0,sp,#4
+  55 0016 FFF7FEFF 	 bl ds_algo_check_settings
+  56              	.LVL5:
+  57 001a 0446     	 mov r4,r0
+  58 001c 10B1     	 cbz r0,.L6
+  64:../Radar_Control/src/radar_target_detection.c ****   {
+  65:../Radar_Control/src/radar_target_detection.c ****     /* Apply new settings */
+  66:../Radar_Control/src/radar_target_detection.c ****     ds_algo_store_settings(&new_settings);
+  67:../Radar_Control/src/radar_target_detection.c ****     return (RADAR_ERR_OK);
+  68:../Radar_Control/src/radar_target_detection.c ****   }
+  69:../Radar_Control/src/radar_target_detection.c ****   else
+  70:../Radar_Control/src/radar_target_detection.c ****   {
+  71:../Radar_Control/src/radar_target_detection.c ****     return (RADAR_ERR_PARAMETER_OUT_OF_RANGE);
+  59              	 .loc 1 71 0
+  60 001e 0C20     	 movs r0,#12
+  72:../Radar_Control/src/radar_target_detection.c ****   }
+  73:../Radar_Control/src/radar_target_detection.c **** }
+  61              	 .loc 1 73 0
+  62 0020 14B0     	 add sp,sp,#80
+  63              	.LCFI2:
+  64              	 .cfi_remember_state
+  65              	 .cfi_def_cfa_offset 8
+  66              	 
+  67 0022 10BD     	 pop {r4,pc}
+  68              	.L6:
+  69              	.LCFI3:
+  70              	 .cfi_restore_state
+  66:../Radar_Control/src/radar_target_detection.c ****     return (RADAR_ERR_OK);
+  71              	 .loc 1 66 0
+  72 0024 01A8     	 add r0,sp,#4
+  73 0026 FFF7FEFF 	 bl ds_algo_store_settings
+  74              	.LVL6:
+  67:../Radar_Control/src/radar_target_detection.c ****   }
+  75              	 .loc 1 67 0
+  76 002a 2046     	 mov r0,r4
+  77              	 .loc 1 73 0
+  78 002c 14B0     	 add sp,sp,#80
+  79              	.LCFI4:
+  80              	 .cfi_def_cfa_offset 8
+  81              	 
+  82 002e 10BD     	 pop {r4,pc}
+  83              	 .cfi_endproc
+  84              	.LFE470:
+  86              	 .section .text.radar_get_dsp_settings,"ax",%progbits
+  87              	 .align 2
+  88              	 .global radar_get_dsp_settings
+  89              	 .thumb
+  90              	 .thumb_func
+  92              	radar_get_dsp_settings:
+  93              	.LFB471:
+  74:../Radar_Control/src/radar_target_detection.c **** 
+  75:../Radar_Control/src/radar_target_detection.c **** //============================================================================
+  76:../Radar_Control/src/radar_target_detection.c **** 
+  77:../Radar_Control/src/radar_target_detection.c **** uint16_t radar_get_dsp_settings(Radar_Handle_t device, DSP_Settings_t* configuration)
+  78:../Radar_Control/src/radar_target_detection.c **** {
+  94              	 .loc 1 78 0
+  95              	 .cfi_startproc
+  96              	 
+  97              	 
+  98              	.LVL7:
+  99 0000 F8B5     	 push {r3,r4,r5,r6,r7,lr}
+ 100              	.LCFI5:
+ 101              	 .cfi_def_cfa_offset 24
+ 102              	 .cfi_offset 3,-24
+ 103              	 .cfi_offset 4,-20
+ 104              	 .cfi_offset 5,-16
+ 105              	 .cfi_offset 6,-12
+ 106              	 .cfi_offset 7,-8
+ 107              	 .cfi_offset 14,-4
+ 108              	 .loc 1 78 0
+ 109 0002 0C46     	 mov r4,r1
+  79:../Radar_Control/src/radar_target_detection.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  80:../Radar_Control/src/radar_target_detection.c ****   algo_settings_t *p_ds_config = ds_algo_get_settings();
+ 110              	 .loc 1 80 0
+ 111 0004 FFF7FEFF 	 bl ds_algo_get_settings
+ 112              	.LVL8:
+ 113 0008 0346     	 mov r3,r0
+ 114              	.LVL9:
+  81:../Radar_Control/src/radar_target_detection.c ****   
+  82:../Radar_Control/src/radar_target_detection.c ****   configuration->enable_tracking      = p_ds_config->tracking_enable;
+  83:../Radar_Control/src/radar_target_detection.c ****   configuration->enable_mti_filter    = p_ds_config->mti_filter_enable;
+  84:../Radar_Control/src/radar_target_detection.c ****   configuration->num_of_tracks        = p_ds_config->num_of_tracks;
+  85:../Radar_Control/src/radar_target_detection.c ****   configuration->mti_filter_length    = p_ds_config->mti_filter_len;
+  86:../Radar_Control/src/radar_target_detection.c ****   configuration->median_filter_length = p_ds_config->median_filter_len;
+  87:../Radar_Control/src/radar_target_detection.c ****   configuration->range_mvg_avg_length = p_ds_config->mvg_avg_len;
+  88:../Radar_Control/src/radar_target_detection.c ****   configuration->min_range_cm         = p_ds_config->min_distance_cm;
+  89:../Radar_Control/src/radar_target_detection.c ****   configuration->max_range_cm         = p_ds_config->max_distance_cm;
+  90:../Radar_Control/src/radar_target_detection.c ****   configuration->range_threshold      = p_ds_config->range_detection_threshold;
+  91:../Radar_Control/src/radar_target_detection.c ****   
+  92:../Radar_Control/src/radar_target_detection.c ****   configuration->min_speed_kmh        = p_ds_config->min_speed_kmh;
+  93:../Radar_Control/src/radar_target_detection.c ****   configuration->max_speed_kmh        = p_ds_config->max_speed_kmh;
+  94:../Radar_Control/src/radar_target_detection.c ****   configuration->speed_threshold      = p_ds_config->speed_detection_threshold;
+  95:../Radar_Control/src/radar_target_detection.c ****   
+  96:../Radar_Control/src/radar_target_detection.c ****   return (RADAR_ERR_OK);
+  97:../Radar_Control/src/radar_target_detection.c **** }
+ 115              	 .loc 1 97 0
+ 116 000a 0020     	 movs r0,#0
+ 117              	.LVL10:
+  82:../Radar_Control/src/radar_target_detection.c ****   configuration->enable_mti_filter    = p_ds_config->mti_filter_enable;
+ 118              	 .loc 1 82 0
+ 119 000c DA68     	 ldr r2,[r3,#12]
+ 120 000e A274     	 strb r2,[r4,#18]
+  83:../Radar_Control/src/radar_target_detection.c ****   configuration->num_of_tracks        = p_ds_config->num_of_tracks;
+ 121              	 .loc 1 83 0
+ 122 0010 1A6A     	 ldr r2,[r3,#32]
+ 123 0012 6275     	 strb r2,[r4,#21]
+  84:../Radar_Control/src/radar_target_detection.c ****   configuration->mti_filter_length    = p_ds_config->mti_filter_len;
+ 124              	 .loc 1 84 0
+ 125 0014 1A69     	 ldr r2,[r3,#16]
+ 126 0016 E274     	 strb r2,[r4,#19]
+  86:../Radar_Control/src/radar_target_detection.c ****   configuration->range_mvg_avg_length = p_ds_config->mvg_avg_len;
+ 127              	 .loc 1 86 0
+ 128 0018 9A69     	 ldr r2,[r3,#24]
+  85:../Radar_Control/src/radar_target_detection.c ****   configuration->median_filter_length = p_ds_config->median_filter_len;
+ 129              	 .loc 1 85 0
+ 130 001a D3F81CE0 	 ldr lr,[r3,#28]
+  86:../Radar_Control/src/radar_target_detection.c ****   configuration->range_mvg_avg_length = p_ds_config->mvg_avg_len;
+ 131              	 .loc 1 86 0
+ 132 001e 2275     	 strb r2,[r4,#20]
+  87:../Radar_Control/src/radar_target_detection.c ****   configuration->min_range_cm         = p_ds_config->min_distance_cm;
+ 133              	 .loc 1 87 0
+ 134 0020 5A69     	 ldr r2,[r3,#20]
+ 135 0022 2270     	 strb r2,[r4]
+  88:../Radar_Control/src/radar_target_detection.c ****   configuration->max_range_cm         = p_ds_config->max_distance_cm;
+ 136              	 .loc 1 88 0
+ 137 0024 DF6A     	 ldr r7,[r3,#44]
+  89:../Radar_Control/src/radar_target_detection.c ****   configuration->range_threshold      = p_ds_config->range_detection_threshold;
+ 138              	 .loc 1 89 0
+ 139 0026 1E6B     	 ldr r6,[r3,#48]
+  90:../Radar_Control/src/radar_target_detection.c ****   
+ 140              	 .loc 1 90 0
+ 141 0028 5D6B     	 ldr r5,[r3,#52]
+  92:../Radar_Control/src/radar_target_detection.c ****   configuration->max_speed_kmh        = p_ds_config->max_speed_kmh;
+ 142              	 .loc 1 92 0
+ 143 002a D96B     	 ldr r1,[r3,#60]
+  93:../Radar_Control/src/radar_target_detection.c ****   configuration->speed_threshold      = p_ds_config->speed_detection_threshold;
+ 144              	 .loc 1 93 0
+ 145 002c 1A6C     	 ldr r2,[r3,#64]
+  94:../Radar_Control/src/radar_target_detection.c ****   
+ 146              	 .loc 1 94 0
+ 147 002e 9B6B     	 ldr r3,[r3,#56]
+ 148              	.LVL11:
+ 149 0030 2382     	 strh r3,[r4,#16]
+  85:../Radar_Control/src/radar_target_detection.c ****   configuration->median_filter_length = p_ds_config->median_filter_len;
+ 150              	 .loc 1 85 0
+ 151 0032 A4F816E0 	 strh lr,[r4,#22]
+  88:../Radar_Control/src/radar_target_detection.c ****   configuration->max_range_cm         = p_ds_config->max_distance_cm;
+ 152              	 .loc 1 88 0
+ 153 0036 6780     	 strh r7,[r4,#2]
+  89:../Radar_Control/src/radar_target_detection.c ****   configuration->range_threshold      = p_ds_config->range_detection_threshold;
+ 154              	 .loc 1 89 0
+ 155 0038 A680     	 strh r6,[r4,#4]
+  90:../Radar_Control/src/radar_target_detection.c ****   
+ 156              	 .loc 1 90 0
+ 157 003a E581     	 strh r5,[r4,#14]
+  92:../Radar_Control/src/radar_target_detection.c ****   configuration->max_speed_kmh        = p_ds_config->max_speed_kmh;
+ 158              	 .loc 1 92 0
+ 159 003c E180     	 strh r1,[r4,#6]
+  93:../Radar_Control/src/radar_target_detection.c ****   configuration->speed_threshold      = p_ds_config->speed_detection_threshold;
+ 160              	 .loc 1 93 0
+ 161 003e 2281     	 strh r2,[r4,#8]
+ 162              	 .loc 1 97 0
+ 163 0040 F8BD     	 pop {r3,r4,r5,r6,r7,pc}
+ 164              	 .cfi_endproc
+ 165              	.LFE471:
+ 167              	 .section .text.radar_get_target_info,"ax",%progbits
+ 168              	 .align 2
+ 169              	 .global radar_get_target_info
+ 170              	 .thumb
+ 171              	 .thumb_func
+ 173              	radar_get_target_info:
+ 174              	.LFB472:
+  98:../Radar_Control/src/radar_target_detection.c **** 
+  99:../Radar_Control/src/radar_target_detection.c **** //============================================================================
+ 100:../Radar_Control/src/radar_target_detection.c **** 
+ 101:../Radar_Control/src/radar_target_detection.c **** uint16_t radar_get_target_info(Radar_Handle_t device, Target_Info_t* target_info, uint8_t* target_c
+ 102:../Radar_Control/src/radar_target_detection.c **** {
+ 175              	 .loc 1 102 0
+ 176              	 .cfi_startproc
+ 177              	 
+ 178              	 
+ 179              	.LVL12:
+ 180 0000 08B5     	 push {r3,lr}
+ 181              	.LCFI6:
+ 182              	 .cfi_def_cfa_offset 8
+ 183              	 .cfi_offset 3,-8
+ 184              	 .cfi_offset 14,-4
+ 103:../Radar_Control/src/radar_target_detection.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 104:../Radar_Control/src/radar_target_detection.c **** 
+ 105:../Radar_Control/src/radar_target_detection.c ****   ds_ep_fetch_target_list(target_info, target_count);
+ 185              	 .loc 1 105 0
+ 186 0002 0846     	 mov r0,r1
+ 187              	.LVL13:
+ 188 0004 1146     	 mov r1,r2
+ 189              	.LVL14:
+ 190 0006 FFF7FEFF 	 bl ds_ep_fetch_target_list
+ 191              	.LVL15:
+ 106:../Radar_Control/src/radar_target_detection.c ****   return (RADAR_ERR_OK);
+ 107:../Radar_Control/src/radar_target_detection.c **** }
+ 192              	 .loc 1 107 0
+ 193 000a 0020     	 movs r0,#0
+ 194 000c 08BD     	 pop {r3,pc}
+ 195              	 .cfi_endproc
+ 196              	.LFE472:
+ 198 000e 00BF     	 .section .text.radar_get_range_detection_threshold,"ax",%progbits
+ 199              	 .align 2
+ 200              	 .global radar_get_range_detection_threshold
+ 201              	 .thumb
+ 202              	 .thumb_func
+ 204              	radar_get_range_detection_threshold:
+ 205              	.LFB473:
+ 108:../Radar_Control/src/radar_target_detection.c **** 
+ 109:../Radar_Control/src/radar_target_detection.c **** //============================================================================
+ 110:../Radar_Control/src/radar_target_detection.c **** 
+ 111:../Radar_Control/src/radar_target_detection.c **** uint16_t radar_get_range_detection_threshold(Radar_Handle_t device, uint16_t *threshold)
+ 112:../Radar_Control/src/radar_target_detection.c **** {
+ 206              	 .loc 1 112 0
+ 207              	 .cfi_startproc
+ 208              	 
+ 209              	 
+ 210              	.LVL16:
+ 211 0000 08B5     	 push {r3,lr}
+ 212              	.LCFI7:
+ 213              	 .cfi_def_cfa_offset 8
+ 214              	 .cfi_offset 3,-8
+ 215              	 .cfi_offset 14,-4
+ 113:../Radar_Control/src/radar_target_detection.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 114:../Radar_Control/src/radar_target_detection.c **** 
+ 115:../Radar_Control/src/radar_target_detection.c ****   ds_ep_fetch_range_detection_threshold(threshold);
+ 216              	 .loc 1 115 0
+ 217 0002 0846     	 mov r0,r1
+ 218              	.LVL17:
+ 219 0004 FFF7FEFF 	 bl ds_ep_fetch_range_detection_threshold
+ 220              	.LVL18:
+ 116:../Radar_Control/src/radar_target_detection.c ****   return (RADAR_ERR_OK);
+ 117:../Radar_Control/src/radar_target_detection.c **** }
+ 221              	 .loc 1 117 0
+ 222 0008 0020     	 movs r0,#0
+ 223 000a 08BD     	 pop {r3,pc}
+ 224              	 .cfi_endproc
+ 225              	.LFE473:
+ 227              	 .text
+ 228              	.Letext0:
+ 229              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 230              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 231              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 232              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 233              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 234              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 235              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 236              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 237              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 238              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 239              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 240              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 241              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 242              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 243              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/ds_radar_interface.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 radar_target_detection.c
+    {standard input}:20     .text.radar_set_dsp_settings:00000000 $t
+    {standard input}:25     .text.radar_set_dsp_settings:00000000 radar_set_dsp_settings
+    {standard input}:87     .text.radar_get_dsp_settings:00000000 $t
+    {standard input}:92     .text.radar_get_dsp_settings:00000000 radar_get_dsp_settings
+    {standard input}:168    .text.radar_get_target_info:00000000 $t
+    {standard input}:173    .text.radar_get_target_info:00000000 radar_get_target_info
+    {standard input}:199    .text.radar_get_range_detection_threshold:00000000 $t
+    {standard input}:204    .text.radar_get_range_detection_threshold:00000000 radar_get_range_detection_threshold
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+memset
+ds_algo_fetch_settings
+ds_algo_check_settings
+ds_algo_store_settings
+ds_algo_get_settings
+ds_ep_fetch_target_list
+ds_ep_fetch_range_detection_threshold

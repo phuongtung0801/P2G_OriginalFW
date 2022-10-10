@@ -1,0 +1,185 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "radar_p2g.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.radar_set_gain_level,"ax",%progbits
+  20              	 .align 2
+  21              	 .global radar_set_gain_level
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	radar_set_gain_level:
+  26              	.LFB470:
+  27              	 .file 1 "../Radar_Control/src/radar_p2g.c"
+   1:../Radar_Control/src/radar_p2g.c **** /**
+   2:../Radar_Control/src/radar_p2g.c ****   @file radar_p2g.c
+   3:../Radar_Control/src/radar_p2g.c **** 
+   4:../Radar_Control/src/radar_p2g.c ****   @brief This file contains the driver API for Position2Go Board of
+   5:../Radar_Control/src/radar_p2g.c ****          Infineon radar sensors.
+   6:../Radar_Control/src/radar_p2g.c **** */
+   7:../Radar_Control/src/radar_p2g.c **** 
+   8:../Radar_Control/src/radar_p2g.c **** /* ===========================================================================
+   9:../Radar_Control/src/radar_p2g.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../Radar_Control/src/radar_p2g.c **** ** All rights reserved.
+  11:../Radar_Control/src/radar_p2g.c **** ** ===========================================================================
+  12:../Radar_Control/src/radar_p2g.c **** **
+  13:../Radar_Control/src/radar_p2g.c **** ** ===========================================================================
+  14:../Radar_Control/src/radar_p2g.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../Radar_Control/src/radar_p2g.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../Radar_Control/src/radar_p2g.c **** ** is not permitted without Infineon's prior written authorisation.
+  17:../Radar_Control/src/radar_p2g.c **** ** ===========================================================================
+  18:../Radar_Control/src/radar_p2g.c **** */
+  19:../Radar_Control/src/radar_p2g.c **** 
+  20:../Radar_Control/src/radar_p2g.c **** /*
+  21:../Radar_Control/src/radar_p2g.c **** ==============================================================================
+  22:../Radar_Control/src/radar_p2g.c ****    1. INCLUDE FILES
+  23:../Radar_Control/src/radar_p2g.c **** ==============================================================================
+  24:../Radar_Control/src/radar_p2g.c ****  */
+  25:../Radar_Control/src/radar_p2g.c **** 
+  26:../Radar_Control/src/radar_p2g.c **** #include "radar_api.h"
+  27:../Radar_Control/src/radar_p2g.c **** #include "ds_radar_interface.h"
+  28:../Radar_Control/src/radar_p2g.c **** 
+  29:../Radar_Control/src/radar_p2g.c **** /*
+  30:../Radar_Control/src/radar_p2g.c **** ==============================================================================
+  31:../Radar_Control/src/radar_p2g.c ****    2. EXPORTED FUNCTIONS
+  32:../Radar_Control/src/radar_p2g.c **** ==============================================================================
+  33:../Radar_Control/src/radar_p2g.c ****  */
+  34:../Radar_Control/src/radar_p2g.c **** 
+  35:../Radar_Control/src/radar_p2g.c **** uint16_t radar_set_gain_level(Radar_Handle_t device, uint16_t gain_level)
+  36:../Radar_Control/src/radar_p2g.c **** {
+  28              	 .loc 1 36 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  37:../Radar_Control/src/radar_p2g.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  38:../Radar_Control/src/radar_p2g.c ****   
+  39:../Radar_Control/src/radar_p2g.c ****   if (gain_level > MAX_PGA_GAIN_LEVEL)
+  33              	 .loc 1 39 0
+  34 0000 0729     	 cmp r1,#7
+  35 0002 01D9     	 bls .L7
+  40:../Radar_Control/src/radar_p2g.c ****   {
+  41:../Radar_Control/src/radar_p2g.c ****     return (RADAR_ERR_UNSUPPORTED_PGA_GAIN);
+  36              	 .loc 1 41 0
+  37 0004 5220     	 movs r0,#82
+  38              	.LVL1:
+  39 0006 7047     	 bx lr
+  40              	.LVL2:
+  41              	.L7:
+  36:../Radar_Control/src/radar_p2g.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  42              	 .loc 1 36 0
+  43 0008 00B5     	 push {lr}
+  44              	.LCFI0:
+  45              	 .cfi_def_cfa_offset 4
+  46              	 .cfi_offset 14,-4
+  47 000a 83B0     	 sub sp,sp,#12
+  48              	.LCFI1:
+  49              	 .cfi_def_cfa_offset 16
+  50 000c 0191     	 str r1,[sp,#4]
+  42:../Radar_Control/src/radar_p2g.c ****   }
+  43:../Radar_Control/src/radar_p2g.c ****   
+  44:../Radar_Control/src/radar_p2g.c ****   /* Update the PGA Gain level */
+  45:../Radar_Control/src/radar_p2g.c ****   ds_device_get_settings()->pga_rx_gain_level = gain_level;
+  51              	 .loc 1 45 0
+  52 000e FFF7FEFF 	 bl ds_device_get_settings
+  53              	.LVL3:
+  54 0012 0199     	 ldr r1,[sp,#4]
+  55 0014 4184     	 strh r1,[r0,#34]
+  46:../Radar_Control/src/radar_p2g.c ****   ds_device_get_settings()->isGainlevelUpdated = 1;
+  56              	 .loc 1 46 0
+  57 0016 FFF7FEFF 	 bl ds_device_get_settings
+  58              	.LVL4:
+  59 001a 0123     	 movs r3,#1
+  60 001c 4363     	 str r3,[r0,#52]
+  47:../Radar_Control/src/radar_p2g.c ****   
+  48:../Radar_Control/src/radar_p2g.c ****   return (RADAR_ERR_OK);
+  61              	 .loc 1 48 0
+  62 001e 0020     	 movs r0,#0
+  49:../Radar_Control/src/radar_p2g.c **** }
+  63              	 .loc 1 49 0
+  64 0020 03B0     	 add sp,sp,#12
+  65              	.LCFI2:
+  66              	 .cfi_def_cfa_offset 4
+  67              	 
+  68 0022 5DF804FB 	 ldr pc,[sp],#4
+  69              	 .cfi_endproc
+  70              	.LFE470:
+  72 0026 00BF     	 .section .text.radar_get_gain_level,"ax",%progbits
+  73              	 .align 2
+  74              	 .global radar_get_gain_level
+  75              	 .thumb
+  76              	 .thumb_func
+  78              	radar_get_gain_level:
+  79              	.LFB471:
+  50:../Radar_Control/src/radar_p2g.c **** 
+  51:../Radar_Control/src/radar_p2g.c **** //============================================================================
+  52:../Radar_Control/src/radar_p2g.c **** 
+  53:../Radar_Control/src/radar_p2g.c **** uint16_t radar_get_gain_level(Radar_Handle_t device, uint16_t* gain_level)
+  54:../Radar_Control/src/radar_p2g.c **** {
+  80              	 .loc 1 54 0
+  81              	 .cfi_startproc
+  82              	 
+  83              	 
+  84              	.LVL5:
+  85 0000 10B5     	 push {r4,lr}
+  86              	.LCFI3:
+  87              	 .cfi_def_cfa_offset 8
+  88              	 .cfi_offset 4,-8
+  89              	 .cfi_offset 14,-4
+  90              	 .loc 1 54 0
+  91 0002 0C46     	 mov r4,r1
+  55:../Radar_Control/src/radar_p2g.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  56:../Radar_Control/src/radar_p2g.c ****   
+  57:../Radar_Control/src/radar_p2g.c ****   /* Get current PGA Gain level from driver */
+  58:../Radar_Control/src/radar_p2g.c ****   *gain_level = ds_device_get_settings()->pga_rx_gain_level;
+  92              	 .loc 1 58 0
+  93 0004 FFF7FEFF 	 bl ds_device_get_settings
+  94              	.LVL6:
+  95 0008 438C     	 ldrh r3,[r0,#34]
+  96 000a 2380     	 strh r3,[r4]
+  59:../Radar_Control/src/radar_p2g.c ****   
+  60:../Radar_Control/src/radar_p2g.c ****   return (RADAR_ERR_OK);
+  61:../Radar_Control/src/radar_p2g.c **** }
+  97              	 .loc 1 61 0
+  98 000c 0020     	 movs r0,#0
+  99 000e 10BD     	 pop {r4,pc}
+ 100              	 .cfi_endproc
+ 101              	.LFE471:
+ 103              	 .text
+ 104              	.Letext0:
+ 105              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 106              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 107              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 108              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 109              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 110              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 111              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 112              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 113              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 114              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 115              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 116              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 117              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 radar_p2g.c
+    {standard input}:20     .text.radar_set_gain_level:00000000 $t
+    {standard input}:25     .text.radar_set_gain_level:00000000 radar_set_gain_level
+    {standard input}:73     .text.radar_get_gain_level:00000000 $t
+    {standard input}:78     .text.radar_get_gain_level:00000000 radar_get_gain_level
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+ds_device_get_settings

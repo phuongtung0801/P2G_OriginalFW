@@ -1,0 +1,1358 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "EndpointRadarADCXMC.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.send_adc_configuration,"ax",%progbits
+  20              	 .align 2
+  21              	 .global send_adc_configuration
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	send_adc_configuration:
+  26              	.LFB486:
+  27              	 .file 1 "../HostCommunication/src/EndpointRadarADCXMC.c"
+   1:../HostCommunication/src/EndpointRadarADCXMC.c **** /**
+   2:../HostCommunication/src/EndpointRadarADCXMC.c ****  * \file EndpointRadarADCXMC.c
+   3:../HostCommunication/src/EndpointRadarADCXMC.c ****  *
+   4:../HostCommunication/src/EndpointRadarADCXMC.c ****  * \brief ...
+   5:../HostCommunication/src/EndpointRadarADCXMC.c ****  *
+   6:../HostCommunication/src/EndpointRadarADCXMC.c ****  * ...
+   7:../HostCommunication/src/EndpointRadarADCXMC.c ****  *
+   8:../HostCommunication/src/EndpointRadarADCXMC.c ****  */
+   9:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  10:../HostCommunication/src/EndpointRadarADCXMC.c **** /* ===========================================================================
+  11:../HostCommunication/src/EndpointRadarADCXMC.c **** ** Copyright (C) 2016-2018 Infineon Technologies AG
+  12:../HostCommunication/src/EndpointRadarADCXMC.c **** ** All rights reserved.
+  13:../HostCommunication/src/EndpointRadarADCXMC.c **** ** ===========================================================================
+  14:../HostCommunication/src/EndpointRadarADCXMC.c **** **
+  15:../HostCommunication/src/EndpointRadarADCXMC.c **** ** ===========================================================================
+  16:../HostCommunication/src/EndpointRadarADCXMC.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  17:../HostCommunication/src/EndpointRadarADCXMC.c **** ** Passing on and copying of this document, and communication of its contents
+  18:../HostCommunication/src/EndpointRadarADCXMC.c **** ** is not permitted without Infineon's prior written authorisation.
+  19:../HostCommunication/src/EndpointRadarADCXMC.c **** ** ===========================================================================
+  20:../HostCommunication/src/EndpointRadarADCXMC.c **** */
+  21:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  22:../HostCommunication/src/EndpointRadarADCXMC.c **** /*
+  23:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+  24:../HostCommunication/src/EndpointRadarADCXMC.c ****    1. INCLUDE FILES
+  25:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+  26:../HostCommunication/src/EndpointRadarADCXMC.c **** */
+  27:../HostCommunication/src/EndpointRadarADCXMC.c **** #include "EndpointRadarADCXMC.h"
+  28:../HostCommunication/src/EndpointRadarADCXMC.c **** #include "EndpointRadarChangeCodes.h"
+  29:../HostCommunication/src/EndpointRadarADCXMC.c **** #include "PayloadHelper.h"
+  30:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  31:../HostCommunication/src/EndpointRadarADCXMC.c **** /*
+  32:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+  33:../HostCommunication/src/EndpointRadarADCXMC.c ****    2. LOCAL DEFINITIONS
+  34:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+  35:../HostCommunication/src/EndpointRadarADCXMC.c **** */
+  36:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  37:../HostCommunication/src/EndpointRadarADCXMC.c **** /**
+  38:../HostCommunication/src/EndpointRadarADCXMC.c ****  * \defgroup MessageTypes
+  39:../HostCommunication/src/EndpointRadarADCXMC.c ****  *
+  40:../HostCommunication/src/EndpointRadarADCXMC.c ****  * \brief This end point knows these message types.
+  41:../HostCommunication/src/EndpointRadarADCXMC.c ****  *
+  42:../HostCommunication/src/EndpointRadarADCXMC.c ****  * The first payload byte of every message is one of these codes.
+  43:../HostCommunication/src/EndpointRadarADCXMC.c ****  *
+  44:../HostCommunication/src/EndpointRadarADCXMC.c ****  * @{
+  45:../HostCommunication/src/EndpointRadarADCXMC.c ****  */
+  46:../HostCommunication/src/EndpointRadarADCXMC.c **** #define MSG_GET_CONFIGURATION     0x00 /**< A message to query the ADC
+  47:../HostCommunication/src/EndpointRadarADCXMC.c ****                                             configuration. */
+  48:../HostCommunication/src/EndpointRadarADCXMC.c **** #define MSG_SET_CONFIGURATION     0x01 /**< A message containing the ADC
+  49:../HostCommunication/src/EndpointRadarADCXMC.c ****                                             configuration. */
+  50:../HostCommunication/src/EndpointRadarADCXMC.c **** /** @} */
+  51:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  52:../HostCommunication/src/EndpointRadarADCXMC.c **** /*
+  53:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+  54:../HostCommunication/src/EndpointRadarADCXMC.c ****    3. LOCAL FUNCTION PROTOTYPES
+  55:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+  56:../HostCommunication/src/EndpointRadarADCXMC.c **** */
+  57:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  58:../HostCommunication/src/EndpointRadarADCXMC.c **** uint16_t send_adc_configuration(uint8_t endpoint,
+  59:../HostCommunication/src/EndpointRadarADCXMC.c ****                                        Radar_Handle_t radar_driver);
+  60:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  61:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  62:../HostCommunication/src/EndpointRadarADCXMC.c **** uint8_t adc_endpoint = 0;
+  63:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  64:../HostCommunication/src/EndpointRadarADCXMC.c **** /*
+  65:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+  66:../HostCommunication/src/EndpointRadarADCXMC.c ****   4. LOCAL FUNCTIONS
+  67:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+  68:../HostCommunication/src/EndpointRadarADCXMC.c **** */
+  69:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  70:../HostCommunication/src/EndpointRadarADCXMC.c **** uint16_t send_adc_configuration(uint8_t endpoint,
+  71:../HostCommunication/src/EndpointRadarADCXMC.c ****                                        Radar_Handle_t radar_driver)
+  72:../HostCommunication/src/EndpointRadarADCXMC.c **** {
+  28              	 .loc 1 72 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 F0B5     	 push {r4,r5,r6,r7,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 20
+  36              	 .cfi_offset 4,-20
+  37              	 .cfi_offset 5,-16
+  38              	 .cfi_offset 6,-12
+  39              	 .cfi_offset 7,-8
+  40              	 .cfi_offset 14,-4
+  73:../HostCommunication/src/EndpointRadarADCXMC.c ****     uint16_t error_code;
+  74:../HostCommunication/src/EndpointRadarADCXMC.c ****     Adc_Configuration_t adc_configuration;
+  75:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  76:../HostCommunication/src/EndpointRadarADCXMC.c ****     adc_endpoint = endpoint;
+  41              	 .loc 1 76 0
+  42 0002 174B     	 ldr r3,.L5
+  72:../HostCommunication/src/EndpointRadarADCXMC.c ****     uint16_t error_code;
+  43              	 .loc 1 72 0
+  44 0004 85B0     	 sub sp,sp,#20
+  45              	.LCFI1:
+  46              	 .cfi_def_cfa_offset 40
+  72:../HostCommunication/src/EndpointRadarADCXMC.c ****     uint16_t error_code;
+  47              	 .loc 1 72 0
+  48 0006 0546     	 mov r5,r0
+  77:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  78:../HostCommunication/src/EndpointRadarADCXMC.c ****     /* read ADC configuration from device */
+  79:../HostCommunication/src/EndpointRadarADCXMC.c ****     error_code = radar_get_adc_configuration(radar_driver,
+  49              	 .loc 1 79 0
+  50 0008 0846     	 mov r0,r1
+  51              	.LVL1:
+  52 000a 02A9     	 add r1,sp,#8
+  53              	.LVL2:
+  76:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  54              	 .loc 1 76 0
+  55 000c 1D70     	 strb r5,[r3]
+  56              	 .loc 1 79 0
+  57 000e FFF7FEFF 	 bl radar_get_adc_configuration
+  58              	.LVL3:
+  80:../HostCommunication/src/EndpointRadarADCXMC.c ****                                              &adc_configuration);
+  81:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  82:../HostCommunication/src/EndpointRadarADCXMC.c ****     if (error_code == RADAR_ERR_OK)
+  59              	 .loc 1 82 0
+  60 0012 0446     	 mov r4,r0
+  61 0014 08BB     	 cbnz r0,.L2
+  62              	.LVL4:
+  63              	.LBB25:
+  83:../HostCommunication/src/EndpointRadarADCXMC.c ****     {
+  84:../HostCommunication/src/EndpointRadarADCXMC.c ****         uint8_t message[7];
+  85:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  86:../HostCommunication/src/EndpointRadarADCXMC.c ****         /* compile message */
+  87:../HostCommunication/src/EndpointRadarADCXMC.c ****         wr_payload_u8 (message, 0, MSG_SET_CONFIGURATION);
+  88:../HostCommunication/src/EndpointRadarADCXMC.c ****         wr_payload_u32(message, 1, adc_configuration.samplerate_Hz);
+  64              	 .loc 1 88 0
+  65 0016 029B     	 ldr r3,[sp,#8]
+  66              	.LVL5:
+  67              	.LBB26:
+  68              	.LBB27:
+  69              	 .file 2 "../HostCommunication/src/PayloadHelper.h"
+   1:../HostCommunication/src/PayloadHelper.h **** ﻿/**
+   2:../HostCommunication/src/PayloadHelper.h ****  * \file PayloadHelper.h
+   3:../HostCommunication/src/PayloadHelper.h ****  *
+   4:../HostCommunication/src/PayloadHelper.h ****  * \brief This file defines an internal protocol API to be used by endpoint
+   5:../HostCommunication/src/PayloadHelper.h ****  *        implementations.
+   6:../HostCommunication/src/PayloadHelper.h ****  *
+   7:../HostCommunication/src/PayloadHelper.h ****  * This file defines some light weight function that help to access data in
+   8:../HostCommunication/src/PayloadHelper.h ****  * protocol payload. Different implementation allow to adapt to the
+   9:../HostCommunication/src/PayloadHelper.h ****  * capabilities of the target machine. Special implementations can be chosen
+  10:../HostCommunication/src/PayloadHelper.h ****  * by defining the according compile time switch. If none of the available
+  11:../HostCommunication/src/PayloadHelper.h ****  * compile time switches is chosen, the default implementation will be used.
+  12:../HostCommunication/src/PayloadHelper.h ****  *
+  13:../HostCommunication/src/PayloadHelper.h ****  * The default implementation is safe on all target machines and can handle
+  14:../HostCommunication/src/PayloadHelper.h ****  * both, big endian CPUs and little endian CPUs. It may be slower than other
+  15:../HostCommunication/src/PayloadHelper.h ****  * special implementations.
+  16:../HostCommunication/src/PayloadHelper.h ****  *
+  17:../HostCommunication/src/PayloadHelper.h ****  * If the compile time switch COMLIB_ALLOW_PAYLOAD_CASTS is set, a special
+  18:../HostCommunication/src/PayloadHelper.h ****  * implementation for little endian machines is used, that can access data
+  19:../HostCommunication/src/PayloadHelper.h ****  * faster by casting data to the right data type. This implementation works
+  20:../HostCommunication/src/PayloadHelper.h ****  * only for CPUs that have no alignment requirement for 16 bit and 32 bit
+  21:../HostCommunication/src/PayloadHelper.h ****  * integers.
+  22:../HostCommunication/src/PayloadHelper.h ****  */
+  23:../HostCommunication/src/PayloadHelper.h **** 
+  24:../HostCommunication/src/PayloadHelper.h **** /* ===========================================================================
+  25:../HostCommunication/src/PayloadHelper.h **** ** Copyright (C) 2016-2018 Infineon Technologies AG
+  26:../HostCommunication/src/PayloadHelper.h **** ** All rights reserved.
+  27:../HostCommunication/src/PayloadHelper.h **** ** ===========================================================================
+  28:../HostCommunication/src/PayloadHelper.h **** **
+  29:../HostCommunication/src/PayloadHelper.h **** ** ===========================================================================
+  30:../HostCommunication/src/PayloadHelper.h **** ** This document contains proprietary information of Infineon Technologies AG.
+  31:../HostCommunication/src/PayloadHelper.h **** ** Passing on and copying of this document, and communication of its contents
+  32:../HostCommunication/src/PayloadHelper.h **** ** is not permitted without Infineon's prior written authorisation.
+  33:../HostCommunication/src/PayloadHelper.h **** ** ===========================================================================
+  34:../HostCommunication/src/PayloadHelper.h **** */
+  35:../HostCommunication/src/PayloadHelper.h **** 
+  36:../HostCommunication/src/PayloadHelper.h **** #ifndef HOSTCOMMUNICATION_PAYLOAD_HELPER_H_
+  37:../HostCommunication/src/PayloadHelper.h **** #define HOSTCOMMUNICATION_PAYLOAD_HELPER_H_
+  38:../HostCommunication/src/PayloadHelper.h **** 
+  39:../HostCommunication/src/PayloadHelper.h **** /*
+  40:../HostCommunication/src/PayloadHelper.h **** ==============================================================================
+  41:../HostCommunication/src/PayloadHelper.h ****    1. INCLUDE FILES
+  42:../HostCommunication/src/PayloadHelper.h **** ==============================================================================
+  43:../HostCommunication/src/PayloadHelper.h **** */
+  44:../HostCommunication/src/PayloadHelper.h **** #include <stdint.h>
+  45:../HostCommunication/src/PayloadHelper.h **** 
+  46:../HostCommunication/src/PayloadHelper.h **** /*
+  47:../HostCommunication/src/PayloadHelper.h **** ==============================================================================
+  48:../HostCommunication/src/PayloadHelper.h ****    2. FUNCTION PROTOTYPES AND INLINE FUNCTIONS
+  49:../HostCommunication/src/PayloadHelper.h **** ==============================================================================
+  50:../HostCommunication/src/PayloadHelper.h **** */
+  51:../HostCommunication/src/PayloadHelper.h **** 
+  52:../HostCommunication/src/PayloadHelper.h **** /**
+  53:../HostCommunication/src/PayloadHelper.h ****  * \internal
+  54:../HostCommunication/src/PayloadHelper.h ****  * \brief The function extracts a signed 8 bit integer from a payload buffer.
+  55:../HostCommunication/src/PayloadHelper.h ****  *
+  56:../HostCommunication/src/PayloadHelper.h ****  * The function reads one byte from the given payload buffer at the requested
+  57:../HostCommunication/src/PayloadHelper.h ****  * position and interprets it as a signed 8 bit integer value, which will be
+  58:../HostCommunication/src/PayloadHelper.h ****  * returned.
+  59:../HostCommunication/src/PayloadHelper.h ****  *
+  60:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+  61:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+  62:../HostCommunication/src/PayloadHelper.h ****  *                     starts.
+  63:../HostCommunication/src/PayloadHelper.h ****  *
+  64:../HostCommunication/src/PayloadHelper.h ****  * \return The function returns the value read from the payload.
+  65:../HostCommunication/src/PayloadHelper.h ****  */
+  66:../HostCommunication/src/PayloadHelper.h **** static inline int8_t rd_payload_i8(const uint8_t* payload, uint16_t offset)
+  67:../HostCommunication/src/PayloadHelper.h **** {
+  68:../HostCommunication/src/PayloadHelper.h ****     return (int8_t)payload[offset];
+  69:../HostCommunication/src/PayloadHelper.h **** }
+  70:../HostCommunication/src/PayloadHelper.h **** 
+  71:../HostCommunication/src/PayloadHelper.h **** /**
+  72:../HostCommunication/src/PayloadHelper.h ****  * \internal
+  73:../HostCommunication/src/PayloadHelper.h ****  * \brief The function extracts an unsigned 8 bit integer from a payload
+  74:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+  75:../HostCommunication/src/PayloadHelper.h ****  *
+  76:../HostCommunication/src/PayloadHelper.h ****  * The function reads one byte from the given payload buffer at the requested
+  77:../HostCommunication/src/PayloadHelper.h ****  * position and interprets it as an unsigned 8 bit integer value, which will
+  78:../HostCommunication/src/PayloadHelper.h ****  * be returned.
+  79:../HostCommunication/src/PayloadHelper.h ****  *
+  80:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+  81:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+  82:../HostCommunication/src/PayloadHelper.h ****  *                     starts.
+  83:../HostCommunication/src/PayloadHelper.h ****  *
+  84:../HostCommunication/src/PayloadHelper.h ****  * \return The function returns the value read from the payload.
+  85:../HostCommunication/src/PayloadHelper.h ****  */
+  86:../HostCommunication/src/PayloadHelper.h **** static inline uint8_t rd_payload_u8(const uint8_t* payload, uint16_t offset)
+  87:../HostCommunication/src/PayloadHelper.h **** {
+  88:../HostCommunication/src/PayloadHelper.h ****     return payload[offset];
+  89:../HostCommunication/src/PayloadHelper.h **** }
+  90:../HostCommunication/src/PayloadHelper.h **** 
+  91:../HostCommunication/src/PayloadHelper.h **** /**
+  92:../HostCommunication/src/PayloadHelper.h ****  * \internal
+  93:../HostCommunication/src/PayloadHelper.h ****  * \brief The function extracts a signed 16 bit integer from a payload buffer.
+  94:../HostCommunication/src/PayloadHelper.h ****  *
+  95:../HostCommunication/src/PayloadHelper.h ****  * The function reads two bytes from the given payload buffer starting at the
+  96:../HostCommunication/src/PayloadHelper.h ****  * requested position and interprets them as a signed 16 bit integer value,
+  97:../HostCommunication/src/PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+  98:../HostCommunication/src/PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+  99:../HostCommunication/src/PayloadHelper.h ****  *
+ 100:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 101:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 102:../HostCommunication/src/PayloadHelper.h ****  *                     starts.
+ 103:../HostCommunication/src/PayloadHelper.h ****  *
+ 104:../HostCommunication/src/PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 105:../HostCommunication/src/PayloadHelper.h ****  */
+ 106:../HostCommunication/src/PayloadHelper.h **** static inline int16_t rd_payload_i16(const uint8_t* payload, uint16_t offset);
+ 107:../HostCommunication/src/PayloadHelper.h **** 
+ 108:../HostCommunication/src/PayloadHelper.h **** /**
+ 109:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 110:../HostCommunication/src/PayloadHelper.h ****  * \brief The function extracts an unsigned 16 bit integer from a payload
+ 111:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 112:../HostCommunication/src/PayloadHelper.h ****  *
+ 113:../HostCommunication/src/PayloadHelper.h ****  * The function reads two bytes from the given payload buffer starting at the
+ 114:../HostCommunication/src/PayloadHelper.h ****  * requested position and interprets them as an unsigned 16 bit integer value,
+ 115:../HostCommunication/src/PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 116:../HostCommunication/src/PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 117:../HostCommunication/src/PayloadHelper.h ****  *
+ 118:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 119:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 120:../HostCommunication/src/PayloadHelper.h ****  *                     starts.
+ 121:../HostCommunication/src/PayloadHelper.h ****  *
+ 122:../HostCommunication/src/PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 123:../HostCommunication/src/PayloadHelper.h ****  */
+ 124:../HostCommunication/src/PayloadHelper.h **** static inline uint16_t rd_payload_u16(const uint8_t* payload,
+ 125:../HostCommunication/src/PayloadHelper.h ****                                       uint16_t offset);
+ 126:../HostCommunication/src/PayloadHelper.h **** 
+ 127:../HostCommunication/src/PayloadHelper.h **** /**
+ 128:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 129:../HostCommunication/src/PayloadHelper.h ****  * \brief The function extracts a signed 32 bit integer from a payload buffer.
+ 130:../HostCommunication/src/PayloadHelper.h ****  *
+ 131:../HostCommunication/src/PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 132:../HostCommunication/src/PayloadHelper.h ****  * requested position and interprets them as a signed 32 bit integer value,
+ 133:../HostCommunication/src/PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 134:../HostCommunication/src/PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 135:../HostCommunication/src/PayloadHelper.h ****  *
+ 136:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 137:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 138:../HostCommunication/src/PayloadHelper.h ****  *                     starts.
+ 139:../HostCommunication/src/PayloadHelper.h ****  *
+ 140:../HostCommunication/src/PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 141:../HostCommunication/src/PayloadHelper.h ****  */
+ 142:../HostCommunication/src/PayloadHelper.h **** static inline int32_t rd_payload_i32(const uint8_t* payload, uint16_t offset);
+ 143:../HostCommunication/src/PayloadHelper.h **** 
+ 144:../HostCommunication/src/PayloadHelper.h **** /**
+ 145:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 146:../HostCommunication/src/PayloadHelper.h ****  * \brief The function extracts an unsigned 32 bit integer from a payload
+ 147:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 148:../HostCommunication/src/PayloadHelper.h ****  *
+ 149:../HostCommunication/src/PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 150:../HostCommunication/src/PayloadHelper.h ****  * requested position and interprets them as an unsigned 32 bit integer value,
+ 151:../HostCommunication/src/PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 152:../HostCommunication/src/PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 153:../HostCommunication/src/PayloadHelper.h ****  *
+ 154:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 155:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 156:../HostCommunication/src/PayloadHelper.h ****  *                     starts.
+ 157:../HostCommunication/src/PayloadHelper.h ****  *
+ 158:../HostCommunication/src/PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 159:../HostCommunication/src/PayloadHelper.h ****  */
+ 160:../HostCommunication/src/PayloadHelper.h **** static inline uint32_t rd_payload_u32(const uint8_t* payload,
+ 161:../HostCommunication/src/PayloadHelper.h ****                                       uint16_t offset);
+ 162:../HostCommunication/src/PayloadHelper.h **** 
+ 163:../HostCommunication/src/PayloadHelper.h **** /**
+ 164:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 165:../HostCommunication/src/PayloadHelper.h ****  * \brief The function extracts a signed 64 bit integer from a payload buffer.
+ 166:../HostCommunication/src/PayloadHelper.h ****  *
+ 167:../HostCommunication/src/PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 168:../HostCommunication/src/PayloadHelper.h ****  * requested position and interprets them as a signed 64 bit integer value,
+ 169:../HostCommunication/src/PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 170:../HostCommunication/src/PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 171:../HostCommunication/src/PayloadHelper.h ****  *
+ 172:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 173:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 174:../HostCommunication/src/PayloadHelper.h ****  *                     starts.
+ 175:../HostCommunication/src/PayloadHelper.h ****  *
+ 176:../HostCommunication/src/PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 177:../HostCommunication/src/PayloadHelper.h ****  */
+ 178:../HostCommunication/src/PayloadHelper.h **** static inline int64_t rd_payload_i64(const uint8_t* payload, uint16_t offset);
+ 179:../HostCommunication/src/PayloadHelper.h **** 
+ 180:../HostCommunication/src/PayloadHelper.h **** /**
+ 181:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 182:../HostCommunication/src/PayloadHelper.h ****  * \brief The function extracts an unsigned 64 bit integer from a payload
+ 183:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 184:../HostCommunication/src/PayloadHelper.h ****  *
+ 185:../HostCommunication/src/PayloadHelper.h ****  * The function reads four bytes from the given payload buffer starting at the
+ 186:../HostCommunication/src/PayloadHelper.h ****  * requested position and interprets them as an unsigned 64 bit integer value,
+ 187:../HostCommunication/src/PayloadHelper.h ****  * which will be returned. If needed the byte order is swapped to convert from
+ 188:../HostCommunication/src/PayloadHelper.h ****  * the payload's little endian format to the CPU's endian format.
+ 189:../HostCommunication/src/PayloadHelper.h ****  *
+ 190:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 191:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the requested data value
+ 192:../HostCommunication/src/PayloadHelper.h ****  *                     starts.
+ 193:../HostCommunication/src/PayloadHelper.h ****  *
+ 194:../HostCommunication/src/PayloadHelper.h ****  * \return The function returns the value read from the payload.
+ 195:../HostCommunication/src/PayloadHelper.h ****  */
+ 196:../HostCommunication/src/PayloadHelper.h **** static inline uint64_t rd_payload_u64(const uint8_t* payload,
+ 197:../HostCommunication/src/PayloadHelper.h ****                                       uint16_t offset);
+ 198:../HostCommunication/src/PayloadHelper.h **** 
+ 199:../HostCommunication/src/PayloadHelper.h **** /**
+ 200:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 201:../HostCommunication/src/PayloadHelper.h ****  * \brief The function writes a signed 8 bit integer value to a payload
+ 202:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 203:../HostCommunication/src/PayloadHelper.h ****  *
+ 204:../HostCommunication/src/PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 205:../HostCommunication/src/PayloadHelper.h ****  * requested position.
+ 206:../HostCommunication/src/PayloadHelper.h ****  *
+ 207:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 208:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 209:../HostCommunication/src/PayloadHelper.h ****  *                     to.
+ 210:../HostCommunication/src/PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 211:../HostCommunication/src/PayloadHelper.h ****  */
+ 212:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i8(uint8_t* payload, uint16_t offset,
+ 213:../HostCommunication/src/PayloadHelper.h ****                                  int8_t value)
+ 214:../HostCommunication/src/PayloadHelper.h **** {
+ 215:../HostCommunication/src/PayloadHelper.h ****     payload[offset] = (uint8_t)value;
+ 216:../HostCommunication/src/PayloadHelper.h **** }
+ 217:../HostCommunication/src/PayloadHelper.h **** 
+ 218:../HostCommunication/src/PayloadHelper.h **** /**
+ 219:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 220:../HostCommunication/src/PayloadHelper.h ****  * \brief The function writes an unsigned 8 bit integer value to a payload
+ 221:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 222:../HostCommunication/src/PayloadHelper.h ****  *
+ 223:../HostCommunication/src/PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 224:../HostCommunication/src/PayloadHelper.h ****  * requested position.
+ 225:../HostCommunication/src/PayloadHelper.h ****  *
+ 226:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 227:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 228:../HostCommunication/src/PayloadHelper.h ****  *                     to.
+ 229:../HostCommunication/src/PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 230:../HostCommunication/src/PayloadHelper.h ****  */
+ 231:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u8(uint8_t* payload, uint16_t offset,
+ 232:../HostCommunication/src/PayloadHelper.h ****                                  uint8_t value)
+ 233:../HostCommunication/src/PayloadHelper.h **** {
+ 234:../HostCommunication/src/PayloadHelper.h ****     payload[offset] = value;
+  70              	 .loc 2 234 0
+  71 0018 9DF80D20 	 ldrb r2,[sp,#13]
+  72              	.LBE27:
+  73              	.LBE26:
+  74              	.LBB29:
+  75              	.LBB30:
+  76 001c 9DF80C60 	 ldrb r6,[sp,#12]
+  77              	.LBE30:
+  78              	.LBE29:
+  79              	.LBB32:
+  80              	.LBB33:
+ 235:../HostCommunication/src/PayloadHelper.h **** }
+ 236:../HostCommunication/src/PayloadHelper.h **** 
+ 237:../HostCommunication/src/PayloadHelper.h **** /**
+ 238:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 239:../HostCommunication/src/PayloadHelper.h ****  * \brief The function writes a signed 16 bit integer value to a payload
+ 240:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 241:../HostCommunication/src/PayloadHelper.h ****  *
+ 242:../HostCommunication/src/PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 243:../HostCommunication/src/PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 244:../HostCommunication/src/PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 245:../HostCommunication/src/PayloadHelper.h ****  *
+ 246:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 247:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 248:../HostCommunication/src/PayloadHelper.h ****  *                     to.
+ 249:../HostCommunication/src/PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 250:../HostCommunication/src/PayloadHelper.h ****  */
+ 251:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i16(uint8_t* payload, uint16_t offset,
+ 252:../HostCommunication/src/PayloadHelper.h ****                                   int16_t value);
+ 253:../HostCommunication/src/PayloadHelper.h **** 
+ 254:../HostCommunication/src/PayloadHelper.h **** /**
+ 255:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 256:../HostCommunication/src/PayloadHelper.h ****  * \brief The function writes an unsigned 16 bit integer value to a payload
+ 257:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 258:../HostCommunication/src/PayloadHelper.h ****  *
+ 259:../HostCommunication/src/PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 260:../HostCommunication/src/PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 261:../HostCommunication/src/PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 262:../HostCommunication/src/PayloadHelper.h ****  *
+ 263:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 264:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 265:../HostCommunication/src/PayloadHelper.h ****  *                     to.
+ 266:../HostCommunication/src/PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 267:../HostCommunication/src/PayloadHelper.h ****  */
+ 268:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u16(uint8_t* payload, uint16_t offset,
+ 269:../HostCommunication/src/PayloadHelper.h ****                                   uint16_t value);
+ 270:../HostCommunication/src/PayloadHelper.h **** 
+ 271:../HostCommunication/src/PayloadHelper.h **** /**
+ 272:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 273:../HostCommunication/src/PayloadHelper.h ****  * \brief The function writes a signed 32 bit integer value to a payload
+ 274:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 275:../HostCommunication/src/PayloadHelper.h ****  *
+ 276:../HostCommunication/src/PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 277:../HostCommunication/src/PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 278:../HostCommunication/src/PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 279:../HostCommunication/src/PayloadHelper.h ****  *
+ 280:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 281:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 282:../HostCommunication/src/PayloadHelper.h ****  *                     to.
+ 283:../HostCommunication/src/PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 284:../HostCommunication/src/PayloadHelper.h ****  */
+ 285:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i32(uint8_t* payload, uint16_t offset,
+ 286:../HostCommunication/src/PayloadHelper.h ****                                   int32_t value);
+ 287:../HostCommunication/src/PayloadHelper.h **** 
+ 288:../HostCommunication/src/PayloadHelper.h **** /**
+ 289:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 290:../HostCommunication/src/PayloadHelper.h ****  * \brief The function writes an unsigned 32 bit integer value to a payload
+ 291:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 292:../HostCommunication/src/PayloadHelper.h ****  *
+ 293:../HostCommunication/src/PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 294:../HostCommunication/src/PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 295:../HostCommunication/src/PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 296:../HostCommunication/src/PayloadHelper.h ****  *
+ 297:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 298:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 299:../HostCommunication/src/PayloadHelper.h ****  *                     to.
+ 300:../HostCommunication/src/PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 301:../HostCommunication/src/PayloadHelper.h ****  */
+ 302:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u32(uint8_t* payload, uint16_t offset,
+ 303:../HostCommunication/src/PayloadHelper.h ****                                   uint32_t value);
+ 304:../HostCommunication/src/PayloadHelper.h **** 
+ 305:../HostCommunication/src/PayloadHelper.h **** /**
+ 306:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 307:../HostCommunication/src/PayloadHelper.h ****  * \brief The function writes a signed 64 bit integer value to a payload
+ 308:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 309:../HostCommunication/src/PayloadHelper.h ****  *
+ 310:../HostCommunication/src/PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 311:../HostCommunication/src/PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 312:../HostCommunication/src/PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 313:../HostCommunication/src/PayloadHelper.h ****  *
+ 314:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 315:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 316:../HostCommunication/src/PayloadHelper.h ****  *                     to.
+ 317:../HostCommunication/src/PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 318:../HostCommunication/src/PayloadHelper.h ****  */
+ 319:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i64(uint8_t* payload, uint16_t offset,
+ 320:../HostCommunication/src/PayloadHelper.h ****                                   int64_t value);
+ 321:../HostCommunication/src/PayloadHelper.h **** 
+ 322:../HostCommunication/src/PayloadHelper.h **** /**
+ 323:../HostCommunication/src/PayloadHelper.h ****  * \internal
+ 324:../HostCommunication/src/PayloadHelper.h ****  * \brief The function writes an unsigned 64 bit integer value to a payload
+ 325:../HostCommunication/src/PayloadHelper.h ****  *        buffer.
+ 326:../HostCommunication/src/PayloadHelper.h ****  *
+ 327:../HostCommunication/src/PayloadHelper.h ****  * The function writes the given value into the given payload buffer at the
+ 328:../HostCommunication/src/PayloadHelper.h ****  * requested position. If needed the byte order is swapped to convert from the
+ 329:../HostCommunication/src/PayloadHelper.h ****  * payload's little endian format to the CPU's endian format.
+ 330:../HostCommunication/src/PayloadHelper.h ****  *
+ 331:../HostCommunication/src/PayloadHelper.h ****  * \param[in] payload  A pointer to a block of payload data.
+ 332:../HostCommunication/src/PayloadHelper.h ****  * \param[in] offset   The byte position at which the value will be written
+ 333:../HostCommunication/src/PayloadHelper.h ****  *                     to.
+ 334:../HostCommunication/src/PayloadHelper.h ****  * \param[in] value    The value to be written into the payload buffer.
+ 335:../HostCommunication/src/PayloadHelper.h ****  */
+ 336:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u64(uint8_t* payload, uint16_t offset,
+ 337:../HostCommunication/src/PayloadHelper.h ****                                   uint64_t value);
+ 338:../HostCommunication/src/PayloadHelper.h **** /*
+ 339:../HostCommunication/src/PayloadHelper.h **** ==============================================================================
+ 340:../HostCommunication/src/PayloadHelper.h ****    3. INLINE FUNCTIONS
+ 341:../HostCommunication/src/PayloadHelper.h **** ==============================================================================
+ 342:../HostCommunication/src/PayloadHelper.h **** */
+ 343:../HostCommunication/src/PayloadHelper.h **** #ifdef COMLIB_ALLOW_PAYLOAD_CASTS
+ 344:../HostCommunication/src/PayloadHelper.h **** /*
+ 345:../HostCommunication/src/PayloadHelper.h ****  * The following function implementations wan only be used on machines with
+ 346:../HostCommunication/src/PayloadHelper.h ****  * little endian CPUs, but are faster than the generic implementations.
+ 347:../HostCommunication/src/PayloadHelper.h ****  */
+ 348:../HostCommunication/src/PayloadHelper.h **** 
+ 349:../HostCommunication/src/PayloadHelper.h **** static inline int16_t rd_payload_i16(const uint8_t* payload, uint16_t offset)
+ 350:../HostCommunication/src/PayloadHelper.h **** {
+ 351:../HostCommunication/src/PayloadHelper.h ****     return *(int16_t*)(payload + offset);
+ 352:../HostCommunication/src/PayloadHelper.h **** }
+ 353:../HostCommunication/src/PayloadHelper.h **** 
+ 354:../HostCommunication/src/PayloadHelper.h **** static inline uint16_t rd_payload_u16(const uint8_t* payload, uint16_t offset)
+ 355:../HostCommunication/src/PayloadHelper.h **** {
+ 356:../HostCommunication/src/PayloadHelper.h ****     return *(uint16_t*)(payload + offset);
+ 357:../HostCommunication/src/PayloadHelper.h **** }
+ 358:../HostCommunication/src/PayloadHelper.h **** 
+ 359:../HostCommunication/src/PayloadHelper.h **** static inline int32_t rd_payload_i32(const uint8_t* payload, uint16_t offset)
+ 360:../HostCommunication/src/PayloadHelper.h **** {
+ 361:../HostCommunication/src/PayloadHelper.h ****     return *(int32_t*)(payload + offset);
+ 362:../HostCommunication/src/PayloadHelper.h **** }
+ 363:../HostCommunication/src/PayloadHelper.h **** 
+ 364:../HostCommunication/src/PayloadHelper.h **** static inline uint32_t rd_payload_u32(const uint8_t* payload, uint16_t offset)
+ 365:../HostCommunication/src/PayloadHelper.h **** {
+ 366:../HostCommunication/src/PayloadHelper.h ****     return *(uint32_t*)(payload + offset);
+ 367:../HostCommunication/src/PayloadHelper.h **** }
+ 368:../HostCommunication/src/PayloadHelper.h **** 
+ 369:../HostCommunication/src/PayloadHelper.h **** static inline int64_t rd_payload_i64(const uint8_t* payload, uint16_t offset)
+ 370:../HostCommunication/src/PayloadHelper.h **** {
+ 371:../HostCommunication/src/PayloadHelper.h ****     union
+ 372:../HostCommunication/src/PayloadHelper.h ****     {
+ 373:../HostCommunication/src/PayloadHelper.h ****         uint32_t u32[2];
+ 374:../HostCommunication/src/PayloadHelper.h ****         int64_t i64;
+ 375:../HostCommunication/src/PayloadHelper.h ****     } value;
+ 376:../HostCommunication/src/PayloadHelper.h ****     value.u32[0] = *(uint32_t*)(payload + offset);
+ 377:../HostCommunication/src/PayloadHelper.h ****     value.u32[1] = *(uint32_t*)(payload + offset + 4);
+ 378:../HostCommunication/src/PayloadHelper.h **** 
+ 379:../HostCommunication/src/PayloadHelper.h ****     return value.i64;
+ 380:../HostCommunication/src/PayloadHelper.h **** }
+ 381:../HostCommunication/src/PayloadHelper.h **** 
+ 382:../HostCommunication/src/PayloadHelper.h **** static inline uint64_t rd_payload_u64(const uint8_t* payload, uint16_t offset)
+ 383:../HostCommunication/src/PayloadHelper.h **** {
+ 384:../HostCommunication/src/PayloadHelper.h ****     union
+ 385:../HostCommunication/src/PayloadHelper.h ****     {
+ 386:../HostCommunication/src/PayloadHelper.h ****         uint32_t u32[2];
+ 387:../HostCommunication/src/PayloadHelper.h ****         uint64_t u64;
+ 388:../HostCommunication/src/PayloadHelper.h ****     } value;
+ 389:../HostCommunication/src/PayloadHelper.h ****     value.u32[0] = *(uint32_t*)(payload + offset);
+ 390:../HostCommunication/src/PayloadHelper.h ****     value.u32[1] = *(uint32_t*)(payload + offset + 4);
+ 391:../HostCommunication/src/PayloadHelper.h **** 
+ 392:../HostCommunication/src/PayloadHelper.h ****     return value.u64;
+ 393:../HostCommunication/src/PayloadHelper.h **** }
+ 394:../HostCommunication/src/PayloadHelper.h **** 
+ 395:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i16(uint8_t* payload, uint16_t offset,
+ 396:../HostCommunication/src/PayloadHelper.h ****                                   int16_t iValue)
+ 397:../HostCommunication/src/PayloadHelper.h **** {
+ 398:../HostCommunication/src/PayloadHelper.h ****     *(int16_t*)(payload + offset) = iValue;
+ 399:../HostCommunication/src/PayloadHelper.h **** }
+ 400:../HostCommunication/src/PayloadHelper.h **** 
+ 401:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u16(uint8_t* payload, uint16_t offset,
+ 402:../HostCommunication/src/PayloadHelper.h ****                                   uint16_t value)
+ 403:../HostCommunication/src/PayloadHelper.h **** {
+ 404:../HostCommunication/src/PayloadHelper.h ****     *(uint16_t*)(payload + offset) = value;
+ 405:../HostCommunication/src/PayloadHelper.h **** }
+ 406:../HostCommunication/src/PayloadHelper.h **** 
+ 407:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i32(uint8_t* payload, uint16_t offset,
+ 408:../HostCommunication/src/PayloadHelper.h ****                                   int32_t value)
+ 409:../HostCommunication/src/PayloadHelper.h **** {
+ 410:../HostCommunication/src/PayloadHelper.h ****     *(int32_t*)(payload + offset) = value;
+ 411:../HostCommunication/src/PayloadHelper.h **** }
+ 412:../HostCommunication/src/PayloadHelper.h **** 
+ 413:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u32(uint8_t* payload, uint16_t offset,
+ 414:../HostCommunication/src/PayloadHelper.h ****                                   uint32_t value)
+ 415:../HostCommunication/src/PayloadHelper.h **** {
+ 416:../HostCommunication/src/PayloadHelper.h ****     *(uint32_t*)(payload + offset) = value;
+ 417:../HostCommunication/src/PayloadHelper.h **** }
+ 418:../HostCommunication/src/PayloadHelper.h **** 
+ 419:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i64(uint8_t* payload, uint16_t offset,
+ 420:../HostCommunication/src/PayloadHelper.h ****                                   int64_t value)
+ 421:../HostCommunication/src/PayloadHelper.h **** {
+ 422:../HostCommunication/src/PayloadHelper.h ****     union
+ 423:../HostCommunication/src/PayloadHelper.h ****     {
+ 424:../HostCommunication/src/PayloadHelper.h ****         uint32_t u32[2];
+ 425:../HostCommunication/src/PayloadHelper.h ****         int64_t i64;
+ 426:../HostCommunication/src/PayloadHelper.h ****     } value_;
+ 427:../HostCommunication/src/PayloadHelper.h ****     value_.i64 = value;
+ 428:../HostCommunication/src/PayloadHelper.h ****     *(uint32_t*)(payload + offset)     = value_.u32[0];
+ 429:../HostCommunication/src/PayloadHelper.h ****     *(uint32_t*)(payload + offset + 4) = value_.u32[1];
+ 430:../HostCommunication/src/PayloadHelper.h **** }
+ 431:../HostCommunication/src/PayloadHelper.h **** 
+ 432:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u64(uint8_t* payload, uint16_t offset,
+ 433:../HostCommunication/src/PayloadHelper.h ****                                   uint64_t value)
+ 434:../HostCommunication/src/PayloadHelper.h **** {
+ 435:../HostCommunication/src/PayloadHelper.h ****     union
+ 436:../HostCommunication/src/PayloadHelper.h ****     {
+ 437:../HostCommunication/src/PayloadHelper.h ****         uint32_t u32[2];
+ 438:../HostCommunication/src/PayloadHelper.h ****         uint64_t u64;
+ 439:../HostCommunication/src/PayloadHelper.h ****     } value_;
+ 440:../HostCommunication/src/PayloadHelper.h ****     value_.u64 = value;
+ 441:../HostCommunication/src/PayloadHelper.h ****     *(uint32_t*)(payload + offset)     = value_.u32[0];
+ 442:../HostCommunication/src/PayloadHelper.h ****     *(uint32_t*)(payload + offset + 4) = value_.u32[1];
+ 443:../HostCommunication/src/PayloadHelper.h **** }
+ 444:../HostCommunication/src/PayloadHelper.h **** 
+ 445:../HostCommunication/src/PayloadHelper.h **** /*
+ 446:../HostCommunication/src/PayloadHelper.h **** ==============================================================================
+ 447:../HostCommunication/src/PayloadHelper.h ****    4. INLINE FUNCTIONS
+ 448:../HostCommunication/src/PayloadHelper.h **** ==============================================================================
+ 449:../HostCommunication/src/PayloadHelper.h **** */
+ 450:../HostCommunication/src/PayloadHelper.h **** #else
+ 451:../HostCommunication/src/PayloadHelper.h **** /*
+ 452:../HostCommunication/src/PayloadHelper.h ****  * The following function implementations are safe on any platform, but slower
+ 453:../HostCommunication/src/PayloadHelper.h ****  * than the native little endian implementations.
+ 454:../HostCommunication/src/PayloadHelper.h ****  */
+ 455:../HostCommunication/src/PayloadHelper.h **** 
+ 456:../HostCommunication/src/PayloadHelper.h **** static inline int16_t rd_payload_i16(const uint8_t* payload, uint16_t offset)
+ 457:../HostCommunication/src/PayloadHelper.h **** {
+ 458:../HostCommunication/src/PayloadHelper.h ****     return (int16_t)((((uint16_t)payload[offset + 1]) <<  8) |
+ 459:../HostCommunication/src/PayloadHelper.h ****                       ((uint16_t)payload[offset    ]));
+ 460:../HostCommunication/src/PayloadHelper.h **** }
+ 461:../HostCommunication/src/PayloadHelper.h **** 
+ 462:../HostCommunication/src/PayloadHelper.h **** static inline uint16_t rd_payload_u16(const uint8_t* payload, uint16_t offset)
+ 463:../HostCommunication/src/PayloadHelper.h **** {
+ 464:../HostCommunication/src/PayloadHelper.h ****     return (((uint16_t)payload[offset + 1]) <<  8) |
+ 465:../HostCommunication/src/PayloadHelper.h ****             ((uint16_t)payload[offset    ]);
+ 466:../HostCommunication/src/PayloadHelper.h **** }
+ 467:../HostCommunication/src/PayloadHelper.h **** 
+ 468:../HostCommunication/src/PayloadHelper.h **** static inline int32_t rd_payload_i32(const uint8_t* payload, uint16_t offset)
+ 469:../HostCommunication/src/PayloadHelper.h **** {
+ 470:../HostCommunication/src/PayloadHelper.h ****     return (int32_t)((((uint32_t)payload[offset + 3]) << 24) |
+ 471:../HostCommunication/src/PayloadHelper.h ****                      (((uint32_t)payload[offset + 2]) << 16) |
+ 472:../HostCommunication/src/PayloadHelper.h ****                      (((uint32_t)payload[offset + 1]) <<  8) |
+ 473:../HostCommunication/src/PayloadHelper.h ****                       ((uint32_t)payload[offset    ]));
+ 474:../HostCommunication/src/PayloadHelper.h **** }
+ 475:../HostCommunication/src/PayloadHelper.h **** 
+ 476:../HostCommunication/src/PayloadHelper.h **** static inline uint32_t rd_payload_u32(const uint8_t* payload, uint16_t offset)
+ 477:../HostCommunication/src/PayloadHelper.h **** {
+ 478:../HostCommunication/src/PayloadHelper.h ****     return (((uint32_t)payload[offset + 3]) << 24) |
+ 479:../HostCommunication/src/PayloadHelper.h ****            (((uint32_t)payload[offset + 2]) << 16) |
+ 480:../HostCommunication/src/PayloadHelper.h ****            (((uint32_t)payload[offset + 1]) <<  8) |
+ 481:../HostCommunication/src/PayloadHelper.h ****             ((uint32_t)payload[offset    ]);
+ 482:../HostCommunication/src/PayloadHelper.h **** }
+ 483:../HostCommunication/src/PayloadHelper.h **** 
+ 484:../HostCommunication/src/PayloadHelper.h **** static inline int64_t rd_payload_i64(const uint8_t* payload, uint16_t offset)
+ 485:../HostCommunication/src/PayloadHelper.h **** {
+ 486:../HostCommunication/src/PayloadHelper.h ****     return (int64_t)((((uint64_t)payload[offset + 7]) << 56) |
+ 487:../HostCommunication/src/PayloadHelper.h ****                      (((uint64_t)payload[offset + 6]) << 48) |
+ 488:../HostCommunication/src/PayloadHelper.h ****                      (((uint64_t)payload[offset + 5]) << 40) |
+ 489:../HostCommunication/src/PayloadHelper.h ****                      (((uint64_t)payload[offset + 4]) << 32) |
+ 490:../HostCommunication/src/PayloadHelper.h ****                      (((uint64_t)payload[offset + 3]) << 24) |
+ 491:../HostCommunication/src/PayloadHelper.h ****                      (((uint64_t)payload[offset + 2]) << 16) |
+ 492:../HostCommunication/src/PayloadHelper.h ****                      (((uint64_t)payload[offset + 1]) <<  8) |
+ 493:../HostCommunication/src/PayloadHelper.h ****                       ((uint64_t)payload[offset    ]));
+ 494:../HostCommunication/src/PayloadHelper.h **** }
+ 495:../HostCommunication/src/PayloadHelper.h **** 
+ 496:../HostCommunication/src/PayloadHelper.h **** static inline uint64_t rd_payload_u64(const uint8_t* payload, uint16_t offset)
+ 497:../HostCommunication/src/PayloadHelper.h **** {
+ 498:../HostCommunication/src/PayloadHelper.h ****     return (((uint64_t)payload[offset + 7]) << 56) |
+ 499:../HostCommunication/src/PayloadHelper.h ****            (((uint64_t)payload[offset + 6]) << 48) |
+ 500:../HostCommunication/src/PayloadHelper.h ****            (((uint64_t)payload[offset + 5]) << 40) |
+ 501:../HostCommunication/src/PayloadHelper.h ****            (((uint64_t)payload[offset + 4]) << 32) |
+ 502:../HostCommunication/src/PayloadHelper.h ****            (((uint64_t)payload[offset + 3]) << 24) |
+ 503:../HostCommunication/src/PayloadHelper.h ****            (((uint64_t)payload[offset + 2]) << 16) |
+ 504:../HostCommunication/src/PayloadHelper.h ****            (((uint64_t)payload[offset + 1]) <<  8) |
+ 505:../HostCommunication/src/PayloadHelper.h ****             ((uint64_t)payload[offset    ]);
+ 506:../HostCommunication/src/PayloadHelper.h **** }
+ 507:../HostCommunication/src/PayloadHelper.h **** 
+ 508:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i16(uint8_t* payload, uint16_t offset,
+ 509:../HostCommunication/src/PayloadHelper.h ****                                   int16_t value)
+ 510:../HostCommunication/src/PayloadHelper.h **** {
+ 511:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (((uint16_t)value) >>  8) & 0xFF;
+ 512:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  ((uint16_t)value)        & 0xFF;
+ 513:../HostCommunication/src/PayloadHelper.h **** }
+ 514:../HostCommunication/src/PayloadHelper.h **** 
+ 515:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u16(uint8_t* payload, uint16_t offset,
+ 516:../HostCommunication/src/PayloadHelper.h ****                                   uint16_t value)
+ 517:../HostCommunication/src/PayloadHelper.h **** {
+ 518:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+ 519:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 520:../HostCommunication/src/PayloadHelper.h **** }
+ 521:../HostCommunication/src/PayloadHelper.h **** 
+ 522:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_i32(uint8_t* payload, uint16_t offset,
+ 523:../HostCommunication/src/PayloadHelper.h ****                                   int32_t value)
+ 524:../HostCommunication/src/PayloadHelper.h **** {
+ 525:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 3] = (((uint32_t)value) >> 24) & 0xFF;
+ 526:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 2] = (((uint32_t)value) >> 16) & 0xFF;
+ 527:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (((uint32_t)value) >>  8) & 0xFF;
+ 528:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  ((uint32_t)value)        & 0xFF;
+ 529:../HostCommunication/src/PayloadHelper.h **** }
+ 530:../HostCommunication/src/PayloadHelper.h **** 
+ 531:../HostCommunication/src/PayloadHelper.h **** static inline void wr_payload_u32(uint8_t* payload, uint16_t offset,
+ 532:../HostCommunication/src/PayloadHelper.h ****                                   uint32_t value)
+ 533:../HostCommunication/src/PayloadHelper.h **** {
+ 534:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 3] = (value >> 24) & 0xFF;
+ 535:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 2] = (value >> 16) & 0xFF;
+ 536:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+ 537:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+  81              	 .loc 2 537 0
+  82 0020 8DF80130 	 strb r3,[sp,#1]
+  83              	.LVL6:
+ 534:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 2] = (value >> 16) & 0xFF;
+  84              	 .loc 2 534 0
+  85 0024 4FEA136E 	 lsr lr,r3,#24
+  86              	.LBE33:
+  87              	.LBE32:
+  89:../HostCommunication/src/EndpointRadarADCXMC.c ****         wr_payload_u8 (message, 5, adc_configuration.resolution);
+  90:../HostCommunication/src/EndpointRadarADCXMC.c ****         wr_payload_u8 (message, 6, adc_configuration.use_post_calibration);
+  91:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+  92:../HostCommunication/src/EndpointRadarADCXMC.c ****         /* send message */
+  93:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_header(endpoint, sizeof(message));
+  88              	 .loc 1 93 0
+  89 0028 2846     	 mov r0,r5
+  90              	.LVL7:
+  91              	.LBB38:
+  92              	.LBB34:
+ 535:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+  93              	 .loc 2 535 0
+  94 002a 1F0C     	 lsrs r7,r3,#16
+  95              	.LBE34:
+  96              	.LBE38:
+  97              	 .loc 1 93 0
+  98 002c 0721     	 movs r1,#7
+  99              	.LBB39:
+ 100              	.LBB35:
+ 536:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 101              	 .loc 2 536 0
+ 102 002e 1B0A     	 lsrs r3,r3,#8
+ 103              	.LVL8:
+ 104              	.LBE35:
+ 105              	.LBE39:
+ 106              	.LBB40:
+ 107              	.LBB41:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 108              	 .loc 2 234 0
+ 109 0030 0125     	 movs r5,#1
+ 110              	.LBE41:
+ 111              	.LBE40:
+ 112              	.LBB43:
+ 113              	.LBB36:
+ 534:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 2] = (value >> 16) & 0xFF;
+ 114              	 .loc 2 534 0
+ 115 0032 8DF804E0 	 strb lr,[sp,#4]
+ 536:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 116              	 .loc 2 536 0
+ 117 0036 8DF80230 	 strb r3,[sp,#2]
+ 118              	.LBE36:
+ 119              	.LBE43:
+ 120              	.LBB44:
+ 121              	.LBB28:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 122              	 .loc 2 234 0
+ 123 003a 8DF80620 	 strb r2,[sp,#6]
+ 124              	.LBE28:
+ 125              	.LBE44:
+ 126              	.LBB45:
+ 127              	.LBB37:
+ 535:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+ 128              	 .loc 2 535 0
+ 129 003e 8DF80370 	 strb r7,[sp,#3]
+ 130              	.LBE37:
+ 131              	.LBE45:
+ 132              	.LBB46:
+ 133              	.LBB42:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 134              	 .loc 2 234 0
+ 135 0042 8DF80050 	 strb r5,[sp]
+ 136              	.LBE42:
+ 137              	.LBE46:
+ 138              	.LBB47:
+ 139              	.LBB31:
+ 140 0046 8DF80560 	 strb r6,[sp,#5]
+ 141              	.LVL9:
+ 142              	.LBE31:
+ 143              	.LBE47:
+ 144              	 .loc 1 93 0
+ 145 004a FFF7FEFF 	 bl protocol_send_header
+ 146              	.LVL10:
+  94:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_payload(message, sizeof(message));
+ 147              	 .loc 1 94 0
+ 148 004e 6846     	 mov r0,sp
+ 149 0050 0721     	 movs r1,#7
+ 150 0052 FFF7FEFF 	 bl protocol_send_payload
+ 151              	.LVL11:
+  95:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_tail();
+ 152              	 .loc 1 95 0
+ 153 0056 FFF7FEFF 	 bl protocol_send_tail
+ 154              	.LVL12:
+ 155              	.L2:
+ 156              	.LBE25:
+  96:../HostCommunication/src/EndpointRadarADCXMC.c ****     }
+  97:../HostCommunication/src/EndpointRadarADCXMC.c ****     return error_code;
+  98:../HostCommunication/src/EndpointRadarADCXMC.c **** }
+ 157              	 .loc 1 98 0
+ 158 005a 2046     	 mov r0,r4
+ 159 005c 05B0     	 add sp,sp,#20
+ 160              	.LCFI2:
+ 161              	 .cfi_def_cfa_offset 20
+ 162              	 
+ 163 005e F0BD     	 pop {r4,r5,r6,r7,pc}
+ 164              	.L6:
+ 165              	 .align 2
+ 166              	.L5:
+ 167 0060 00000000 	 .word .LANCHOR0
+ 168              	 .cfi_endproc
+ 169              	.LFE486:
+ 171              	 .section .text.ep_radar_adcxmc_handle_message,"ax",%progbits
+ 172              	 .align 2
+ 173              	 .global ep_radar_adcxmc_handle_message
+ 174              	 .thumb
+ 175              	 .thumb_func
+ 177              	ep_radar_adcxmc_handle_message:
+ 178              	.LFB487:
+  99:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 100:../HostCommunication/src/EndpointRadarADCXMC.c **** /*
+ 101:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+ 102:../HostCommunication/src/EndpointRadarADCXMC.c ****    5. EXPORTED FUNCTIONS
+ 103:../HostCommunication/src/EndpointRadarADCXMC.c **** ==============================================================================
+ 104:../HostCommunication/src/EndpointRadarADCXMC.c **** */
+ 105:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 106:../HostCommunication/src/EndpointRadarADCXMC.c **** uint16_t ep_radar_adcxmc_handle_message(uint8_t endpoint,
+ 107:../HostCommunication/src/EndpointRadarADCXMC.c ****                                         uint8_t* message_data,
+ 108:../HostCommunication/src/EndpointRadarADCXMC.c ****                                         uint16_t num_bytes,
+ 109:../HostCommunication/src/EndpointRadarADCXMC.c ****                                         void* context)
+ 110:../HostCommunication/src/EndpointRadarADCXMC.c **** {
+ 179              	 .loc 1 110 0
+ 180              	 .cfi_startproc
+ 181              	 
+ 182              	 
+ 183              	.LVL13:
+ 184 0000 F0B5     	 push {r4,r5,r6,r7,lr}
+ 185              	.LCFI3:
+ 186              	 .cfi_def_cfa_offset 20
+ 187              	 .cfi_offset 4,-20
+ 188              	 .cfi_offset 5,-16
+ 189              	 .cfi_offset 6,-12
+ 190              	 .cfi_offset 7,-8
+ 191              	 .cfi_offset 14,-4
+ 192 0002 0546     	 mov r5,r0
+ 111:../HostCommunication/src/EndpointRadarADCXMC.c ****     Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+ 112:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 113:../HostCommunication/src/EndpointRadarADCXMC.c ****     switch (message_data[0])
+ 193              	 .loc 1 113 0
+ 194 0004 0878     	 ldrb r0,[r1]
+ 195              	.LVL14:
+ 110:../HostCommunication/src/EndpointRadarADCXMC.c ****     Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+ 196              	 .loc 1 110 0
+ 197 0006 87B0     	 sub sp,sp,#28
+ 198              	.LCFI4:
+ 199              	 .cfi_def_cfa_offset 48
+ 200              	 .loc 1 113 0
+ 201 0008 28B3     	 cbz r0,.L9
+ 202 000a 0128     	 cmp r0,#1
+ 203 000c 04D0     	 beq .L10
+ 204              	.L14:
+ 114:../HostCommunication/src/EndpointRadarADCXMC.c ****     {
+ 115:../HostCommunication/src/EndpointRadarADCXMC.c ****     case MSG_GET_CONFIGURATION:
+ 116:../HostCommunication/src/EndpointRadarADCXMC.c ****         if (num_bytes == 1)
+ 117:../HostCommunication/src/EndpointRadarADCXMC.c ****         {
+ 118:../HostCommunication/src/EndpointRadarADCXMC.c ****             return send_adc_configuration(endpoint, radar_driver);
+ 119:../HostCommunication/src/EndpointRadarADCXMC.c ****         }
+ 120:../HostCommunication/src/EndpointRadarADCXMC.c ****         break;
+ 121:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 122:../HostCommunication/src/EndpointRadarADCXMC.c ****     case MSG_SET_CONFIGURATION:
+ 123:../HostCommunication/src/EndpointRadarADCXMC.c ****         if (num_bytes == 7)
+ 124:../HostCommunication/src/EndpointRadarADCXMC.c ****         {
+ 125:../HostCommunication/src/EndpointRadarADCXMC.c ****             unsigned error_code;
+ 126:../HostCommunication/src/EndpointRadarADCXMC.c ****             Adc_Configuration_t config;
+ 127:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 128:../HostCommunication/src/EndpointRadarADCXMC.c ****             /* extract parameters from message */
+ 129:../HostCommunication/src/EndpointRadarADCXMC.c ****             config.samplerate_Hz        = rd_payload_u32(message_data, 1);
+ 130:../HostCommunication/src/EndpointRadarADCXMC.c ****             config.resolution           = rd_payload_u8 (message_data, 5);
+ 131:../HostCommunication/src/EndpointRadarADCXMC.c ****             config.use_post_calibration = rd_payload_u8 (message_data, 6);
+ 132:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 133:../HostCommunication/src/EndpointRadarADCXMC.c ****             /* apply ADC configuration */
+ 134:../HostCommunication/src/EndpointRadarADCXMC.c ****             error_code = radar_set_adc_configuration(radar_driver, &config);
+ 135:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 136:../HostCommunication/src/EndpointRadarADCXMC.c ****             /* inform other endpoints of the change */
+ 137:../HostCommunication/src/EndpointRadarADCXMC.c ****             protocol_broadcast_change(radar_driver,
+ 138:../HostCommunication/src/EndpointRadarADCXMC.c ****                                       EP_RADAR_CHNG_ADC_SETTINGS);
+ 139:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 140:../HostCommunication/src/EndpointRadarADCXMC.c ****             return error_code;
+ 141:../HostCommunication/src/EndpointRadarADCXMC.c ****         }
+ 142:../HostCommunication/src/EndpointRadarADCXMC.c ****         break;
+ 143:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 144:../HostCommunication/src/EndpointRadarADCXMC.c ****     default:
+ 145:../HostCommunication/src/EndpointRadarADCXMC.c ****         break;
+ 146:../HostCommunication/src/EndpointRadarADCXMC.c ****     }
+ 147:../HostCommunication/src/EndpointRadarADCXMC.c ****     return PROTOCOL_STATUS_INVALID_PAYLOAD;
+ 205              	 .loc 1 147 0
+ 206 000e 4FF6FF74 	 movw r4,#65535
+ 207              	.LVL15:
+ 208              	.L8:
+ 148:../HostCommunication/src/EndpointRadarADCXMC.c **** }
+ 209              	 .loc 1 148 0 discriminator 1
+ 210 0012 2046     	 mov r0,r4
+ 211 0014 07B0     	 add sp,sp,#28
+ 212              	.LCFI5:
+ 213              	 .cfi_remember_state
+ 214              	 .cfi_def_cfa_offset 20
+ 215              	 
+ 216 0016 F0BD     	 pop {r4,r5,r6,r7,pc}
+ 217              	.LVL16:
+ 218              	.L10:
+ 219              	.LCFI6:
+ 220              	 .cfi_restore_state
+ 123:../HostCommunication/src/EndpointRadarADCXMC.c ****         {
+ 221              	 .loc 1 123 0
+ 222 0018 072A     	 cmp r2,#7
+ 223 001a F8D1     	 bne .L14
+ 224              	.LVL17:
+ 225              	.LBB66:
+ 226              	.LBB67:
+ 227              	.LBB68:
+ 479:../HostCommunication/src/PayloadHelper.h ****            (((uint32_t)payload[offset + 1]) <<  8) |
+ 228              	 .loc 2 479 0
+ 229 001c CC78     	 ldrb r4,[r1,#3]
+ 478:../HostCommunication/src/PayloadHelper.h ****            (((uint32_t)payload[offset + 2]) << 16) |
+ 230              	 .loc 2 478 0
+ 231 001e 0A79     	 ldrb r2,[r1,#4]
+ 232              	.LVL18:
+ 481:../HostCommunication/src/PayloadHelper.h **** }
+ 233              	 .loc 2 481 0
+ 234 0020 4878     	 ldrb r0,[r1,#1]
+ 480:../HostCommunication/src/PayloadHelper.h ****             ((uint32_t)payload[offset    ]);
+ 235              	 .loc 2 480 0
+ 236 0022 8E78     	 ldrb r6,[r1,#2]
+ 237              	.LBE68:
+ 238              	.LBE67:
+ 130:../HostCommunication/src/EndpointRadarADCXMC.c ****             config.use_post_calibration = rd_payload_u8 (message_data, 6);
+ 239              	 .loc 1 130 0
+ 240 0024 4F79     	 ldrb r7,[r1,#5]
+ 131:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 241              	 .loc 1 131 0
+ 242 0026 8D79     	 ldrb r5,[r1,#6]
+ 134:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 243              	 .loc 1 134 0
+ 244 0028 0193     	 str r3,[sp,#4]
+ 245              	.LBB70:
+ 246              	.LBB69:
+ 479:../HostCommunication/src/PayloadHelper.h ****            (((uint32_t)payload[offset + 1]) <<  8) |
+ 247              	 .loc 2 479 0
+ 248 002a 2104     	 lsls r1,r4,#16
+ 249              	.LVL19:
+ 478:../HostCommunication/src/PayloadHelper.h ****            (((uint32_t)payload[offset + 2]) << 16) |
+ 250              	 .loc 2 478 0
+ 251 002c 41EA0262 	 orr r2,r1,r2,lsl#24
+ 252 0030 0243     	 orrs r2,r2,r0
+ 253 0032 42EA0622 	 orr r2,r2,r6,lsl#8
+ 254              	.LBE69:
+ 255              	.LBE70:
+ 134:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 256              	 .loc 1 134 0
+ 257 0036 04A9     	 add r1,sp,#16
+ 258 0038 1846     	 mov r0,r3
+ 130:../HostCommunication/src/EndpointRadarADCXMC.c ****             config.use_post_calibration = rd_payload_u8 (message_data, 6);
+ 259              	 .loc 1 130 0
+ 260 003a 8DF81470 	 strb r7,[sp,#20]
+ 129:../HostCommunication/src/EndpointRadarADCXMC.c ****             config.resolution           = rd_payload_u8 (message_data, 5);
+ 261              	 .loc 1 129 0
+ 262 003e 0492     	 str r2,[sp,#16]
+ 263              	.LVL20:
+ 131:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 264              	 .loc 1 131 0
+ 265 0040 8DF81550 	 strb r5,[sp,#21]
+ 134:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 266              	 .loc 1 134 0
+ 267 0044 FFF7FEFF 	 bl radar_set_adc_configuration
+ 268              	.LVL21:
+ 137:../HostCommunication/src/EndpointRadarADCXMC.c ****                                       EP_RADAR_CHNG_ADC_SETTINGS);
+ 269              	 .loc 1 137 0
+ 270 0048 019B     	 ldr r3,[sp,#4]
+ 134:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 271              	 .loc 1 134 0
+ 272 004a 0446     	 mov r4,r0
+ 273              	.LVL22:
+ 137:../HostCommunication/src/EndpointRadarADCXMC.c ****                                       EP_RADAR_CHNG_ADC_SETTINGS);
+ 274              	 .loc 1 137 0
+ 275 004c 0421     	 movs r1,#4
+ 276 004e 1846     	 mov r0,r3
+ 277 0050 FFF7FEFF 	 bl protocol_broadcast_change
+ 278              	.LVL23:
+ 279 0054 DDE7     	 b .L8
+ 280              	.LVL24:
+ 281              	.L9:
+ 282              	.LBE66:
+ 116:../HostCommunication/src/EndpointRadarADCXMC.c ****         {
+ 283              	 .loc 1 116 0
+ 284 0056 012A     	 cmp r2,#1
+ 285 0058 D9D1     	 bne .L14
+ 286              	.LVL25:
+ 287              	.LBB71:
+ 288              	.LBB72:
+  76:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 289              	 .loc 1 76 0
+ 290 005a 164C     	 ldr r4,.L17
+ 291 005c 0192     	 str r2,[sp,#4]
+  79:../HostCommunication/src/EndpointRadarADCXMC.c ****                                              &adc_configuration);
+ 292              	 .loc 1 79 0
+ 293 005e 1846     	 mov r0,r3
+ 294 0060 04A9     	 add r1,sp,#16
+ 295              	.LVL26:
+  76:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 296              	 .loc 1 76 0
+ 297 0062 2570     	 strb r5,[r4]
+  79:../HostCommunication/src/EndpointRadarADCXMC.c ****                                              &adc_configuration);
+ 298              	 .loc 1 79 0
+ 299 0064 FFF7FEFF 	 bl radar_get_adc_configuration
+ 300              	.LVL27:
+  82:../HostCommunication/src/EndpointRadarADCXMC.c ****     {
+ 301              	 .loc 1 82 0
+ 302 0068 019A     	 ldr r2,[sp,#4]
+ 303 006a 0446     	 mov r4,r0
+ 304 006c 0028     	 cmp r0,#0
+ 305 006e D0D1     	 bne .L8
+ 306              	.LVL28:
+ 307              	.LBB73:
+  88:../HostCommunication/src/EndpointRadarADCXMC.c ****         wr_payload_u8 (message, 5, adc_configuration.resolution);
+ 308              	 .loc 1 88 0
+ 309 0070 049B     	 ldr r3,[sp,#16]
+ 310              	.LVL29:
+ 311              	.LBB74:
+ 312              	.LBB75:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 313              	 .loc 2 234 0
+ 314 0072 9DF81470 	 ldrb r7,[sp,#20]
+ 315              	.LBE75:
+ 316              	.LBE74:
+ 317              	.LBB77:
+ 318              	.LBB78:
+ 319 0076 9DF81560 	 ldrb r6,[sp,#21]
+ 320              	.LBE78:
+ 321              	.LBE77:
+ 322              	.LBB80:
+ 323              	.LBB81:
+ 324 007a 8DF80820 	 strb r2,[sp,#8]
+ 325              	.LBE81:
+ 326              	.LBE80:
+ 327              	.LBB82:
+ 328              	.LBB83:
+ 534:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 2] = (value >> 16) & 0xFF;
+ 329              	 .loc 2 534 0
+ 330 007e 4FEA136E 	 lsr lr,r3,#24
+ 536:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 331              	 .loc 2 536 0
+ 332 0082 1A0A     	 lsrs r2,r3,#8
+ 333              	.LBE83:
+ 334              	.LBE82:
+  93:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_payload(message, sizeof(message));
+ 335              	 .loc 1 93 0
+ 336 0084 2846     	 mov r0,r5
+ 337              	.LVL30:
+ 338 0086 0721     	 movs r1,#7
+ 339              	.LBB85:
+ 340              	.LBB84:
+ 535:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+ 341              	 .loc 2 535 0
+ 342 0088 1D0C     	 lsrs r5,r3,#16
+ 343              	.LVL31:
+ 344              	 .loc 2 537 0
+ 345 008a 8DF80930 	 strb r3,[sp,#9]
+ 346              	.LVL32:
+ 534:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 2] = (value >> 16) & 0xFF;
+ 347              	 .loc 2 534 0
+ 348 008e 8DF80CE0 	 strb lr,[sp,#12]
+ 536:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 349              	 .loc 2 536 0
+ 350 0092 8DF80A20 	 strb r2,[sp,#10]
+ 535:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+ 351              	 .loc 2 535 0
+ 352 0096 8DF80B50 	 strb r5,[sp,#11]
+ 353              	.LBE84:
+ 354              	.LBE85:
+ 355              	.LBB86:
+ 356              	.LBB76:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 357              	 .loc 2 234 0
+ 358 009a 8DF80D70 	 strb r7,[sp,#13]
+ 359              	.LVL33:
+ 360              	.LBE76:
+ 361              	.LBE86:
+ 362              	.LBB87:
+ 363              	.LBB79:
+ 364 009e 8DF80E60 	 strb r6,[sp,#14]
+ 365              	.LBE79:
+ 366              	.LBE87:
+  93:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_payload(message, sizeof(message));
+ 367              	 .loc 1 93 0
+ 368 00a2 FFF7FEFF 	 bl protocol_send_header
+ 369              	.LVL34:
+  94:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_tail();
+ 370              	 .loc 1 94 0
+ 371 00a6 02A8     	 add r0,sp,#8
+ 372              	.LVL35:
+ 373 00a8 0721     	 movs r1,#7
+ 374 00aa FFF7FEFF 	 bl protocol_send_payload
+ 375              	.LVL36:
+  95:../HostCommunication/src/EndpointRadarADCXMC.c ****     }
+ 376              	 .loc 1 95 0
+ 377 00ae FFF7FEFF 	 bl protocol_send_tail
+ 378              	.LVL37:
+ 379              	.LBE73:
+ 380              	.LBE72:
+ 381              	.LBE71:
+ 118:../HostCommunication/src/EndpointRadarADCXMC.c ****         }
+ 382              	 .loc 1 118 0
+ 383 00b2 AEE7     	 b .L8
+ 384              	.L18:
+ 385              	 .align 2
+ 386              	.L17:
+ 387 00b4 00000000 	 .word .LANCHOR0
+ 388              	 .cfi_endproc
+ 389              	.LFE487:
+ 391              	 .section .text.ep_radar_adcxmc_handle_change,"ax",%progbits
+ 392              	 .align 2
+ 393              	 .global ep_radar_adcxmc_handle_change
+ 394              	 .thumb
+ 395              	 .thumb_func
+ 397              	ep_radar_adcxmc_handle_change:
+ 398              	.LFB488:
+ 149:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 150:../HostCommunication/src/EndpointRadarADCXMC.c **** void ep_radar_adcxmc_handle_change(uint8_t endpoint, void* context,
+ 151:../HostCommunication/src/EndpointRadarADCXMC.c ****                                    uint32_t what)
+ 152:../HostCommunication/src/EndpointRadarADCXMC.c **** {
+ 399              	 .loc 1 152 0
+ 400              	 .cfi_startproc
+ 401              	 
+ 402              	 
+ 403              	.LVL38:
+ 153:../HostCommunication/src/EndpointRadarADCXMC.c ****     Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+ 154:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 155:../HostCommunication/src/EndpointRadarADCXMC.c ****     if (what == EP_RADAR_CHNG_ADC_SETTINGS)
+ 404              	 .loc 1 155 0
+ 405 0000 042A     	 cmp r2,#4
+ 406 0002 00D0     	 beq .L24
+ 407 0004 7047     	 bx lr
+ 408              	.L24:
+ 152:../HostCommunication/src/EndpointRadarADCXMC.c ****     Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+ 409              	 .loc 1 152 0
+ 410 0006 F0B5     	 push {r4,r5,r6,r7,lr}
+ 411              	.LCFI7:
+ 412              	 .cfi_def_cfa_offset 20
+ 413              	 .cfi_offset 4,-20
+ 414              	 .cfi_offset 5,-16
+ 415              	 .cfi_offset 6,-12
+ 416              	 .cfi_offset 7,-8
+ 417              	 .cfi_offset 14,-4
+ 418              	.LBB99:
+ 419              	.LBB100:
+  76:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 420              	 .loc 1 76 0
+ 421 0008 154B     	 ldr r3,.L25
+ 422              	.LBE100:
+ 423              	.LBE99:
+ 152:../HostCommunication/src/EndpointRadarADCXMC.c ****     Radar_Handle_t radar_driver = (Radar_Handle_t)context;
+ 424              	 .loc 1 152 0
+ 425 000a 85B0     	 sub sp,sp,#20
+ 426              	.LCFI8:
+ 427              	 .cfi_def_cfa_offset 40
+ 428 000c 0446     	 mov r4,r0
+ 429              	.LVL39:
+ 430              	.LBB125:
+ 431              	.LBB124:
+  79:../HostCommunication/src/EndpointRadarADCXMC.c ****                                              &adc_configuration);
+ 432              	 .loc 1 79 0
+ 433 000e 0846     	 mov r0,r1
+ 434              	.LVL40:
+ 435 0010 02A9     	 add r1,sp,#8
+ 436              	.LVL41:
+  76:../HostCommunication/src/EndpointRadarADCXMC.c **** 
+ 437              	 .loc 1 76 0
+ 438 0012 1C70     	 strb r4,[r3]
+  79:../HostCommunication/src/EndpointRadarADCXMC.c ****                                              &adc_configuration);
+ 439              	 .loc 1 79 0
+ 440 0014 FFF7FEFF 	 bl radar_get_adc_configuration
+ 441              	.LVL42:
+  82:../HostCommunication/src/EndpointRadarADCXMC.c ****     {
+ 442              	 .loc 1 82 0
+ 443 0018 00BB     	 cbnz r0,.L19
+ 444              	.LVL43:
+ 445              	.LBB101:
+  88:../HostCommunication/src/EndpointRadarADCXMC.c ****         wr_payload_u8 (message, 5, adc_configuration.resolution);
+ 446              	 .loc 1 88 0
+ 447 001a 029B     	 ldr r3,[sp,#8]
+ 448              	.LVL44:
+ 449              	.LBB102:
+ 450              	.LBB103:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 451              	 .loc 2 234 0
+ 452 001c 9DF80D20 	 ldrb r2,[sp,#13]
+ 453              	.LBE103:
+ 454              	.LBE102:
+ 455              	.LBB105:
+ 456              	.LBB106:
+ 457 0020 9DF80C50 	 ldrb r5,[sp,#12]
+ 458              	.LBE106:
+ 459              	.LBE105:
+ 460              	.LBB108:
+ 461              	.LBB109:
+ 462              	 .loc 2 537 0
+ 463 0024 8DF80130 	 strb r3,[sp,#1]
+ 464              	.LVL45:
+ 465              	.LBE109:
+ 466              	.LBE108:
+  93:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_payload(message, sizeof(message));
+ 467              	 .loc 1 93 0
+ 468 0028 2046     	 mov r0,r4
+ 469              	.LVL46:
+ 470              	.LBB114:
+ 471              	.LBB110:
+ 534:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 2] = (value >> 16) & 0xFF;
+ 472              	 .loc 2 534 0
+ 473 002a 1F0E     	 lsrs r7,r3,#24
+ 535:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+ 474              	 .loc 2 535 0
+ 475 002c 1E0C     	 lsrs r6,r3,#16
+ 476              	.LBE110:
+ 477              	.LBE114:
+  93:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_payload(message, sizeof(message));
+ 478              	 .loc 1 93 0
+ 479 002e 0721     	 movs r1,#7
+ 480              	.LBB115:
+ 481              	.LBB111:
+ 536:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 482              	 .loc 2 536 0
+ 483 0030 1B0A     	 lsrs r3,r3,#8
+ 484              	.LVL47:
+ 485              	.LBE111:
+ 486              	.LBE115:
+ 487              	.LBB116:
+ 488              	.LBB117:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 489              	 .loc 2 234 0
+ 490 0032 0124     	 movs r4,#1
+ 491              	.LVL48:
+ 492              	.LBE117:
+ 493              	.LBE116:
+ 494              	.LBB119:
+ 495              	.LBB112:
+ 536:../HostCommunication/src/PayloadHelper.h ****     payload[offset    ] =  value        & 0xFF;
+ 496              	 .loc 2 536 0
+ 497 0034 8DF80230 	 strb r3,[sp,#2]
+ 498              	.LBE112:
+ 499              	.LBE119:
+ 500              	.LBB120:
+ 501              	.LBB104:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 502              	 .loc 2 234 0
+ 503 0038 8DF80620 	 strb r2,[sp,#6]
+ 504              	.LBE104:
+ 505              	.LBE120:
+ 506              	.LBB121:
+ 507              	.LBB113:
+ 534:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 2] = (value >> 16) & 0xFF;
+ 508              	 .loc 2 534 0
+ 509 003c 8DF80470 	 strb r7,[sp,#4]
+ 535:../HostCommunication/src/PayloadHelper.h ****     payload[offset + 1] = (value >>  8) & 0xFF;
+ 510              	 .loc 2 535 0
+ 511 0040 8DF80360 	 strb r6,[sp,#3]
+ 512              	.LBE113:
+ 513              	.LBE121:
+ 514              	.LBB122:
+ 515              	.LBB118:
+ 234:../HostCommunication/src/PayloadHelper.h **** }
+ 516              	 .loc 2 234 0
+ 517 0044 8DF80040 	 strb r4,[sp]
+ 518              	.LBE118:
+ 519              	.LBE122:
+ 520              	.LBB123:
+ 521              	.LBB107:
+ 522 0048 8DF80550 	 strb r5,[sp,#5]
+ 523              	.LVL49:
+ 524              	.LBE107:
+ 525              	.LBE123:
+  93:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_payload(message, sizeof(message));
+ 526              	 .loc 1 93 0
+ 527 004c FFF7FEFF 	 bl protocol_send_header
+ 528              	.LVL50:
+  94:../HostCommunication/src/EndpointRadarADCXMC.c ****         protocol_send_tail();
+ 529              	 .loc 1 94 0
+ 530 0050 6846     	 mov r0,sp
+ 531 0052 0721     	 movs r1,#7
+ 532 0054 FFF7FEFF 	 bl protocol_send_payload
+ 533              	.LVL51:
+  95:../HostCommunication/src/EndpointRadarADCXMC.c ****     }
+ 534              	 .loc 1 95 0
+ 535 0058 FFF7FEFF 	 bl protocol_send_tail
+ 536              	.LVL52:
+ 537              	.L19:
+ 538              	.LBE101:
+ 539              	.LBE124:
+ 540              	.LBE125:
+ 156:../HostCommunication/src/EndpointRadarADCXMC.c ****         send_adc_configuration(endpoint, radar_driver);
+ 157:../HostCommunication/src/EndpointRadarADCXMC.c **** }
+ 541              	 .loc 1 157 0
+ 542 005c 05B0     	 add sp,sp,#20
+ 543              	.LCFI9:
+ 544              	 .cfi_def_cfa_offset 20
+ 545              	 
+ 546 005e F0BD     	 pop {r4,r5,r6,r7,pc}
+ 547              	.L26:
+ 548              	 .align 2
+ 549              	.L25:
+ 550 0060 00000000 	 .word .LANCHOR0
+ 551              	 .cfi_endproc
+ 552              	.LFE488:
+ 554              	 .global adc_endpoint
+ 555              	 .section .bss.adc_endpoint,"aw",%nobits
+ 556              	 .set .LANCHOR0,.+0
+ 559              	adc_endpoint:
+ 560 0000 00       	 .space 1
+ 561              	 .text
+ 562              	.Letext0:
+ 563              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 564              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 565              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 566              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 567              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 568              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 569              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 570              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 571              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 572              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 573              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 574              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 575              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 576              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/HostCommunication/include/Protocol.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 EndpointRadarADCXMC.c
+    {standard input}:20     .text.send_adc_configuration:00000000 $t
+    {standard input}:25     .text.send_adc_configuration:00000000 send_adc_configuration
+    {standard input}:167    .text.send_adc_configuration:00000060 $d
+    {standard input}:172    .text.ep_radar_adcxmc_handle_message:00000000 $t
+    {standard input}:177    .text.ep_radar_adcxmc_handle_message:00000000 ep_radar_adcxmc_handle_message
+    {standard input}:387    .text.ep_radar_adcxmc_handle_message:000000b4 $d
+    {standard input}:392    .text.ep_radar_adcxmc_handle_change:00000000 $t
+    {standard input}:397    .text.ep_radar_adcxmc_handle_change:00000000 ep_radar_adcxmc_handle_change
+    {standard input}:550    .text.ep_radar_adcxmc_handle_change:00000060 $d
+    {standard input}:559    .bss.adc_endpoint:00000000 adc_endpoint
+    {standard input}:560    .bss.adc_endpoint:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+radar_get_adc_configuration
+protocol_send_header
+protocol_send_payload
+protocol_send_tail
+radar_set_adc_configuration
+protocol_broadcast_change

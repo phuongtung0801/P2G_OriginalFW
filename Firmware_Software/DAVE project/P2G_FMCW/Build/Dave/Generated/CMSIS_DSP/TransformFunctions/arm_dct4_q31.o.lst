@@ -1,0 +1,726 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "arm_dct4_q31.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.arm_dct4_q31,"ax",%progbits
+  20              	 .align 2
+  21              	 .global arm_dct4_q31
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	arm_dct4_q31:
+  26              	.LFB135:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions/arm_dct4_q31.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** /* ----------------------------------------------------------------------
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Project:      CMSIS DSP Library
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Title:        arm_dct4_q31.c
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Description:  Processing function of DCT4 & IDCT4 Q31
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  *
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * $Date:        27. January 2017
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * $Revision:    V.1.5.1
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  *
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Target Processor: Cortex-M cores
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * -------------------------------------------------------------------- */
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** /*
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Copyright (C) 2010-2017 ARM Limited or its affiliates. All rights reserved.
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  *
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * SPDX-License-Identifier: Apache-2.0
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  *
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * not use this file except in compliance with the License.
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * You may obtain a copy of the License at
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  *
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * www.apache.org/licenses/LICENSE-2.0
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  *
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Unless required by applicable law or agreed to in writing, software
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * See the License for the specific language governing permissions and
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * limitations under the License.
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  */
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** #include "CMSIS_DSP/cmsis_dsp.h"
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** /**
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * @addtogroup DCT4_IDCT4
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * @{
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  */
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** /**
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * @brief Processing function for the Q31 DCT4/IDCT4.
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * @param[in]       *S             points to an instance of the Q31 DCT4 structure.
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * @param[in]       *pState        points to state buffer.
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * @param[in,out]   *pInlineBuffer points to the in-place input and output buffer.
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * @return none.
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * \par Input an output formats:
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Input samples need to be downscaled by 1 bit to avoid saturations in the Q31 DCT process,
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * as the conversion from DCT2 to DCT4 involves one subtraction.
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Internally inputs are downscaled in the RFFT process function to avoid overflows.
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * Number of bits downscaled, depends on the size of the transform.
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * The input and output formats for different DCT sizes and number of bits to upscale are mentioned
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  *
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  * \image html dct4FormatsQ31Table.gif
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****  */
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** void arm_dct4_q31(
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   const arm_dct4_instance_q31 * S,
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   q31_t * pState,
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   q31_t * pInlineBuffer)
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** {
+  28              	 .loc 1 56 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 2DE9F047 	 push {r4,r5,r6,r7,r8,r9,r10,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 32
+  36              	 .cfi_offset 4,-32
+  37              	 .cfi_offset 5,-28
+  38              	 .cfi_offset 6,-24
+  39              	 .cfi_offset 7,-20
+  40              	 .cfi_offset 8,-16
+  41              	 .cfi_offset 9,-12
+  42              	 .cfi_offset 10,-8
+  43              	 .cfi_offset 14,-4
+  44              	 .loc 1 56 0
+  45 0004 0546     	 mov r5,r0
+  46 0006 1746     	 mov r7,r2
+  47 0008 0C46     	 mov r4,r1
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   uint16_t i;                                    /* Loop counter */
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   q31_t *weights = S->pTwiddle;                  /* Pointer to the Weights table */
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   q31_t *cosFact = S->pCosFactor;                /* Pointer to the cos factors table */
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   q31_t *pS1, *pS2, *pbuff;                      /* Temporary pointers for input buffer and pState 
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   q31_t in;                                      /* Temporary variable */
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* DCT4 computation involves DCT2 (which is calculated using RFFT)
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * along with some pre-processing and post-processing.
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * Computational procedure is explained as follows:
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * (a) Pre-processing involves multiplying input with cos factor,
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *     r(n) = 2 * u(n) * cos(pi*(2*n+1)/(4*n))
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *              where,
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *                 r(n) -- output of preprocessing
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *                 u(n) -- input to preprocessing(actual Source buffer)
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * (b) Calculation of DCT2 using FFT is divided into three steps:
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *                  Step1: Re-ordering of even and odd elements of input.
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *                  Step2: Calculating FFT of the re-ordered input.
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *                  Step3: Taking the real part of the product of FFT output and weights.
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * (c) Post-processing - DCT4 can be obtained from DCT2 output using the following equation:
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *                   Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *                        where,
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *                           Y4 -- DCT4 output,   Y2 -- DCT2 output
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * (d) Multiplying the output with the normalizing factor sqrt(2/N).
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    */
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****         /*-------- Pre-processing ------------*/
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Multiplying input with cos factor i.e. r(n) = 2 * x(n) * cos(pi*(2*n+1)/(4*n)) */
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   arm_mult_q31(pInlineBuffer, cosFact, pInlineBuffer, S->N);
+  48              	 .loc 1 85 0
+  49 000a 0388     	 ldrh r3,[r0]
+  50 000c C168     	 ldr r1,[r0,#12]
+  51              	.LVL1:
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   q31_t *cosFact = S->pCosFactor;                /* Pointer to the cos factors table */
+  52              	 .loc 1 58 0
+  53 000e 8668     	 ldr r6,[r0,#8]
+  54              	.LVL2:
+  55              	 .loc 1 85 0
+  56 0010 1046     	 mov r0,r2
+  57              	.LVL3:
+  58 0012 FFF7FEFF 	 bl arm_mult_q31
+  59              	.LVL4:
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   arm_shift_q31(pInlineBuffer, 1, pInlineBuffer, S->N);
+  60              	 .loc 1 86 0
+  61 0016 3A46     	 mov r2,r7
+  62 0018 2B88     	 ldrh r3,[r5]
+  63 001a 0121     	 movs r1,#1
+  64 001c 3846     	 mov r0,r7
+  65 001e FFF7FEFF 	 bl arm_shift_q31
+  66              	.LVL5:
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* ----------------------------------------------------------------
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * Step1: Re-ordering of even and odd elements as
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *             pState[i] =  pInlineBuffer[2*i] and
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *             pState[N-i-1] = pInlineBuffer[2*i+1] where i = 0 to N/2
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    ---------------------------------------------------------------------*/
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pS1 initialized to pState */
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pS1 = pState;
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pS2 initialized to pState+N-1, so that it points to the end of the state buffer */
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pS2 = pState + (S->N - 1u);
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pbuff initialized to input buffer */
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pbuff = pInlineBuffer;
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** #if defined (ARM_MATH_DSP)
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Run the below code for Cortex-M4 and Cortex-M3 */
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Initializing the loop counter to N/2 >> 2 for loop unrolling by 4 */
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = S->Nby2 >> 2u;
+  67              	 .loc 1 108 0
+  68 0022 B5F80280 	 ldrh r8,[r5,#2]
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+  69              	 .loc 1 98 0
+  70 0026 B5F800C0 	 ldrh ip,[r5]
+  71              	.LVL6:
+  72              	 .loc 1 108 0
+  73 002a 4FEA9808 	 lsr r8,r8,#2
+  74 002e 08F1FF38 	 add r8,r8,#-1
+  75 0032 1FFA88F8 	 uxth r8,r8
+  76 0036 08F10208 	 add r8,r8,#2
+  77 003a 04EB8C01 	 add r1,r4,ip,lsl#2
+  78 003e 04F1100E 	 add lr,r4,#16
+  79 0042 04EB0818 	 add r8,r4,r8,lsl#4
+  80 0046 1439     	 subs r1,r1,#20
+  81 0048 7246     	 mov r2,lr
+  82 004a 07F12003 	 add r3,r7,#32
+  83              	.LVL7:
+  84              	.L2:
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    ** a second loop below computes the remaining 1 to 3 samples. */
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   do
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Re-ordering of even and odd elements */
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* pState[i] =  pInlineBuffer[2*i] */
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS1++ = *pbuff++;
+  85              	 .loc 1 116 0 discriminator 1
+  86 004e 53F8200C 	 ldr r0,[r3,#-32]
+  87 0052 42F8100C 	 str r0,[r2,#-16]
+  88              	.LVL8:
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* pState[N-i-1] = pInlineBuffer[2*i+1] */
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS2-- = *pbuff++;
+  89              	 .loc 1 118 0 discriminator 1
+  90 0056 53F81C0C 	 ldr r0,[r3,#-28]
+  91 005a 0861     	 str r0,[r1,#16]
+  92              	.LVL9:
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS1++ = *pbuff++;
+  93              	 .loc 1 120 0 discriminator 1
+  94 005c 53F8180C 	 ldr r0,[r3,#-24]
+  95 0060 42F80C0C 	 str r0,[r2,#-12]
+  96              	.LVL10:
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS2-- = *pbuff++;
+  97              	 .loc 1 121 0 discriminator 1
+  98 0064 53F8140C 	 ldr r0,[r3,#-20]
+  99 0068 C860     	 str r0,[r1,#12]
+ 100              	.LVL11:
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS1++ = *pbuff++;
+ 101              	 .loc 1 123 0 discriminator 1
+ 102 006a 53F8100C 	 ldr r0,[r3,#-16]
+ 103 006e 42F8080C 	 str r0,[r2,#-8]
+ 104              	.LVL12:
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS2-- = *pbuff++;
+ 105              	 .loc 1 124 0 discriminator 1
+ 106 0072 53F80C0C 	 ldr r0,[r3,#-12]
+ 107 0076 8860     	 str r0,[r1,#8]
+ 108              	.LVL13:
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS1++ = *pbuff++;
+ 109              	 .loc 1 126 0 discriminator 1
+ 110 0078 53F8080C 	 ldr r0,[r3,#-8]
+ 111 007c 42F8040C 	 str r0,[r2,#-4]
+ 112              	.LVL14:
+ 113 0080 1032     	 adds r2,r2,#16
+ 114              	.LVL15:
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS2-- = *pbuff++;
+ 115              	 .loc 1 127 0 discriminator 1
+ 116 0082 53F8040C 	 ldr r0,[r3,#-4]
+ 117 0086 4860     	 str r0,[r1,#4]
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   } while (i > 0u);
+ 118              	 .loc 1 131 0 discriminator 1
+ 119 0088 4245     	 cmp r2,r8
+ 120 008a A1F11001 	 sub r1,r1,#16
+ 121              	.LVL16:
+ 122 008e 03F12003 	 add r3,r3,#32
+ 123              	.LVL17:
+ 124 0092 DCD1     	 bne .L2
+ 125              	.LVL18:
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pbuff initialized to input buffer */
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pbuff = pInlineBuffer;
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pS1 initialized to pState */
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pS1 = pState;
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Initializing the loop counter to N/4 instead of N for loop unrolling */
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = S->N >> 2u;
+ 126              	 .loc 1 140 0
+ 127 0094 4FEA9C02 	 lsr r2,ip,#2
+ 128 0098 013A     	 subs r2,r2,#1
+ 129 009a 92B2     	 uxth r2,r2
+ 130 009c 0232     	 adds r2,r2,#2
+ 131 009e 07F11008 	 add r8,r7,#16
+ 132 00a2 07EB0212 	 add r2,r7,r2,lsl#4
+ 133 00a6 4346     	 mov r3,r8
+ 134              	.LVL19:
+ 135              	.L3:
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Processing with loop unrolling 4 times as N is always multiple of 4.
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * Compute 4 outputs at a time */
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   do
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Writing the re-ordered output back to inplace input buffer */
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = *pS1++;
+ 136              	 .loc 1 147 0 discriminator 1
+ 137 00a8 5EF8101C 	 ldr r1,[lr,#-16]
+ 138 00ac 43F8101C 	 str r1,[r3,#-16]
+ 139              	.LVL20:
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = *pS1++;
+ 140              	 .loc 1 148 0 discriminator 1
+ 141 00b0 5EF80C1C 	 ldr r1,[lr,#-12]
+ 142 00b4 43F80C1C 	 str r1,[r3,#-12]
+ 143              	.LVL21:
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = *pS1++;
+ 144              	 .loc 1 149 0 discriminator 1
+ 145 00b8 5EF8081C 	 ldr r1,[lr,#-8]
+ 146 00bc 43F8081C 	 str r1,[r3,#-8]
+ 147              	.LVL22:
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = *pS1++;
+ 148              	 .loc 1 150 0 discriminator 1
+ 149 00c0 5EF8041C 	 ldr r1,[lr,#-4]
+ 150 00c4 43F8041C 	 str r1,[r3,#-4]
+ 151 00c8 1033     	 adds r3,r3,#16
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   } while (i > 0u);
+ 152              	 .loc 1 154 0 discriminator 1
+ 153 00ca 9342     	 cmp r3,r2
+ 154 00cc 0EF1100E 	 add lr,lr,#16
+ 155              	.LVL23:
+ 156 00d0 EAD1     	 bne .L3
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* ---------------------------------------------------------
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *     Step2: Calculate RFFT for N-point input
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * ---------------------------------------------------------- */
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pInlineBuffer is real input of length N , pState is the complex output of length 2N */
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   arm_rfft_q31(S->pRfft, pInlineBuffer, pState);
+ 157              	 .loc 1 161 0
+ 158 00d2 2246     	 mov r2,r4
+ 159 00d4 2869     	 ldr r0,[r5,#16]
+ 160 00d6 3946     	 mov r1,r7
+ 161 00d8 FFF7FEFF 	 bl arm_rfft_q31
+ 162              	.LVL24:
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /*----------------------------------------------------------------------
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *  Step3: Multiply the FFT output with the weights.
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *----------------------------------------------------------------------*/
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   arm_cmplx_mult_cmplx_q31(pState, weights, pState, S->N);
+ 163              	 .loc 1 166 0
+ 164 00dc 2046     	 mov r0,r4
+ 165 00de 3146     	 mov r1,r6
+ 166 00e0 2246     	 mov r2,r4
+ 167 00e2 2B88     	 ldrh r3,[r5]
+ 168 00e4 FFF7FEFF 	 bl arm_cmplx_mult_cmplx_q31
+ 169              	.LVL25:
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* The output of complex multiplication is in 3.29 format.
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * Hence changing the format of N (i.e. 2*N elements) complex numbers to 1.31 format by shifting 
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   arm_shift_q31(pState, 2, pState, S->N * 2);
+ 170              	 .loc 1 170 0
+ 171 00e8 2B88     	 ldrh r3,[r5]
+ 172 00ea 2246     	 mov r2,r4
+ 173 00ec 2046     	 mov r0,r4
+ 174 00ee 5B00     	 lsls r3,r3,#1
+ 175 00f0 0221     	 movs r1,#2
+ 176 00f2 FFF7FEFF 	 bl arm_shift_q31
+ 177              	.LVL26:
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* ----------- Post-processing ---------- */
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* DCT-IV can be obtained from DCT-II by the equation,
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *       Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *       Hence, Y4(0) = Y2(0)/2  */
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Getting only real part from the output and Converting to DCT-IV */
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Initializing the loop counter to N >> 2 for loop unrolling by 4 */
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = (S->N - 1u) >> 2u;
+ 178              	 .loc 1 179 0
+ 179 00f6 B5F800E0 	 ldrh lr,[r5]
+ 180              	.LVL27:
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pbuff initialized to input buffer. */
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pbuff = pInlineBuffer;
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pS1 initialized to pState */
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pS1 = pState;
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Calculating Y4(0) from Y2(0) using Y4(0) = Y2(0)/2 */
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   in = *pS1++ >> 1u;
+ 181              	 .loc 1 188 0
+ 182 00fa A246     	 mov r10,r4
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 183              	 .loc 1 179 0
+ 184 00fc 0EF1FF3C 	 add ip,lr,#-1
+ 185              	 .loc 1 188 0
+ 186 0100 5AF8083B 	 ldr r3,[r10],#8
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 187              	 .loc 1 179 0
+ 188 0104 4FEA9C06 	 lsr r6,ip,#2
+ 189              	.LVL28:
+ 190 0108 013E     	 subs r6,r6,#1
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* input buffer acts as inplace, so output values are stored in the input itself. */
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   *pbuff++ = in;
+ 191              	 .loc 1 190 0
+ 192 010a 3A46     	 mov r2,r7
+ 193 010c B6B2     	 uxth r6,r6
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* input buffer acts as inplace, so output values are stored in the input itself. */
+ 194              	 .loc 1 188 0
+ 195 010e 5B10     	 asrs r3,r3,#1
+ 196              	.LVL29:
+ 197 0110 07EB0619 	 add r9,r7,r6,lsl#4
+ 198              	 .loc 1 190 0
+ 199 0114 42F8143B 	 str r3,[r2],#20
+ 200              	.LVL30:
+ 201 0118 09F12409 	 add r9,r9,#36
+ 202 011c 2834     	 adds r4,r4,#40
+ 203              	.LVL31:
+ 204              	.L4:
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pState pointer is incremented twice as the real values are located alternatively in the array 
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pS1++;
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* First part of the processing with loop unrolling.  Compute 4 outputs at a time.
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    ** a second loop below computes the remaining 1 to 3 samples. */
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   do
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* pState pointer (pS1) is incremented twice as the real values are located alternatively in th
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pS1++ - in;
+ 205              	 .loc 1 201 0 discriminator 1
+ 206 011e 54F8200C 	 ldr r0,[r4,#-32]
+ 207 0122 C31A     	 subs r3,r0,r3
+ 208              	.LVL32:
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = in;
+ 209              	 .loc 1 202 0 discriminator 1
+ 210 0124 42F8103C 	 str r3,[r2,#-16]
+ 211              	.LVL33:
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* points to the next real value */
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     pS1++;
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pS1++ - in;
+ 212              	 .loc 1 206 0 discriminator 1
+ 213 0128 54F8181C 	 ldr r1,[r4,#-24]
+ 214 012c C91A     	 subs r1,r1,r3
+ 215              	.LVL34:
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = in;
+ 216              	 .loc 1 207 0 discriminator 1
+ 217 012e 42F80C1C 	 str r1,[r2,#-12]
+ 218              	.LVL35:
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     pS1++;
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pS1++ - in;
+ 219              	 .loc 1 210 0 discriminator 1
+ 220 0132 54F8103C 	 ldr r3,[r4,#-16]
+ 221 0136 5B1A     	 subs r3,r3,r1
+ 222              	.LVL36:
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = in;
+ 223              	 .loc 1 211 0 discriminator 1
+ 224 0138 42F8083C 	 str r3,[r2,#-8]
+ 225              	.LVL37:
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     pS1++;
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pS1++ - in;
+ 226              	 .loc 1 214 0 discriminator 1
+ 227 013c 54F8081C 	 ldr r1,[r4,#-8]
+ 228 0140 CB1A     	 subs r3,r1,r3
+ 229              	.LVL38:
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = in;
+ 230              	 .loc 1 215 0 discriminator 1
+ 231 0142 42F8043C 	 str r3,[r2,#-4]
+ 232              	.LVL39:
+ 233 0146 1032     	 adds r2,r2,#16
+ 234              	.LVL40:
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     pS1++;
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   } while (i > 0u);
+ 235              	 .loc 1 220 0 discriminator 1
+ 236 0148 4A45     	 cmp r2,r9
+ 237 014a 04F12004 	 add r4,r4,#32
+ 238              	.LVL41:
+ 239 014e E6D1     	 bne .L4
+ 240 0150 0136     	 adds r6,r6,#1
+ 241 0152 07EB0612 	 add r2,r7,r6,lsl#4
+ 242              	.LVL42:
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* If the blockSize is not a multiple of 4, compute any remaining output samples here.
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    ** No loop unrolling is used. */
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = (S->N - 1u) % 0x4u;
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   while (i > 0u)
+ 243              	 .loc 1 226 0
+ 244 0156 1CF0030C 	 ands ip,ip,#3
+ 245 015a 02F10402 	 add r2,r2,#4
+ 246 015e 4FEA4616 	 lsl r6,r6,#5
+ 247              	.LVL43:
+ 248 0162 11D0     	 beq .L8
+ 249 0164 0CF1FF3C 	 add ip,ip,#-1
+ 250 0168 1FFA8CF0 	 uxth r0,ip
+ 251 016c 0836     	 adds r6,r6,#8
+ 252              	.LVL44:
+ 253 016e 02EB8000 	 add r0,r2,r0,lsl#2
+ 254 0172 B244     	 add r10,r10,r6
+ 255              	.LVL45:
+ 256 0174 043A     	 subs r2,r2,#4
+ 257              	.LVL46:
+ 258              	.L7:
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* pState pointer (pS1) is incremented twice as the real values are located alternatively in th
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pS1++ - in;
+ 259              	 .loc 1 230 0
+ 260 0176 5AF8081C 	 ldr r1,[r10,#-8]
+ 261 017a CB1A     	 subs r3,r1,r3
+ 262              	.LVL47:
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = in;
+ 263              	 .loc 1 231 0
+ 264 017c 42F8043F 	 str r3,[r2,#4]!
+ 265              	.LVL48:
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 266              	 .loc 1 226 0
+ 267 0180 8242     	 cmp r2,r0
+ 268 0182 0AF1080A 	 add r10,r10,#8
+ 269              	.LVL49:
+ 270 0186 F6D1     	 bne .L7
+ 271              	.LVL50:
+ 272              	.L8:
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* points to the next real value */
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     pS1++;
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   }
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****         /*------------ Normalizing the output by multiplying with the normalizing factor ----------
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Initializing the loop counter to N/4 instead of N for loop unrolling */
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = S->N >> 2u;
+ 273              	 .loc 1 243 0
+ 274 0188 4FEA9E04 	 lsr r4,lr,#2
+ 275 018c 013C     	 subs r4,r4,#1
+ 276 018e A4B2     	 uxth r4,r4
+ 277 0190 0234     	 adds r4,r4,#2
+ 278 0192 07EB0414 	 add r4,r7,r4,lsl#4
+ 279              	.LVL51:
+ 280              	.L6:
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pbuff initialized to the pInlineBuffer(now contains the output values) */
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pbuff = pInlineBuffer;
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Processing with loop unrolling 4 times as N is always multiple of 4.  Compute 4 outputs at a t
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   do
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Multiplying pInlineBuffer with the normalizing factor sqrt(2/N) */
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pbuff;
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = ((q31_t) (((q63_t) in * S->normalize) >> 31));
+ 281              	 .loc 1 253 0 discriminator 1
+ 282 0196 6868     	 ldr r0,[r5,#4]
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = ((q31_t) (((q63_t) in * S->normalize) >> 31));
+ 283              	 .loc 1 252 0 discriminator 1
+ 284 0198 58F8106C 	 ldr r6,[r8,#-16]
+ 285              	.LVL52:
+ 286              	 .loc 1 253 0 discriminator 1
+ 287 019c 86FB0067 	 smull r6,r7,r6,r0
+ 288              	.LVL53:
+ 289 01a0 F00F     	 lsrs r0,r6,#31
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pbuff;
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = ((q31_t) (((q63_t) in * S->normalize) >> 31));
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pbuff;
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = ((q31_t) (((q63_t) in * S->normalize) >> 31));
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pbuff;
+ 290              	 .loc 1 261 0 discriminator 1
+ 291 01a2 18E90E00 	 ldmdb r8,{r1,r2,r3}
+ 292              	.LVL54:
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 293              	 .loc 1 253 0 discriminator 1
+ 294 01a6 40EA4700 	 orr r0,r0,r7,lsl#1
+ 295 01aa 48F8100C 	 str r0,[r8,#-16]
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 296              	 .loc 1 256 0 discriminator 1
+ 297 01ae 6E68     	 ldr r6,[r5,#4]
+ 298 01b0 81FB0667 	 smull r6,r7,r1,r6
+ 299 01b4 F10F     	 lsrs r1,r6,#31
+ 300 01b6 41EA4701 	 orr r1,r1,r7,lsl#1
+ 301 01ba 48F80C1C 	 str r1,[r8,#-12]
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 302              	 .loc 1 259 0 discriminator 1
+ 303 01be 6868     	 ldr r0,[r5,#4]
+ 304 01c0 82FB0001 	 smull r0,r1,r2,r0
+ 305 01c4 C20F     	 lsrs r2,r0,#31
+ 306 01c6 42EA4102 	 orr r2,r2,r1,lsl#1
+ 307 01ca 48F8082C 	 str r2,[r8,#-8]
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = ((q31_t) (((q63_t) in * S->normalize) >> 31));
+ 308              	 .loc 1 262 0 discriminator 1
+ 309 01ce 6A68     	 ldr r2,[r5,#4]
+ 310 01d0 83FB0201 	 smull r0,r1,r3,r2
+ 311 01d4 C20F     	 lsrs r2,r0,#31
+ 312 01d6 42EA4102 	 orr r2,r2,r1,lsl#1
+ 313 01da 48F8042C 	 str r2,[r8,#-4]
+ 314 01de 08F11008 	 add r8,r8,#16
+ 315              	.LVL55:
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   } while (i > 0u);
+ 316              	 .loc 1 266 0 discriminator 1
+ 317 01e2 A045     	 cmp r8,r4
+ 318 01e4 D7D1     	 bne .L6
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** #else
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Run the below code for Cortex-M0 */
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Initializing the loop counter to N/2 */
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = S->Nby2;
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   do
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Re-ordering of even and odd elements */
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* pState[i] =  pInlineBuffer[2*i] */
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS1++ = *pbuff++;
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* pState[N-i-1] = pInlineBuffer[2*i+1] */
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pS2-- = *pbuff++;
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   } while (i > 0u);
+ 287:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 288:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pbuff initialized to input buffer */
+ 289:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pbuff = pInlineBuffer;
+ 290:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 291:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pS1 initialized to pState */
+ 292:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pS1 = pState;
+ 293:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 294:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Initializing the loop counter */
+ 295:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = S->N;
+ 296:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 297:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   do
+ 298:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 299:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Writing the re-ordered output back to inplace input buffer */
+ 300:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = *pS1++;
+ 301:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 302:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 303:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 304:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   } while (i > 0u);
+ 305:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 306:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 307:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* ---------------------------------------------------------
+ 308:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *     Step2: Calculate RFFT for N-point input
+ 309:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * ---------------------------------------------------------- */
+ 310:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pInlineBuffer is real input of length N , pState is the complex output of length 2N */
+ 311:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   arm_rfft_q31(S->pRfft, pInlineBuffer, pState);
+ 312:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 313:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /*----------------------------------------------------------------------
+ 314:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *  Step3: Multiply the FFT output with the weights.
+ 315:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *----------------------------------------------------------------------*/
+ 316:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   arm_cmplx_mult_cmplx_q31(pState, weights, pState, S->N);
+ 317:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 318:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* The output of complex multiplication is in 3.29 format.
+ 319:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    * Hence changing the format of N (i.e. 2*N elements) complex numbers to 1.31 format by shifting 
+ 320:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   arm_shift_q31(pState, 2, pState, S->N * 2);
+ 321:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 322:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* ----------- Post-processing ---------- */
+ 323:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* DCT-IV can be obtained from DCT-II by the equation,
+ 324:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *       Y4(k) = Y2(k) - Y4(k-1) and Y4(-1) = Y4(0)
+ 325:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****    *       Hence, Y4(0) = Y2(0)/2  */
+ 326:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Getting only real part from the output and Converting to DCT-IV */
+ 327:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 328:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pbuff initialized to input buffer. */
+ 329:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pbuff = pInlineBuffer;
+ 330:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 331:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pS1 initialized to pState */
+ 332:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pS1 = pState;
+ 333:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 334:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Calculating Y4(0) from Y2(0) using Y4(0) = Y2(0)/2 */
+ 335:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   in = *pS1++ >> 1u;
+ 336:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* input buffer acts as inplace, so output values are stored in the input itself. */
+ 337:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   *pbuff++ = in;
+ 338:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 339:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pState pointer is incremented twice as the real values are located alternatively in the array 
+ 340:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pS1++;
+ 341:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 342:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Initializing the loop counter */
+ 343:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = (S->N - 1u);
+ 344:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 345:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   while (i > 0u)
+ 346:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 347:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Calculating Y4(1) to Y4(N-1) from Y2 using equation Y4(k) = Y2(k) - Y4(k-1) */
+ 348:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* pState pointer (pS1) is incremented twice as the real values are located alternatively in th
+ 349:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pS1++ - in;
+ 350:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = in;
+ 351:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* points to the next real value */
+ 352:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     pS1++;
+ 353:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 354:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 355:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 356:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   }
+ 357:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 358:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 359:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****         /*------------ Normalizing the output by multiplying with the normalizing factor ----------
+ 360:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 361:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* Initializing the loop counter */
+ 362:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   i = S->N;
+ 363:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 364:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   /* pbuff initialized to the pInlineBuffer(now contains the output values) */
+ 365:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   pbuff = pInlineBuffer;
+ 366:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 367:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   do
+ 368:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   {
+ 369:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Multiplying pInlineBuffer with the normalizing factor sqrt(2/N) */
+ 370:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     in = *pbuff;
+ 371:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     *pbuff++ = ((q31_t) (((q63_t) in * S->normalize) >> 31));
+ 372:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 373:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     /* Decrement the loop counter */
+ 374:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****     i--;
+ 375:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c ****   } while (i > 0u);
+ 376:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 377:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** #endif /* #if defined (ARM_MATH_DSP) */
+ 378:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** 
+ 379:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/TransformFunctions\arm_dct4_q31.c **** }
+ 319              	 .loc 1 379 0
+ 320 01e6 BDE8F087 	 pop {r4,r5,r6,r7,r8,r9,r10,pc}
+ 321              	 .cfi_endproc
+ 322              	.LFE135:
+ 324 01ea 00BF     	 .text
+ 325              	.Letext0:
+ 326              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 327              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 328              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/arm_math.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_dct4_q31.c
+    {standard input}:20     .text.arm_dct4_q31:00000000 $t
+    {standard input}:25     .text.arm_dct4_q31:00000000 arm_dct4_q31
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+arm_mult_q31
+arm_shift_q31
+arm_rfft_q31
+arm_cmplx_mult_cmplx_q31

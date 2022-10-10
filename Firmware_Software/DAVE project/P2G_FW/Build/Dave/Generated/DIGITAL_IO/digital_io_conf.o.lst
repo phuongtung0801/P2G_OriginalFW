@@ -1,0 +1,242 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "digital_io_conf.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .global DIGITAL_IO_LED1
+  20              	 .global DIGITAL_IO_PLL_MUXIN
+  21              	 .global DIGITAL_IO_PGA_LDO_ENABLE
+  22              	 .global DIGITAL_IO_SPI_M_CS_PGA
+  23              	 .global DIGITAL_IO_SPI_DATA_PGA
+  24              	 .global DIGITAL_IO_BGT_LDO_ENABLE
+  25              	 .global DIGITAL_IO_PLL_TRIG2
+  26              	 .global DIGITAL_IO_PLL_TRIG1
+  27              	 .global DIGITAL_IO_SPI_M_DATA
+  28              	 .global DIGITAL_IO_SPI_M_CS_PLL
+  29              	 .global DIGITAL_IO_SPI_M_CS_BGT24
+  30              	 .global DIGITAL_IO_SPI_M_CLK
+  31              	 .global DIGITAL_IO_PLL_MOD
+  32              	 .global DIGITAL_IO_PLL_CE
+  33              	 .global DIGITAL_IO_BGT_POWER_ENABLE
+  34              	 .section .rodata.DIGITAL_IO_BGT_LDO_ENABLE,"a",%progbits
+  35              	 .align 2
+  38              	DIGITAL_IO_BGT_LDO_ENABLE:
+  39 0000 00840248 	 .word 1208124416
+  40 0004 80       	 .byte -128
+  41 0005 000000   	 .space 3
+  42 0008 01000000 	 .word 1
+  43 000c 00000000 	 .space 4
+  44 0010 03       	 .byte 3
+  45 0011 00       	 .byte 0
+  46 0012 0000     	 .space 2
+  47              	 .section .rodata.DIGITAL_IO_PLL_CE,"a",%progbits
+  48              	 .align 2
+  51              	DIGITAL_IO_PLL_CE:
+  52 0000 00820248 	 .word 1208123904
+  53 0004 80       	 .byte -128
+  54 0005 000000   	 .space 3
+  55 0008 00000100 	 .word 65536
+  56 000c 01       	 .byte 1
+  57 000d 000000   	 .space 3
+  58 0010 02       	 .byte 2
+  59 0011 00       	 .byte 0
+  60 0012 0000     	 .space 2
+  61              	 .section .rodata.DIGITAL_IO_SPI_DATA_PGA,"a",%progbits
+  62              	 .align 2
+  65              	DIGITAL_IO_SPI_DATA_PGA:
+  66 0000 00850248 	 .word 1208124672
+  67 0004 80       	 .byte -128
+  68 0005 000000   	 .space 3
+  69 0008 00000100 	 .word 65536
+  70 000c 00000000 	 .space 4
+  71 0010 01       	 .byte 1
+  72 0011 00       	 .byte 0
+  73 0012 0000     	 .space 2
+  74              	 .section .rodata.DIGITAL_IO_SPI_M_CLK,"a",%progbits
+  75              	 .align 2
+  78              	DIGITAL_IO_SPI_M_CLK:
+  79 0000 00880248 	 .word 1208125440
+  80 0004 80       	 .byte -128
+  81 0005 000000   	 .space 3
+  82 0008 00000100 	 .word 65536
+  83 000c 00000000 	 .space 4
+  84 0010 05       	 .byte 5
+  85 0011 00       	 .byte 0
+  86 0012 0000     	 .space 2
+  87              	 .section .rodata.DIGITAL_IO_SPI_M_CS_PGA,"a",%progbits
+  88              	 .align 2
+  91              	DIGITAL_IO_SPI_M_CS_PGA:
+  92 0000 00880248 	 .word 1208125440
+  93 0004 80       	 .byte -128
+  94 0005 000000   	 .space 3
+  95 0008 01000000 	 .word 1
+  96 000c 00000000 	 .space 4
+  97 0010 04       	 .byte 4
+  98 0011 00       	 .byte 0
+  99 0012 0000     	 .space 2
+ 100              	 .section .rodata.DIGITAL_IO_PLL_TRIG1,"a",%progbits
+ 101              	 .align 2
+ 104              	DIGITAL_IO_PLL_TRIG1:
+ 105 0000 00810248 	 .word 1208123648
+ 106 0004 00       	 .byte 0
+ 107 0005 00000000 	 .space 11
+ 107      00000000 
+ 107      000000
+ 108 0010 03       	 .byte 3
+ 109 0011 00       	 .byte 0
+ 110 0012 0000     	 .space 2
+ 111              	 .section .rodata.DIGITAL_IO_PLL_TRIG2,"a",%progbits
+ 112              	 .align 2
+ 115              	DIGITAL_IO_PLL_TRIG2:
+ 116 0000 00810248 	 .word 1208123648
+ 117 0004 80       	 .byte -128
+ 118 0005 000000   	 .space 3
+ 119 0008 00000100 	 .word 65536
+ 120 000c 00000000 	 .space 4
+ 121 0010 01       	 .byte 1
+ 122 0011 00       	 .byte 0
+ 123 0012 0000     	 .space 2
+ 124              	 .section .rodata.DIGITAL_IO_PLL_MOD,"a",%progbits
+ 125              	 .align 2
+ 128              	DIGITAL_IO_PLL_MOD:
+ 129 0000 00810248 	 .word 1208123648
+ 130 0004 00       	 .byte 0
+ 131 0005 00000000 	 .space 11
+ 131      00000000 
+ 131      000000
+ 132 0010 02       	 .byte 2
+ 133 0011 00       	 .byte 0
+ 134 0012 0000     	 .space 2
+ 135              	 .section .rodata.DIGITAL_IO_SPI_M_CS_PLL,"a",%progbits
+ 136              	 .align 2
+ 139              	DIGITAL_IO_SPI_M_CS_PLL:
+ 140 0000 00810248 	 .word 1208123648
+ 141 0004 80       	 .byte -128
+ 142 0005 000000   	 .space 3
+ 143 0008 01000000 	 .word 1
+ 144 000c 00000000 	 .space 4
+ 145 0010 08       	 .byte 8
+ 146 0011 00       	 .byte 0
+ 147 0012 0000     	 .space 2
+ 148              	 .section .rodata.DIGITAL_IO_PLL_MUXIN,"a",%progbits
+ 149              	 .align 2
+ 152              	DIGITAL_IO_PLL_MUXIN:
+ 153 0000 00810248 	 .word 1208123648
+ 154 0004 00       	 .byte 0
+ 155 0005 00000000 	 .space 11
+ 155      00000000 
+ 155      000000
+ 156 0010 00       	 .byte 0
+ 157 0011 00       	 .byte 0
+ 158 0012 0000     	 .space 2
+ 159              	 .section .rodata.DIGITAL_IO_SPI_M_CS_BGT24,"a",%progbits
+ 160              	 .align 2
+ 163              	DIGITAL_IO_SPI_M_CS_BGT24:
+ 164 0000 00880248 	 .word 1208125440
+ 165 0004 80       	 .byte -128
+ 166 0005 000000   	 .space 3
+ 167 0008 01000000 	 .word 1
+ 168 000c 00000000 	 .space 4
+ 169 0010 06       	 .byte 6
+ 170 0011 00       	 .byte 0
+ 171 0012 0000     	 .space 2
+ 172              	 .section .rodata.DIGITAL_IO_LED1,"a",%progbits
+ 173              	 .align 2
+ 176              	DIGITAL_IO_LED1:
+ 177 0000 00870248 	 .word 1208125184
+ 178 0004 80       	 .byte -128
+ 179 0005 000000   	 .space 3
+ 180 0008 00000100 	 .word 65536
+ 181 000c 00000000 	 .space 4
+ 182 0010 08       	 .byte 8
+ 183 0011 00       	 .byte 0
+ 184 0012 0000     	 .space 2
+ 185              	 .section .rodata.DIGITAL_IO_PGA_LDO_ENABLE,"a",%progbits
+ 186              	 .align 2
+ 189              	DIGITAL_IO_PGA_LDO_ENABLE:
+ 190 0000 00870248 	 .word 1208125184
+ 191 0004 80       	 .byte -128
+ 192 0005 000000   	 .space 3
+ 193 0008 01000000 	 .word 1
+ 194 000c 00000000 	 .space 4
+ 195 0010 0B       	 .byte 11
+ 196 0011 00       	 .byte 0
+ 197 0012 0000     	 .space 2
+ 198              	 .section .rodata.DIGITAL_IO_SPI_M_DATA,"a",%progbits
+ 199              	 .align 2
+ 202              	DIGITAL_IO_SPI_M_DATA:
+ 203 0000 00880248 	 .word 1208125440
+ 204 0004 80       	 .byte -128
+ 205 0005 000000   	 .space 3
+ 206 0008 00000100 	 .word 65536
+ 207 000c 00000000 	 .space 4
+ 208 0010 07       	 .byte 7
+ 209 0011 00       	 .byte 0
+ 210 0012 0000     	 .space 2
+ 211              	 .section .rodata.DIGITAL_IO_BGT_POWER_ENABLE,"a",%progbits
+ 212              	 .align 2
+ 215              	DIGITAL_IO_BGT_POWER_ENABLE:
+ 216 0000 00820248 	 .word 1208123904
+ 217 0004 80       	 .byte -128
+ 218 0005 000000   	 .space 3
+ 219 0008 00000100 	 .word 65536
+ 220 000c 00000000 	 .space 4
+ 221 0010 03       	 .byte 3
+ 222 0011 00       	 .byte 0
+ 223 0012 0000     	 .space 2
+ 224              	 .text
+ 225              	.Letext0:
+ 226              	 .file 1 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 227              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 228              	 .file 3 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_gpio.h"
+ 229              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 230              	 .file 5 "../Dave/Generated/DIGITAL_IO/digital_io.h"
+ 231              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 232              	 .file 7 "../Dave/Generated/DIGITAL_IO/digital_io_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 digital_io_conf.c
+    {standard input}:176    .rodata.DIGITAL_IO_LED1:00000000 DIGITAL_IO_LED1
+    {standard input}:152    .rodata.DIGITAL_IO_PLL_MUXIN:00000000 DIGITAL_IO_PLL_MUXIN
+    {standard input}:189    .rodata.DIGITAL_IO_PGA_LDO_ENABLE:00000000 DIGITAL_IO_PGA_LDO_ENABLE
+    {standard input}:91     .rodata.DIGITAL_IO_SPI_M_CS_PGA:00000000 DIGITAL_IO_SPI_M_CS_PGA
+    {standard input}:65     .rodata.DIGITAL_IO_SPI_DATA_PGA:00000000 DIGITAL_IO_SPI_DATA_PGA
+    {standard input}:38     .rodata.DIGITAL_IO_BGT_LDO_ENABLE:00000000 DIGITAL_IO_BGT_LDO_ENABLE
+    {standard input}:115    .rodata.DIGITAL_IO_PLL_TRIG2:00000000 DIGITAL_IO_PLL_TRIG2
+    {standard input}:104    .rodata.DIGITAL_IO_PLL_TRIG1:00000000 DIGITAL_IO_PLL_TRIG1
+    {standard input}:202    .rodata.DIGITAL_IO_SPI_M_DATA:00000000 DIGITAL_IO_SPI_M_DATA
+    {standard input}:139    .rodata.DIGITAL_IO_SPI_M_CS_PLL:00000000 DIGITAL_IO_SPI_M_CS_PLL
+    {standard input}:163    .rodata.DIGITAL_IO_SPI_M_CS_BGT24:00000000 DIGITAL_IO_SPI_M_CS_BGT24
+    {standard input}:78     .rodata.DIGITAL_IO_SPI_M_CLK:00000000 DIGITAL_IO_SPI_M_CLK
+    {standard input}:128    .rodata.DIGITAL_IO_PLL_MOD:00000000 DIGITAL_IO_PLL_MOD
+    {standard input}:51     .rodata.DIGITAL_IO_PLL_CE:00000000 DIGITAL_IO_PLL_CE
+    {standard input}:215    .rodata.DIGITAL_IO_BGT_POWER_ENABLE:00000000 DIGITAL_IO_BGT_POWER_ENABLE
+    {standard input}:35     .rodata.DIGITAL_IO_BGT_LDO_ENABLE:00000000 $d
+    {standard input}:48     .rodata.DIGITAL_IO_PLL_CE:00000000 $d
+    {standard input}:62     .rodata.DIGITAL_IO_SPI_DATA_PGA:00000000 $d
+    {standard input}:75     .rodata.DIGITAL_IO_SPI_M_CLK:00000000 $d
+    {standard input}:88     .rodata.DIGITAL_IO_SPI_M_CS_PGA:00000000 $d
+    {standard input}:101    .rodata.DIGITAL_IO_PLL_TRIG1:00000000 $d
+    {standard input}:112    .rodata.DIGITAL_IO_PLL_TRIG2:00000000 $d
+    {standard input}:125    .rodata.DIGITAL_IO_PLL_MOD:00000000 $d
+    {standard input}:136    .rodata.DIGITAL_IO_SPI_M_CS_PLL:00000000 $d
+    {standard input}:149    .rodata.DIGITAL_IO_PLL_MUXIN:00000000 $d
+    {standard input}:160    .rodata.DIGITAL_IO_SPI_M_CS_BGT24:00000000 $d
+    {standard input}:173    .rodata.DIGITAL_IO_LED1:00000000 $d
+    {standard input}:186    .rodata.DIGITAL_IO_PGA_LDO_ENABLE:00000000 $d
+    {standard input}:199    .rodata.DIGITAL_IO_SPI_M_DATA:00000000 $d
+    {standard input}:212    .rodata.DIGITAL_IO_BGT_POWER_ENABLE:00000000 $d
+
+NO UNDEFINED SYMBOLS

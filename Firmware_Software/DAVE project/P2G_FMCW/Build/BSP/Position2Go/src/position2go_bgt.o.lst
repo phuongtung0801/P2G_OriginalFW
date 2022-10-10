@@ -1,0 +1,1202 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "position2go_bgt.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.bgt_init,"ax",%progbits
+  20              	 .align 2
+  21              	 .global bgt_init
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	bgt_init:
+  26              	.LFB470:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src/position2go_bgt.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****     @file: position2go_bgt.c
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****     @brief: This file implements the function declarations for Infineon's BGT
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****  */
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** /* ===========================================================================
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ** All rights reserved.
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ** ===========================================================================
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** **
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ** ===========================================================================
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ** Passing on and copying of this document, and communication of its contents
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ** is not permitted without Infineon's prior written authorization.
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ** ===========================================================================
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** */
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** /*
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ==============================================================================
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    1. INCLUDE FILES
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ==============================================================================
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****  */
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** #include "position2go_bgt.h"
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** #include "bgt24mtr1x.h"
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** #include "config.h"
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** /*
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ==============================================================================
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    2. DATA
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ==============================================================================
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****  */
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** static SPI_DIGITAL_IOs_t bgt24mtr1x_spi_pins; /**< SPI GPIOs used to configure BGT24MTR1x device */
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** /*
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ==============================================================================
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    3. EXPORTED FUNCTIONS
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** ==============================================================================
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****  */
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_init(uint32_t lna_gain, uint32_t power_level)
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+  28              	 .loc 1 44 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 38B5     	 push {r3,r4,r5,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 16
+  36              	 .cfi_offset 3,-16
+  37              	 .cfi_offset 4,-12
+  38              	 .cfi_offset 5,-8
+  39              	 .cfi_offset 14,-4
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   /* Set the digital IOs used by SPI interface */
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_spi_pins.spi_device    = BGT_DEVICE;
+  40              	 .loc 1 46 0
+  41 0002 084B     	 ldr r3,.L3
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_spi_pins.gpio_cs_pin   = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_BGT24;
+  42              	 .loc 1 47 0
+  43 0004 084D     	 ldr r5,.L3+4
+  44 0006 5D60     	 str r5,[r3,#4]
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_spi_pins.gpio_data_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_DATA;
+  45              	 .loc 1 48 0
+  46 0008 084C     	 ldr r4,.L3+8
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_spi_pins.gpio_clk_pin  = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CLK;
+  47              	 .loc 1 49 0
+  48 000a 094A     	 ldr r2,.L3+12
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_spi_pins.gpio_data_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_DATA;
+  49              	 .loc 1 48 0
+  50 000c 9C60     	 str r4,[r3,#8]
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_spi_pins.gpio_cs_pin   = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_BGT24;
+  51              	 .loc 1 46 0
+  52 000e 0025     	 movs r5,#0
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_init((Bgt24mtr1x_LNAgain_t)lna_gain, (Bgt24mtr1x_Power_t)power_level);
+  53              	 .loc 1 51 0
+  54 0010 C0B2     	 uxtb r0,r0
+  55              	.LVL1:
+  56 0012 C9B2     	 uxtb r1,r1
+  57              	.LVL2:
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_spi_pins.gpio_cs_pin   = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_BGT24;
+  58              	 .loc 1 46 0
+  59 0014 1D70     	 strb r5,[r3]
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   
+  60              	 .loc 1 49 0
+  61 0016 DA60     	 str r2,[r3,#12]
+  62              	 .loc 1 51 0
+  63 0018 FFF7FEFF 	 bl bgt24mtr1x_init
+  64              	.LVL3:
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_ana_vref_tx();
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+  65              	 .loc 1 54 0
+  66 001c BDE83840 	 pop {r3,r4,r5,lr}
+  67              	.LCFI1:
+  68              	 .cfi_restore 14
+  69              	 .cfi_restore 5
+  70              	 .cfi_restore 4
+  71              	 .cfi_restore 3
+  72              	 .cfi_def_cfa_offset 0
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+  73              	 .loc 1 53 0
+  74 0020 FFF7FEBF 	 b bgt24mtr1x_ana_vref_tx
+  75              	.LVL4:
+  76              	.L4:
+  77              	 .align 2
+  78              	.L3:
+  79 0024 00000000 	 .word .LANCHOR0
+  80 0028 00000000 	 .word DIGITAL_IO_SPI_M_CS_BGT24
+  81 002c 00000000 	 .word DIGITAL_IO_SPI_M_DATA
+  82 0030 00000000 	 .word DIGITAL_IO_SPI_M_CLK
+  83              	 .cfi_endproc
+  84              	.LFE470:
+  86              	 .section .text.bgt_start_tx,"ax",%progbits
+  87              	 .align 2
+  88              	 .global bgt_start_tx
+  89              	 .thumb
+  90              	 .thumb_func
+  92              	bgt_start_tx:
+  93              	.LFB471:
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_start_tx(void)
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+  94              	 .loc 1 59 0
+  95              	 .cfi_startproc
+  96              	 
+  97              	 
+  98              	 
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_start_tx();
+  99              	 .loc 1 60 0
+ 100 0000 FFF7FEBF 	 b bgt24mtr1x_start_tx
+ 101              	.LVL5:
+ 102              	 .cfi_endproc
+ 103              	.LFE471:
+ 105              	 .section .text.bgt_stop_tx,"ax",%progbits
+ 106              	 .align 2
+ 107              	 .global bgt_stop_tx
+ 108              	 .thumb
+ 109              	 .thumb_func
+ 111              	bgt_stop_tx:
+ 112              	.LFB472:
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_stop_tx(void)
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 113              	 .loc 1 66 0
+ 114              	 .cfi_startproc
+ 115              	 
+ 116              	 
+ 117              	 
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_stop_tx();
+ 118              	 .loc 1 67 0
+ 119 0000 FFF7FEBF 	 b bgt24mtr1x_stop_tx
+ 120              	.LVL6:
+ 121              	 .cfi_endproc
+ 122              	.LFE472:
+ 124              	 .section .text.bgt_power_up,"ax",%progbits
+ 125              	 .align 2
+ 126              	 .global bgt_power_up
+ 127              	 .thumb
+ 128              	 .thumb_func
+ 130              	bgt_power_up:
+ 131              	.LFB473:
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_power_up(void)
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 132              	 .loc 1 73 0
+ 133              	 .cfi_startproc
+ 134              	 
+ 135              	 
+ 136              	 
+ 137 0000 30B4     	 push {r4,r5}
+ 138              	.LCFI2:
+ 139              	 .cfi_def_cfa_offset 8
+ 140              	 .cfi_offset 4,-8
+ 141              	 .cfi_offset 5,-4
+ 142 0002 074A     	 ldr r2,.L9
+ 143 0004 074B     	 ldr r3,.L9+4
+ 144              	.LBB38:
+ 145              	.LBB39:
+ 146              	.LBB40:
+ 147              	 .file 2 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_gpio.h"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @file xmc_gpio.h
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @date 2015-06-20
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @cond
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMClib v2.1.16 - XMC Peripheral Driver Library 
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Copyright (c) 2015-2017, Infineon Technologies AG
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * All rights reserved.                        
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                             
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * following conditions are met:   
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer.                        
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * products derived from this software without specific prior written permission.                  
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Change History
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * --------------
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-02-20:
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Initial draft<br>
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Documentation improved <br>
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *      
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-06-20:
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @endcond
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #ifndef XMC_GPIO_H
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_H
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * HEADER FILES
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc_common.h"
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup XMClib XMC Peripheral Library
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @{
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup GPIO
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @brief General Purpose Input Output (GPIO) driver for the XMC microcontroller family.
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * GPIO driver provide a generic and very flexible software interface for all standard digital I/O 
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Each port slice has individual interfaces for the operation as General Purpose I/O and it furthe
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * connectivity to the on-chip periphery and the control for the pad characteristics. 
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * The driver is divided into Input and Output mode.
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Input mode features:
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Configuration structure XMC_GPIO_CONFIG_t and initialization function XMC_GPIO_Init()
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of weak pull-up or pull-down device. Configuration structure XMC_GPIO_MO
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of input hysteresis. XMC_GPIO_SetInputHysteresis()
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Output mode features:
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of push pull/open drain and Alternate output. Configuration structure XM
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of pad driver strength. Configuration structure XMC_GPIO_OUTPUT_STRENGTH
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of initial output level. Configuration structure XMC_GPIO_OUTPUT_LEVEL_t
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *@{
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * MACROS
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Pos PORT0_IOCR0_PC0_Pos
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Msk PORT0_IOCR0_PC0_Msk
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Size 				(8U)
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 											
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_OUTPUT_LEVEL(level) ((level == XMC_GPIO_OUTPUT_LEVEL_LOW) || \
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             (level == XMC_GPIO_OUTPUT_LEVEL_HIGH))
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_HWCTRL(hwctrl) ((hwctrl == XMC_GPIO_HWCTRL_DISABLED) || \
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL1) || \
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL2))                    
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * ENUMS
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines output level of a pin. Use type \a XMC_GPIO_OUTPUT_LEVEL_t for this enum.
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_OUTPUT_LEVEL
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_LOW  = 0x10000U, /**<  Reset bit */
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_HIGH = 0x1U, 	/**< Set bit  */
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_OUTPUT_LEVEL_t;
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines direct hardware control characteristics of the pin . Use type \a XMC_GPIO_HWCTRL_t for t
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_HWCTRL
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_DISABLED     = 0x0U, /**<  Software control only */
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL1  = 0x1U, /**<  HWI0/HWO0 control path can override the software confi
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL2  = 0x2U  /**<  HWI1/HWO1 control path can override the software confi
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_HWCTRL_t;
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * DEVICE FAMILY EXTENSIONS
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  #if UC_FAMILY == XMC1
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc1_gpio.h"
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #elif UC_FAMILY == XMC4
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc4_gpio.h"
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #else
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #error "xmc_gpio.h: family device not supported"
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**************************************************************************************************
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * API PROTOTYPES
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #ifdef __cplusplus
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** extern "C" {
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	  Constant pointer pointing to GPIO port, to access port registers like Pn_OUT,Pn_O
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	  Port pin number.
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  config GPIO configuration data structure. Refer data structure @ref XMC_GPIO_CONFIG_t fo
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,hysteresis, push pull
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for a selected \a po
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \a config provides selected I/O settings. It configures hardware registers Pn_IOCR,Pn_OUT, Pn_OM
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,push pull /open drain
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for selected \a port
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * It configures hardware registers Pn_IOCR,Pn_OUT,Pn_OMR,Pn_PDISC and Pn_PDR.\n
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * This API is called in definition of DAVE_init by code generation and therefore should not be exp
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * for the normal operation. Use other APIs only after DAVE_init is called successfully (returns DA
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_Init(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_CONFIG_t *const c
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	Constant pointer pointing to GPIO port, to access hardware register Pn_IOCR.
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 191:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  mode input / output functionality selection. Refer @ref XMC_GPIO_MODE_t for valid values
+ 192:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 193:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 194:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 195:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 196:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets digital input and output driver functionality and characteristics of a GPIO port pin. It co
+ 197:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * registers Pn_IOCR. \a mode is initially configured during initialization in XMC_GPIO_Init(). Cal
+ 198:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * the port direction functionality as needed later in the program.
+ 199:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 200:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 201:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 202:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 203:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 204:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 205:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_SetMode(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_MODE_t mode);
+ 206:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 207:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 208:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 209:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 210:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	 Constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 211:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	 Port pin number.
+ 212:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  level output level selection. Refer @ref XMC_GPIO_OUTPUT_LEVEL_t for valid values.
+ 213:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 214:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 215:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 216:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 217:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Set port pin output level to high or low.It configures hardware registers Pn_OMR.\a level is ini
+ 218:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * configured during initialization in XMC_GPIO_Init(). Call this API to alter output level as need
+ 219:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 220:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 221:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 222:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 223:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 224:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 225:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 226:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 227:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 228:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 229:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLevel(XMC_GPIO_PORT_t *const port, const uint8_t pin, const 
+ 230:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 231:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 232:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid output level", XMC_GPIO_CHECK_OUTPUT_LEVEL(level));
+ 233:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   
+ 234:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)level << pin;
+ 235:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 236:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 237:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 238:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 239:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 240:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 241:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 242:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 243:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 244:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 245:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  Sets port pin output to high. It configures hardware registers Pn_OMR.
+ 246:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 247:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  \par<b>Related APIs:</b><BR>
+ 248:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputLow()
+ 249:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 250:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 251:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().\n
+ 252:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 253:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 254:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 255:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 256:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 257:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 258:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputHigh: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 259:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)0x1U << pin;
+ 148              	 .loc 2 260 0
+ 149 0006 157C     	 ldrb r5,[r2,#16]
+ 150              	.LBE40:
+ 151              	.LBE39:
+ 152              	.LBE38:
+ 153              	.LBB47:
+ 154              	.LBB48:
+ 155              	.LBB49:
+ 261:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 262:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 263:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 264:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 265:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 266:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	port pin number.
+ 267:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 268:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return  None
+ 269:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 270:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Description:</b><br>
+ 271:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets port pin output to low. It configures hardware registers Pn_OMR.\n
+ 272:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 273:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>>
+ 274:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMC_GPIO_SetOutputHigh()
+ 275:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 276:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Note:</b><br>
+ 277:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 278:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 279:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 280:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 281:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 282:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLow(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 283:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 284:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLow: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 285:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 286:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = 0x10000U << pin;
+ 156              	 .loc 2 286 0
+ 157 0008 1C7C     	 ldrb r4,[r3,#16]
+ 158 000a 1068     	 ldr r0,[r2]
+ 159              	.LVL7:
+ 160 000c 1968     	 ldr r1,[r3]
+ 161              	.LVL8:
+ 162              	.LBE49:
+ 163              	.LBE48:
+ 164              	.LBE47:
+ 165              	.LBB56:
+ 166              	.LBB44:
+ 167              	.LBB41:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 168              	 .loc 2 260 0
+ 169 000e 0122     	 movs r2,#1
+ 170              	.LBE41:
+ 171              	.LBE44:
+ 172              	.LBE56:
+ 173              	.LBB57:
+ 174              	.LBB53:
+ 175              	.LBB50:
+ 176              	 .loc 2 286 0
+ 177 0010 4FF48033 	 mov r3,#65536
+ 178              	.LBE50:
+ 179              	.LBE53:
+ 180              	.LBE57:
+ 181              	.LBB58:
+ 182              	.LBB45:
+ 183              	.LBB42:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 184              	 .loc 2 260 0
+ 185 0014 AA40     	 lsls r2,r2,r5
+ 186              	.LBE42:
+ 187              	.LBE45:
+ 188              	.LBE58:
+ 189              	.LBB59:
+ 190              	.LBB54:
+ 191              	.LBB51:
+ 192              	 .loc 2 286 0
+ 193 0016 A340     	 lsls r3,r3,r4
+ 194              	.LBE51:
+ 195              	.LBE54:
+ 196              	.LBE59:
+ 197              	.LBB60:
+ 198              	.LBB46:
+ 199              	.LBB43:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 200              	 .loc 2 260 0
+ 201 0018 4260     	 str r2,[r0,#4]
+ 202              	.LBE43:
+ 203              	.LBE46:
+ 204              	.LBE60:
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   /* Before turning on BGT, we should keep CE pin high.
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    * CE pin is active low, so it should keep high until it is activated.
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    */
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_SPI_M_CS_BGT24);
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_BGT_POWER_ENABLE);
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 205              	 .loc 1 79 0
+ 206 001a 30BC     	 pop {r4,r5}
+ 207              	.LCFI3:
+ 208              	 .cfi_restore 5
+ 209              	 .cfi_restore 4
+ 210              	 .cfi_def_cfa_offset 0
+ 211              	.LBB61:
+ 212              	.LBB55:
+ 213              	.LBB52:
+ 214              	 .loc 2 286 0
+ 215 001c 4B60     	 str r3,[r1,#4]
+ 216              	.LBE52:
+ 217              	.LBE55:
+ 218              	.LBE61:
+ 219              	 .loc 1 79 0
+ 220 001e 7047     	 bx lr
+ 221              	.L10:
+ 222              	 .align 2
+ 223              	.L9:
+ 224 0020 00000000 	 .word DIGITAL_IO_SPI_M_CS_BGT24
+ 225 0024 00000000 	 .word DIGITAL_IO_BGT_POWER_ENABLE
+ 226              	 .cfi_endproc
+ 227              	.LFE473:
+ 229              	 .section .text.bgt_power_down,"ax",%progbits
+ 230              	 .align 2
+ 231              	 .global bgt_power_down
+ 232              	 .thumb
+ 233              	 .thumb_func
+ 235              	bgt_power_down:
+ 236              	.LFB474:
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  83:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_power_down(void)
+  84:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 237              	 .loc 1 84 0
+ 238              	 .cfi_startproc
+ 239              	 
+ 240              	 
+ 241              	 
+ 242 0000 F0B4     	 push {r4,r5,r6,r7}
+ 243              	.LCFI4:
+ 244              	 .cfi_def_cfa_offset 16
+ 245              	 .cfi_offset 4,-16
+ 246              	 .cfi_offset 5,-12
+ 247              	 .cfi_offset 6,-8
+ 248              	 .cfi_offset 7,-4
+ 249 0002 0A49     	 ldr r1,.L13
+ 250 0004 0A4A     	 ldr r2,.L13+4
+ 251 0006 0B4B     	 ldr r3,.L13+8
+ 252              	.LBB62:
+ 253              	.LBB63:
+ 254              	.LBB64:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 255              	 .loc 2 260 0
+ 256 0008 0F7C     	 ldrb r7,[r1,#16]
+ 257              	.LBE64:
+ 258              	.LBE63:
+ 259              	.LBE62:
+ 260              	.LBB71:
+ 261              	.LBB72:
+ 262              	.LBB73:
+ 263              	 .loc 2 286 0
+ 264 000a 1E7C     	 ldrb r6,[r3,#16]
+ 265              	.LBE73:
+ 266              	.LBE72:
+ 267              	.LBE71:
+ 268              	.LBB78:
+ 269              	.LBB79:
+ 270              	.LBB80:
+ 271 000c 147C     	 ldrb r4,[r2,#16]
+ 272 000e 0D68     	 ldr r5,[r1]
+ 273              	.LVL9:
+ 274 0010 1068     	 ldr r0,[r2]
+ 275              	.LVL10:
+ 276 0012 1968     	 ldr r1,[r3]
+ 277              	.LVL11:
+ 278              	.LBE80:
+ 279              	.LBE79:
+ 280              	.LBE78:
+ 281              	.LBB85:
+ 282              	.LBB68:
+ 283              	.LBB65:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 284              	 .loc 2 260 0
+ 285 0014 0122     	 movs r2,#1
+ 286              	.LBE65:
+ 287              	.LBE68:
+ 288              	.LBE85:
+ 289              	.LBB86:
+ 290              	.LBB83:
+ 291              	.LBB81:
+ 292              	 .loc 2 286 0
+ 293 0016 4FF48033 	 mov r3,#65536
+ 294 001a 03FA04F4 	 lsl r4,r3,r4
+ 295              	.LBE81:
+ 296              	.LBE83:
+ 297              	.LBE86:
+ 298              	.LBB87:
+ 299              	.LBB69:
+ 300              	.LBB66:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 301              	 .loc 2 260 0
+ 302 001e BA40     	 lsls r2,r2,r7
+ 303              	.LBE66:
+ 304              	.LBE69:
+ 305              	.LBE87:
+ 306              	.LBB88:
+ 307              	.LBB76:
+ 308              	.LBB74:
+ 309              	 .loc 2 286 0
+ 310 0020 B340     	 lsls r3,r3,r6
+ 311              	.LBE74:
+ 312              	.LBE76:
+ 313              	.LBE88:
+ 314              	.LBB89:
+ 315              	.LBB70:
+ 316              	.LBB67:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 317              	 .loc 2 260 0
+ 318 0022 6A60     	 str r2,[r5,#4]
+ 319              	.LBE67:
+ 320              	.LBE70:
+ 321              	.LBE89:
+ 322              	.LBB90:
+ 323              	.LBB84:
+ 324              	.LBB82:
+ 325              	 .loc 2 286 0
+ 326 0024 4460     	 str r4,[r0,#4]
+ 327              	.LBE82:
+ 328              	.LBE84:
+ 329              	.LBE90:
+ 330              	.LBB91:
+ 331              	.LBB77:
+ 332              	.LBB75:
+ 333 0026 4B60     	 str r3,[r1,#4]
+ 334              	.LBE75:
+ 335              	.LBE77:
+ 336              	.LBE91:
+  85:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   /* After turning off BGT, we should keep SPI's signals low
+  86:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    * to avoid offset voltage at BGT's VCC.
+  87:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    *
+  88:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    * If they are above 0.3V which is bias voltage inside BGT, then inside BGT turns on.
+  89:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    * It makes offset voltage at BGT's VCC.
+  90:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****    */
+  91:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_BGT_POWER_ENABLE);
+  92:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_SPI_M_CS_BGT24);
+  93:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   DIGITAL_IO_SetOutputLow(&DIGITAL_IO_SPI_M_DATA);
+  94:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 337              	 .loc 1 94 0
+ 338 0028 F0BC     	 pop {r4,r5,r6,r7}
+ 339              	.LCFI5:
+ 340              	 .cfi_restore 7
+ 341              	 .cfi_restore 6
+ 342              	 .cfi_restore 5
+ 343              	 .cfi_restore 4
+ 344              	 .cfi_def_cfa_offset 0
+ 345              	.LVL12:
+ 346 002a 7047     	 bx lr
+ 347              	.L14:
+ 348              	 .align 2
+ 349              	.L13:
+ 350 002c 00000000 	 .word DIGITAL_IO_BGT_POWER_ENABLE
+ 351 0030 00000000 	 .word DIGITAL_IO_SPI_M_CS_BGT24
+ 352 0034 00000000 	 .word DIGITAL_IO_SPI_M_DATA
+ 353              	 .cfi_endproc
+ 354              	.LFE474:
+ 356              	 .section .text.bgt_set_tx_power,"ax",%progbits
+ 357              	 .align 2
+ 358              	 .global bgt_set_tx_power
+ 359              	 .thumb
+ 360              	 .thumb_func
+ 362              	bgt_set_tx_power:
+ 363              	.LFB475:
+  95:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  96:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+  97:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+  98:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_set_tx_power(uint8_t power_level)
+  99:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 364              	 .loc 1 99 0
+ 365              	 .cfi_startproc
+ 366              	 
+ 367              	 
+ 368              	 
+ 369              	.LVL13:
+ 100:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_set_tx_power((Bgt24mtr1x_Power_t)power_level);
+ 370              	 .loc 1 100 0
+ 371 0000 FFF7FEBF 	 b bgt24mtr1x_set_tx_power
+ 372              	.LVL14:
+ 373              	 .cfi_endproc
+ 374              	.LFE475:
+ 376              	 .section .text.bgt_get_tx_power,"ax",%progbits
+ 377              	 .align 2
+ 378              	 .global bgt_get_tx_power
+ 379              	 .thumb
+ 380              	 .thumb_func
+ 382              	bgt_get_tx_power:
+ 383              	.LFB476:
+ 101:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 102:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 103:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 104:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 105:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** uint8_t bgt_get_tx_power(void)
+ 106:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 384              	 .loc 1 106 0
+ 385              	 .cfi_startproc
+ 386              	 
+ 387              	 
+ 388              	 
+ 107:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   return bgt24mtr1x_get_tx_power();
+ 389              	 .loc 1 107 0
+ 390 0000 FFF7FEBF 	 b bgt24mtr1x_get_tx_power
+ 391              	.LVL15:
+ 392              	 .cfi_endproc
+ 393              	.LFE476:
+ 395              	 .section .text.bgt_lna_gain_enable,"ax",%progbits
+ 396              	 .align 2
+ 397              	 .global bgt_lna_gain_enable
+ 398              	 .thumb
+ 399              	 .thumb_func
+ 401              	bgt_lna_gain_enable:
+ 402              	.LFB477:
+ 108:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 109:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 110:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 111:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 112:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_lna_gain_enable(void)
+ 113:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 403              	 .loc 1 113 0
+ 404              	 .cfi_startproc
+ 405              	 
+ 406              	 
+ 407              	 
+ 114:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_lna_gain_enable();
+ 408              	 .loc 1 114 0
+ 409 0000 FFF7FEBF 	 b bgt24mtr1x_lna_gain_enable
+ 410              	.LVL16:
+ 411              	 .cfi_endproc
+ 412              	.LFE477:
+ 414              	 .section .text.bgt_lna_gain_disable,"ax",%progbits
+ 415              	 .align 2
+ 416              	 .global bgt_lna_gain_disable
+ 417              	 .thumb
+ 418              	 .thumb_func
+ 420              	bgt_lna_gain_disable:
+ 421              	.LFB478:
+ 115:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 116:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 117:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 118:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 119:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_lna_gain_disable(void)
+ 120:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 422              	 .loc 1 120 0
+ 423              	 .cfi_startproc
+ 424              	 
+ 425              	 
+ 426              	 
+ 121:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_lna_gain_disable();
+ 427              	 .loc 1 121 0
+ 428 0000 FFF7FEBF 	 b bgt24mtr1x_lna_gain_disable
+ 429              	.LVL17:
+ 430              	 .cfi_endproc
+ 431              	.LFE478:
+ 433              	 .section .text.bgt_lna_gain_is_enable,"ax",%progbits
+ 434              	 .align 2
+ 435              	 .global bgt_lna_gain_is_enable
+ 436              	 .thumb
+ 437              	 .thumb_func
+ 439              	bgt_lna_gain_is_enable:
+ 440              	.LFB479:
+ 122:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 123:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 124:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 125:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 126:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** uint8_t bgt_lna_gain_is_enable(void)
+ 127:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 441              	 .loc 1 127 0
+ 442              	 .cfi_startproc
+ 443              	 
+ 444              	 
+ 445              	 
+ 128:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   return bgt24mtr1x_lna_gain_is_enable();
+ 446              	 .loc 1 128 0
+ 447 0000 FFF7FEBF 	 b bgt24mtr1x_lna_gain_is_enable
+ 448              	.LVL18:
+ 449              	 .cfi_endproc
+ 450              	.LFE479:
+ 452              	 .section .text.bgt_set_config,"ax",%progbits
+ 453              	 .align 2
+ 454              	 .global bgt_set_config
+ 455              	 .thumb
+ 456              	 .thumb_func
+ 458              	bgt_set_config:
+ 459              	.LFB480:
+ 129:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 130:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 131:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 132:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 133:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_set_config(uint16_t config_val)
+ 134:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 460              	 .loc 1 134 0
+ 461              	 .cfi_startproc
+ 462              	 
+ 463              	 
+ 464              	 
+ 465              	.LVL19:
+ 135:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_set_config(config_val);
+ 466              	 .loc 1 135 0
+ 467 0000 FFF7FEBF 	 b bgt24mtr1x_set_config
+ 468              	.LVL20:
+ 469              	 .cfi_endproc
+ 470              	.LFE480:
+ 472              	 .section .text.bgt_get_config,"ax",%progbits
+ 473              	 .align 2
+ 474              	 .global bgt_get_config
+ 475              	 .thumb
+ 476              	 .thumb_func
+ 478              	bgt_get_config:
+ 479              	.LFB481:
+ 136:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 137:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 138:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 139:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 140:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** uint16_t bgt_get_config(void)
+ 141:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 480              	 .loc 1 141 0
+ 481              	 .cfi_startproc
+ 482              	 
+ 483              	 
+ 484              	 
+ 142:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   return bgt24mtr1x_get_config();
+ 485              	 .loc 1 142 0
+ 486 0000 FFF7FEBF 	 b bgt24mtr1x_get_config
+ 487              	.LVL21:
+ 488              	 .cfi_endproc
+ 489              	.LFE481:
+ 491              	 .section .text.bgt_ana_temp,"ax",%progbits
+ 492              	 .align 2
+ 493              	 .global bgt_ana_temp
+ 494              	 .thumb
+ 495              	 .thumb_func
+ 497              	bgt_ana_temp:
+ 498              	.LFB482:
+ 143:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 144:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 145:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 146:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 147:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_ana_temp(void)
+ 148:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 499              	 .loc 1 148 0
+ 500              	 .cfi_startproc
+ 501              	 
+ 502              	 
+ 503              	 
+ 149:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_ana_temp();
+ 504              	 .loc 1 149 0
+ 505 0000 FFF7FEBF 	 b bgt24mtr1x_ana_temp
+ 506              	.LVL22:
+ 507              	 .cfi_endproc
+ 508              	.LFE482:
+ 510              	 .section .text.bgt_ana_vout_tx,"ax",%progbits
+ 511              	 .align 2
+ 512              	 .global bgt_ana_vout_tx
+ 513              	 .thumb
+ 514              	 .thumb_func
+ 516              	bgt_ana_vout_tx:
+ 517              	.LFB483:
+ 150:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 151:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 152:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 153:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 154:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_ana_vout_tx(void)
+ 155:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 518              	 .loc 1 155 0
+ 519              	 .cfi_startproc
+ 520              	 
+ 521              	 
+ 522              	 
+ 156:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_ana_vout_tx();
+ 523              	 .loc 1 156 0
+ 524 0000 FFF7FEBF 	 b bgt24mtr1x_ana_vout_tx
+ 525              	.LVL23:
+ 526              	 .cfi_endproc
+ 527              	.LFE483:
+ 529              	 .section .text.bgt_ana_vref_tx,"ax",%progbits
+ 530              	 .align 2
+ 531              	 .global bgt_ana_vref_tx
+ 532              	 .thumb
+ 533              	 .thumb_func
+ 535              	bgt_ana_vref_tx:
+ 536              	.LFB484:
+ 157:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 158:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 159:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 160:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 161:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_ana_vref_tx(void)
+ 162:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 537              	 .loc 1 162 0
+ 538              	 .cfi_startproc
+ 539              	 
+ 540              	 
+ 541              	 
+ 163:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_ana_vref_tx();
+ 542              	 .loc 1 163 0
+ 543 0000 FFF7FEBF 	 b bgt24mtr1x_ana_vref_tx
+ 544              	.LVL24:
+ 545              	 .cfi_endproc
+ 546              	.LFE484:
+ 548              	 .section .text.bgt_get_ana_config,"ax",%progbits
+ 549              	 .align 2
+ 550              	 .global bgt_get_ana_config
+ 551              	 .thumb
+ 552              	 .thumb_func
+ 554              	bgt_get_ana_config:
+ 555              	.LFB485:
+ 164:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 165:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 166:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 167:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 168:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** uint16_t bgt_get_ana_config(void)
+ 169:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 556              	 .loc 1 169 0
+ 557              	 .cfi_startproc
+ 558              	 
+ 559              	 
+ 560              	 
+ 170:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   return bgt24mtr1x_get_ana_config();
+ 561              	 .loc 1 170 0
+ 562 0000 FFF7FEBF 	 b bgt24mtr1x_get_ana_config
+ 563              	.LVL25:
+ 564              	 .cfi_endproc
+ 565              	.LFE485:
+ 567              	 .section .text.bgt_lowest_power_with_q2_disable,"ax",%progbits
+ 568              	 .align 2
+ 569              	 .global bgt_lowest_power_with_q2_disable
+ 570              	 .thumb
+ 571              	 .thumb_func
+ 573              	bgt_lowest_power_with_q2_disable:
+ 574              	.LFB486:
+ 171:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 172:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 173:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 174:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 175:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_lowest_power_with_q2_disable(void)
+ 176:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 575              	 .loc 1 176 0
+ 576              	 .cfi_startproc
+ 577              	 
+ 578              	 
+ 579              	 
+ 177:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   bgt24mtr1x_set_config((uint16_t)BGT24MTR1X_POWER_CONF);
+ 580              	 .loc 1 177 0
+ 581 0000 41F24700 	 movw r0,#4167
+ 582 0004 FFF7FEBF 	 b bgt24mtr1x_set_config
+ 583              	.LVL26:
+ 584              	 .cfi_endproc
+ 585              	.LFE486:
+ 587              	 .section .text.bgt_ldo_enable,"ax",%progbits
+ 588              	 .align 2
+ 589              	 .global bgt_ldo_enable
+ 590              	 .thumb
+ 591              	 .thumb_func
+ 593              	bgt_ldo_enable:
+ 594              	.LFB487:
+ 178:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 179:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 180:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 181:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 182:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_ldo_enable(void)
+ 183:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 595              	 .loc 1 183 0
+ 596              	 .cfi_startproc
+ 597              	 
+ 598              	 
+ 599              	 
+ 600 0000 034B     	 ldr r3,.L28
+ 601              	.LBB92:
+ 602              	.LBB93:
+ 603              	.LBB94:
+ 260:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 604              	 .loc 2 260 0
+ 605 0002 197C     	 ldrb r1,[r3,#16]
+ 606 0004 1A68     	 ldr r2,[r3]
+ 607              	.LVL27:
+ 608 0006 0123     	 movs r3,#1
+ 609 0008 8B40     	 lsls r3,r3,r1
+ 610 000a 5360     	 str r3,[r2,#4]
+ 611 000c 7047     	 bx lr
+ 612              	.L29:
+ 613 000e 00BF     	 .align 2
+ 614              	.L28:
+ 615 0010 00000000 	 .word DIGITAL_IO_BGT_LDO_ENABLE
+ 616              	.LBE94:
+ 617              	.LBE93:
+ 618              	.LBE92:
+ 619              	 .cfi_endproc
+ 620              	.LFE487:
+ 622              	 .section .text.bgt_ldo_disable,"ax",%progbits
+ 623              	 .align 2
+ 624              	 .global bgt_ldo_disable
+ 625              	 .thumb
+ 626              	 .thumb_func
+ 628              	bgt_ldo_disable:
+ 629              	.LFB488:
+ 184:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c ****   DIGITAL_IO_SetOutputHigh(&DIGITAL_IO_BGT_LDO_ENABLE);
+ 185:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** }
+ 186:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 187:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** //============================================================================
+ 188:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** 
+ 189:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** void bgt_ldo_disable(void)
+ 190:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/src\position2go_bgt.c **** {
+ 630              	 .loc 1 190 0
+ 631              	 .cfi_startproc
+ 632              	 
+ 633              	 
+ 634              	 
+ 635 0000 034B     	 ldr r3,.L31
+ 636              	.LBB95:
+ 637              	.LBB96:
+ 638              	.LBB97:
+ 639              	 .loc 2 286 0
+ 640 0002 197C     	 ldrb r1,[r3,#16]
+ 641 0004 1A68     	 ldr r2,[r3]
+ 642              	.LVL28:
+ 643 0006 4FF48033 	 mov r3,#65536
+ 644 000a 8B40     	 lsls r3,r3,r1
+ 645 000c 5360     	 str r3,[r2,#4]
+ 646 000e 7047     	 bx lr
+ 647              	.L32:
+ 648              	 .align 2
+ 649              	.L31:
+ 650 0010 00000000 	 .word DIGITAL_IO_BGT_LDO_ENABLE
+ 651              	.LBE97:
+ 652              	.LBE96:
+ 653              	.LBE95:
+ 654              	 .cfi_endproc
+ 655              	.LFE488:
+ 657              	 .section .bss.bgt24mtr1x_spi_pins,"aw",%nobits
+ 658              	 .align 2
+ 659              	 .set .LANCHOR0,.+0
+ 662              	bgt24mtr1x_spi_pins:
+ 663 0000 00000000 	 .space 16
+ 663      00000000 
+ 663      00000000 
+ 663      00000000 
+ 664              	 .text
+ 665              	.Letext0:
+ 666              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 667              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 668              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 669              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 670              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 671              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io.h"
+ 672              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 673              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 674              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 675              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/inc/bsp_common.h"
+ 676              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Components/bgt24mtr1x/inc/bgt24mtr1x.h"
+ 677              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 678              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 679              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 680              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io_extern.h"
+ 681              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 position2go_bgt.c
+    {standard input}:20     .text.bgt_init:00000000 $t
+    {standard input}:25     .text.bgt_init:00000000 bgt_init
+    {standard input}:79     .text.bgt_init:00000024 $d
+    {standard input}:87     .text.bgt_start_tx:00000000 $t
+    {standard input}:92     .text.bgt_start_tx:00000000 bgt_start_tx
+    {standard input}:106    .text.bgt_stop_tx:00000000 $t
+    {standard input}:111    .text.bgt_stop_tx:00000000 bgt_stop_tx
+    {standard input}:125    .text.bgt_power_up:00000000 $t
+    {standard input}:130    .text.bgt_power_up:00000000 bgt_power_up
+    {standard input}:224    .text.bgt_power_up:00000020 $d
+    {standard input}:230    .text.bgt_power_down:00000000 $t
+    {standard input}:235    .text.bgt_power_down:00000000 bgt_power_down
+    {standard input}:350    .text.bgt_power_down:0000002c $d
+    {standard input}:357    .text.bgt_set_tx_power:00000000 $t
+    {standard input}:362    .text.bgt_set_tx_power:00000000 bgt_set_tx_power
+    {standard input}:377    .text.bgt_get_tx_power:00000000 $t
+    {standard input}:382    .text.bgt_get_tx_power:00000000 bgt_get_tx_power
+    {standard input}:396    .text.bgt_lna_gain_enable:00000000 $t
+    {standard input}:401    .text.bgt_lna_gain_enable:00000000 bgt_lna_gain_enable
+    {standard input}:415    .text.bgt_lna_gain_disable:00000000 $t
+    {standard input}:420    .text.bgt_lna_gain_disable:00000000 bgt_lna_gain_disable
+    {standard input}:434    .text.bgt_lna_gain_is_enable:00000000 $t
+    {standard input}:439    .text.bgt_lna_gain_is_enable:00000000 bgt_lna_gain_is_enable
+    {standard input}:453    .text.bgt_set_config:00000000 $t
+    {standard input}:458    .text.bgt_set_config:00000000 bgt_set_config
+    {standard input}:473    .text.bgt_get_config:00000000 $t
+    {standard input}:478    .text.bgt_get_config:00000000 bgt_get_config
+    {standard input}:492    .text.bgt_ana_temp:00000000 $t
+    {standard input}:497    .text.bgt_ana_temp:00000000 bgt_ana_temp
+    {standard input}:511    .text.bgt_ana_vout_tx:00000000 $t
+    {standard input}:516    .text.bgt_ana_vout_tx:00000000 bgt_ana_vout_tx
+    {standard input}:530    .text.bgt_ana_vref_tx:00000000 $t
+    {standard input}:535    .text.bgt_ana_vref_tx:00000000 bgt_ana_vref_tx
+    {standard input}:549    .text.bgt_get_ana_config:00000000 $t
+    {standard input}:554    .text.bgt_get_ana_config:00000000 bgt_get_ana_config
+    {standard input}:568    .text.bgt_lowest_power_with_q2_disable:00000000 $t
+    {standard input}:573    .text.bgt_lowest_power_with_q2_disable:00000000 bgt_lowest_power_with_q2_disable
+    {standard input}:588    .text.bgt_ldo_enable:00000000 $t
+    {standard input}:593    .text.bgt_ldo_enable:00000000 bgt_ldo_enable
+    {standard input}:615    .text.bgt_ldo_enable:00000010 $d
+    {standard input}:623    .text.bgt_ldo_disable:00000000 $t
+    {standard input}:628    .text.bgt_ldo_disable:00000000 bgt_ldo_disable
+    {standard input}:650    .text.bgt_ldo_disable:00000010 $d
+    {standard input}:658    .bss.bgt24mtr1x_spi_pins:00000000 $d
+    {standard input}:662    .bss.bgt24mtr1x_spi_pins:00000000 bgt24mtr1x_spi_pins
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+bgt24mtr1x_init
+bgt24mtr1x_ana_vref_tx
+DIGITAL_IO_SPI_M_CS_BGT24
+DIGITAL_IO_SPI_M_DATA
+DIGITAL_IO_SPI_M_CLK
+bgt24mtr1x_start_tx
+bgt24mtr1x_stop_tx
+DIGITAL_IO_BGT_POWER_ENABLE
+bgt24mtr1x_set_tx_power
+bgt24mtr1x_get_tx_power
+bgt24mtr1x_lna_gain_enable
+bgt24mtr1x_lna_gain_disable
+bgt24mtr1x_lna_gain_is_enable
+bgt24mtr1x_set_config
+bgt24mtr1x_get_config
+bgt24mtr1x_ana_temp
+bgt24mtr1x_ana_vout_tx
+bgt24mtr1x_get_ana_config
+DIGITAL_IO_BGT_LDO_ENABLE

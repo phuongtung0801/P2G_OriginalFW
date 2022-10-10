@@ -1,0 +1,213 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "global_adc_conf.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .global GLOBAL_ADC_0
+  20              	 .global group_3_config
+  21              	 .global group_2_config
+  22              	 .global group_1_config
+  23              	 .global group_0_config
+  24              	 .global global_config
+  25              	 .global group_init_handle3
+  26              	 .global group_init_handle2
+  27              	 .global group_init_handle1
+  28              	 .global group_init_handle0
+  29              	 .section .rodata.group_init_handle0,"a",%progbits
+  30              	 .align 2
+  33              	group_init_handle0:
+  34 0000 00       	 .byte 0
+  35 0001 00       	 .space 1
+  36 0002 00       	 .byte 0
+  37 0003 00       	 .byte 0
+  38 0004 00       	 .byte 0
+  39 0005 00       	 .byte 0
+  40 0006 00       	 .byte 0
+  41 0007 00       	 .byte 0
+  42 0008 00       	 .byte 0
+  43 0009 00       	 .byte 0
+  44 000a 00       	 .byte 0
+  45 000b 00       	 .byte 0
+  46 000c 00       	 .byte 0
+  47 000d 00       	 .byte 0
+  48 000e 00       	 .byte 0
+  49 000f 00       	 .byte 0
+  50 0010 80       	 .byte 128
+  51 0011 000000   	 .space 3
+  52              	 .section .rodata.group_init_handle1,"a",%progbits
+  53              	 .align 2
+  56              	group_init_handle1:
+  57 0000 00       	 .byte 0
+  58 0001 00       	 .space 1
+  59 0002 00       	 .byte 0
+  60 0003 00       	 .byte 0
+  61 0004 00       	 .byte 0
+  62 0005 00       	 .byte 0
+  63 0006 00       	 .byte 0
+  64 0007 00       	 .byte 0
+  65 0008 00       	 .byte 0
+  66 0009 00       	 .byte 0
+  67 000a 00       	 .byte 0
+  68 000b 00       	 .byte 0
+  69 000c 00       	 .byte 0
+  70 000d 00       	 .byte 0
+  71 000e 00       	 .byte 0
+  72 000f 00       	 .byte 0
+  73 0010 80       	 .byte 128
+  74 0011 000000   	 .space 3
+  75              	 .section .data.group_0_config,"aw",%progbits
+  76              	 .align 2
+  79              	group_0_config:
+  80 0000 00440040 	 .word 1073759232
+  81 0004 00000000 	 .word group_init_handle0
+  82 0008 01       	 .byte 1
+  83 0009 02       	 .byte 2
+  84 000a 0000     	 .space 2
+  85              	 .section .rodata.group_init_handle3,"a",%progbits
+  86              	 .align 2
+  89              	group_init_handle3:
+  90 0000 00       	 .byte 0
+  91 0001 00       	 .space 1
+  92 0002 00       	 .byte 0
+  93 0003 00       	 .byte 0
+  94 0004 00       	 .byte 0
+  95 0005 00       	 .byte 0
+  96 0006 00       	 .byte 0
+  97 0007 00       	 .byte 0
+  98 0008 00       	 .byte 0
+  99 0009 00       	 .byte 0
+ 100 000a 00       	 .byte 0
+ 101 000b 00       	 .byte 0
+ 102 000c 00       	 .byte 0
+ 103 000d 00       	 .byte 0
+ 104 000e 00       	 .byte 0
+ 105 000f 00       	 .byte 0
+ 106 0010 80       	 .byte 128
+ 107 0011 000000   	 .space 3
+ 108              	 .section .rodata.global_config,"a",%progbits
+ 109              	 .align 2
+ 112              	global_config:
+ 113 0000 00       	 .byte 0
+ 114 0001 00       	 .byte 0
+ 115 0002 00       	 .byte 0
+ 116 0003 00       	 .byte 0
+ 117 0004 04       	 .byte 4
+ 118 0005 00       	 .byte 0
+ 119 0006 0000     	 .space 2
+ 120 0008 00       	 .byte 0
+ 121 0009 00       	 .byte 0
+ 122 000a 00       	 .byte 0
+ 123 000b 00       	 .byte 0
+ 124 000c 00       	 .byte 0
+ 125 000d 00       	 .byte 0
+ 126 000e 00       	 .byte 0
+ 127 000f 00       	 .byte 0
+ 128 0010 0000     	 .space 2
+ 129 0012 00       	 .byte 0
+ 130 0013 00       	 .byte 0
+ 131 0014 00       	 .byte 0
+ 132 0015 000000   	 .space 3
+ 133              	 .section .data.GLOBAL_ADC_0,"aw",%progbits
+ 134              	 .align 2
+ 137              	GLOBAL_ADC_0:
+ 138 0000 00000000 	 .word group_0_config
+ 139 0004 00000000 	 .word group_1_config
+ 140 0008 00000000 	 .word group_2_config
+ 141 000c 00000000 	 .word group_3_config
+ 142 0010 00000000 	 .word global_config
+ 143 0014 00400040 	 .word 1073758208
+ 144 0018 02       	 .byte 2
+ 145 0019 01       	 .byte 1
+ 146 001a 0000     	 .space 2
+ 147              	 .section .data.group_1_config,"aw",%progbits
+ 148              	 .align 2
+ 151              	group_1_config:
+ 152 0000 00480040 	 .word 1073760256
+ 153 0004 00000000 	 .word group_init_handle1
+ 154 0008 01       	 .byte 1
+ 155 0009 02       	 .byte 2
+ 156 000a 0000     	 .space 2
+ 157              	 .section .data.group_3_config,"aw",%progbits
+ 158              	 .align 2
+ 161              	group_3_config:
+ 162 0000 00500040 	 .word 1073762304
+ 163 0004 00000000 	 .word group_init_handle3
+ 164 0008 01       	 .byte 1
+ 165 0009 02       	 .byte 2
+ 166 000a 0000     	 .space 2
+ 167              	 .section .data.group_2_config,"aw",%progbits
+ 168              	 .align 2
+ 171              	group_2_config:
+ 172 0000 004C0040 	 .word 1073761280
+ 173 0004 00000000 	 .word group_init_handle2
+ 174 0008 01       	 .byte 1
+ 175 0009 02       	 .byte 2
+ 176 000a 0000     	 .space 2
+ 177              	 .section .rodata.group_init_handle2,"a",%progbits
+ 178              	 .align 2
+ 181              	group_init_handle2:
+ 182 0000 00       	 .byte 0
+ 183 0001 00       	 .space 1
+ 184 0002 00       	 .byte 0
+ 185 0003 00       	 .byte 0
+ 186 0004 00       	 .byte 0
+ 187 0005 00       	 .byte 0
+ 188 0006 00       	 .byte 0
+ 189 0007 00       	 .byte 0
+ 190 0008 00       	 .byte 0
+ 191 0009 00       	 .byte 0
+ 192 000a 00       	 .byte 0
+ 193 000b 00       	 .byte 0
+ 194 000c 00       	 .byte 0
+ 195 000d 00       	 .byte 0
+ 196 000e 00       	 .byte 0
+ 197 000f 00       	 .byte 0
+ 198 0010 80       	 .byte 128
+ 199 0011 000000   	 .space 3
+ 200              	 .text
+ 201              	.Letext0:
+ 202              	 .file 1 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 203              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 204              	 .file 3 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 205              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 206              	 .file 5 "../Dave/Generated/GLOBAL_ADC/global_adc.h"
+ 207              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 208              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 209              	 .file 8 "../Dave/Generated/GLOBAL_ADC/global_adc_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 global_adc_conf.c
+    {standard input}:137    .data.GLOBAL_ADC_0:00000000 GLOBAL_ADC_0
+    {standard input}:161    .data.group_3_config:00000000 group_3_config
+    {standard input}:171    .data.group_2_config:00000000 group_2_config
+    {standard input}:151    .data.group_1_config:00000000 group_1_config
+    {standard input}:79     .data.group_0_config:00000000 group_0_config
+    {standard input}:112    .rodata.global_config:00000000 global_config
+    {standard input}:89     .rodata.group_init_handle3:00000000 group_init_handle3
+    {standard input}:181    .rodata.group_init_handle2:00000000 group_init_handle2
+    {standard input}:56     .rodata.group_init_handle1:00000000 group_init_handle1
+    {standard input}:33     .rodata.group_init_handle0:00000000 group_init_handle0
+    {standard input}:30     .rodata.group_init_handle0:00000000 $d
+    {standard input}:53     .rodata.group_init_handle1:00000000 $d
+    {standard input}:76     .data.group_0_config:00000000 $d
+    {standard input}:86     .rodata.group_init_handle3:00000000 $d
+    {standard input}:109    .rodata.global_config:00000000 $d
+    {standard input}:134    .data.GLOBAL_ADC_0:00000000 $d
+    {standard input}:148    .data.group_1_config:00000000 $d
+    {standard input}:158    .data.group_3_config:00000000 $d
+    {standard input}:168    .data.group_2_config:00000000 $d
+    {standard input}:178    .rodata.group_init_handle2:00000000 $d
+
+NO UNDEFINED SYMBOLS

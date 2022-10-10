@@ -1,0 +1,1686 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "radar_base.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.radar_get_driver_version,"ax",%progbits
+  20              	 .align 2
+  21              	 .global radar_get_driver_version
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	radar_get_driver_version:
+  26              	.LFB470:
+  27              	 .file 1 "../Radar_Control/src/radar_base.c"
+   1:../Radar_Control/src/radar_base.c **** /**
+   2:../Radar_Control/src/radar_base.c ****     @file: radar_base.c
+   3:../Radar_Control/src/radar_base.c **** 
+   4:../Radar_Control/src/radar_base.c ****     @brief: This file contains the basic driver API for Infineon radar sensors.
+   5:../Radar_Control/src/radar_base.c **** */
+   6:../Radar_Control/src/radar_base.c **** 
+   7:../Radar_Control/src/radar_base.c **** /* ===========================================================================
+   8:../Radar_Control/src/radar_base.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+   9:../Radar_Control/src/radar_base.c **** ** All rights reserved.
+  10:../Radar_Control/src/radar_base.c **** ** ===========================================================================
+  11:../Radar_Control/src/radar_base.c **** **
+  12:../Radar_Control/src/radar_base.c **** ** ===========================================================================
+  13:../Radar_Control/src/radar_base.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  14:../Radar_Control/src/radar_base.c **** ** Passing on and copying of this document, and communication of its contents
+  15:../Radar_Control/src/radar_base.c **** ** is not permitted without Infineon's prior written authorization.
+  16:../Radar_Control/src/radar_base.c **** ** ===========================================================================
+  17:../Radar_Control/src/radar_base.c **** */
+  18:../Radar_Control/src/radar_base.c **** 
+  19:../Radar_Control/src/radar_base.c **** /*
+  20:../Radar_Control/src/radar_base.c **** ==============================================================================
+  21:../Radar_Control/src/radar_base.c ****    1. INCLUDE FILES
+  22:../Radar_Control/src/radar_base.c **** ==============================================================================
+  23:../Radar_Control/src/radar_base.c ****  */
+  24:../Radar_Control/src/radar_base.c **** 
+  25:../Radar_Control/src/radar_base.c **** #include "version.h"
+  26:../Radar_Control/src/radar_base.c **** #include "radar_api.h"
+  27:../Radar_Control/src/radar_base.c **** #include "radar_control.h"
+  28:../Radar_Control/src/radar_base.c **** #include "ds_radar_interface.h"
+  29:../Radar_Control/src/radar_base.c **** #include "position2go_bsp.h"
+  30:../Radar_Control/src/radar_base.c **** 
+  31:../Radar_Control/src/radar_base.c **** /*
+  32:../Radar_Control/src/radar_base.c **** ==============================================================================
+  33:../Radar_Control/src/radar_base.c ****    2. DATA
+  34:../Radar_Control/src/radar_base.c **** ==============================================================================
+  35:../Radar_Control/src/radar_base.c ****  */
+  36:../Radar_Control/src/radar_base.c **** 
+  37:../Radar_Control/src/radar_base.c **** size_t frame_size = 0;
+  38:../Radar_Control/src/radar_base.c **** 
+  39:../Radar_Control/src/radar_base.c **** /* Global Data Buffer used to store the raw IQ data samples for FMCW chirps,
+  40:../Radar_Control/src/radar_base.c ****    first (SAMPLES_PER_CHIRP * 2) samples are for I&Q data for RX1,
+  41:../Radar_Control/src/radar_base.c ****    followed by (SAMPLES_PER_CHIRP * 2) samples for I&Q data for RX2 */
+  42:../Radar_Control/src/radar_base.c **** uint32_t data_fifo[BSP_MAX_ADC_BUFFER_SIZE_BYTES/sizeof(uint32_t)];  
+  43:../Radar_Control/src/radar_base.c ****                                    					 	 	 	 	 	
+  44:../Radar_Control/src/radar_base.c **** 
+  45:../Radar_Control/src/radar_base.c **** static const Driver_Version_t driver_version_s =
+  46:../Radar_Control/src/radar_base.c **** {
+  47:../Radar_Control/src/radar_base.c ****   /*.uMajor    =*/ FW_VERSION_MAJOR,
+  48:../Radar_Control/src/radar_base.c ****   /*.uMinor    =*/ FW_VERSION_MINOR,
+  49:../Radar_Control/src/radar_base.c ****   /*.uRevision =*/ FW_VERSION_REVISION
+  50:../Radar_Control/src/radar_base.c **** };
+  51:../Radar_Control/src/radar_base.c **** 
+  52:../Radar_Control/src/radar_base.c **** /*
+  53:../Radar_Control/src/radar_base.c **** ==============================================================================
+  54:../Radar_Control/src/radar_base.c ****    3. EXPORTED FUNCTIONS
+  55:../Radar_Control/src/radar_base.c **** ==============================================================================
+  56:../Radar_Control/src/radar_base.c ****  */
+  57:../Radar_Control/src/radar_base.c **** 
+  58:../Radar_Control/src/radar_base.c **** const Driver_Version_t* radar_get_driver_version(void)
+  59:../Radar_Control/src/radar_base.c **** {
+  28              	 .loc 1 59 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	 
+  60:../Radar_Control/src/radar_base.c ****   return (&driver_version_s);
+  61:../Radar_Control/src/radar_base.c **** }
+  33              	 .loc 1 61 0
+  34 0000 0048     	 ldr r0,.L2
+  35 0002 7047     	 bx lr
+  36              	.L3:
+  37              	 .align 2
+  38              	.L2:
+  39 0004 00000000 	 .word .LANCHOR0
+  40              	 .cfi_endproc
+  41              	.LFE470:
+  43              	 .section .text.radar_get_number_of_available_devices,"ax",%progbits
+  44              	 .align 2
+  45              	 .global radar_get_number_of_available_devices
+  46              	 .thumb
+  47              	 .thumb_func
+  49              	radar_get_number_of_available_devices:
+  50              	.LFB471:
+  62:../Radar_Control/src/radar_base.c **** 
+  63:../Radar_Control/src/radar_base.c **** //============================================================================
+  64:../Radar_Control/src/radar_base.c **** 
+  65:../Radar_Control/src/radar_base.c **** uint8_t radar_get_number_of_available_devices(void)
+  66:../Radar_Control/src/radar_base.c **** {
+  51              	 .loc 1 66 0
+  52              	 .cfi_startproc
+  53              	 
+  54              	 
+  55              	 
+  67:../Radar_Control/src/radar_base.c ****   return bsp_get_number_of_available_radar_devices();
+  56              	 .loc 1 67 0
+  57 0000 FFF7FEBF 	 b bsp_get_number_of_available_radar_devices
+  58              	.LVL0:
+  59              	 .cfi_endproc
+  60              	.LFE471:
+  62              	 .section .text.radar_open_device,"ax",%progbits
+  63              	 .align 2
+  64              	 .global radar_open_device
+  65              	 .thumb
+  66              	 .thumb_func
+  68              	radar_open_device:
+  69              	.LFB472:
+  68:../Radar_Control/src/radar_base.c **** }
+  69:../Radar_Control/src/radar_base.c **** 
+  70:../Radar_Control/src/radar_base.c **** //============================================================================
+  71:../Radar_Control/src/radar_base.c **** 
+  72:../Radar_Control/src/radar_base.c **** uint16_t radar_open_device(int32_t device_number, Radar_Handle_t* device)
+  73:../Radar_Control/src/radar_base.c **** {
+  70              	 .loc 1 73 0
+  71              	 .cfi_startproc
+  72              	 
+  73              	 
+  74              	.LVL1:
+  75 0000 2DE9F041 	 push {r4,r5,r6,r7,r8,lr}
+  76              	.LCFI0:
+  77              	 .cfi_def_cfa_offset 24
+  78              	 .cfi_offset 4,-24
+  79              	 .cfi_offset 5,-20
+  80              	 .cfi_offset 6,-16
+  81              	 .cfi_offset 7,-12
+  82              	 .cfi_offset 8,-8
+  83              	 .cfi_offset 14,-4
+  84 0004 9AB0     	 sub sp,sp,#104
+  85              	.LCFI1:
+  86              	 .cfi_def_cfa_offset 128
+  74:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device_number); /* Suppress compiler warnings of unused variable */
+  75:../Radar_Control/src/radar_base.c ****   
+  76:../Radar_Control/src/radar_base.c ****   Frame_Format_t frame_format;
+  77:../Radar_Control/src/radar_base.c ****   uint16_t retValue = RADAR_ERR_OK;
+  78:../Radar_Control/src/radar_base.c ****   int32_t status = 0;
+  79:../Radar_Control/src/radar_base.c ****   uint16_t num_of_bytes;
+  80:../Radar_Control/src/radar_base.c ****   void* calibration_data_ptr = NULL;
+  87              	 .loc 1 80 0
+  88 0006 0024     	 movs r4,#0
+  89 0008 1AAE     	 add r6,sp,#104
+  81:../Radar_Control/src/radar_base.c ****   acq_buf_obj acq_buf = { .status = not_initialized } ;
+  82:../Radar_Control/src/radar_base.c ****     
+  83:../Radar_Control/src/radar_base.c ****   /* Initialize the driver instance with NULL, until it was successfully initialized */
+  84:../Radar_Control/src/radar_base.c ****   *device = NULL;
+  90              	 .loc 1 84 0
+  91 000a 0C60     	 str r4,[r1]
+  73:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device_number); /* Suppress compiler warnings of unused variable */
+  92              	 .loc 1 73 0
+  93 000c 0F46     	 mov r7,r1
+  80:../Radar_Control/src/radar_base.c ****   acq_buf_obj acq_buf = { .status = not_initialized } ;
+  94              	 .loc 1 80 0
+  95 000e 46F8404D 	 str r4,[r6,#-64]!
+  85:../Radar_Control/src/radar_base.c ****   
+  86:../Radar_Control/src/radar_base.c ****   /* Initialize driver data structure */
+  87:../Radar_Control/src/radar_base.c ****   /* -------------------------------- */
+  88:../Radar_Control/src/radar_base.c ****   status = ds_init();
+  96              	 .loc 1 88 0
+  97 0012 FFF7FEFF 	 bl ds_init
+  98              	.LVL2:
+  89:../Radar_Control/src/radar_base.c ****   status |= radar_read_calibration(device, CALIBRATION_TARGET_FLASH, CALIBRATION_DATA_ADC, &calibra
+  99              	 .loc 1 89 0
+ 100 0016 0DF1260E 	 add lr,sp,#38
+  88:../Radar_Control/src/radar_base.c ****   status |= radar_read_calibration(device, CALIBRATION_TARGET_FLASH, CALIBRATION_DATA_ADC, &calibra
+ 101              	 .loc 1 88 0
+ 102 001a 0546     	 mov r5,r0
+ 103              	.LVL3:
+ 104              	 .loc 1 89 0
+ 105 001c 3346     	 mov r3,r6
+ 106 001e 3846     	 mov r0,r7
+ 107              	.LVL4:
+ 108 0020 2146     	 mov r1,r4
+ 109 0022 2246     	 mov r2,r4
+ 110 0024 CDF800E0 	 str lr,[sp]
+ 111 0028 FFF7FEFF 	 bl radar_read_calibration
+ 112              	.LVL5:
+ 113 002c 2843     	 orrs r0,r0,r5
+ 114              	.LVL6:
+  90:../Radar_Control/src/radar_base.c ****   if(status > 0)
+ 115              	 .loc 1 90 0
+ 116 002e A042     	 cmp r0,r4
+ 117 0030 03DD     	 ble .L6
+ 118              	.L8:
+  91:../Radar_Control/src/radar_base.c ****   {
+  92:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 119              	 .loc 1 92 0
+ 120 0032 0820     	 movs r0,#8
+ 121              	.LVL7:
+ 122              	.L7:
+  93:../Radar_Control/src/radar_base.c ****   }
+  94:../Radar_Control/src/radar_base.c ****   
+  95:../Radar_Control/src/radar_base.c ****   //========================================================================
+  96:../Radar_Control/src/radar_base.c ****   //------------------------- Frame Format configurations ------------------
+  97:../Radar_Control/src/radar_base.c ****   //========================================================================
+  98:../Radar_Control/src/radar_base.c ****   ds_ep_fetch_frame_format(&frame_format);
+  99:../Radar_Control/src/radar_base.c ****   
+ 100:../Radar_Control/src/radar_base.c ****   //=========================================================================
+ 101:../Radar_Control/src/radar_base.c ****   //------------------------- General configurations ------------------------
+ 102:../Radar_Control/src/radar_base.c ****   //=========================================================================
+ 103:../Radar_Control/src/radar_base.c ****   radar_set_data_acq_mode(RADAR_MANUAL_TRIGGER);
+ 104:../Radar_Control/src/radar_base.c ****   
+ 105:../Radar_Control/src/radar_base.c ****   /* If the frame format contains a 0, this makes no sense. */
+ 106:../Radar_Control/src/radar_base.c ****   if ((frame_format.rx_mask == 0) ||
+ 107:../Radar_Control/src/radar_base.c ****       (frame_format.num_chirps_per_frame  == 0) ||
+ 108:../Radar_Control/src/radar_base.c ****         (frame_format.num_samples_per_chirp == 0) ||
+ 109:../Radar_Control/src/radar_base.c ****           (frame_format.num_chirps_per_frame  > BSP_MAX_NUM_CHIRPS_PER_FRAME) ||
+ 110:../Radar_Control/src/radar_base.c ****             (frame_format.num_samples_per_chirp > BSP_MAX_NUM_SAMPLES_PER_CHIRP))
+ 111:../Radar_Control/src/radar_base.c ****   {
+ 112:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 113:../Radar_Control/src/radar_base.c ****   }
+ 114:../Radar_Control/src/radar_base.c ****   
+ 115:../Radar_Control/src/radar_base.c ****   /* Check frame memory limits */
+ 116:../Radar_Control/src/radar_base.c ****   /* ------------------------- */
+ 117:../Radar_Control/src/radar_base.c ****   frame_size = frame_format.num_chirps_per_frame * frame_format.num_samples_per_chirp *
+ 118:../Radar_Control/src/radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * 2U * sizeof(uint16_t); // complex IQ samples per ant
+ 119:../Radar_Control/src/radar_base.c ****   
+ 120:../Radar_Control/src/radar_base.c ****   if (frame_size > BSP_MAX_ADC_BUFFER_SIZE_BYTES)
+ 121:../Radar_Control/src/radar_base.c ****   {
+ 122:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 123:../Radar_Control/src/radar_base.c ****   }
+ 124:../Radar_Control/src/radar_base.c ****   
+ 125:../Radar_Control/src/radar_base.c ****   /* Initialize sensor hardware */
+ 126:../Radar_Control/src/radar_base.c ****   /* -------------------------- */
+ 127:../Radar_Control/src/radar_base.c ****   acq_buf = create_acq_data_buffer_obj((uint8_t*) data_fifo, BSP_MAX_ADC_BUFFER_SIZE_BYTES,
+ 128:../Radar_Control/src/radar_base.c ****                                        frame_format.num_chirps_per_frame,
+ 129:../Radar_Control/src/radar_base.c ****                                        frame_format.num_samples_per_chirp, 2, 2, 12);
+ 130:../Radar_Control/src/radar_base.c ****   
+ 131:../Radar_Control/src/radar_base.c ****   ds_set_active_acq_buf(acq_buf);
+ 132:../Radar_Control/src/radar_base.c ****   
+ 133:../Radar_Control/src/radar_base.c ****   ds_device_get_settings()->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 134:../Radar_Control/src/radar_base.c ****   
+ 135:../Radar_Control/src/radar_base.c ****   /* Set the number of samples to captured during each chirp
+ 136:../Radar_Control/src/radar_base.c ****   This value will be used in BSP to configure the DMA block size and destination address */
+ 137:../Radar_Control/src/radar_base.c ****   bsp_set_num_samples_per_dma_transfer(ds_device_get_settings()->num_samples_per_chirp);
+ 138:../Radar_Control/src/radar_base.c ****   
+ 139:../Radar_Control/src/radar_base.c ****   ds_device_get_settings()->pll_num_of_chirps_per_frame = frame_format.num_chirps_per_frame;
+ 140:../Radar_Control/src/radar_base.c ****   
+ 141:../Radar_Control/src/radar_base.c ****   /* Set the number of chirps count per frame */
+ 142:../Radar_Control/src/radar_base.c ****   bsp_set_num_chirps_per_frame(frame_format.num_chirps_per_frame);
+ 143:../Radar_Control/src/radar_base.c ****   
+ 144:../Radar_Control/src/radar_base.c ****   /* BGT, PLL, DMA, Timers & Calibration initialization */
+ 145:../Radar_Control/src/radar_base.c ****   /* -------------------------------------------------- */
+ 146:../Radar_Control/src/radar_base.c ****   retValue = radar_init(device);
+ 147:../Radar_Control/src/radar_base.c ****   
+ 148:../Radar_Control/src/radar_base.c ****   g_adc_sampling_completed = false;
+ 149:../Radar_Control/src/radar_base.c ****   
+ 150:../Radar_Control/src/radar_base.c ****   return (retValue);
+ 151:../Radar_Control/src/radar_base.c **** }
+ 123              	 .loc 1 151 0
+ 124 0034 1AB0     	 add sp,sp,#104
+ 125              	.LCFI2:
+ 126              	 .cfi_remember_state
+ 127              	 .cfi_def_cfa_offset 24
+ 128              	 
+ 129 0036 BDE8F081 	 pop {r4,r5,r6,r7,r8,pc}
+ 130              	.LVL8:
+ 131              	.L6:
+ 132              	.LCFI3:
+ 133              	 .cfi_restore_state
+  98:../Radar_Control/src/radar_base.c ****   
+ 134              	 .loc 1 98 0
+ 135 003a 0BA8     	 add r0,sp,#44
+ 136 003c FFF7FEFF 	 bl ds_ep_fetch_frame_format
+ 137              	.LVL9:
+ 103:../Radar_Control/src/radar_base.c ****   
+ 138              	 .loc 1 103 0
+ 139 0040 2046     	 mov r0,r4
+ 140 0042 FFF7FEFF 	 bl radar_set_data_acq_mode
+ 141              	.LVL10:
+ 106:../Radar_Control/src/radar_base.c ****       (frame_format.num_chirps_per_frame  == 0) ||
+ 142              	 .loc 1 106 0
+ 143 0046 9DF83430 	 ldrb r3,[sp,#52]
+ 144 004a 002B     	 cmp r3,#0
+ 145 004c F1D0     	 beq .L8
+ 107:../Radar_Control/src/radar_base.c ****         (frame_format.num_samples_per_chirp == 0) ||
+ 146              	 .loc 1 107 0 discriminator 1
+ 147 004e 0C9B     	 ldr r3,[sp,#48]
+ 106:../Radar_Control/src/radar_base.c ****       (frame_format.num_chirps_per_frame  == 0) ||
+ 148              	 .loc 1 106 0 discriminator 1
+ 149 0050 002B     	 cmp r3,#0
+ 150 0052 EED0     	 beq .L8
+ 108:../Radar_Control/src/radar_base.c ****           (frame_format.num_chirps_per_frame  > BSP_MAX_NUM_CHIRPS_PER_FRAME) ||
+ 151              	 .loc 1 108 0
+ 152 0054 0B9A     	 ldr r2,[sp,#44]
+ 107:../Radar_Control/src/radar_base.c ****         (frame_format.num_samples_per_chirp == 0) ||
+ 153              	 .loc 1 107 0
+ 154 0056 511E     	 subs r1,r2,#1
+ 155 0058 FF29     	 cmp r1,#255
+ 156 005a EAD8     	 bhi .L8
+ 108:../Radar_Control/src/radar_base.c ****           (frame_format.num_chirps_per_frame  > BSP_MAX_NUM_CHIRPS_PER_FRAME) ||
+ 157              	 .loc 1 108 0
+ 158 005c 402B     	 cmp r3,#64
+ 159 005e E8D8     	 bhi .L8
+ 117:../Radar_Control/src/radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * 2U * sizeof(uint16_t); // complex IQ samples per ant
+ 160              	 .loc 1 117 0
+ 161 0060 02FB03F5 	 mul r5,r2,r3
+ 118:../Radar_Control/src/radar_base.c ****   
+ 162              	 .loc 1 118 0
+ 163 0064 FFF7FEFF 	 bl ds_ep_get_device_info
+ 164              	.LVL11:
+ 117:../Radar_Control/src/radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * 2U * sizeof(uint16_t); // complex IQ samples per ant
+ 165              	 .loc 1 117 0
+ 166 0068 427B     	 ldrb r2,[r0,#13]
+ 167 006a 1E49     	 ldr r1,.L17
+ 168 006c AB00     	 lsls r3,r5,#2
+ 118:../Radar_Control/src/radar_base.c ****   
+ 169              	 .loc 1 118 0
+ 170 006e 02FB03F3 	 mul r3,r2,r3
+ 120:../Radar_Control/src/radar_base.c ****   {
+ 171              	 .loc 1 120 0
+ 172 0072 B3F5004F 	 cmp r3,#32768
+ 117:../Radar_Control/src/radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * 2U * sizeof(uint16_t); // complex IQ samples per ant
+ 173              	 .loc 1 117 0
+ 174 0076 0B60     	 str r3,[r1]
+ 120:../Radar_Control/src/radar_base.c ****   {
+ 175              	 .loc 1 120 0
+ 176 0078 DBD8     	 bhi .L8
+ 127:../Radar_Control/src/radar_base.c ****                                        frame_format.num_chirps_per_frame,
+ 177              	 .loc 1 127 0
+ 178 007a BDF82C20 	 ldrh r2,[sp,#44]
+ 179 007e 0092     	 str r2,[sp]
+ 180 0080 0DF13808 	 add r8,sp,#56
+ 181 0084 0222     	 movs r2,#2
+ 182 0086 0C21     	 movs r1,#12
+ 183 0088 BDF83030 	 ldrh r3,[sp,#48]
+ 184 008c 0192     	 str r2,[sp,#4]
+ 185 008e 4046     	 mov r0,r8
+ 186 0090 0292     	 str r2,[sp,#8]
+ 187 0092 0391     	 str r1,[sp,#12]
+ 188 0094 4FF40042 	 mov r2,#32768
+ 189 0098 1349     	 ldr r1,.L17+4
+ 131:../Radar_Control/src/radar_base.c ****   
+ 190              	 .loc 1 131 0
+ 191 009a 12AE     	 add r6,sp,#72
+ 127:../Radar_Control/src/radar_base.c ****                                        frame_format.num_chirps_per_frame,
+ 192              	 .loc 1 127 0
+ 193 009c FFF7FEFF 	 bl create_acq_data_buffer_obj
+ 194              	.LVL12:
+ 131:../Radar_Control/src/radar_base.c ****   
+ 195              	 .loc 1 131 0
+ 196 00a0 0FCE     	 ldmia r6!,{r0,r1,r2,r3}
+ 197 00a2 6D46     	 mov r5,sp
+ 198 00a4 0FC5     	 stmia r5!,{r0,r1,r2,r3}
+ 199 00a6 96E80F00 	 ldmia r6,{r0,r1,r2,r3}
+ 200 00aa 85E80F00 	 stmia r5,{r0,r1,r2,r3}
+ 201 00ae 98E80F00 	 ldmia r8,{r0,r1,r2,r3}
+ 202 00b2 FFF7FEFF 	 bl ds_set_active_acq_buf
+ 203              	.LVL13:
+ 133:../Radar_Control/src/radar_base.c ****   
+ 204              	 .loc 1 133 0
+ 205 00b6 FFF7FEFF 	 bl ds_device_get_settings
+ 206              	.LVL14:
+ 207 00ba 0B9B     	 ldr r3,[sp,#44]
+ 208 00bc C362     	 str r3,[r0,#44]
+ 137:../Radar_Control/src/radar_base.c ****   
+ 209              	 .loc 1 137 0
+ 210 00be FFF7FEFF 	 bl ds_device_get_settings
+ 211              	.LVL15:
+ 212 00c2 C06A     	 ldr r0,[r0,#44]
+ 213 00c4 FFF7FEFF 	 bl bsp_set_num_samples_per_dma_transfer
+ 214              	.LVL16:
+ 139:../Radar_Control/src/radar_base.c ****   
+ 215              	 .loc 1 139 0
+ 216 00c8 FFF7FEFF 	 bl ds_device_get_settings
+ 217              	.LVL17:
+ 218 00cc 0C9B     	 ldr r3,[sp,#48]
+ 219 00ce 4361     	 str r3,[r0,#20]
+ 142:../Radar_Control/src/radar_base.c ****   
+ 220              	 .loc 1 142 0
+ 221 00d0 1846     	 mov r0,r3
+ 222 00d2 FFF7FEFF 	 bl bsp_set_num_chirps_per_frame
+ 223              	.LVL18:
+ 146:../Radar_Control/src/radar_base.c ****   
+ 224              	 .loc 1 146 0
+ 225 00d6 3846     	 mov r0,r7
+ 226 00d8 FFF7FEFF 	 bl radar_init
+ 227              	.LVL19:
+ 148:../Radar_Control/src/radar_base.c ****   
+ 228              	 .loc 1 148 0
+ 229 00dc 034B     	 ldr r3,.L17+8
+ 230 00de 1C60     	 str r4,[r3]
+ 150:../Radar_Control/src/radar_base.c **** }
+ 231              	 .loc 1 150 0
+ 232 00e0 A8E7     	 b .L7
+ 233              	.L18:
+ 234 00e2 00BF     	 .align 2
+ 235              	.L17:
+ 236 00e4 00000000 	 .word .LANCHOR1
+ 237 00e8 00000000 	 .word data_fifo
+ 238 00ec 00000000 	 .word g_adc_sampling_completed
+ 239              	 .cfi_endproc
+ 240              	.LFE472:
+ 242              	 .section .text.radar_close_device,"ax",%progbits
+ 243              	 .align 2
+ 244              	 .global radar_close_device
+ 245              	 .thumb
+ 246              	 .thumb_func
+ 248              	radar_close_device:
+ 249              	.LFB473:
+ 152:../Radar_Control/src/radar_base.c **** 
+ 153:../Radar_Control/src/radar_base.c **** //============================================================================
+ 154:../Radar_Control/src/radar_base.c **** 
+ 155:../Radar_Control/src/radar_base.c **** void radar_close_device(Radar_Handle_t device)
+ 156:../Radar_Control/src/radar_base.c **** {
+ 250              	 .loc 1 156 0
+ 251              	 .cfi_startproc
+ 252              	 
+ 253              	 
+ 254              	 
+ 255              	.LVL20:
+ 157:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 158:../Radar_Control/src/radar_base.c ****   
+ 159:../Radar_Control/src/radar_base.c ****   bgt_stop_tx();
+ 256              	 .loc 1 159 0
+ 257 0000 FFF7FEBF 	 b bgt_stop_tx
+ 258              	.LVL21:
+ 259              	 .cfi_endproc
+ 260              	.LFE473:
+ 262              	 .section .text.radar_get_device_info,"ax",%progbits
+ 263              	 .align 2
+ 264              	 .global radar_get_device_info
+ 265              	 .thumb
+ 266              	 .thumb_func
+ 268              	radar_get_device_info:
+ 269              	.LFB474:
+ 160:../Radar_Control/src/radar_base.c **** }
+ 161:../Radar_Control/src/radar_base.c **** 
+ 162:../Radar_Control/src/radar_base.c **** //============================================================================
+ 163:../Radar_Control/src/radar_base.c **** 
+ 164:../Radar_Control/src/radar_base.c **** uint16_t radar_get_device_info(Radar_Handle_t device, Device_Info_t* device_info)
+ 165:../Radar_Control/src/radar_base.c **** {
+ 270              	 .loc 1 165 0
+ 271              	 .cfi_startproc
+ 272              	 
+ 273              	 
+ 274              	.LVL22:
+ 275 0000 38B5     	 push {r3,r4,r5,lr}
+ 276              	.LCFI4:
+ 277              	 .cfi_def_cfa_offset 16
+ 278              	 .cfi_offset 3,-16
+ 279              	 .cfi_offset 4,-12
+ 280              	 .cfi_offset 5,-8
+ 281              	 .cfi_offset 14,-4
+ 282              	 .loc 1 165 0
+ 283 0002 0C46     	 mov r4,r1
+ 166:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 167:../Radar_Control/src/radar_base.c **** 
+ 168:../Radar_Control/src/radar_base.c ****   /* Get device information:
+ 169:../Radar_Control/src/radar_base.c ****       - Sensor description
+ 170:../Radar_Control/src/radar_base.c ****       - Hardware Version information
+ 171:../Radar_Control/src/radar_base.c ****       - Sensor features
+ 172:../Radar_Control/src/radar_base.c ****       - Data format
+ 173:../Radar_Control/src/radar_base.c ****   */
+ 174:../Radar_Control/src/radar_base.c ****   *device_info = *ds_ep_get_device_info();
+ 284              	 .loc 1 174 0
+ 285 0004 FFF7FEFF 	 bl ds_ep_get_device_info
+ 286              	.LVL23:
+ 287 0008 0546     	 mov r5,r0
+ 288 000a 0FCD     	 ldmia r5!,{r0,r1,r2,r3}
+ 289 000c 0FC4     	 stmia r4!,{r0,r1,r2,r3}
+ 290              	.LVL24:
+ 291 000e 2B68     	 ldr r3,[r5]
+ 292 0010 2360     	 str r3,[r4]
+ 175:../Radar_Control/src/radar_base.c ****    
+ 176:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_OK);
+ 177:../Radar_Control/src/radar_base.c **** }
+ 293              	 .loc 1 177 0
+ 294 0012 0020     	 movs r0,#0
+ 295 0014 38BD     	 pop {r3,r4,r5,pc}
+ 296              	 .cfi_endproc
+ 297              	.LFE474:
+ 299 0016 00BF     	 .section .text.radar_get_temperature,"ax",%progbits
+ 300              	 .align 2
+ 301              	 .global radar_get_temperature
+ 302              	 .thumb
+ 303              	 .thumb_func
+ 305              	radar_get_temperature:
+ 306              	.LFB475:
+ 178:../Radar_Control/src/radar_base.c **** 
+ 179:../Radar_Control/src/radar_base.c **** //============================================================================
+ 180:../Radar_Control/src/radar_base.c **** 
+ 181:../Radar_Control/src/radar_base.c **** uint16_t radar_get_temperature(Radar_Handle_t device, uint8_t temp_sensor, int32_t* temperature_001
+ 182:../Radar_Control/src/radar_base.c **** {
+ 307              	 .loc 1 182 0
+ 308              	 .cfi_startproc
+ 309              	 
+ 310              	 
+ 311              	.LVL25:
+ 183:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 184:../Radar_Control/src/radar_base.c ****   
+ 185:../Radar_Control/src/radar_base.c ****   /* Check temperature sensor, only single sensor supported */
+ 186:../Radar_Control/src/radar_base.c ****   if (temp_sensor == 0)
+ 312              	 .loc 1 186 0
+ 313 0000 09B1     	 cbz r1,.L27
+ 187:../Radar_Control/src/radar_base.c ****   {
+ 188:../Radar_Control/src/radar_base.c ****     *temperature_001C = (int32_t) (bsp_bgt_get_temp_value() * 1000.0f);	// (expected value is actua
+ 189:../Radar_Control/src/radar_base.c ****     
+ 190:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_OK);
+ 191:../Radar_Control/src/radar_base.c ****   }
+ 192:../Radar_Control/src/radar_base.c ****   else
+ 193:../Radar_Control/src/radar_base.c ****   {
+ 194:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_SENSOR_DOES_NOT_EXIST);
+ 314              	 .loc 1 194 0
+ 315 0002 0720     	 movs r0,#7
+ 316              	.LVL26:
+ 317 0004 7047     	 bx lr
+ 318              	.LVL27:
+ 319              	.L27:
+ 182:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 320              	 .loc 1 182 0
+ 321 0006 38B5     	 push {r3,r4,r5,lr}
+ 322              	.LCFI5:
+ 323              	 .cfi_def_cfa_offset 16
+ 324              	 .cfi_offset 3,-16
+ 325              	 .cfi_offset 4,-12
+ 326              	 .cfi_offset 5,-8
+ 327              	 .cfi_offset 14,-4
+ 328 0008 0C46     	 mov r4,r1
+ 329 000a 1546     	 mov r5,r2
+ 188:../Radar_Control/src/radar_base.c ****     
+ 330              	 .loc 1 188 0
+ 331 000c FFF7FEFF 	 bl bsp_bgt_get_temp_value
+ 332              	.LVL28:
+ 333 0010 DFED057A 	 flds s15,.L28
+ 334 0014 07EE100A 	 fmsr s14,r0
+ 335 0018 67EE277A 	 fmuls s15,s14,s15
+ 190:../Radar_Control/src/radar_base.c ****   }
+ 336              	 .loc 1 190 0
+ 337 001c 2046     	 mov r0,r4
+ 188:../Radar_Control/src/radar_base.c ****     
+ 338              	 .loc 1 188 0
+ 339 001e FDEEE77A 	 ftosizs s15,s15
+ 340 0022 C5ED007A 	 fsts s15,[r5]
+ 190:../Radar_Control/src/radar_base.c ****   }
+ 341              	 .loc 1 190 0
+ 342 0026 38BD     	 pop {r3,r4,r5,pc}
+ 343              	.LVL29:
+ 344              	.L29:
+ 345              	 .align 2
+ 346              	.L28:
+ 347 0028 00007A44 	 .word 1148846080
+ 348              	 .cfi_endproc
+ 349              	.LFE475:
+ 351              	 .section .text.radar_get_tx_power,"ax",%progbits
+ 352              	 .align 2
+ 353              	 .global radar_get_tx_power
+ 354              	 .thumb
+ 355              	 .thumb_func
+ 357              	radar_get_tx_power:
+ 358              	.LFB476:
+ 195:../Radar_Control/src/radar_base.c ****   }
+ 196:../Radar_Control/src/radar_base.c **** }
+ 197:../Radar_Control/src/radar_base.c **** 
+ 198:../Radar_Control/src/radar_base.c **** //============================================================================
+ 199:../Radar_Control/src/radar_base.c **** 
+ 200:../Radar_Control/src/radar_base.c **** uint16_t radar_get_tx_power(Radar_Handle_t device, uint8_t tx_antenna, int32_t* tx_power_001dBm)
+ 201:../Radar_Control/src/radar_base.c **** {
+ 359              	 .loc 1 201 0
+ 360              	 .cfi_startproc
+ 361              	 
+ 362              	 
+ 363              	.LVL30:
+ 202:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 203:../Radar_Control/src/radar_base.c ****   
+ 204:../Radar_Control/src/radar_base.c ****   /* Check number of TX antenna */
+ 205:../Radar_Control/src/radar_base.c ****   if (tx_antenna == 0)
+ 364              	 .loc 1 205 0
+ 365 0000 09B1     	 cbz r1,.L35
+ 206:../Radar_Control/src/radar_base.c ****   {
+ 207:../Radar_Control/src/radar_base.c ****     *tx_power_001dBm = (int32_t)(bsp_bgt_get_txpower_value() * 1000.0f); // return TX power
+ 208:../Radar_Control/src/radar_base.c ****     
+ 209:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_OK);
+ 210:../Radar_Control/src/radar_base.c ****   }
+ 211:../Radar_Control/src/radar_base.c ****   
+ 212:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_ANTENNA_DOES_NOT_EXIST);
+ 366              	 .loc 1 212 0
+ 367 0002 0620     	 movs r0,#6
+ 368              	.LVL31:
+ 369 0004 7047     	 bx lr
+ 370              	.LVL32:
+ 371              	.L35:
+ 201:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 372              	 .loc 1 201 0
+ 373 0006 38B5     	 push {r3,r4,r5,lr}
+ 374              	.LCFI6:
+ 375              	 .cfi_def_cfa_offset 16
+ 376              	 .cfi_offset 3,-16
+ 377              	 .cfi_offset 4,-12
+ 378              	 .cfi_offset 5,-8
+ 379              	 .cfi_offset 14,-4
+ 380 0008 0C46     	 mov r4,r1
+ 381 000a 1546     	 mov r5,r2
+ 207:../Radar_Control/src/radar_base.c ****     
+ 382              	 .loc 1 207 0
+ 383 000c FFF7FEFF 	 bl bsp_bgt_get_txpower_value
+ 384              	.LVL33:
+ 385 0010 DFED057A 	 flds s15,.L36
+ 386 0014 07EE100A 	 fmsr s14,r0
+ 387 0018 67EE277A 	 fmuls s15,s14,s15
+ 209:../Radar_Control/src/radar_base.c ****   }
+ 388              	 .loc 1 209 0
+ 389 001c 2046     	 mov r0,r4
+ 207:../Radar_Control/src/radar_base.c ****     
+ 390              	 .loc 1 207 0
+ 391 001e FDEEE77A 	 ftosizs s15,s15
+ 392 0022 C5ED007A 	 fsts s15,[r5]
+ 209:../Radar_Control/src/radar_base.c ****   }
+ 393              	 .loc 1 209 0
+ 394 0026 38BD     	 pop {r3,r4,r5,pc}
+ 395              	.LVL34:
+ 396              	.L37:
+ 397              	 .align 2
+ 398              	.L36:
+ 399 0028 00007A44 	 .word 1148846080
+ 400              	 .cfi_endproc
+ 401              	.LFE476:
+ 403              	 .section .text.radar_get_chirp_duration,"ax",%progbits
+ 404              	 .align 2
+ 405              	 .global radar_get_chirp_duration
+ 406              	 .thumb
+ 407              	 .thumb_func
+ 409              	radar_get_chirp_duration:
+ 410              	.LFB477:
+ 213:../Radar_Control/src/radar_base.c **** }
+ 214:../Radar_Control/src/radar_base.c **** 
+ 215:../Radar_Control/src/radar_base.c **** //============================================================================
+ 216:../Radar_Control/src/radar_base.c **** 
+ 217:../Radar_Control/src/radar_base.c **** uint16_t radar_get_chirp_duration(Radar_Handle_t device, uint32_t* chirp_duration_nsec)
+ 218:../Radar_Control/src/radar_base.c **** {
+ 411              	 .loc 1 218 0
+ 412              	 .cfi_startproc
+ 413              	 
+ 414              	 
+ 415              	.LVL35:
+ 416 0000 10B5     	 push {r4,lr}
+ 417              	.LCFI7:
+ 418              	 .cfi_def_cfa_offset 8
+ 419              	 .cfi_offset 4,-8
+ 420              	 .cfi_offset 14,-4
+ 421              	 .loc 1 218 0
+ 422 0002 0C46     	 mov r4,r1
+ 219:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 220:../Radar_Control/src/radar_base.c ****   
+ 221:../Radar_Control/src/radar_base.c ****   /* Calculate chirp timing from current settings */
+ 222:../Radar_Control/src/radar_base.c ****   /* -------------------------------------------- */
+ 223:../Radar_Control/src/radar_base.c ****   /* Unit is ns. (factor 10^9 is distributed to denominator and denominator for fixed point precisi
+ 224:../Radar_Control/src/radar_base.c ****   
+ 225:../Radar_Control/src/radar_base.c ****   *chirp_duration_nsec = (ds_device_get_settings()->pll_chirp_time_usec * 1000U);
+ 423              	 .loc 1 225 0
+ 424 0004 FFF7FEFF 	 bl ds_device_get_settings
+ 425              	.LVL36:
+ 426 0008 0268     	 ldr r2,[r0]
+ 427 000a 4FF47A73 	 mov r3,#1000
+ 428 000e 03FB02F3 	 mul r3,r3,r2
+ 429 0012 2360     	 str r3,[r4]
+ 226:../Radar_Control/src/radar_base.c ****   
+ 227:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_OK);
+ 228:../Radar_Control/src/radar_base.c **** }
+ 430              	 .loc 1 228 0
+ 431 0014 0020     	 movs r0,#0
+ 432 0016 10BD     	 pop {r4,pc}
+ 433              	 .cfi_endproc
+ 434              	.LFE477:
+ 436              	 .section .text.radar_get_min_frame_interval,"ax",%progbits
+ 437              	 .align 2
+ 438              	 .global radar_get_min_frame_interval
+ 439              	 .thumb
+ 440              	 .thumb_func
+ 442              	radar_get_min_frame_interval:
+ 443              	.LFB478:
+ 229:../Radar_Control/src/radar_base.c **** 
+ 230:../Radar_Control/src/radar_base.c **** //============================================================================
+ 231:../Radar_Control/src/radar_base.c **** 
+ 232:../Radar_Control/src/radar_base.c **** uint16_t radar_get_min_frame_interval(Radar_Handle_t device, uint32_t* min_frame_interval_usec)
+ 233:../Radar_Control/src/radar_base.c **** {
+ 444              	 .loc 1 233 0
+ 445              	 .cfi_startproc
+ 446              	 
+ 447              	 
+ 448              	.LVL37:
+ 449 0000 70B5     	 push {r4,r5,r6,lr}
+ 450              	.LCFI8:
+ 451              	 .cfi_def_cfa_offset 16
+ 452              	 .cfi_offset 4,-16
+ 453              	 .cfi_offset 5,-12
+ 454              	 .cfi_offset 6,-8
+ 455              	 .cfi_offset 14,-4
+ 456              	 .loc 1 233 0
+ 457 0002 0C46     	 mov r4,r1
+ 234:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 235:../Radar_Control/src/radar_base.c ****   uint32_t bgt_duty_cycle_delay_usec;
+ 236:../Radar_Control/src/radar_base.c ****   
+ 237:../Radar_Control/src/radar_base.c ****   if(ds_device_get_settings()->power_duty_cycle_enable_flag == true)
+ 458              	 .loc 1 237 0
+ 459 0004 FFF7FEFF 	 bl ds_device_get_settings
+ 460              	.LVL38:
+ 461 0008 90F82420 	 ldrb r2,[r0,#36]
+ 238:../Radar_Control/src/radar_base.c ****   {
+ 239:../Radar_Control/src/radar_base.c ****     bgt_duty_cycle_delay_usec = 3000U; /* approximate value calculated from bgt power up sequence 1
+ 240:../Radar_Control/src/radar_base.c ****   }
+ 241:../Radar_Control/src/radar_base.c ****   else
+ 242:../Radar_Control/src/radar_base.c ****   {
+ 243:../Radar_Control/src/radar_base.c ****     bgt_duty_cycle_delay_usec = 1000U; /* approximate delay to accommodate processing time */
+ 462              	 .loc 1 243 0
+ 463 000c 40F6B833 	 movw r3,#3000
+ 237:../Radar_Control/src/radar_base.c ****   {
+ 464              	 .loc 1 237 0
+ 465 0010 012A     	 cmp r2,#1
+ 466              	 .loc 1 243 0
+ 467 0012 0CBF     	 ite eq
+ 468 0014 1D46     	 moveq r5,r3
+ 469 0016 4FF47A75 	 movne r5,#1000
+ 470              	.LVL39:
+ 244:../Radar_Control/src/radar_base.c ****   }
+ 245:../Radar_Control/src/radar_base.c ****   
+ 246:../Radar_Control/src/radar_base.c **** #if defined (FMCW_SUPPORTED) && defined (DOPPLER_SUPPORTED)
+ 247:../Radar_Control/src/radar_base.c ****   
+ 248:../Radar_Control/src/radar_base.c ****   *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * (ds_device_get
+ 249:../Radar_Control/src/radar_base.c ****     ((SAMPLES_PER_CHIRP * 1000U / DOPPLER_SAMPLING_FREQ_HZ) * 1000U) + 2 * ALGO_PROCESS_TIME_USEC; 
+ 250:../Radar_Control/src/radar_base.c ****   
+ 251:../Radar_Control/src/radar_base.c **** #elif defined (FMCW_SUPPORTED)
+ 252:../Radar_Control/src/radar_base.c ****   *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * (ds_device_get
+ 253:../Radar_Control/src/radar_base.c ****   
+ 254:../Radar_Control/src/radar_base.c **** #elif defined (DOPPLER_SUPPORTED)
+ 255:../Radar_Control/src/radar_base.c ****   *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * ((ds_device_ge
+ 256:../Radar_Control/src/radar_base.c ****   
+ 257:../Radar_Control/src/radar_base.c **** #else
+ 258:../Radar_Control/src/radar_base.c ****   
+ 259:../Radar_Control/src/radar_base.c ****   if(ds_device_get_settings()->pll_modulation_mode == MODULATION_FMCW)
+ 471              	 .loc 1 259 0
+ 472 001a FFF7FEFF 	 bl ds_device_get_settings
+ 473              	.LVL40:
+ 474 001e 8369     	 ldr r3,[r0,#24]
+ 475 0020 012B     	 cmp r3,#1
+ 476 0022 11D0     	 beq .L46
+ 260:../Radar_Control/src/radar_base.c ****   {
+ 261:../Radar_Control/src/radar_base.c ****     *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * (ds_device_g
+ 262:../Radar_Control/src/radar_base.c ****   }
+ 263:../Radar_Control/src/radar_base.c ****   else /* Doppler modulation */
+ 264:../Radar_Control/src/radar_base.c ****   {
+ 265:../Radar_Control/src/radar_base.c ****     /* min_frame_interval_usec = Sampling period x No. of chirps x No. of samples per chirp x 10000
+ 266:../Radar_Control/src/radar_base.c ****     Sampling period =  1 / DOPPLER_SAMPLING_FREQ_Hz */
+ 267:../Radar_Control/src/radar_base.c ****     *min_frame_interval_usec = ds_device_get_settings()->pll_num_of_chirps_per_frame * ((ds_device_
+ 477              	 .loc 1 267 0
+ 478 0024 FFF7FEFF 	 bl ds_device_get_settings
+ 479              	.LVL41:
+ 480 0028 4669     	 ldr r6,[r0,#20]
+ 481 002a FFF7FEFF 	 bl ds_device_get_settings
+ 482              	.LVL42:
+ 483 002e 0C4B     	 ldr r3,.L47
+ 484 0030 C26A     	 ldr r2,[r0,#44]
+ 485 0032 0C49     	 ldr r1,.L47+4
+ 486 0034 03FB02F2 	 mul r2,r3,r2
+ 487 0038 A1FB0223 	 umull r2,r3,r1,r2
+ 488 003c 9B0B     	 lsrs r3,r3,#14
+ 489 003e 06FB0353 	 mla r3,r6,r3,r5
+ 490 0042 2360     	 str r3,[r4]
+ 268:../Radar_Control/src/radar_base.c ****   }
+ 269:../Radar_Control/src/radar_base.c ****   
+ 270:../Radar_Control/src/radar_base.c **** #endif
+ 271:../Radar_Control/src/radar_base.c ****   
+ 272:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_OK);
+ 273:../Radar_Control/src/radar_base.c **** }
+ 491              	 .loc 1 273 0
+ 492 0044 0020     	 movs r0,#0
+ 493 0046 70BD     	 pop {r4,r5,r6,pc}
+ 494              	.LVL43:
+ 495              	.L46:
+ 261:../Radar_Control/src/radar_base.c ****   }
+ 496              	 .loc 1 261 0
+ 497 0048 FFF7FEFF 	 bl ds_device_get_settings
+ 498              	.LVL44:
+ 499 004c 4669     	 ldr r6,[r0,#20]
+ 500 004e FFF7FEFF 	 bl ds_device_get_settings
+ 501              	.LVL45:
+ 502 0052 0368     	 ldr r3,[r0]
+ 503 0054 C833     	 adds r3,r3,#200
+ 504 0056 06FB0353 	 mla r3,r6,r3,r5
+ 505 005a 2360     	 str r3,[r4]
+ 506              	 .loc 1 273 0
+ 507 005c 0020     	 movs r0,#0
+ 508 005e 70BD     	 pop {r4,r5,r6,pc}
+ 509              	.LVL46:
+ 510              	.L48:
+ 511              	 .align 2
+ 512              	.L47:
+ 513 0060 40420F00 	 .word 1000000
+ 514 0064 5917B7D1 	 .word -776530087
+ 515              	 .cfi_endproc
+ 516              	.LFE478:
+ 518              	 .section .text.radar_set_frame_format,"ax",%progbits
+ 519              	 .align 2
+ 520              	 .global radar_set_frame_format
+ 521              	 .thumb
+ 522              	 .thumb_func
+ 524              	radar_set_frame_format:
+ 525              	.LFB479:
+ 274:../Radar_Control/src/radar_base.c **** 
+ 275:../Radar_Control/src/radar_base.c **** //============================================================================
+ 276:../Radar_Control/src/radar_base.c **** 
+ 277:../Radar_Control/src/radar_base.c **** uint16_t radar_set_frame_format(Radar_Handle_t device, const Frame_Format_t* frame_format)
+ 278:../Radar_Control/src/radar_base.c **** {
+ 526              	 .loc 1 278 0
+ 527              	 .cfi_startproc
+ 528              	 
+ 529              	 
+ 530              	.LVL47:
+ 531 0000 70B5     	 push {r4,r5,r6,lr}
+ 532              	.LCFI9:
+ 533              	 .cfi_def_cfa_offset 16
+ 534              	 .cfi_offset 4,-16
+ 535              	 .cfi_offset 5,-12
+ 536              	 .cfi_offset 6,-8
+ 537              	 .cfi_offset 14,-4
+ 538              	 .loc 1 278 0
+ 539 0002 0546     	 mov r5,r0
+ 540 0004 0C46     	 mov r4,r1
+ 279:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 280:../Radar_Control/src/radar_base.c ****   
+ 281:../Radar_Control/src/radar_base.c ****   /* Configuration change is only allowed while automatic trigger is not working */
+ 282:../Radar_Control/src/radar_base.c ****   if (radar_get_data_acq_mode() != RADAR_MANUAL_TRIGGER)
+ 541              	 .loc 1 282 0
+ 542 0006 FFF7FEFF 	 bl radar_get_data_acq_mode
+ 543              	.LVL48:
+ 544 000a 08B1     	 cbz r0,.L71
+ 283:../Radar_Control/src/radar_base.c ****   {
+ 284:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_BUSY);
+ 545              	 .loc 1 284 0
+ 546 000c 0220     	 movs r0,#2
+ 547 000e 70BD     	 pop {r4,r5,r6,pc}
+ 548              	.LVL49:
+ 549              	.L71:
+ 285:../Radar_Control/src/radar_base.c ****   }
+ 286:../Radar_Control/src/radar_base.c ****   
+ 287:../Radar_Control/src/radar_base.c ****   /* Check if configuration is valid */
+ 288:../Radar_Control/src/radar_base.c ****   /* ------------------------------- */
+ 289:../Radar_Control/src/radar_base.c ****   
+ 290:../Radar_Control/src/radar_base.c ****   /* This sensor can only acquire real signal data */
+ 291:../Radar_Control/src/radar_base.c ****   if (frame_format->signal_part != RADAR_SIGNAL_I_AND_Q)
+ 550              	 .loc 1 291 0
+ 551 0010 637A     	 ldrb r3,[r4,#9]
+ 552 0012 022B     	 cmp r3,#2
+ 553 0014 01D0     	 beq .L72
+ 292:../Radar_Control/src/radar_base.c ****   {
+ 293:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_UNAVAILABLE_SIGNAL_PART);
+ 554              	 .loc 1 293 0
+ 555 0016 0B20     	 movs r0,#11
+ 556 0018 70BD     	 pop {r4,r5,r6,pc}
+ 557              	.LVL50:
+ 558              	.L72:
+ 294:../Radar_Control/src/radar_base.c ****   }
+ 295:../Radar_Control/src/radar_base.c ****   /* This sensor support RX1, RX2 and both at the same time antennas enabled */
+ 296:../Radar_Control/src/radar_base.c ****   if (frame_format->rx_mask > BSP_RX_ANTENNA_MASK )
+ 559              	 .loc 1 296 0
+ 560 001a 237A     	 ldrb r3,[r4,#8]
+ 561 001c 032B     	 cmp r3,#3
+ 562 001e 01D9     	 bls .L73
+ 297:../Radar_Control/src/radar_base.c ****   {
+ 298:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_ANTENNA_DOES_NOT_EXIST);
+ 563              	 .loc 1 298 0
+ 564 0020 0620     	 movs r0,#6
+ 565 0022 70BD     	 pop {r4,r5,r6,pc}
+ 566              	.LVL51:
+ 567              	.L73:
+ 299:../Radar_Control/src/radar_base.c ****   }
+ 300:../Radar_Control/src/radar_base.c ****   /* LMX2491 supports only a limited number of ramps before auto turn off. */
+ 301:../Radar_Control/src/radar_base.c ****   if ((frame_format->num_chirps_per_frame == 0) || (frame_format->num_chirps_per_frame > BSP_MAX_NU
+ 568              	 .loc 1 301 0
+ 569 0024 6368     	 ldr r3,[r4,#4]
+ 570 0026 5A1E     	 subs r2,r3,#1
+ 571 0028 3F2A     	 cmp r2,#63
+ 572 002a 01D9     	 bls .L51
+ 573              	.LVL52:
+ 574              	.L52:
+ 302:../Radar_Control/src/radar_base.c ****   {
+ 303:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 575              	 .loc 1 303 0
+ 576 002c 0820     	 movs r0,#8
+ 577 002e 70BD     	 pop {r4,r5,r6,pc}
+ 578              	.LVL53:
+ 579              	.L51:
+ 304:../Radar_Control/src/radar_base.c ****   }
+ 305:../Radar_Control/src/radar_base.c ****   
+ 306:../Radar_Control/src/radar_base.c ****   /* BGT can store only a limited number of samples per chirp */
+ 307:../Radar_Control/src/radar_base.c ****   if ((frame_format->num_samples_per_chirp == 0) || (frame_format->num_samples_per_chirp > BSP_MAX_
+ 580              	 .loc 1 307 0
+ 581 0030 2668     	 ldr r6,[r4]
+ 582 0032 721E     	 subs r2,r6,#1
+ 583 0034 FF2A     	 cmp r2,#255
+ 584 0036 F9D8     	 bhi .L52
+ 308:../Radar_Control/src/radar_base.c ****   {
+ 309:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 310:../Radar_Control/src/radar_base.c ****   }
+ 311:../Radar_Control/src/radar_base.c ****   
+ 312:../Radar_Control/src/radar_base.c ****   /* For Doppler modulation mode the number of chirp must be 1 */
+ 313:../Radar_Control/src/radar_base.c ****   if ((frame_format->num_chirps_per_frame != 1) && (ds_device_get_settings()->pll_modulation_mode =
+ 585              	 .loc 1 313 0
+ 586 0038 012B     	 cmp r3,#1
+ 587 003a 05D0     	 beq .L56
+ 588              	 .loc 1 313 0 is_stmt 0 discriminator 1
+ 589 003c FFF7FEFF 	 bl ds_device_get_settings
+ 590              	.LVL54:
+ 591 0040 8369     	 ldr r3,[r0,#24]
+ 592 0042 002B     	 cmp r3,#0
+ 593 0044 F2D0     	 beq .L52
+ 594 0046 2668     	 ldr r6,[r4]
+ 595              	.L56:
+ 314:../Radar_Control/src/radar_base.c ****   {
+ 315:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 316:../Radar_Control/src/radar_base.c ****   }
+ 317:../Radar_Control/src/radar_base.c ****   
+ 318:../Radar_Control/src/radar_base.c ****   /* Check if samples per chirp are in [32,64,128,256] range */
+ 319:../Radar_Control/src/radar_base.c ****   if ((frame_format->num_samples_per_chirp != 256U) &&
+ 596              	 .loc 1 319 0 is_stmt 1
+ 597 0048 B6F5807F 	 cmp r6,#256
+ 598 004c 07D0     	 beq .L55
+ 599              	 .loc 1 319 0 is_stmt 0 discriminator 1
+ 600 004e 802E     	 cmp r6,#128
+ 601 0050 05D0     	 beq .L55
+ 320:../Radar_Control/src/radar_base.c ****       (frame_format->num_samples_per_chirp != 128U) &&
+ 602              	 .loc 1 320 0 is_stmt 1
+ 603 0052 402E     	 cmp r6,#64
+ 604 0054 03D0     	 beq .L55
+ 321:../Radar_Control/src/radar_base.c ****         (frame_format->num_samples_per_chirp != 64U)  &&
+ 605              	 .loc 1 321 0
+ 606 0056 202E     	 cmp r6,#32
+ 607 0058 01D0     	 beq .L55
+ 322:../Radar_Control/src/radar_base.c ****           (frame_format->num_samples_per_chirp != 32U))
+ 323:../Radar_Control/src/radar_base.c ****   {
+ 324:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_SAMPLERATE_OUT_OF_RANGE);
+ 608              	 .loc 1 324 0
+ 609 005a 5020     	 movs r0,#80
+ 325:../Radar_Control/src/radar_base.c ****   }
+ 326:../Radar_Control/src/radar_base.c ****   
+ 327:../Radar_Control/src/radar_base.c ****   uint32_t temp_samplerate_Hz = (uint32_t) (((float)frame_format->num_samples_per_chirp * 1000000.0
+ 328:../Radar_Control/src/radar_base.c ****   radar_set_sampling_freq(device, MODULATION_FMCW, temp_samplerate_Hz);
+ 329:../Radar_Control/src/radar_base.c **** 
+ 330:../Radar_Control/src/radar_base.c ****   /* Check frame memory limits */
+ 331:../Radar_Control/src/radar_base.c ****   /* ------------------------- */
+ 332:../Radar_Control/src/radar_base.c ****   frame_size = frame_format->num_chirps_per_frame * frame_format->num_samples_per_chirp * 2U *
+ 333:../Radar_Control/src/radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * sizeof(uint16_t); // complex IQ samples per antenna
+ 334:../Radar_Control/src/radar_base.c ****   
+ 335:../Radar_Control/src/radar_base.c ****   if (frame_size > BSP_MAX_ADC_BUFFER_SIZE_BYTES)
+ 336:../Radar_Control/src/radar_base.c ****   {
+ 337:../Radar_Control/src/radar_base.c ****     return (RADAR_ERR_UNSUPPORTED_FRAME_FORMAT);
+ 338:../Radar_Control/src/radar_base.c ****   }
+ 339:../Radar_Control/src/radar_base.c ****   
+ 340:../Radar_Control/src/radar_base.c ****   /* Store new frame format in store */
+ 341:../Radar_Control/src/radar_base.c ****   ds_ep_store_frame_format(frame_format);
+ 342:../Radar_Control/src/radar_base.c ****   
+ 343:../Radar_Control/src/radar_base.c ****   g_adc_sampling_completed = false;
+ 344:../Radar_Control/src/radar_base.c ****   
+ 345:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_OK);
+ 346:../Radar_Control/src/radar_base.c **** }
+ 610              	 .loc 1 346 0
+ 611 005c 70BD     	 pop {r4,r5,r6,pc}
+ 612              	.LVL55:
+ 613              	.L55:
+ 327:../Radar_Control/src/radar_base.c ****   radar_set_sampling_freq(device, MODULATION_FMCW, temp_samplerate_Hz);
+ 614              	 .loc 1 327 0
+ 615 005e FFF7FEFF 	 bl ds_device_get_settings
+ 616              	.LVL56:
+ 617 0062 07EE906A 	 fmsr s15,r6
+ 618 0066 9FED166A 	 flds s12,.L74
+ 619 006a B8EE677A 	 fuitos s14,s15
+ 620 006e D0ED007A 	 flds s15,[r0]
+ 621 0072 F8EE676A 	 fuitos s13,s15
+ 622 0076 67EE067A 	 fmuls s15,s14,s12
+ 328:../Radar_Control/src/radar_base.c **** 
+ 623              	 .loc 1 328 0
+ 624 007a 0121     	 movs r1,#1
+ 327:../Radar_Control/src/radar_base.c ****   radar_set_sampling_freq(device, MODULATION_FMCW, temp_samplerate_Hz);
+ 625              	 .loc 1 327 0
+ 626 007c C7EEA67A 	 fdivs s15,s15,s13
+ 328:../Radar_Control/src/radar_base.c **** 
+ 627              	 .loc 1 328 0
+ 628 0080 2846     	 mov r0,r5
+ 629              	.LVL57:
+ 327:../Radar_Control/src/radar_base.c ****   radar_set_sampling_freq(device, MODULATION_FMCW, temp_samplerate_Hz);
+ 630              	 .loc 1 327 0
+ 631 0082 FCEEE77A 	 ftouizs s15,s15
+ 328:../Radar_Control/src/radar_base.c **** 
+ 632              	 .loc 1 328 0
+ 633 0086 F8EE677A 	 fuitos s15,s15
+ 634 008a 17EE902A 	 fmrs r2,s15
+ 635 008e FFF7FEFF 	 bl radar_set_sampling_freq
+ 636              	.LVL58:
+ 332:../Radar_Control/src/radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * sizeof(uint16_t); // complex IQ samples per antenna
+ 637              	 .loc 1 332 0
+ 638 0092 94E82800 	 ldmia r4,{r3,r5}
+ 639              	.LVL59:
+ 640 0096 03FB05F5 	 mul r5,r3,r5
+ 333:../Radar_Control/src/radar_base.c ****   
+ 641              	 .loc 1 333 0
+ 642 009a FFF7FEFF 	 bl ds_ep_get_device_info
+ 643              	.LVL60:
+ 332:../Radar_Control/src/radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * sizeof(uint16_t); // complex IQ samples per antenna
+ 644              	 .loc 1 332 0
+ 645 009e 427B     	 ldrb r2,[r0,#13]
+ 646 00a0 0849     	 ldr r1,.L74+4
+ 647 00a2 AB00     	 lsls r3,r5,#2
+ 333:../Radar_Control/src/radar_base.c ****   
+ 648              	 .loc 1 333 0
+ 649 00a4 02FB03F3 	 mul r3,r2,r3
+ 335:../Radar_Control/src/radar_base.c ****   {
+ 650              	 .loc 1 335 0
+ 651 00a8 B3F5004F 	 cmp r3,#32768
+ 332:../Radar_Control/src/radar_base.c ****     ds_ep_get_device_info()->num_rx_antennas * sizeof(uint16_t); // complex IQ samples per antenna
+ 652              	 .loc 1 332 0
+ 653 00ac 0B60     	 str r3,[r1]
+ 335:../Radar_Control/src/radar_base.c ****   {
+ 654              	 .loc 1 335 0
+ 655 00ae BDD8     	 bhi .L52
+ 341:../Radar_Control/src/radar_base.c ****   
+ 656              	 .loc 1 341 0
+ 657 00b0 2046     	 mov r0,r4
+ 658 00b2 FFF7FEFF 	 bl ds_ep_store_frame_format
+ 659              	.LVL61:
+ 343:../Radar_Control/src/radar_base.c ****   
+ 660              	 .loc 1 343 0
+ 661 00b6 044B     	 ldr r3,.L74+8
+ 662 00b8 0020     	 movs r0,#0
+ 663 00ba 1860     	 str r0,[r3]
+ 345:../Radar_Control/src/radar_base.c **** }
+ 664              	 .loc 1 345 0
+ 665 00bc 70BD     	 pop {r4,r5,r6,pc}
+ 666              	.LVL62:
+ 667              	.L75:
+ 668 00be 00BF     	 .align 2
+ 669              	.L74:
+ 670 00c0 00247449 	 .word 1232348160
+ 671 00c4 00000000 	 .word .LANCHOR1
+ 672 00c8 00000000 	 .word g_adc_sampling_completed
+ 673              	 .cfi_endproc
+ 674              	.LFE479:
+ 676              	 .section .text.radar_get_frame_format,"ax",%progbits
+ 677              	 .align 2
+ 678              	 .global radar_get_frame_format
+ 679              	 .thumb
+ 680              	 .thumb_func
+ 682              	radar_get_frame_format:
+ 683              	.LFB480:
+ 347:../Radar_Control/src/radar_base.c **** 
+ 348:../Radar_Control/src/radar_base.c **** //============================================================================
+ 349:../Radar_Control/src/radar_base.c **** 
+ 350:../Radar_Control/src/radar_base.c **** uint16_t radar_get_frame_format(Radar_Handle_t device, Frame_Format_t* p_frame_format)
+ 351:../Radar_Control/src/radar_base.c **** {
+ 684              	 .loc 1 351 0
+ 685              	 .cfi_startproc
+ 686              	 
+ 687              	 
+ 688              	.LVL63:
+ 689 0000 08B5     	 push {r3,lr}
+ 690              	.LCFI10:
+ 691              	 .cfi_def_cfa_offset 8
+ 692              	 .cfi_offset 3,-8
+ 693              	 .cfi_offset 14,-4
+ 352:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 353:../Radar_Control/src/radar_base.c ****   
+ 354:../Radar_Control/src/radar_base.c ****   /* Return current frame format of driver object */
+ 355:../Radar_Control/src/radar_base.c ****   ds_ep_fetch_frame_format(p_frame_format);
+ 694              	 .loc 1 355 0
+ 695 0002 0846     	 mov r0,r1
+ 696              	.LVL64:
+ 697 0004 FFF7FEFF 	 bl ds_ep_fetch_frame_format
+ 698              	.LVL65:
+ 356:../Radar_Control/src/radar_base.c ****   
+ 357:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_OK);
+ 358:../Radar_Control/src/radar_base.c **** }
+ 699              	 .loc 1 358 0
+ 700 0008 0020     	 movs r0,#0
+ 701 000a 08BD     	 pop {r3,pc}
+ 702              	 .cfi_endproc
+ 703              	.LFE480:
+ 705              	 .section .text.radar_get_frame,"ax",%progbits
+ 706              	 .align 2
+ 707              	 .global radar_get_frame
+ 708              	 .thumb
+ 709              	 .thumb_func
+ 711              	radar_get_frame:
+ 712              	.LFB481:
+ 359:../Radar_Control/src/radar_base.c **** 
+ 360:../Radar_Control/src/radar_base.c **** //============================================================================
+ 361:../Radar_Control/src/radar_base.c **** 
+ 362:../Radar_Control/src/radar_base.c **** uint16_t radar_get_frame(Radar_Handle_t device, Frame_Info_t* frame_info, uint8_t wait_for_data)
+ 363:../Radar_Control/src/radar_base.c **** {
+ 713              	 .loc 1 363 0
+ 714              	 .cfi_startproc
+ 715              	 
+ 716              	 
+ 717              	.LVL66:
+ 718 0000 70B5     	 push {r4,r5,r6,lr}
+ 719              	.LCFI11:
+ 720              	 .cfi_def_cfa_offset 16
+ 721              	 .cfi_offset 4,-16
+ 722              	 .cfi_offset 5,-12
+ 723              	 .cfi_offset 6,-8
+ 724              	 .cfi_offset 14,-4
+ 725 0002 84B0     	 sub sp,sp,#16
+ 726              	.LCFI12:
+ 727              	 .cfi_def_cfa_offset 32
+ 364:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 365:../Radar_Control/src/radar_base.c ****   
+ 366:../Radar_Control/src/radar_base.c ****   Frame_Format_t frame_format;
+ 367:../Radar_Control/src/radar_base.c ****   
+ 368:../Radar_Control/src/radar_base.c ****   ds_ep_fetch_frame_format(&frame_format);
+ 728              	 .loc 1 368 0
+ 729 0004 01A8     	 add r0,sp,#4
+ 730              	.LVL67:
+ 363:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+ 731              	 .loc 1 363 0
+ 732 0006 0D46     	 mov r5,r1
+ 733 0008 1446     	 mov r4,r2
+ 734              	 .loc 1 368 0
+ 735 000a FFF7FEFF 	 bl ds_ep_fetch_frame_format
+ 736              	.LVL68:
+ 369:../Radar_Control/src/radar_base.c ****   
+ 370:../Radar_Control/src/radar_base.c ****   acq_buf_obj *p_acq_buf = ds_get_active_acq_buf();
+ 737              	 .loc 1 370 0
+ 738 000e FFF7FEFF 	 bl ds_get_active_acq_buf
+ 739              	.LVL69:
+ 740 0012 0646     	 mov r6,r0
+ 741              	.LVL70:
+ 371:../Radar_Control/src/radar_base.c ****   
+ 372:../Radar_Control/src/radar_base.c ****   if (radar_get_data_acq_mode() != RADAR_AUTO_TRIGGER)	// without automaticFrameTrigger
+ 742              	 .loc 1 372 0
+ 743 0014 FFF7FEFF 	 bl radar_get_data_acq_mode
+ 744              	.LVL71:
+ 745 0018 0128     	 cmp r0,#1
+ 746 001a 2FD0     	 beq .L79
+ 373:../Radar_Control/src/radar_base.c ****   {
+ 374:../Radar_Control/src/radar_base.c ****     bsp_trigger_new_frame();
+ 747              	 .loc 1 374 0
+ 748 001c FFF7FEFF 	 bl bsp_trigger_new_frame
+ 749              	.LVL72:
+ 750 0020 1B4A     	 ldr r2,.L89
+ 751              	.L82:
+ 375:../Radar_Control/src/radar_base.c ****   }
+ 376:../Radar_Control/src/radar_base.c ****   else // with automaticFrameTrigger
+ 377:../Radar_Control/src/radar_base.c ****   {
+ 378:../Radar_Control/src/radar_base.c ****     if ((!wait_for_data) && (!g_adc_sampling_completed))
+ 379:../Radar_Control/src/radar_base.c ****     {
+ 380:../Radar_Control/src/radar_base.c ****       return (RADAR_ERR_TIMEOUT);
+ 381:../Radar_Control/src/radar_base.c ****     }
+ 382:../Radar_Control/src/radar_base.c ****   }
+ 383:../Radar_Control/src/radar_base.c ****   
+ 384:../Radar_Control/src/radar_base.c ****   while (g_adc_sampling_completed == false); // block GetFrame if data is not ready
+ 752              	 .loc 1 384 0 discriminator 1
+ 753 0022 1368     	 ldr r3,[r2]
+ 754 0024 1A4C     	 ldr r4,.L89
+ 755 0026 002B     	 cmp r3,#0
+ 756 0028 FBD0     	 beq .L82
+ 385:../Radar_Control/src/radar_base.c ****   
+ 386:../Radar_Control/src/radar_base.c ****   /* Data acquired */
+ 387:../Radar_Control/src/radar_base.c ****   /* ------------- */
+ 388:../Radar_Control/src/radar_base.c ****   //memcpy(transport_buffer, p_acq_buf->p_acq_buf, frame_size);	// copy ADC buffer to be send to av
+ 389:../Radar_Control/src/radar_base.c ****   
+ 390:../Radar_Control/src/radar_base.c ****   frame_info->sample_data           = p_acq_buf->p_acq_buf;
+ 757              	 .loc 1 390 0
+ 758 002a B36A     	 ldr r3,[r6,#40]
+ 759 002c 2B60     	 str r3,[r5]
+ 391:../Radar_Control/src/radar_base.c ****   frame_info->num_rx_antennas       = ds_ep_get_device_info()->num_rx_antennas;
+ 760              	 .loc 1 391 0
+ 761 002e FFF7FEFF 	 bl ds_ep_get_device_info
+ 762              	.LVL73:
+ 392:../Radar_Control/src/radar_base.c ****   frame_info->num_chirps            = frame_format.num_chirps_per_frame;
+ 763              	 .loc 1 392 0
+ 764 0032 029A     	 ldr r2,[sp,#8]
+ 391:../Radar_Control/src/radar_base.c ****   frame_info->num_rx_antennas       = ds_ep_get_device_info()->num_rx_antennas;
+ 765              	 .loc 1 391 0
+ 766 0034 417B     	 ldrb r1,[r0,#13]
+ 393:../Radar_Control/src/radar_base.c ****   frame_info->rx_mask               = frame_format.rx_mask;
+ 767              	 .loc 1 393 0
+ 768 0036 9DF80C30 	 ldrb r3,[sp,#12]
+ 391:../Radar_Control/src/radar_base.c ****   frame_info->num_rx_antennas       = ds_ep_get_device_info()->num_rx_antennas;
+ 769              	 .loc 1 391 0
+ 770 003a 2973     	 strb r1,[r5,#12]
+ 392:../Radar_Control/src/radar_base.c ****   frame_info->num_chirps            = frame_format.num_chirps_per_frame;
+ 771              	 .loc 1 392 0
+ 772 003c AA60     	 str r2,[r5,#8]
+ 773              	 .loc 1 393 0
+ 774 003e 2B76     	 strb r3,[r5,#24]
+ 394:../Radar_Control/src/radar_base.c ****   frame_info->adc_resolution        = ds_device_get_settings()->adc_resolution;
+ 775              	 .loc 1 394 0
+ 776 0040 FFF7FEFF 	 bl ds_device_get_settings
+ 777              	.LVL74:
+ 395:../Radar_Control/src/radar_base.c ****   frame_info->interleaved_rx        = 0;
+ 778              	 .loc 1 395 0
+ 779 0044 0026     	 movs r6,#0
+ 780              	.LVL75:
+ 394:../Radar_Control/src/radar_base.c ****   frame_info->adc_resolution        = ds_device_get_settings()->adc_resolution;
+ 781              	 .loc 1 394 0
+ 782 0046 90F82030 	 ldrb r3,[r0,#32]
+ 783 004a 6B76     	 strb r3,[r5,#25]
+ 784              	 .loc 1 395 0
+ 785 004c AE76     	 strb r6,[r5,#26]
+ 396:../Radar_Control/src/radar_base.c ****   frame_info->frame_number          = bsp_get_frame_counter();
+ 786              	 .loc 1 396 0
+ 787 004e FFF7FEFF 	 bl bsp_get_frame_counter
+ 788              	.LVL76:
+ 397:../Radar_Control/src/radar_base.c ****   frame_info->data_format           = RADAR_RX_DATA_COMPLEX;
+ 789              	 .loc 1 397 0
+ 790 0052 0123     	 movs r3,#1
+ 791 0054 EB76     	 strb r3,[r5,#27]
+ 396:../Radar_Control/src/radar_base.c ****   frame_info->frame_number          = bsp_get_frame_counter();
+ 792              	 .loc 1 396 0
+ 793 0056 6860     	 str r0,[r5,#4]
+ 398:../Radar_Control/src/radar_base.c ****   frame_info->temperature_001C      = (int32_t) (bsp_bgt_get_temp_value() * 1000);	// (expected val
+ 794              	 .loc 1 398 0
+ 795 0058 FFF7FEFF 	 bl bsp_bgt_get_temp_value
+ 796              	.LVL77:
+ 797 005c DFED0D7A 	 flds s15,.L89+4
+ 399:../Radar_Control/src/radar_base.c ****   frame_info->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 798              	 .loc 1 399 0
+ 799 0060 019B     	 ldr r3,[sp,#4]
+ 400:../Radar_Control/src/radar_base.c **** 
+ 401:../Radar_Control/src/radar_base.c ****   g_adc_sampling_completed          = false;
+ 800              	 .loc 1 401 0
+ 801 0062 2660     	 str r6,[r4]
+ 398:../Radar_Control/src/radar_base.c ****   frame_info->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 802              	 .loc 1 398 0
+ 803 0064 07EE100A 	 fmsr s14,r0
+ 804 0068 67EE277A 	 fmuls s15,s14,s15
+ 402:../Radar_Control/src/radar_base.c ****   
+ 403:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_OK);
+ 805              	 .loc 1 403 0
+ 806 006c 3046     	 mov r0,r6
+ 398:../Radar_Control/src/radar_base.c ****   frame_info->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 807              	 .loc 1 398 0
+ 808 006e FDEEE77A 	 ftosizs s15,s15
+ 399:../Radar_Control/src/radar_base.c **** 
+ 809              	 .loc 1 399 0
+ 810 0072 2B61     	 str r3,[r5,#16]
+ 398:../Radar_Control/src/radar_base.c ****   frame_info->num_samples_per_chirp = frame_format.num_samples_per_chirp;
+ 811              	 .loc 1 398 0
+ 812 0074 C5ED057A 	 fsts s15,[r5,#20]
+ 404:../Radar_Control/src/radar_base.c **** }
+ 813              	 .loc 1 404 0
+ 814 0078 04B0     	 add sp,sp,#16
+ 815              	.LCFI13:
+ 816              	 .cfi_remember_state
+ 817              	 .cfi_def_cfa_offset 16
+ 818              	 
+ 819 007a 70BD     	 pop {r4,r5,r6,pc}
+ 820              	.LVL78:
+ 821              	.L79:
+ 822              	.LCFI14:
+ 823              	 .cfi_restore_state
+ 378:../Radar_Control/src/radar_base.c ****     {
+ 824              	 .loc 1 378 0
+ 825 007c 044A     	 ldr r2,.L89
+ 826 007e 002C     	 cmp r4,#0
+ 827 0080 CFD1     	 bne .L82
+ 378:../Radar_Control/src/radar_base.c ****     {
+ 828              	 .loc 1 378 0 is_stmt 0 discriminator 1
+ 829 0082 1368     	 ldr r3,[r2]
+ 830 0084 002B     	 cmp r3,#0
+ 831 0086 CCD1     	 bne .L82
+ 380:../Radar_Control/src/radar_base.c ****     }
+ 832              	 .loc 1 380 0 is_stmt 1
+ 833 0088 0420     	 movs r0,#4
+ 834              	 .loc 1 404 0
+ 835 008a 04B0     	 add sp,sp,#16
+ 836              	.LCFI15:
+ 837              	 .cfi_def_cfa_offset 16
+ 838              	 
+ 839 008c 70BD     	 pop {r4,r5,r6,pc}
+ 840              	.LVL79:
+ 841              	.L90:
+ 842 008e 00BF     	 .align 2
+ 843              	.L89:
+ 844 0090 00000000 	 .word g_adc_sampling_completed
+ 845 0094 00007A44 	 .word 1148846080
+ 846              	 .cfi_endproc
+ 847              	.LFE481:
+ 849              	 .section .text.radar_set_automatic_frame_trigger,"ax",%progbits
+ 850              	 .align 2
+ 851              	 .global radar_set_automatic_frame_trigger
+ 852              	 .thumb
+ 853              	 .thumb_func
+ 855              	radar_set_automatic_frame_trigger:
+ 856              	.LFB482:
+ 405:../Radar_Control/src/radar_base.c **** 
+ 406:../Radar_Control/src/radar_base.c **** //============================================================================
+ 407:../Radar_Control/src/radar_base.c **** 
+ 408:../Radar_Control/src/radar_base.c **** uint16_t radar_set_automatic_frame_trigger(Radar_Handle_t device, uint32_t frame_interval_usec)
+ 409:../Radar_Control/src/radar_base.c **** {
+ 857              	 .loc 1 409 0
+ 858              	 .cfi_startproc
+ 859              	 
+ 860              	 
+ 861              	.LVL80:
+ 862 0000 70B5     	 push {r4,r5,r6,lr}
+ 863              	.LCFI16:
+ 864              	 .cfi_def_cfa_offset 16
+ 865              	 .cfi_offset 4,-16
+ 866              	 .cfi_offset 5,-12
+ 867              	 .cfi_offset 6,-8
+ 868              	 .cfi_offset 14,-4
+ 410:../Radar_Control/src/radar_base.c ****   /* Stop trigger timer first  */
+ 411:../Radar_Control/src/radar_base.c ****   /* ------------------------- */
+ 412:../Radar_Control/src/radar_base.c ****   bsp_timer_stop_clear(&TIMER_FRAME_TRIG);
+ 869              	 .loc 1 412 0
+ 870 0002 2748     	 ldr r0,.L103
+ 871              	.LVL81:
+ 409:../Radar_Control/src/radar_base.c ****   /* Stop trigger timer first  */
+ 872              	 .loc 1 409 0
+ 873 0004 0C46     	 mov r4,r1
+ 874              	 .loc 1 412 0
+ 875 0006 FFF7FEFF 	 bl bsp_timer_stop_clear
+ 876              	.LVL82:
+ 413:../Radar_Control/src/radar_base.c ****   
+ 414:../Radar_Control/src/radar_base.c ****   radar_set_data_acq_mode(RADAR_MANUAL_TRIGGER);
+ 877              	 .loc 1 414 0
+ 878 000a 0020     	 movs r0,#0
+ 879 000c FFF7FEFF 	 bl radar_set_data_acq_mode
+ 880              	.LVL83:
+ 415:../Radar_Control/src/radar_base.c ****   
+ 416:../Radar_Control/src/radar_base.c ****   /* Restart trigger timer */
+ 417:../Radar_Control/src/radar_base.c ****   /* --------------------- */
+ 418:../Radar_Control/src/radar_base.c ****   if (frame_interval_usec > 0)
+ 881              	 .loc 1 418 0
+ 882 0010 0CB9     	 cbnz r4,.L101
+ 419:../Radar_Control/src/radar_base.c ****   {
+ 420:../Radar_Control/src/radar_base.c ****     uint32_t min_frame_interval_usec;
+ 421:../Radar_Control/src/radar_base.c ****     
+ 422:../Radar_Control/src/radar_base.c ****     radar_get_min_frame_interval(device, &min_frame_interval_usec);
+ 423:../Radar_Control/src/radar_base.c ****     
+ 424:../Radar_Control/src/radar_base.c ****     if (frame_interval_usec < min_frame_interval_usec)
+ 425:../Radar_Control/src/radar_base.c ****     {
+ 426:../Radar_Control/src/radar_base.c ****       return (RADAR_ERR_UNSUPPORTED_FRAME_INTERVAL);
+ 427:../Radar_Control/src/radar_base.c ****     }
+ 428:../Radar_Control/src/radar_base.c ****     
+ 429:../Radar_Control/src/radar_base.c ****     /* Update time period of Automatic Trigger */
+ 430:../Radar_Control/src/radar_base.c ****     if (TIMER_SetTimeInterval(&TIMER_FRAME_TRIG, frame_interval_usec * 100U) != TIMER_STATUS_SUCCES
+ 431:../Radar_Control/src/radar_base.c ****     {
+ 432:../Radar_Control/src/radar_base.c ****       return (RADAR_ERR_UNSUPPORTED_FRAME_INTERVAL);
+ 433:../Radar_Control/src/radar_base.c ****     }
+ 434:../Radar_Control/src/radar_base.c ****     
+ 435:../Radar_Control/src/radar_base.c ****     ds_device_get_settings()->frame_period_usec = frame_interval_usec;
+ 436:../Radar_Control/src/radar_base.c ****     
+ 437:../Radar_Control/src/radar_base.c ****     /* Reset the current frame counter */
+ 438:../Radar_Control/src/radar_base.c ****     bsp_reset_frame_counter();
+ 439:../Radar_Control/src/radar_base.c ****     
+ 440:../Radar_Control/src/radar_base.c ****     g_adc_sampling_completed = false;
+ 441:../Radar_Control/src/radar_base.c ****     
+ 442:../Radar_Control/src/radar_base.c ****     radar_set_data_acq_mode(RADAR_AUTO_TRIGGER);
+ 443:../Radar_Control/src/radar_base.c ****     
+ 444:../Radar_Control/src/radar_base.c ****     bsp_timer_start(&TIMER_FRAME_TRIG);
+ 445:../Radar_Control/src/radar_base.c ****   }
+ 446:../Radar_Control/src/radar_base.c ****   
+ 447:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_OK);
+ 883              	 .loc 1 447 0
+ 884 0012 2046     	 mov r0,r4
+ 448:../Radar_Control/src/radar_base.c **** }
+ 885              	 .loc 1 448 0
+ 886 0014 70BD     	 pop {r4,r5,r6,pc}
+ 887              	.LVL84:
+ 888              	.L101:
+ 889              	.LBB5:
+ 890              	.LBB6:
+ 891              	.LBB7:
+ 237:../Radar_Control/src/radar_base.c ****   {
+ 892              	 .loc 1 237 0
+ 893 0016 FFF7FEFF 	 bl ds_device_get_settings
+ 894              	.LVL85:
+ 895 001a 90F82430 	 ldrb r3,[r0,#36]
+ 243:../Radar_Control/src/radar_base.c ****   }
+ 896              	 .loc 1 243 0
+ 897 001e 012B     	 cmp r3,#1
+ 898 0020 40F6B835 	 movw r5,#3000
+ 899 0024 18BF     	 it ne
+ 900 0026 4FF47A75 	 movne r5,#1000
+ 901              	.LVL86:
+ 259:../Radar_Control/src/radar_base.c ****   {
+ 902              	 .loc 1 259 0
+ 903 002a FFF7FEFF 	 bl ds_device_get_settings
+ 904              	.LVL87:
+ 905 002e 8369     	 ldr r3,[r0,#24]
+ 906 0030 012B     	 cmp r3,#1
+ 907 0032 12D0     	 beq .L102
+ 267:../Radar_Control/src/radar_base.c ****   }
+ 908              	 .loc 1 267 0
+ 909 0034 FFF7FEFF 	 bl ds_device_get_settings
+ 910              	.LVL88:
+ 911 0038 4669     	 ldr r6,[r0,#20]
+ 912 003a FFF7FEFF 	 bl ds_device_get_settings
+ 913              	.LVL89:
+ 914 003e 194B     	 ldr r3,.L103+4
+ 915 0040 C16A     	 ldr r1,[r0,#44]
+ 916 0042 194A     	 ldr r2,.L103+8
+ 917 0044 03FB01F3 	 mul r3,r3,r1
+ 918 0048 A2FB0323 	 umull r2,r3,r2,r3
+ 919 004c 9B0B     	 lsrs r3,r3,#14
+ 920 004e 06FB0353 	 mla r3,r6,r3,r5
+ 921              	.LVL90:
+ 922              	.L95:
+ 923              	.LBE7:
+ 924              	.LBE6:
+ 424:../Radar_Control/src/radar_base.c ****     {
+ 925              	 .loc 1 424 0
+ 926 0052 9C42     	 cmp r4,r3
+ 927 0054 0BD2     	 bcs .L96
+ 928              	.LVL91:
+ 929              	.L97:
+ 930              	.LBB9:
+ 931              	.LBB8:
+ 243:../Radar_Control/src/radar_base.c ****   }
+ 932              	 .loc 1 243 0
+ 933 0056 0520     	 movs r0,#5
+ 934 0058 70BD     	 pop {r4,r5,r6,pc}
+ 935              	.LVL92:
+ 936              	.L102:
+ 261:../Radar_Control/src/radar_base.c ****   }
+ 937              	 .loc 1 261 0
+ 938 005a FFF7FEFF 	 bl ds_device_get_settings
+ 939              	.LVL93:
+ 940 005e 4669     	 ldr r6,[r0,#20]
+ 941 0060 FFF7FEFF 	 bl ds_device_get_settings
+ 942              	.LVL94:
+ 943 0064 0368     	 ldr r3,[r0]
+ 944 0066 C833     	 adds r3,r3,#200
+ 945 0068 06FB0353 	 mla r3,r6,r3,r5
+ 946              	.LVL95:
+ 947 006c F1E7     	 b .L95
+ 948              	.L96:
+ 949              	.LBE8:
+ 950              	.LBE9:
+ 430:../Radar_Control/src/radar_base.c ****     {
+ 951              	 .loc 1 430 0
+ 952 006e 6421     	 movs r1,#100
+ 953 0070 01FB04F1 	 mul r1,r1,r4
+ 954 0074 0A48     	 ldr r0,.L103
+ 955 0076 FFF7FEFF 	 bl TIMER_SetTimeInterval
+ 956              	.LVL96:
+ 957 007a 0546     	 mov r5,r0
+ 958              	.LVL97:
+ 959 007c 0028     	 cmp r0,#0
+ 960 007e EAD1     	 bne .L97
+ 435:../Radar_Control/src/radar_base.c ****     
+ 961              	 .loc 1 435 0
+ 962 0080 FFF7FEFF 	 bl ds_device_get_settings
+ 963              	.LVL98:
+ 964 0084 8462     	 str r4,[r0,#40]
+ 438:../Radar_Control/src/radar_base.c ****     
+ 965              	 .loc 1 438 0
+ 966 0086 FFF7FEFF 	 bl bsp_reset_frame_counter
+ 967              	.LVL99:
+ 440:../Radar_Control/src/radar_base.c ****     
+ 968              	 .loc 1 440 0
+ 969 008a 084B     	 ldr r3,.L103+12
+ 442:../Radar_Control/src/radar_base.c ****     
+ 970              	 .loc 1 442 0
+ 971 008c 0120     	 movs r0,#1
+ 440:../Radar_Control/src/radar_base.c ****     
+ 972              	 .loc 1 440 0
+ 973 008e 1D60     	 str r5,[r3]
+ 442:../Radar_Control/src/radar_base.c ****     
+ 974              	 .loc 1 442 0
+ 975 0090 FFF7FEFF 	 bl radar_set_data_acq_mode
+ 976              	.LVL100:
+ 444:../Radar_Control/src/radar_base.c ****   }
+ 977              	 .loc 1 444 0
+ 978 0094 0248     	 ldr r0,.L103
+ 979 0096 FFF7FEFF 	 bl bsp_timer_start
+ 980              	.LVL101:
+ 981              	.LBE5:
+ 447:../Radar_Control/src/radar_base.c **** }
+ 982              	 .loc 1 447 0
+ 983 009a 2846     	 mov r0,r5
+ 984              	.LBB10:
+ 985 009c 70BD     	 pop {r4,r5,r6,pc}
+ 986              	.LVL102:
+ 987              	.L104:
+ 988 009e 00BF     	 .align 2
+ 989              	.L103:
+ 990 00a0 00000000 	 .word TIMER_FRAME_TRIG
+ 991 00a4 40420F00 	 .word 1000000
+ 992 00a8 5917B7D1 	 .word -776530087
+ 993 00ac 00000000 	 .word g_adc_sampling_completed
+ 994              	.LBE10:
+ 995              	 .cfi_endproc
+ 996              	.LFE482:
+ 998              	 .section .text.radar_test_antennas,"ax",%progbits
+ 999              	 .align 2
+ 1000              	 .global radar_test_antennas
+ 1001              	 .thumb
+ 1002              	 .thumb_func
+ 1004              	radar_test_antennas:
+ 1005              	.LFB483:
+ 449:../Radar_Control/src/radar_base.c **** 
+ 450:../Radar_Control/src/radar_base.c **** //============================================================================
+ 451:../Radar_Control/src/radar_base.c **** 
+ 452:../Radar_Control/src/radar_base.c **** uint16_t radar_test_antennas(Radar_Handle_t device, uint8_t tx_antenna_mask, uint8_t rx_antenna_mas
+ 453:../Radar_Control/src/radar_base.c **** {
+ 1006              	 .loc 1 453 0
+ 1007              	 .cfi_startproc
+ 1008              	 
+ 1009              	 
+ 1010              	 
+ 1011              	.LVL103:
+ 454:../Radar_Control/src/radar_base.c ****   /* Suppress compiler warnings of unused variables */
+ 455:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(device);
+ 456:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(tx_antenna_mask);
+ 457:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(rx_antenna_mask);
+ 458:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(frequency_kHz);
+ 459:../Radar_Control/src/radar_base.c ****   XMC_UNUSED_ARG(tx_power);
+ 460:../Radar_Control/src/radar_base.c ****   
+ 461:../Radar_Control/src/radar_base.c ****   return (RADAR_ERR_FEATURE_UNAVAILABLE);
+ 462:../Radar_Control/src/radar_base.c **** }
+ 1012              	 .loc 1 462 0
+ 1013 0000 4FF40040 	 mov r0,#32768
+ 1014              	.LVL104:
+ 1015 0004 7047     	 bx lr
+ 1016              	 .cfi_endproc
+ 1017              	.LFE483:
+ 1019 0006 00BF     	 .section .text.radar_get_fft_configuration,"ax",%progbits
+ 1020              	 .align 2
+ 1021              	 .global radar_get_fft_configuration
+ 1022              	 .thumb
+ 1023              	 .thumb_func
+ 1025              	radar_get_fft_configuration:
+ 1026              	.LFB484:
+ 463:../Radar_Control/src/radar_base.c **** 
+ 464:../Radar_Control/src/radar_base.c **** //============================================================================
+ 465:../Radar_Control/src/radar_base.c **** 
+ 466:../Radar_Control/src/radar_base.c **** void radar_get_fft_configuration(Radar_Handle_t device, FFT_configuration_t *p_fft_config)
+ 467:../Radar_Control/src/radar_base.c **** {
+ 1027              	 .loc 1 467 0
+ 1028              	 .cfi_startproc
+ 1029              	 
+ 1030              	 
+ 1031              	 
+ 1032              	.LVL105:
+ 468:../Radar_Control/src/radar_base.c **** 	XMC_UNUSED_ARG(device);
+ 469:../Radar_Control/src/radar_base.c **** 
+ 470:../Radar_Control/src/radar_base.c **** 	ds_ep_fetch_fft_config(p_fft_config);
+ 1033              	 .loc 1 470 0
+ 1034 0000 0846     	 mov r0,r1
+ 1035              	.LVL106:
+ 1036 0002 FFF7FEBF 	 b ds_ep_fetch_fft_config
+ 1037              	.LVL107:
+ 1038              	 .cfi_endproc
+ 1039              	.LFE484:
+ 1041              	 .comm data_fifo,32768,4
+ 1042              	 .global frame_size
+ 1043 0006 00BF     	 .section .rodata.driver_version_s,"a",%progbits
+ 1044              	 .align 2
+ 1045              	 .set .LANCHOR0,.+0
+ 1048              	driver_version_s:
+ 1049 0000 01       	 .byte 1
+ 1050 0001 00       	 .byte 0
+ 1051 0002 03       	 .byte 3
+ 1052 0003 00       	 .section .bss.frame_size,"aw",%nobits
+ 1053              	 .align 2
+ 1054              	 .set .LANCHOR1,.+0
+ 1057              	frame_size:
+ 1058 0000 00000000 	 .space 4
+ 1059              	 .text
+ 1060              	.Letext0:
+ 1061              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1062              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1063              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\lib\\gcc\\arm-none-eabi\\4.9.3\\include\\stddef.h"
+ 1064              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/acq_buffer.h"
+ 1065              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 1066              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 1067              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 1068              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc4_scu.h"
+ 1069              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 1070              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/arm_math.h"
+ 1071              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_ccu8.h"
+ 1072              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/GLOBAL_CCU8/global_ccu8.h"
+ 1073              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_ccu4.h"
+ 1074              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/GLOBAL_CCU4/global_ccu4.h"
+ 1075              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/TIMER/timer.h"
+ 1076              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 1077              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 1078              	 .file 19 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 1079              	 .file 20 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_api.h"
+ 1080              	 .file 21 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 1081              	 .file 22 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 1082              	 .file 23 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 1083              	 .file 24 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/TIMER/timer_extern.h"
+ 1084              	 .file 25 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 1085              	 .file 26 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/inc/position2go_bsp.h"
+ 1086              	 .file 27 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/ds_radar_interface.h"
+ 1087              	 .file 28 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Position2Go/inc/position2go_bgt.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 radar_base.c
+    {standard input}:20     .text.radar_get_driver_version:00000000 $t
+    {standard input}:25     .text.radar_get_driver_version:00000000 radar_get_driver_version
+    {standard input}:39     .text.radar_get_driver_version:00000004 $d
+    {standard input}:44     .text.radar_get_number_of_available_devices:00000000 $t
+    {standard input}:49     .text.radar_get_number_of_available_devices:00000000 radar_get_number_of_available_devices
+    {standard input}:63     .text.radar_open_device:00000000 $t
+    {standard input}:68     .text.radar_open_device:00000000 radar_open_device
+    {standard input}:236    .text.radar_open_device:000000e4 $d
+                            *COM*:00008000 data_fifo
+    {standard input}:243    .text.radar_close_device:00000000 $t
+    {standard input}:248    .text.radar_close_device:00000000 radar_close_device
+    {standard input}:263    .text.radar_get_device_info:00000000 $t
+    {standard input}:268    .text.radar_get_device_info:00000000 radar_get_device_info
+    {standard input}:300    .text.radar_get_temperature:00000000 $t
+    {standard input}:305    .text.radar_get_temperature:00000000 radar_get_temperature
+    {standard input}:347    .text.radar_get_temperature:00000028 $d
+    {standard input}:352    .text.radar_get_tx_power:00000000 $t
+    {standard input}:357    .text.radar_get_tx_power:00000000 radar_get_tx_power
+    {standard input}:399    .text.radar_get_tx_power:00000028 $d
+    {standard input}:404    .text.radar_get_chirp_duration:00000000 $t
+    {standard input}:409    .text.radar_get_chirp_duration:00000000 radar_get_chirp_duration
+    {standard input}:437    .text.radar_get_min_frame_interval:00000000 $t
+    {standard input}:442    .text.radar_get_min_frame_interval:00000000 radar_get_min_frame_interval
+    {standard input}:513    .text.radar_get_min_frame_interval:00000060 $d
+    {standard input}:519    .text.radar_set_frame_format:00000000 $t
+    {standard input}:524    .text.radar_set_frame_format:00000000 radar_set_frame_format
+    {standard input}:670    .text.radar_set_frame_format:000000c0 $d
+    {standard input}:677    .text.radar_get_frame_format:00000000 $t
+    {standard input}:682    .text.radar_get_frame_format:00000000 radar_get_frame_format
+    {standard input}:706    .text.radar_get_frame:00000000 $t
+    {standard input}:711    .text.radar_get_frame:00000000 radar_get_frame
+    {standard input}:844    .text.radar_get_frame:00000090 $d
+    {standard input}:850    .text.radar_set_automatic_frame_trigger:00000000 $t
+    {standard input}:855    .text.radar_set_automatic_frame_trigger:00000000 radar_set_automatic_frame_trigger
+    {standard input}:990    .text.radar_set_automatic_frame_trigger:000000a0 $d
+    {standard input}:999    .text.radar_test_antennas:00000000 $t
+    {standard input}:1004   .text.radar_test_antennas:00000000 radar_test_antennas
+    {standard input}:1020   .text.radar_get_fft_configuration:00000000 $t
+    {standard input}:1025   .text.radar_get_fft_configuration:00000000 radar_get_fft_configuration
+    {standard input}:1057   .bss.frame_size:00000000 frame_size
+    {standard input}:1044   .rodata.driver_version_s:00000000 $d
+    {standard input}:1048   .rodata.driver_version_s:00000000 driver_version_s
+    {standard input}:1053   .bss.frame_size:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+bsp_get_number_of_available_radar_devices
+ds_init
+radar_read_calibration
+ds_ep_fetch_frame_format
+radar_set_data_acq_mode
+ds_ep_get_device_info
+create_acq_data_buffer_obj
+ds_set_active_acq_buf
+ds_device_get_settings
+bsp_set_num_samples_per_dma_transfer
+bsp_set_num_chirps_per_frame
+radar_init
+g_adc_sampling_completed
+bgt_stop_tx
+bsp_bgt_get_temp_value
+bsp_bgt_get_txpower_value
+radar_get_data_acq_mode
+radar_set_sampling_freq
+ds_ep_store_frame_format
+ds_get_active_acq_buf
+bsp_trigger_new_frame
+bsp_get_frame_counter
+bsp_timer_stop_clear
+TIMER_SetTimeInterval
+bsp_reset_frame_counter
+bsp_timer_start
+TIMER_FRAME_TRIG
+ds_ep_fetch_fft_config

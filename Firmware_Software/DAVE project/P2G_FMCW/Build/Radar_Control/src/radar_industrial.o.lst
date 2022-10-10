@@ -1,0 +1,274 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "radar_industrial.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.radar_set_duty_cycle,"ax",%progbits
+  20              	 .align 2
+  21              	 .global radar_set_duty_cycle
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	radar_set_duty_cycle:
+  26              	.LFB470:
+  27              	 .file 1 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src/radar_industrial.c"
+   1:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** /**
+   2:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****     @file: radar_industrial.c
+   3:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+   4:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****     @brief: This file contains the driver API for Industrial operation of
+   5:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****             Infineon radar sensors.
+   6:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** */
+   7:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+   8:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** /* ===========================================================================
+   9:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ** All rights reserved.
+  11:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ** ===========================================================================
+  12:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** **
+  13:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ** ===========================================================================
+  14:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ** Passing on and copying of this document, and communication of its contents
+  16:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ** is not permitted without Infineon's prior written authorization.
+  17:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ** ===========================================================================
+  18:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** */
+  19:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  20:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** /*
+  21:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ==============================================================================
+  22:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****    1. INCLUDE FILES
+  23:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ==============================================================================
+  24:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****  */
+  25:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  26:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** #include "radar_api.h"
+  27:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** #include "ds_radar_interface.h"
+  28:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  29:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** /*
+  30:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ==============================================================================
+  31:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****    2. EXPORTED FUNCTIONS
+  32:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** ==============================================================================
+  33:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****  */
+  34:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  35:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** uint16_t radar_set_duty_cycle(Radar_Handle_t device, const uint8_t flag)
+  36:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** {
+  28              	 .loc 1 36 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 10B5     	 push {r4,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 8
+  36              	 .cfi_offset 4,-8
+  37              	 .cfi_offset 14,-4
+  38              	 .loc 1 36 0
+  39 0002 0C46     	 mov r4,r1
+  37:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  38:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   
+  39:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   if (flag != ds_device_get_settings()->power_duty_cycle_enable_flag)
+  40              	 .loc 1 39 0
+  41 0004 FFF7FEFF 	 bl ds_device_get_settings
+  42              	.LVL1:
+  43 0008 90F82430 	 ldrb r3,[r0,#36]
+  44 000c A342     	 cmp r3,r4
+  45 000e 07D0     	 beq .L2
+  40:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   {
+  41:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****     ds_device_get_settings()->is_duty_cycle_enable_updated = 1;
+  46              	 .loc 1 41 0
+  47 0010 FFF7FEFF 	 bl ds_device_get_settings
+  48              	.LVL2:
+  49 0014 0123     	 movs r3,#1
+  50 0016 8363     	 str r3,[r0,#56]
+  42:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****     ds_device_get_settings()->power_duty_cycle_enable_flag = flag;
+  51              	 .loc 1 42 0
+  52 0018 FFF7FEFF 	 bl ds_device_get_settings
+  53              	.LVL3:
+  54 001c 80F82440 	 strb r4,[r0,#36]
+  55              	.L2:
+  43:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   }
+  44:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   
+  45:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   return (RADAR_ERR_OK);
+  46:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** }
+  56              	 .loc 1 46 0
+  57 0020 0020     	 movs r0,#0
+  58 0022 10BD     	 pop {r4,pc}
+  59              	 .cfi_endproc
+  60              	.LFE470:
+  62              	 .section .text.radar_get_duty_cycle,"ax",%progbits
+  63              	 .align 2
+  64              	 .global radar_get_duty_cycle
+  65              	 .thumb
+  66              	 .thumb_func
+  68              	radar_get_duty_cycle:
+  69              	.LFB471:
+  47:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  48:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** //============================================================================
+  49:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  50:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** void radar_get_duty_cycle(Radar_Handle_t device, uint8_t* flag)
+  51:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** {
+  70              	 .loc 1 51 0
+  71              	 .cfi_startproc
+  72              	 
+  73              	 
+  74              	.LVL4:
+  75 0000 10B5     	 push {r4,lr}
+  76              	.LCFI1:
+  77              	 .cfi_def_cfa_offset 8
+  78              	 .cfi_offset 4,-8
+  79              	 .cfi_offset 14,-4
+  80              	 .loc 1 51 0
+  81 0002 0C46     	 mov r4,r1
+  52:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  53:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   
+  54:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   *flag = ds_device_get_settings()->power_duty_cycle_enable_flag;
+  82              	 .loc 1 54 0
+  83 0004 FFF7FEFF 	 bl ds_device_get_settings
+  84              	.LVL5:
+  85 0008 90F82430 	 ldrb r3,[r0,#36]
+  86 000c 2370     	 strb r3,[r4]
+  87 000e 10BD     	 pop {r4,pc}
+  88              	 .cfi_endproc
+  89              	.LFE471:
+  91              	 .section .text.radar_disable_lna_gain,"ax",%progbits
+  92              	 .align 2
+  93              	 .global radar_disable_lna_gain
+  94              	 .thumb
+  95              	 .thumb_func
+  97              	radar_disable_lna_gain:
+  98              	.LFB472:
+  55:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** }
+  56:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  57:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** //============================================================================
+  58:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  59:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** void radar_disable_lna_gain(Radar_Handle_t device)
+  60:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** {
+  99              	 .loc 1 60 0
+ 100              	 .cfi_startproc
+ 101              	 
+ 102              	 
+ 103              	.LVL6:
+ 104 0000 08B5     	 push {r3,lr}
+ 105              	.LCFI2:
+ 106              	 .cfi_def_cfa_offset 8
+ 107              	 .cfi_offset 3,-8
+ 108              	 .cfi_offset 14,-4
+  61:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  62:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   
+  63:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   ds_device_get_settings()->bgt_rx_lna_gain_enable_flag = false;
+ 109              	 .loc 1 63 0
+ 110 0002 FFF7FEFF 	 bl ds_device_get_settings
+ 111              	.LVL7:
+ 112 0006 0023     	 movs r3,#0
+ 113 0008 80F82630 	 strb r3,[r0,#38]
+ 114 000c 08BD     	 pop {r3,pc}
+ 115              	 .cfi_endproc
+ 116              	.LFE472:
+ 118 000e 00BF     	 .section .text.radar_enable_lna_gain,"ax",%progbits
+ 119              	 .align 2
+ 120              	 .global radar_enable_lna_gain
+ 121              	 .thumb
+ 122              	 .thumb_func
+ 124              	radar_enable_lna_gain:
+ 125              	.LFB473:
+  64:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** }
+  65:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  66:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** //============================================================================
+  67:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  68:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** void radar_enable_lna_gain(Radar_Handle_t device)
+  69:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** {
+ 126              	 .loc 1 69 0
+ 127              	 .cfi_startproc
+ 128              	 
+ 129              	 
+ 130              	.LVL8:
+ 131 0000 08B5     	 push {r3,lr}
+ 132              	.LCFI3:
+ 133              	 .cfi_def_cfa_offset 8
+ 134              	 .cfi_offset 3,-8
+ 135              	 .cfi_offset 14,-4
+  70:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  71:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   
+  72:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   ds_device_get_settings()->bgt_rx_lna_gain_enable_flag = true;
+ 136              	 .loc 1 72 0
+ 137 0002 FFF7FEFF 	 bl ds_device_get_settings
+ 138              	.LVL9:
+ 139 0006 0123     	 movs r3,#1
+ 140 0008 80F82630 	 strb r3,[r0,#38]
+ 141 000c 08BD     	 pop {r3,pc}
+ 142              	 .cfi_endproc
+ 143              	.LFE473:
+ 145 000e 00BF     	 .section .text.radar_get_lna_gain_enable_status,"ax",%progbits
+ 146              	 .align 2
+ 147              	 .global radar_get_lna_gain_enable_status
+ 148              	 .thumb
+ 149              	 .thumb_func
+ 151              	radar_get_lna_gain_enable_status:
+ 152              	.LFB474:
+  73:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** }
+  74:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  75:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** //============================================================================
+  76:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** 
+  77:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** uint8_t radar_get_lna_gain_enable_status(Radar_Handle_t device)
+  78:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** {
+ 153              	 .loc 1 78 0
+ 154              	 .cfi_startproc
+ 155              	 
+ 156              	 
+ 157              	.LVL10:
+ 158 0000 08B5     	 push {r3,lr}
+ 159              	.LCFI4:
+ 160              	 .cfi_def_cfa_offset 8
+ 161              	 .cfi_offset 3,-8
+ 162              	 .cfi_offset 14,-4
+  79:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   XMC_UNUSED_ARG(device); /* Suppress compiler warnings of unused variable */
+  80:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   
+  81:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c ****   return (ds_device_get_settings()->bgt_rx_lna_gain_enable_flag);
+ 163              	 .loc 1 81 0
+ 164 0002 FFF7FEFF 	 bl ds_device_get_settings
+ 165              	.LVL11:
+  82:E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/src\radar_industrial.c **** }
+ 166              	 .loc 1 82 0
+ 167 0006 90F82600 	 ldrb r0,[r0,#38]
+ 168 000a 08BD     	 pop {r3,pc}
+ 169              	 .cfi_endproc
+ 170              	.LFE474:
+ 172              	 .text
+ 173              	.Letext0:
+ 174              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 175              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 176              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 177              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_control.h"
+ 178              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 179              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 180              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 181              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 182              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 183              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 184              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 185              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 186              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 radar_industrial.c
+    {standard input}:20     .text.radar_set_duty_cycle:00000000 $t
+    {standard input}:25     .text.radar_set_duty_cycle:00000000 radar_set_duty_cycle
+    {standard input}:63     .text.radar_get_duty_cycle:00000000 $t
+    {standard input}:68     .text.radar_get_duty_cycle:00000000 radar_get_duty_cycle
+    {standard input}:92     .text.radar_disable_lna_gain:00000000 $t
+    {standard input}:97     .text.radar_disable_lna_gain:00000000 radar_disable_lna_gain
+    {standard input}:119    .text.radar_enable_lna_gain:00000000 $t
+    {standard input}:124    .text.radar_enable_lna_gain:00000000 radar_enable_lna_gain
+    {standard input}:146    .text.radar_get_lna_gain_enable_status:00000000 $t
+    {standard input}:151    .text.radar_get_lna_gain_enable_status:00000000 radar_get_lna_gain_enable_status
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+ds_device_get_settings

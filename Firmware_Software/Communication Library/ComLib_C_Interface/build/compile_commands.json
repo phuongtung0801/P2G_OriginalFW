@@ -1,0 +1,67 @@
+[
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/extract_raw_data.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/extract_raw_data.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/extract_raw_data.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/COMPort_Unix.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/COMPort_Unix.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/COMPort_Unix.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/COMPort_Windows.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/COMPort_Windows.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/COMPort_Windows.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointCalibration.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointCalibration.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointCalibration.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointRadarAdcxmc.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarAdcxmc.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarAdcxmc.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointRadarBase.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarBase.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarBase.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointRadarDoppler.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarDoppler.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarDoppler.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointRadarErrorCodes.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarErrorCodes.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarErrorCodes.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointRadarFmcw.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarFmcw.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarFmcw.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointRadarIndustrial.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarIndustrial.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarIndustrial.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointRadarP2G.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarP2G.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointRadarP2G.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/EndpointTargetDetection.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointTargetDetection.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/EndpointTargetDetection.c"
+},
+{
+  "directory": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/build",
+  "command": "C:/MinGW/bin/gcc.exe  @CMakeFiles/Host.dir/includes_C.rsp -g -o CMakeFiles/Host.dir/src/Protocol.c.obj -c \"E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/Protocol.c\"",
+  "file": "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/Communication Library/ComLib_C_Interface/src/Protocol.c"
+}
+]

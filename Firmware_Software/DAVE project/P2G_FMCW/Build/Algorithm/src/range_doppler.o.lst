@@ -1,0 +1,2485 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "range_doppler.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .global __aeabi_f2d
+  20              	 .global __aeabi_dadd
+  21              	 .global __aeabi_d2uiz
+  22              	 .global __aeabi_dmul
+  23              	 .global __aeabi_d2f
+  24              	 .section .text.range_doppler_do,"ax",%progbits
+  25              	 .align 2
+  26              	 .global range_doppler_do
+  27              	 .thumb
+  28              	 .thumb_func
+  30              	range_doppler_do:
+  31              	.LFB470:
+  32              	 .file 1 "../Algorithm/src/range_doppler.c"
+   1:../Algorithm/src/range_doppler.c **** /**
+   2:../Algorithm/src/range_doppler.c ****     @file: range_doppler.c
+   3:../Algorithm/src/range_doppler.c **** 
+   4:../Algorithm/src/range_doppler.c ****     @brief: This file contains RangeDoppler algorithm with Monopulse 
+   5:../Algorithm/src/range_doppler.c ****             angle calculation.
+   6:../Algorithm/src/range_doppler.c **** */
+   7:../Algorithm/src/range_doppler.c **** 
+   8:../Algorithm/src/range_doppler.c **** /* ===========================================================================
+   9:../Algorithm/src/range_doppler.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../Algorithm/src/range_doppler.c **** ** All rights reserved.
+  11:../Algorithm/src/range_doppler.c **** ** ===========================================================================
+  12:../Algorithm/src/range_doppler.c **** **
+  13:../Algorithm/src/range_doppler.c **** ** ===========================================================================
+  14:../Algorithm/src/range_doppler.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../Algorithm/src/range_doppler.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../Algorithm/src/range_doppler.c **** ** is not permitted without Infineon's prior written authorization.
+  17:../Algorithm/src/range_doppler.c **** ** ===========================================================================
+  18:../Algorithm/src/range_doppler.c **** */
+  19:../Algorithm/src/range_doppler.c **** 
+  20:../Algorithm/src/range_doppler.c **** /*
+  21:../Algorithm/src/range_doppler.c **** ==============================================================================
+  22:../Algorithm/src/range_doppler.c ****    1. INCLUDE FILES
+  23:../Algorithm/src/range_doppler.c **** ==============================================================================
+  24:../Algorithm/src/range_doppler.c ****  */
+  25:../Algorithm/src/range_doppler.c **** 
+  26:../Algorithm/src/range_doppler.c **** #include "acq_buffer.h"
+  27:../Algorithm/src/range_doppler.c **** #include "range_doppler.h"
+  28:../Algorithm/src/range_doppler.c **** #include "tracking.h"
+  29:../Algorithm/src/range_doppler.c **** #include "dsp_lib.h"
+  30:../Algorithm/src/range_doppler.c **** #include "datastore.h"
+  31:../Algorithm/src/range_doppler.c **** #include "radar_calibration.h"
+  32:../Algorithm/src/range_doppler.c **** 
+  33:../Algorithm/src/range_doppler.c **** /*
+  34:../Algorithm/src/range_doppler.c **** ==============================================================================
+  35:../Algorithm/src/range_doppler.c ****    2. DEFINITIONS
+  36:../Algorithm/src/range_doppler.c **** ==============================================================================
+  37:../Algorithm/src/range_doppler.c ****  */
+  38:../Algorithm/src/range_doppler.c **** 
+  39:../Algorithm/src/range_doppler.c **** #define  COHERENT_INTEG_LEN             (NUM_OF_CHIRPS) /**< Half of Chirps to be averaged in Fast 
+  40:../Algorithm/src/range_doppler.c **** 
+  41:../Algorithm/src/range_doppler.c **** #define  HEADER_LEN                     (4U) /**< Number of parameters per target computed */
+  42:../Algorithm/src/range_doppler.c **** 
+  43:../Algorithm/src/range_doppler.c **** #define  RANGE_FFT_SIGNAL_ARRAY_LEN     (2 * RANGE_FFT_SIZE * NUM_OF_CHIRPS)
+  44:../Algorithm/src/range_doppler.c **** 
+  45:../Algorithm/src/range_doppler.c **** #define  DOPPLER_FFT_SIGNAL_ARRAY_LEN   (2 * DOPPLER_FFT_SIZE)
+  46:../Algorithm/src/range_doppler.c **** 
+  47:../Algorithm/src/range_doppler.c **** #define  RANGE_FFT_SPECT_ARRAY_LEN      (RANGE_FFT_SIZE / 2)
+  48:../Algorithm/src/range_doppler.c **** 
+  49:../Algorithm/src/range_doppler.c **** #define  DOPPLER_FFT_SPECT_ARRAY_LEN    (DOPPLER_FFT_SIZE)
+  50:../Algorithm/src/range_doppler.c **** 
+  51:../Algorithm/src/range_doppler.c **** #define  Hz_2_MPS                       (0.0124f * 0.5f) /**< wave_len_meters / 2 */
+  52:../Algorithm/src/range_doppler.c **** 
+  53:../Algorithm/src/range_doppler.c **** /*
+  54:../Algorithm/src/range_doppler.c **** ==============================================================================
+  55:../Algorithm/src/range_doppler.c ****    3. DATA
+  56:../Algorithm/src/range_doppler.c **** ==============================================================================
+  57:../Algorithm/src/range_doppler.c ****  */
+  58:../Algorithm/src/range_doppler.c **** 
+  59:../Algorithm/src/range_doppler.c **** static float   fft_input_i1[BSP_MAX_NUM_SAMPLES_PER_CHIRP];
+  60:../Algorithm/src/range_doppler.c **** static float   fft_input_q1[BSP_MAX_NUM_SAMPLES_PER_CHIRP];
+  61:../Algorithm/src/range_doppler.c **** 
+  62:../Algorithm/src/range_doppler.c **** static float   fft_input_i2[BSP_MAX_NUM_SAMPLES_PER_CHIRP];
+  63:../Algorithm/src/range_doppler.c **** static float   fft_input_q2[BSP_MAX_NUM_SAMPLES_PER_CHIRP];
+  64:../Algorithm/src/range_doppler.c **** 
+  65:../Algorithm/src/range_doppler.c **** static float  range_fft_signal_rx1[RANGE_FFT_SIGNAL_ARRAY_LEN]; /** Complex array with IQ interleav
+  66:../Algorithm/src/range_doppler.c **** static float  range_fft_signal_rx2[RANGE_FFT_SIGNAL_ARRAY_LEN];
+  67:../Algorithm/src/range_doppler.c **** 
+  68:../Algorithm/src/range_doppler.c **** static float  range_fft_spectrum[RANGE_FFT_SIZE/2]; /**	For Range FFT Magnitude Spectrum for target
+  69:../Algorithm/src/range_doppler.c **** 
+  70:../Algorithm/src/range_doppler.c **** static float  range_fft_spectrum_temp[RANGE_FFT_SIZE/2]; /** For MTI filtering */
+  71:../Algorithm/src/range_doppler.c **** static float  range_fft_spectrum_hist[RANGE_FFT_SIZE/2];
+  72:../Algorithm/src/range_doppler.c **** 
+  73:../Algorithm/src/range_doppler.c **** static float  doppler_fft_signal_rx1[DOPPLER_FFT_SIGNAL_ARRAY_LEN];
+  74:../Algorithm/src/range_doppler.c **** static float  doppler_fft_signal_rx2[DOPPLER_FFT_SIGNAL_ARRAY_LEN];
+  75:../Algorithm/src/range_doppler.c **** 
+  76:../Algorithm/src/range_doppler.c **** static float  doppler_fft_spectrum[DOPPLER_FFT_SPECT_ARRAY_LEN];
+  77:../Algorithm/src/range_doppler.c **** 
+  78:../Algorithm/src/range_doppler.c **** static tracking_list_t s_tracking_list = { .max_num_of_tracks = CURRENT_NUM_OF_TRACKS, .num_of_trac
+  79:../Algorithm/src/range_doppler.c **** 
+  80:../Algorithm/src/range_doppler.c **** static float  if_scale = (16 * 3.3f / 4095.0f);
+  81:../Algorithm/src/range_doppler.c **** 
+  82:../Algorithm/src/range_doppler.c **** static float  alpha_mti, beta_mti;
+  83:../Algorithm/src/range_doppler.c **** 
+  84:../Algorithm/src/range_doppler.c **** static uint32_t	samples_per_channel = 0;
+  85:../Algorithm/src/range_doppler.c **** 
+  86:../Algorithm/src/range_doppler.c **** #if (FFT_INPUT_TYPE == 0)
+  87:../Algorithm/src/range_doppler.c **** static FFT_Input_t	fft_type = FFT_INPUT_REAL_I;
+  88:../Algorithm/src/range_doppler.c **** #elif (FFT_INPUT_TYPE == 1)
+  89:../Algorithm/src/range_doppler.c **** static FFT_Input_t	fft_type = FFT_INPUT_REAL_Q;
+  90:../Algorithm/src/range_doppler.c **** #else
+  91:../Algorithm/src/range_doppler.c **** static FFT_Input_t	fft_type = FFT_INPUT_COMPLEX;
+  92:../Algorithm/src/range_doppler.c **** #endif
+  93:../Algorithm/src/range_doppler.c **** 
+  94:../Algorithm/src/range_doppler.c **** static Measurement_elem_t target_measurements[CURRENT_NUM_OF_TRACKS];
+  95:../Algorithm/src/range_doppler.c **** 
+  96:../Algorithm/src/range_doppler.c **** static float  distance_per_bin = 0; // distance/bin (meters) = c /(2B * Nfft/Ns);
+  97:../Algorithm/src/range_doppler.c **** 
+  98:../Algorithm/src/range_doppler.c **** /*
+  99:../Algorithm/src/range_doppler.c **** ==============================================================================
+ 100:../Algorithm/src/range_doppler.c ****    3. LOCAL FUNCTION PROTOTYPES
+ 101:../Algorithm/src/range_doppler.c **** ==============================================================================
+ 102:../Algorithm/src/range_doppler.c ****  */
+ 103:../Algorithm/src/range_doppler.c **** 
+ 104:../Algorithm/src/range_doppler.c **** static void range_doppler_init(const algo_settings_t *cp_algo_settings);
+ 105:../Algorithm/src/range_doppler.c **** 
+ 106:../Algorithm/src/range_doppler.c **** static uint8_t target_detection(const algo_settings_t *p_algo_settings, float* fft_spectrum, target
+ 107:../Algorithm/src/range_doppler.c **** 
+ 108:../Algorithm/src/range_doppler.c **** static void target_sorting(algo_result_t *algo_result);
+ 109:../Algorithm/src/range_doppler.c **** 
+ 110:../Algorithm/src/range_doppler.c **** static void update_tracking_list(tracking_list_t* p_tracking_list, Measurement_elem_t* measurement_
+ 111:../Algorithm/src/range_doppler.c **** 
+ 112:../Algorithm/src/range_doppler.c **** static void update_target_list_from_tracks(algo_target_list_t *p_targets, tracking_list_t *p_tracks
+ 113:../Algorithm/src/range_doppler.c **** 
+ 114:../Algorithm/src/range_doppler.c **** /*
+ 115:../Algorithm/src/range_doppler.c **** ==============================================================================
+ 116:../Algorithm/src/range_doppler.c ****     4. EXPORTED FUNCTIONS
+ 117:../Algorithm/src/range_doppler.c **** ==============================================================================
+ 118:../Algorithm/src/range_doppler.c ****  */
+ 119:../Algorithm/src/range_doppler.c **** 
+ 120:../Algorithm/src/range_doppler.c **** void range_doppler_do(acq_buf_obj *p_acq_buf, const algo_settings_t *cp_algo_settings, const device
+ 121:../Algorithm/src/range_doppler.c **** {
+  33              	 .loc 1 121 0
+  34              	 .cfi_startproc
+  35              	 
+  36              	 
+  37              	.LVL0:
+  38 0000 2DE9F04F 	 push {r4,r5,r6,r7,r8,r9,r10,fp,lr}
+  39              	.LCFI0:
+  40              	 .cfi_def_cfa_offset 36
+  41              	 .cfi_offset 4,-36
+  42              	 .cfi_offset 5,-32
+  43              	 .cfi_offset 6,-28
+  44              	 .cfi_offset 7,-24
+  45              	 .cfi_offset 8,-20
+  46              	 .cfi_offset 9,-16
+  47              	 .cfi_offset 10,-12
+  48              	 .cfi_offset 11,-8
+  49              	 .cfi_offset 14,-4
+  50 0004 2DED088B 	 fstmfdd sp!,{d8,d9,d10,d11}
+  51              	.LCFI1:
+  52              	 .cfi_def_cfa_offset 68
+  53              	 .cfi_offset 80,-68
+  54              	 .cfi_offset 81,-64
+  55              	 .cfi_offset 82,-60
+  56              	 .cfi_offset 83,-56
+  57              	 .cfi_offset 84,-52
+  58              	 .cfi_offset 85,-48
+  59              	 .cfi_offset 86,-44
+  60              	 .cfi_offset 87,-40
+  61 0008 ADB0     	 sub sp,sp,#180
+  62              	.LCFI2:
+  63              	 .cfi_def_cfa_offset 248
+  64              	 .loc 1 121 0
+  65 000a 0C46     	 mov r4,r1
+  66 000c 1691     	 str r1,[sp,#88]
+ 122:../Algorithm/src/range_doppler.c ****   algo_target_list_t *p_targets = p_algo_result->p_target_list;
+ 123:../Algorithm/src/range_doppler.c ****   
+ 124:../Algorithm/src/range_doppler.c ****   uint32_t Nc = p_acq_buf->params.num_of_chirps_per_frame;
+ 125:../Algorithm/src/range_doppler.c ****   uint32_t Ns = p_acq_buf->params.num_of_samples_per_chirp;
+ 126:../Algorithm/src/range_doppler.c ****   
+ 127:../Algorithm/src/range_doppler.c ****   uint32_t i, j;
+ 128:../Algorithm/src/range_doppler.c ****   uint32_t max_idx;
+ 129:../Algorithm/src/range_doppler.c ****   uint32_t max_idx_arr;
+ 130:../Algorithm/src/range_doppler.c ****   uint32_t cal_idx;
+ 131:../Algorithm/src/range_doppler.c ****   uint32_t interp_factor = MAX_CALIB_SAMPLES_PER_CHANNEL / Ns;
+ 132:../Algorithm/src/range_doppler.c ****   uint32_t target_idx;
+ 133:../Algorithm/src/range_doppler.c ****   
+ 134:../Algorithm/src/range_doppler.c ****   float if1_real, if2_real;
+ 135:../Algorithm/src/range_doppler.c ****   float if1_imag, if2_imag;
+ 136:../Algorithm/src/range_doppler.c ****   
+ 137:../Algorithm/src/range_doppler.c ****   float max_value;
+ 138:../Algorithm/src/range_doppler.c ****   
+ 139:../Algorithm/src/range_doppler.c ****   float PulseRepTime_sec = (float)(cp_dev_settings->pll_chirp_time_usec + PLL_RAMP_DOWM_TIME_USEC +
+ 140:../Algorithm/src/range_doppler.c ****   
+ 141:../Algorithm/src/range_doppler.c ****   float range_detection_threshold = cp_algo_settings->range_detection_threshold;
+ 142:../Algorithm/src/range_doppler.c ****   
+ 143:../Algorithm/src/range_doppler.c ****   uint32_t peak_search_max_idx;
+ 144:../Algorithm/src/range_doppler.c ****   
+ 145:../Algorithm/src/range_doppler.c ****   float Fd_per_bin = 1.0f/(float)(PulseRepTime_sec * DOPPLER_FFT_SIZE);  // Doppler Per bin
+ 146:../Algorithm/src/range_doppler.c ****   
+ 147:../Algorithm/src/range_doppler.c ****   //--------------------------------------------------------------------------
+ 148:../Algorithm/src/range_doppler.c ****   
+ 149:../Algorithm/src/range_doppler.c ****   alpha_mti = 1.0f / cp_algo_settings->mti_filter_len;
+  67              	 .loc 1 149 0
+  68 000e C969     	 ldr r1,[r1,#28]
+  69              	.LVL1:
+  70 0010 0891     	 str r1,[sp,#32]
+  71 0012 DDED087A 	 flds s15,[sp,#32]
+ 141:../Algorithm/src/range_doppler.c ****   
+  72              	 .loc 1 141 0
+  73 0016 616B     	 ldr r1,[r4,#52]
+ 121:../Algorithm/src/range_doppler.c ****   algo_target_list_t *p_targets = p_algo_result->p_target_list;
+  74              	 .loc 1 121 0
+  75 0018 1590     	 str r0,[sp,#84]
+  76              	 .loc 1 149 0
+  77 001a F8EE677A 	 fuitos s15,s15
+  78 001e B7EE007A 	 fconsts s14,#112
+  79 0022 C7EE277A 	 fdivs s15,s14,s15
+ 121:../Algorithm/src/range_doppler.c ****   algo_target_list_t *p_targets = p_algo_result->p_target_list;
+  80              	 .loc 1 121 0
+  81 0026 1E46     	 mov r6,r3
+  82 0028 0446     	 mov r4,r0
+  83              	.LVL2:
+ 125:../Algorithm/src/range_doppler.c ****   
+  84              	 .loc 1 125 0
+  85 002a 4088     	 ldrh r0,[r0,#2]
+  86              	.LVL3:
+ 150:../Algorithm/src/range_doppler.c ****   
+ 151:../Algorithm/src/range_doppler.c ****   beta_mti = (1.0f - alpha_mti);
+ 152:../Algorithm/src/range_doppler.c ****   
+ 153:../Algorithm/src/range_doppler.c ****   if (samples_per_channel != Ns)
+  87              	 .loc 1 153 0
+  88 002c C14D     	 ldr r5,.L94
+ 121:../Algorithm/src/range_doppler.c ****   algo_target_list_t *p_targets = p_algo_result->p_target_list;
+  89              	 .loc 1 121 0
+  90 002e 1893     	 str r3,[sp,#96]
+ 125:../Algorithm/src/range_doppler.c ****   
+  91              	 .loc 1 125 0
+  92 0030 0E90     	 str r0,[sp,#56]
+  93 0032 0346     	 mov r3,r0
+  94              	.LVL4:
+ 122:../Algorithm/src/range_doppler.c ****   
+  95              	 .loc 1 122 0
+  96 0034 7068     	 ldr r0,[r6,#4]
+  97 0036 1790     	 str r0,[sp,#92]
+  98              	.LVL5:
+ 131:../Algorithm/src/range_doppler.c ****   uint32_t target_idx;
+  99              	 .loc 1 131 0
+ 100 0038 4FF48076 	 mov r6,#256
+ 101              	.LVL6:
+ 102 003c 1846     	 mov r0,r3
+ 103              	.LVL7:
+ 104 003e B6FBF3F3 	 udiv r3,r6,r3
+ 105 0042 0A93     	 str r3,[sp,#40]
+ 149:../Algorithm/src/range_doppler.c ****   
+ 106              	 .loc 1 149 0
+ 107 0044 BC4B     	 ldr r3,.L94+4
+ 141:../Algorithm/src/range_doppler.c ****   
+ 108              	 .loc 1 141 0
+ 109 0046 0791     	 str r1,[sp,#28]
+ 110              	 .loc 1 153 0
+ 111 0048 2968     	 ldr r1,[r5]
+ 149:../Algorithm/src/range_doppler.c ****   
+ 112              	 .loc 1 149 0
+ 113 004a C3ED007A 	 fsts s15,[r3]
+ 141:../Algorithm/src/range_doppler.c ****   
+ 114              	 .loc 1 141 0
+ 115 004e DDED076A 	 flds s13,[sp,#28]
+ 151:../Algorithm/src/range_doppler.c ****   
+ 116              	 .loc 1 151 0
+ 117 0052 BA4B     	 ldr r3,.L94+8
+ 121:../Algorithm/src/range_doppler.c ****   algo_target_list_t *p_targets = p_algo_result->p_target_list;
+ 118              	 .loc 1 121 0
+ 119 0054 1A92     	 str r2,[sp,#104]
+ 151:../Algorithm/src/range_doppler.c ****   
+ 120              	 .loc 1 151 0
+ 121 0056 37EE677A 	 fsubs s14,s14,s15
+ 139:../Algorithm/src/range_doppler.c ****   
+ 122              	 .loc 1 139 0
+ 123 005a 1268     	 ldr r2,[r2]
+ 124              	.LVL8:
+ 124:../Algorithm/src/range_doppler.c ****   uint32_t Ns = p_acq_buf->params.num_of_samples_per_chirp;
+ 125              	 .loc 1 124 0
+ 126 005c A788     	 ldrh r7,[r4,#4]
+ 127              	.LVL9:
+ 139:../Algorithm/src/range_doppler.c ****   
+ 128              	 .loc 1 139 0
+ 129 005e 1B92     	 str r2,[sp,#108]
+ 130              	.LVL10:
+ 131              	 .loc 1 153 0
+ 132 0060 8142     	 cmp r1,r0
+ 141:../Algorithm/src/range_doppler.c ****   
+ 133              	 .loc 1 141 0
+ 134 0062 B8EE668A 	 fuitos s16,s13
+ 135              	.LVL11:
+ 151:../Algorithm/src/range_doppler.c ****   
+ 136              	 .loc 1 151 0
+ 137 0066 83ED007A 	 fsts s14,[r3]
+ 138              	 .loc 1 153 0
+ 139 006a 34D0     	 beq .L2
+ 140              	.LVL12:
+ 141              	.LBB32:
+ 142              	.LBB33:
+ 154:../Algorithm/src/range_doppler.c ****   {
+ 155:../Algorithm/src/range_doppler.c ****     range_doppler_init(cp_algo_settings);
+ 156:../Algorithm/src/range_doppler.c ****     
+ 157:../Algorithm/src/range_doppler.c ****     samples_per_channel = Ns;
+ 158:../Algorithm/src/range_doppler.c ****   }
+ 159:../Algorithm/src/range_doppler.c ****   
+ 160:../Algorithm/src/range_doppler.c ****   distance_per_bin = (float)(300.0f / (cp_dev_settings->pll_bandwidth_MHz * 2 * (RANGE_FFT_SIZE / N
+ 161:../Algorithm/src/range_doppler.c ****   
+ 162:../Algorithm/src/range_doppler.c ****   peak_search_max_idx = (uint32_t)(cp_algo_settings->max_distance_cm / (100.0f * distance_per_bin) 
+ 163:../Algorithm/src/range_doppler.c ****   
+ 164:../Algorithm/src/range_doppler.c ****   peak_search_max_idx = (peak_search_max_idx > RANGE_FFT_SIZE/2-1) ? RANGE_FFT_SIZE/2-1 : peak_sear
+ 165:../Algorithm/src/range_doppler.c ****   
+ 166:../Algorithm/src/range_doppler.c ****   // Nc is set via "p_acq_buf->params.num_of_chirps_per_frame" and comes from the buffer, so the fo
+ 167:../Algorithm/src/range_doppler.c ****   Nc = (Nc > NUM_OF_CHIRPS) ? NUM_OF_CHIRPS : Nc; // to avoid out of memory flow in case more numbe
+ 168:../Algorithm/src/range_doppler.c ****   
+ 169:../Algorithm/src/range_doppler.c ****   //==================== (1) Fast FFT on Rx1 & Rx2 ===========================
+ 170:../Algorithm/src/range_doppler.c ****   
+ 171:../Algorithm/src/range_doppler.c ****   for (j = 0; j < Nc; j++)		// Loop over number of chirps
+ 172:../Algorithm/src/range_doppler.c ****   {
+ 173:../Algorithm/src/range_doppler.c ****     uint16_t *p_temp[4];
+ 174:../Algorithm/src/range_doppler.c ****     p_temp[0] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 0, j );
+ 175:../Algorithm/src/range_doppler.c ****     p_temp[1] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 1, j );
+ 176:../Algorithm/src/range_doppler.c ****     p_temp[2] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 2, j );
+ 177:../Algorithm/src/range_doppler.c ****     p_temp[3] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 3, j );
+ 178:../Algorithm/src/range_doppler.c ****     cal_idx = 0;
+ 179:../Algorithm/src/range_doppler.c ****     
+ 180:../Algorithm/src/range_doppler.c ****     for (i = 0; i < Ns; i++)	// Loop over number of samples per chirp
+ 181:../Algorithm/src/range_doppler.c ****     {
+ 182:../Algorithm/src/range_doppler.c ****       fft_input_i1[i]  = (float)((p_temp[0])[i] - adc_i1_calibration[cal_idx]);
+ 183:../Algorithm/src/range_doppler.c ****       fft_input_q1[i]  = (float)((p_temp[1])[i] - adc_q1_calibration[cal_idx]);
+ 184:../Algorithm/src/range_doppler.c ****       
+ 185:../Algorithm/src/range_doppler.c ****       fft_input_i2[i]  = (float)((p_temp[2])[i] - adc_i2_calibration[cal_idx]);
+ 186:../Algorithm/src/range_doppler.c ****       fft_input_q2[i]  = (float)((p_temp[3])[i] - adc_q2_calibration[cal_idx]);
+ 187:../Algorithm/src/range_doppler.c ****       cal_idx += interp_factor;
+ 188:../Algorithm/src/range_doppler.c ****     }
+ 189:../Algorithm/src/range_doppler.c ****     
+ 190:../Algorithm/src/range_doppler.c ****     //---------------------------------------- Rx1 ---------------------------
+ 191:../Algorithm/src/range_doppler.c ****     compute_fft_signal(fft_input_i1, fft_input_q1, Ns, RANGE_FFT_SIZE, if_scale,
+ 192:../Algorithm/src/range_doppler.c ****                        fft_type, FFT_FAST_TIME, &if1_real, &if1_imag, &range_fft_signal_rx1[(j * RA
+ 193:../Algorithm/src/range_doppler.c ****     
+ 194:../Algorithm/src/range_doppler.c ****     //---------------------------------------- Rx2 ---------------------------
+ 195:../Algorithm/src/range_doppler.c ****     compute_fft_signal(fft_input_i2, fft_input_q2, Ns, RANGE_FFT_SIZE, if_scale,
+ 196:../Algorithm/src/range_doppler.c ****                        fft_type, FFT_FAST_TIME, &if2_real, &if2_imag, &range_fft_signal_rx2[(j * RA
+ 197:../Algorithm/src/range_doppler.c ****   }
+ 198:../Algorithm/src/range_doppler.c ****   
+ 199:../Algorithm/src/range_doppler.c ****   //==================== (2) FFT spectrum on chirp with maximum FFT absolute magnitude ============
+ 200:../Algorithm/src/range_doppler.c ****   
+ 201:../Algorithm/src/range_doppler.c ****   float last_max_value = 0;
+ 202:../Algorithm/src/range_doppler.c ****   
+ 203:../Algorithm/src/range_doppler.c ****   max_idx_arr = 0;
+ 204:../Algorithm/src/range_doppler.c ****   
+ 205:../Algorithm/src/range_doppler.c ****   for (j = 0; j < Nc; j++)  // Loop over number of chirps
+ 206:../Algorithm/src/range_doppler.c ****   {
+ 207:../Algorithm/src/range_doppler.c ****     uint32_t idx = (2 * RANGE_FFT_SIZE) * j;
+ 208:../Algorithm/src/range_doppler.c ****     
+ 209:../Algorithm/src/range_doppler.c **** #if (RX_ANTENNA_SELECTION == 1U)
+ 210:../Algorithm/src/range_doppler.c ****     compute_fft_spectrum(&range_fft_signal_rx1[idx], RANGE_FFT_SIZE/2, range_fft_spectrum);
+ 211:../Algorithm/src/range_doppler.c **** #else
+ 212:../Algorithm/src/range_doppler.c ****     compute_fft_spectrum(&range_fft_signal_rx2[idx], RANGE_FFT_SIZE/2, range_fft_spectrum);
+ 213:../Algorithm/src/range_doppler.c **** #endif
+ 214:../Algorithm/src/range_doppler.c ****     
+ 215:../Algorithm/src/range_doppler.c ****     arm_max_f32(range_fft_spectrum, (uint32_t)RANGE_FFT_SIZE/2, &max_value, &max_idx);
+ 216:../Algorithm/src/range_doppler.c ****     
+ 217:../Algorithm/src/range_doppler.c ****     if(last_max_value < max_value)
+ 218:../Algorithm/src/range_doppler.c ****     {
+ 219:../Algorithm/src/range_doppler.c ****       last_max_value = max_value;
+ 220:../Algorithm/src/range_doppler.c ****       
+ 221:../Algorithm/src/range_doppler.c ****       max_idx_arr = j;
+ 222:../Algorithm/src/range_doppler.c ****     }
+ 223:../Algorithm/src/range_doppler.c ****   }
+ 224:../Algorithm/src/range_doppler.c ****   
+ 225:../Algorithm/src/range_doppler.c ****   max_idx = (2 * RANGE_FFT_SIZE) * max_idx_arr;
+ 226:../Algorithm/src/range_doppler.c ****   
+ 227:../Algorithm/src/range_doppler.c **** #if (RX_ANTENNA_SELECTION == 1U)
+ 228:../Algorithm/src/range_doppler.c ****   compute_fft_spectrum(&range_fft_signal_rx1[max_idx], RANGE_FFT_SIZE/2, range_fft_spectrum);
+ 229:../Algorithm/src/range_doppler.c **** #else
+ 230:../Algorithm/src/range_doppler.c ****   compute_fft_spectrum(&range_fft_signal_rx2[max_idx], RANGE_FFT_SIZE/2, range_fft_spectrum);
+ 231:../Algorithm/src/range_doppler.c **** #endif
+ 232:../Algorithm/src/range_doppler.c ****   
+ 233:../Algorithm/src/range_doppler.c ****   //==================== (3) MTI Filter update =======================
+ 234:../Algorithm/src/range_doppler.c ****   
+ 235:../Algorithm/src/range_doppler.c ****   if (cp_algo_settings->mti_filter_enable == 1U)
+ 236:../Algorithm/src/range_doppler.c ****   {
+ 237:../Algorithm/src/range_doppler.c ****     memcpy(range_fft_spectrum_temp, range_fft_spectrum, (RANGE_FFT_SIZE/2) * sizeof(float));
+ 238:../Algorithm/src/range_doppler.c ****     
+ 239:../Algorithm/src/range_doppler.c ****     for (i = 0; i < (RANGE_FFT_SIZE/2); i++)
+ 240:../Algorithm/src/range_doppler.c ****     {
+ 241:../Algorithm/src/range_doppler.c ****       range_fft_spectrum[i] = fabsf(range_fft_spectrum[i] - range_fft_spectrum_hist[i]);
+ 242:../Algorithm/src/range_doppler.c ****       
+ 243:../Algorithm/src/range_doppler.c ****       range_fft_spectrum_hist[i] = alpha_mti * range_fft_spectrum_temp[i] + beta_mti * range_fft_sp
+ 244:../Algorithm/src/range_doppler.c ****     }
+ 245:../Algorithm/src/range_doppler.c ****   }
+ 246:../Algorithm/src/range_doppler.c ****   else
+ 247:../Algorithm/src/range_doppler.c ****   {
+ 248:../Algorithm/src/range_doppler.c ****     memset(range_fft_spectrum_hist, 0, RANGE_FFT_SIZE/2 * sizeof(float));
+ 249:../Algorithm/src/range_doppler.c ****   }
+ 250:../Algorithm/src/range_doppler.c **** 
+ 251:../Algorithm/src/range_doppler.c ****   //=========== (4) Target detection on Rx1 ==================================
+ 252:../Algorithm/src/range_doppler.c ****   
+ 253:../Algorithm/src/range_doppler.c ****   memset(&p_targets->elems[0], 0, sizeof(p_targets->elems)); // clear target data
+ 254:../Algorithm/src/range_doppler.c ****   
+ 255:../Algorithm/src/range_doppler.c ****   memset(&target_measurements[0], 0, sizeof(target_measurements));
+ 256:../Algorithm/src/range_doppler.c ****   
+ 257:../Algorithm/src/range_doppler.c ****   p_targets->num_of_targets = target_detection(cp_algo_settings, range_fft_spectrum, &p_targets->el
+ 258:../Algorithm/src/range_doppler.c ****   
+ 259:../Algorithm/src/range_doppler.c ****   //=========== (5) Slow FFT on Rx1 & Rx2 ====================================
+ 260:../Algorithm/src/range_doppler.c ****   
+ 261:../Algorithm/src/range_doppler.c ****   if ((p_targets->num_of_targets > 0) && (Nc > 1))
+ 262:../Algorithm/src/range_doppler.c ****   {
+ 263:../Algorithm/src/range_doppler.c ****     for (j = 0; j < p_targets->num_of_targets; j++)
+ 264:../Algorithm/src/range_doppler.c ****     {
+ 265:../Algorithm/src/range_doppler.c ****       uint32_t idx_max = 0;
+ 266:../Algorithm/src/range_doppler.c ****       target_idx = 2 * p_targets->elems[j].idx; // Get the index of Fast FFT spectrum where target 
+ 267:../Algorithm/src/range_doppler.c ****       
+ 268:../Algorithm/src/range_doppler.c ****       for (i = 0; i < Nc; i++)	// Loop over number of chirps
+ 269:../Algorithm/src/range_doppler.c ****       {
+ 270:../Algorithm/src/range_doppler.c ****         uint32_t idx = target_idx + (2 * RANGE_FFT_SIZE) * i;
+ 271:../Algorithm/src/range_doppler.c ****         
+ 272:../Algorithm/src/range_doppler.c ****         fft_input_i1[i]  = range_fft_signal_rx1[idx];
+ 273:../Algorithm/src/range_doppler.c ****         fft_input_q1[i]  = range_fft_signal_rx1[idx + 1];
+ 274:../Algorithm/src/range_doppler.c ****         
+ 275:../Algorithm/src/range_doppler.c ****         fft_input_i2[i]  = range_fft_signal_rx2[idx];
+ 276:../Algorithm/src/range_doppler.c ****         fft_input_q2[i]  = range_fft_signal_rx2[idx + 1];
+ 277:../Algorithm/src/range_doppler.c ****       }
+ 278:../Algorithm/src/range_doppler.c ****       
+ 279:../Algorithm/src/range_doppler.c ****       //-------------------------------- Rx1 ---------------------------------
+ 280:../Algorithm/src/range_doppler.c ****       compute_fft_signal(fft_input_i1, fft_input_q1, Nc, DOPPLER_FFT_SIZE, 1.0,
+ 281:../Algorithm/src/range_doppler.c ****                          FFT_INPUT_COMPLEX, FFT_SLOW_TIME, &if1_real, &if1_imag, doppler_fft_signal
+ 282:../Algorithm/src/range_doppler.c ****       
+ 283:../Algorithm/src/range_doppler.c ****       //-------------------------------- Rx2 ---------------------------------
+ 284:../Algorithm/src/range_doppler.c **** 
+ 285:../Algorithm/src/range_doppler.c ****       compute_fft_signal(fft_input_i2, fft_input_q2, Nc, DOPPLER_FFT_SIZE, 1.0,
+ 286:../Algorithm/src/range_doppler.c ****                          FFT_INPUT_COMPLEX, FFT_SLOW_TIME, &if2_real, &if2_imag, doppler_fft_signal
+ 287:../Algorithm/src/range_doppler.c ****       
+ 288:../Algorithm/src/range_doppler.c **** #if (RX_ANTENNA_SELECTION == 1U)
+ 289:../Algorithm/src/range_doppler.c ****       compute_fft_spectrum(doppler_fft_signal_rx1, DOPPLER_FFT_SIZE, doppler_fft_spectrum);
+ 290:../Algorithm/src/range_doppler.c **** #else
+ 291:../Algorithm/src/range_doppler.c ****       compute_fft_spectrum(doppler_fft_signal_rx2, DOPPLER_FFT_SIZE, doppler_fft_spectrum);
+ 292:../Algorithm/src/range_doppler.c **** #endif
+ 293:../Algorithm/src/range_doppler.c ****       
+ 294:../Algorithm/src/range_doppler.c ****       arm_max_f32(doppler_fft_spectrum, (uint32_t)DOPPLER_FFT_SIZE, &max_value, &idx_max);
+ 295:../Algorithm/src/range_doppler.c ****       
+ 296:../Algorithm/src/range_doppler.c ****       if (max_value >= cp_algo_settings->speed_detection_threshold && idx_max != 0)
+ 297:../Algorithm/src/range_doppler.c ****       {
+ 298:../Algorithm/src/range_doppler.c ****         if (idx_max < DOPPLER_FFT_SIZE/2) // target departing
+ 299:../Algorithm/src/range_doppler.c ****         {
+ 300:../Algorithm/src/range_doppler.c ****           p_targets->elems[j].speed = (float) ((int32_t)idx_max * -Fd_per_bin) * (float)Hz_2_MPS;
+ 301:../Algorithm/src/range_doppler.c ****         }
+ 302:../Algorithm/src/range_doppler.c ****         else // target approching
+ 303:../Algorithm/src/range_doppler.c ****         {
+ 304:../Algorithm/src/range_doppler.c ****           p_targets->elems[j].speed = (float)((DOPPLER_FFT_SIZE - 1 - idx_max) * Fd_per_bin) * (flo
+ 305:../Algorithm/src/range_doppler.c ****         }
+ 306:../Algorithm/src/range_doppler.c ****         
+ 307:../Algorithm/src/range_doppler.c ****         //=========== (6) Angle Calculation on Rx1 & Rx2 =====================
+ 308:../Algorithm/src/range_doppler.c ****         
+ 309:../Algorithm/src/range_doppler.c ****         if1_real = doppler_fft_signal_rx1[2*idx_max];
+ 310:../Algorithm/src/range_doppler.c ****         if1_imag = doppler_fft_signal_rx1[2*idx_max + 1];
+ 311:../Algorithm/src/range_doppler.c ****         
+ 312:../Algorithm/src/range_doppler.c ****         if2_real = doppler_fft_signal_rx2[2*idx_max];
+ 313:../Algorithm/src/range_doppler.c ****         if2_imag = doppler_fft_signal_rx2[2*idx_max + 1];
+ 314:../Algorithm/src/range_doppler.c ****       }
+ 315:../Algorithm/src/range_doppler.c ****       else
+ 316:../Algorithm/src/range_doppler.c ****       {
+ 317:../Algorithm/src/range_doppler.c ****         p_targets->elems[j].speed = 0;
+ 318:../Algorithm/src/range_doppler.c ****       }
+ 319:../Algorithm/src/range_doppler.c ****       
+ 320:../Algorithm/src/range_doppler.c ****       if (cp_algo_settings->tracking_enable == 1U)
+ 321:../Algorithm/src/range_doppler.c ****       {
+ 322:../Algorithm/src/range_doppler.c ****         target_measurements[j].strength = p_targets->elems[j].strength;
+ 323:../Algorithm/src/range_doppler.c ****         target_measurements[j].range    = p_targets->elems[j].range;
+ 324:../Algorithm/src/range_doppler.c ****         target_measurements[j].speed    = p_targets->elems[j].speed;
+ 325:../Algorithm/src/range_doppler.c ****         
+ 326:../Algorithm/src/range_doppler.c ****         target_measurements[j].rx1_angle_arg_re = if1_real;
+ 327:../Algorithm/src/range_doppler.c ****         target_measurements[j].rx1_angle_arg_im = if1_imag;
+ 328:../Algorithm/src/range_doppler.c ****         target_measurements[j].rx2_angle_arg_re = if2_real;
+ 329:../Algorithm/src/range_doppler.c ****         target_measurements[j].rx2_angle_arg_im = if2_imag;
+ 330:../Algorithm/src/range_doppler.c ****       }
+ 331:../Algorithm/src/range_doppler.c ****       else
+ 332:../Algorithm/src/range_doppler.c ****       {
+ 333:../Algorithm/src/range_doppler.c ****         target_angle_data T;
+ 334:../Algorithm/src/range_doppler.c ****         
+ 335:../Algorithm/src/range_doppler.c ****         float wave_length_ant_spacing_ratio = (BSP_TGT_WAVE_LENGTH_MM / BSP_TGT_ANTENNA_SPACING_MM)
+ 336:../Algorithm/src/range_doppler.c ****         
+ 337:../Algorithm/src/range_doppler.c ****         T= compute_angle(if1_real, if1_imag, if2_real, if2_imag, IGNORE_NAN, cp_algo_settings->angl
+ 338:../Algorithm/src/range_doppler.c ****         
+ 339:../Algorithm/src/range_doppler.c ****         p_targets->elems[j].angle = T.target_angle;
+ 340:../Algorithm/src/range_doppler.c ****       }
+ 341:../Algorithm/src/range_doppler.c ****     }
+ 342:../Algorithm/src/range_doppler.c ****   }
+ 343:../Algorithm/src/range_doppler.c ****   
+ 344:../Algorithm/src/range_doppler.c ****   //=========== (7) Measurement update =======================================
+ 345:../Algorithm/src/range_doppler.c ****   
+ 346:../Algorithm/src/range_doppler.c ****   p_algo_result->p_target_list->mode = target_mode;
+ 347:../Algorithm/src/range_doppler.c ****   if (cp_algo_settings->tracking_enable == 1U)
+ 348:../Algorithm/src/range_doppler.c ****   {
+ 349:../Algorithm/src/range_doppler.c ****     update_tracking_list(&s_tracking_list, target_measurements, cp_algo_settings, p_targets->num_of
+ 350:../Algorithm/src/range_doppler.c ****     update_target_list_from_tracks(p_algo_result->p_target_list, &s_tracking_list, cp_algo_settings
+ 351:../Algorithm/src/range_doppler.c ****     
+ 352:../Algorithm/src/range_doppler.c ****     p_algo_result->p_target_list->mode = tracking_mode;
+ 353:../Algorithm/src/range_doppler.c ****   }
+ 354:../Algorithm/src/range_doppler.c ****   else
+ 355:../Algorithm/src/range_doppler.c ****   {
+ 356:../Algorithm/src/range_doppler.c ****     target_sorting(p_algo_result);
+ 357:../Algorithm/src/range_doppler.c ****   }
+ 358:../Algorithm/src/range_doppler.c ****   p_algo_result->range_detection_threshold = range_detection_threshold;
+ 359:../Algorithm/src/range_doppler.c ****   
+ 360:../Algorithm/src/range_doppler.c **** }
+ 361:../Algorithm/src/range_doppler.c **** 
+ 362:../Algorithm/src/range_doppler.c **** /*
+ 363:../Algorithm/src/range_doppler.c **** ==============================================================================
+ 364:../Algorithm/src/range_doppler.c ****    5. LOCAL FUNCTIONS
+ 365:../Algorithm/src/range_doppler.c **** ==============================================================================
+ 366:../Algorithm/src/range_doppler.c ****  */
+ 367:../Algorithm/src/range_doppler.c **** 
+ 368:../Algorithm/src/range_doppler.c **** static void range_doppler_init(const algo_settings_t *cp_algo_settings)
+ 369:../Algorithm/src/range_doppler.c **** {
+ 370:../Algorithm/src/range_doppler.c ****   /* Clear FFT arrays */
+ 371:../Algorithm/src/range_doppler.c ****   memset(range_fft_signal_rx1, 0, RANGE_FFT_SIGNAL_ARRAY_LEN * sizeof(float));
+ 143              	 .loc 1 371 0
+ 144 006c 0021     	 movs r1,#0
+ 145 006e 4FF40042 	 mov r2,#32768
+ 146 0072 B348     	 ldr r0,.L94+12
+ 372:../Algorithm/src/range_doppler.c ****   memset(range_fft_signal_rx2, 0, RANGE_FFT_SIGNAL_ARRAY_LEN * sizeof(float));
+ 373:../Algorithm/src/range_doppler.c **** 
+ 374:../Algorithm/src/range_doppler.c ****   memset(doppler_fft_signal_rx1, 0, DOPPLER_FFT_SIGNAL_ARRAY_LEN * sizeof(float));
+ 375:../Algorithm/src/range_doppler.c ****   memset(doppler_fft_signal_rx2, 0, DOPPLER_FFT_SIGNAL_ARRAY_LEN * sizeof(float));
+ 376:../Algorithm/src/range_doppler.c **** 
+ 377:../Algorithm/src/range_doppler.c ****   memset(range_fft_spectrum_hist, 0, RANGE_FFT_SIZE/2 * sizeof(float));
+ 378:../Algorithm/src/range_doppler.c **** 
+ 379:../Algorithm/src/range_doppler.c ****   memset(doppler_fft_spectrum, 0, DOPPLER_FFT_SPECT_ARRAY_LEN * sizeof(float));
+ 380:../Algorithm/src/range_doppler.c **** 
+ 381:../Algorithm/src/range_doppler.c ****   memset(&target_measurements[0], 0, sizeof(target_measurements));
+ 382:../Algorithm/src/range_doppler.c **** 
+ 383:../Algorithm/src/range_doppler.c ****   memset(&s_tracking_list, 0, sizeof(s_tracking_list));
+ 147              	 .loc 1 383 0
+ 148 0074 B34C     	 ldr r4,.L94+16
+ 149              	.LVL13:
+ 371:../Algorithm/src/range_doppler.c ****   memset(range_fft_signal_rx2, 0, RANGE_FFT_SIGNAL_ARRAY_LEN * sizeof(float));
+ 150              	 .loc 1 371 0
+ 151 0076 FFF7FEFF 	 bl memset
+ 152              	.LVL14:
+ 372:../Algorithm/src/range_doppler.c ****   memset(range_fft_signal_rx2, 0, RANGE_FFT_SIGNAL_ARRAY_LEN * sizeof(float));
+ 153              	 .loc 1 372 0
+ 154 007a 0021     	 movs r1,#0
+ 155 007c 4FF40042 	 mov r2,#32768
+ 156 0080 B148     	 ldr r0,.L94+20
+ 157 0082 FFF7FEFF 	 bl memset
+ 158              	.LVL15:
+ 374:../Algorithm/src/range_doppler.c ****   memset(doppler_fft_signal_rx2, 0, DOPPLER_FFT_SIGNAL_ARRAY_LEN * sizeof(float));
+ 159              	 .loc 1 374 0
+ 160 0086 0021     	 movs r1,#0
+ 161 0088 4FF40072 	 mov r2,#512
+ 162 008c AF48     	 ldr r0,.L94+24
+ 163 008e FFF7FEFF 	 bl memset
+ 164              	.LVL16:
+ 375:../Algorithm/src/range_doppler.c **** 
+ 165              	 .loc 1 375 0
+ 166 0092 0021     	 movs r1,#0
+ 167 0094 4FF40072 	 mov r2,#512
+ 168 0098 AD48     	 ldr r0,.L94+28
+ 169 009a FFF7FEFF 	 bl memset
+ 170              	.LVL17:
+ 377:../Algorithm/src/range_doppler.c **** 
+ 171              	 .loc 1 377 0
+ 172 009e 0021     	 movs r1,#0
+ 173 00a0 4FF40072 	 mov r2,#512
+ 174 00a4 AB48     	 ldr r0,.L94+32
+ 175 00a6 FFF7FEFF 	 bl memset
+ 176              	.LVL18:
+ 379:../Algorithm/src/range_doppler.c **** 
+ 177              	 .loc 1 379 0
+ 178 00aa 3246     	 mov r2,r6
+ 179 00ac 0021     	 movs r1,#0
+ 180 00ae AA48     	 ldr r0,.L94+36
+ 181 00b0 FFF7FEFF 	 bl memset
+ 182              	.LVL19:
+ 381:../Algorithm/src/range_doppler.c **** 
+ 183              	 .loc 1 381 0
+ 184 00b4 0021     	 movs r1,#0
+ 185 00b6 A022     	 movs r2,#160
+ 186 00b8 A848     	 ldr r0,.L94+40
+ 187 00ba FFF7FEFF 	 bl memset
+ 188              	.LVL20:
+ 189              	 .loc 1 383 0
+ 190 00be 0021     	 movs r1,#0
+ 191 00c0 4FF4B562 	 mov r2,#1448
+ 192 00c4 2046     	 mov r0,r4
+ 193 00c6 FFF7FEFF 	 bl memset
+ 194              	.LVL21:
+ 384:../Algorithm/src/range_doppler.c ****   s_tracking_list.max_num_of_tracks = CURRENT_NUM_OF_TRACKS;
+ 195              	 .loc 1 384 0
+ 196 00ca 0523     	 movs r3,#5
+ 197 00cc 6360     	 str r3,[r4,#4]
+ 385:../Algorithm/src/range_doppler.c **** 
+ 386:../Algorithm/src/range_doppler.c ****   fft_init();  // To init the internal FFT functions
+ 198              	 .loc 1 386 0
+ 199 00ce FFF7FEFF 	 bl fft_init
+ 200              	.LVL22:
+ 201              	.LBE33:
+ 202              	.LBE32:
+ 157:../Algorithm/src/range_doppler.c ****   }
+ 203              	 .loc 1 157 0
+ 204 00d2 0E9B     	 ldr r3,[sp,#56]
+ 205 00d4 2B60     	 str r3,[r5]
+ 206              	.LVL23:
+ 207              	.L2:
+ 160:../Algorithm/src/range_doppler.c ****   
+ 208              	 .loc 1 160 0
+ 209 00d6 1A9B     	 ldr r3,[sp,#104]
+ 210 00d8 DDED0A6A 	 flds s13,[sp,#40]
+ 211 00dc D3ED047A 	 flds s15,[r3,#16]
+ 212 00e0 9FED9F6A 	 flds s12,.L94+44
+ 162:../Algorithm/src/range_doppler.c ****   
+ 213              	 .loc 1 162 0
+ 214 00e4 169B     	 ldr r3,[sp,#88]
+ 215 00e6 DFED9F5A 	 flds s11,.L94+48
+ 216 00ea 1B6B     	 ldr r3,[r3,#48]
+ 217 00ec 0793     	 str r3,[sp,#28]
+ 160:../Algorithm/src/range_doppler.c ****   
+ 218              	 .loc 1 160 0
+ 219 00ee 77EEA77A 	 fadds s15,s15,s15
+ 220 00f2 F8EEE66A 	 fsitos s13,s13
+ 162:../Algorithm/src/range_doppler.c ****   
+ 221              	 .loc 1 162 0
+ 222 00f6 07EE103A 	 fmsr s14,r3
+ 160:../Algorithm/src/range_doppler.c ****   
+ 223              	 .loc 1 160 0
+ 224 00fa 67EEA66A 	 fmuls s13,s15,s13
+ 162:../Algorithm/src/range_doppler.c ****   
+ 225              	 .loc 1 162 0
+ 226 00fe B8EE477A 	 fuitos s14,s14
+ 160:../Algorithm/src/range_doppler.c ****   
+ 227              	 .loc 1 160 0
+ 228 0102 C6EE266A 	 fdivs s13,s12,s13
+ 167:../Algorithm/src/range_doppler.c ****   
+ 229              	 .loc 1 167 0
+ 230 0106 102F     	 cmp r7,#16
+ 231 0108 28BF     	 it cs
+ 232 010a 1027     	 movcs r7,#16
+ 233              	.LVL24:
+ 234 010c 3B46     	 mov r3,r7
+ 235 010e 1097     	 str r7,[sp,#64]
+ 160:../Algorithm/src/range_doppler.c ****   
+ 236              	 .loc 1 160 0
+ 237 0110 954A     	 ldr r2,.L94+52
+ 162:../Algorithm/src/range_doppler.c ****   
+ 238              	 .loc 1 162 0
+ 239 0112 B0EE005A 	 fconsts s10,#0
+ 240 0116 66EEA57A 	 fmuls s15,s13,s11
+ 160:../Algorithm/src/range_doppler.c ****   
+ 241              	 .loc 1 160 0
+ 242 011a C2ED006A 	 fsts s13,[r2]
+ 162:../Algorithm/src/range_doppler.c ****   
+ 243              	 .loc 1 162 0
+ 244 011e C7EE277A 	 fdivs s15,s14,s15
+ 245 0122 77EE857A 	 fadds s15,s15,s10
+ 246 0126 FCEEE77A 	 ftouizs s15,s15
+ 247 012a 17EE907A 	 fmrs r7,s15
+ 248              	.LVL25:
+ 164:../Algorithm/src/range_doppler.c ****   
+ 249              	 .loc 1 164 0
+ 250 012e 7F2F     	 cmp r7,#127
+ 251 0130 28BF     	 it cs
+ 252 0132 7F27     	 movcs r7,#127
+ 253              	.LVL26:
+ 254 0134 1C97     	 str r7,[sp,#112]
+ 255              	.LVL27:
+ 171:../Algorithm/src/range_doppler.c ****   {
+ 256              	 .loc 1 171 0
+ 257 0136 002B     	 cmp r3,#0
+ 258 0138 00F00484 	 beq .L55
+ 259 013c 804B     	 ldr r3,.L94+12
+ 260              	.LVL28:
+ 261 013e 1D93     	 str r3,[sp,#116]
+ 262 0140 1993     	 str r3,[sp,#100]
+ 263 0142 0F93     	 str r3,[sp,#60]
+ 264 0144 0E9B     	 ldr r3,[sp,#56]
+ 265 0146 804A     	 ldr r2,.L94+20
+ 266              	.LBB34:
+ 191:../Algorithm/src/range_doppler.c ****                        fft_type, FFT_FAST_TIME, &if1_real, &if1_imag, &range_fft_signal_rx1[(j * RA
+ 267              	 .loc 1 191 0
+ 268 0148 DFED888A 	 flds s17,.L94+56
+ 269 014c 0C92     	 str r2,[sp,#48]
+ 270 014e 9B00     	 lsls r3,r3,#2
+ 271 0150 0B93     	 str r3,[sp,#44]
+ 272              	.LBE34:
+ 171:../Algorithm/src/range_doppler.c ****   {
+ 273              	 .loc 1 171 0
+ 274 0152 0023     	 movs r3,#0
+ 275 0154 0D93     	 str r3,[sp,#52]
+ 276 0156 20AB     	 add r3,sp,#128
+ 277 0158 1193     	 str r3,[sp,#68]
+ 278 015a 22AB     	 add r3,sp,#136
+ 279 015c 1393     	 str r3,[sp,#76]
+ 280 015e 21AB     	 add r3,sp,#132
+ 281 0160 1293     	 str r3,[sp,#72]
+ 282 0162 23AB     	 add r3,sp,#140
+ 283 0164 1493     	 str r3,[sp,#80]
+ 284              	.LVL29:
+ 285              	.L5:
+ 286              	.LBB35:
+ 174:../Algorithm/src/range_doppler.c ****     p_temp[1] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 1, j );
+ 287              	 .loc 1 174 0
+ 288 0166 159F     	 ldr r7,[sp,#84]
+ 289 0168 0D9E     	 ldr r6,[sp,#52]
+ 290 016a 0021     	 movs r1,#0
+ 291 016c 3246     	 mov r2,r6
+ 292 016e 3846     	 mov r0,r7
+ 293 0170 FFF7FEFF 	 bl get_buffer_address_by_chirp
+ 294              	.LVL30:
+ 175:../Algorithm/src/range_doppler.c ****     p_temp[2] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 2, j );
+ 295              	 .loc 1 175 0
+ 296 0174 0121     	 movs r1,#1
+ 297 0176 3246     	 mov r2,r6
+ 174:../Algorithm/src/range_doppler.c ****     p_temp[1] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 1, j );
+ 298              	 .loc 1 174 0
+ 299 0178 8046     	 mov r8,r0
+ 300              	.LVL31:
+ 175:../Algorithm/src/range_doppler.c ****     p_temp[2] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 2, j );
+ 301              	 .loc 1 175 0
+ 302 017a 3846     	 mov r0,r7
+ 303              	.LVL32:
+ 304 017c FFF7FEFF 	 bl get_buffer_address_by_chirp
+ 305              	.LVL33:
+ 176:../Algorithm/src/range_doppler.c ****     p_temp[3] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 3, j );
+ 306              	 .loc 1 176 0
+ 307 0180 0221     	 movs r1,#2
+ 308 0182 3246     	 mov r2,r6
+ 175:../Algorithm/src/range_doppler.c ****     p_temp[2] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 2, j );
+ 309              	 .loc 1 175 0
+ 310 0184 0546     	 mov r5,r0
+ 311              	.LVL34:
+ 176:../Algorithm/src/range_doppler.c ****     p_temp[3] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 3, j );
+ 312              	 .loc 1 176 0
+ 313 0186 3846     	 mov r0,r7
+ 314              	.LVL35:
+ 315 0188 FFF7FEFF 	 bl get_buffer_address_by_chirp
+ 316              	.LVL36:
+ 177:../Algorithm/src/range_doppler.c ****     cal_idx = 0;
+ 317              	 .loc 1 177 0
+ 318 018c 0321     	 movs r1,#3
+ 176:../Algorithm/src/range_doppler.c ****     p_temp[3] = (uint16_t *)get_buffer_address_by_chirp(p_acq_buf, 3, j );
+ 319              	 .loc 1 176 0
+ 320 018e 0446     	 mov r4,r0
+ 321              	.LVL37:
+ 177:../Algorithm/src/range_doppler.c ****     cal_idx = 0;
+ 322              	 .loc 1 177 0
+ 323 0190 3246     	 mov r2,r6
+ 324 0192 3846     	 mov r0,r7
+ 325              	.LVL38:
+ 326 0194 FFF7FEFF 	 bl get_buffer_address_by_chirp
+ 327              	.LVL39:
+ 180:../Algorithm/src/range_doppler.c ****     {
+ 328              	 .loc 1 180 0
+ 329 0198 0E9B     	 ldr r3,[sp,#56]
+ 330 019a 002B     	 cmp r3,#0
+ 331 019c 53D0     	 beq .L8
+ 332 019e 744B     	 ldr r3,.L94+60
+ 333 01a0 744A     	 ldr r2,.L94+64
+ 334 01a2 1B68     	 ldr r3,[r3]
+ 335 01a4 0993     	 str r3,[sp,#36]
+ 336 01a6 744B     	 ldr r3,.L94+68
+ 337 01a8 1268     	 ldr r2,[r2]
+ 338 01aa 1B68     	 ldr r3,[r3]
+ 339 01ac 0893     	 str r3,[sp,#32]
+ 340 01ae DFF8D491 	 ldr r9,.L94+80
+ 341 01b2 DFF8D4B1 	 ldr fp,.L94+84
+ 342 01b6 DFF8D4A1 	 ldr r10,.L94+88
+ 343 01ba 0792     	 str r2,[sp,#28]
+ 344 01bc 0023     	 movs r3,#0
+ 345 01be A8F10208 	 sub r8,r8,#2
+ 346              	.LVL40:
+ 347 01c2 A5F1020C 	 sub ip,r5,#2
+ 348 01c6 A4F1020E 	 sub lr,r4,#2
+ 349 01ca 871E     	 subs r7,r0,#2
+ 350 01cc 1A46     	 mov r2,r3
+ 351              	.LVL41:
+ 352              	.L7:
+ 182:../Algorithm/src/range_doppler.c ****       fft_input_q1[i]  = (float)((p_temp[1])[i] - adc_q1_calibration[cal_idx]);
+ 353              	 .loc 1 182 0 discriminator 3
+ 354 01ce 6B49     	 ldr r1,.L94+72
+ 355 01d0 38F8024F 	 ldrh r4,[r8,#2]!
+ 356 01d4 31F81260 	 ldrh r6,[r1,r2,lsl#1]
+ 183:../Algorithm/src/range_doppler.c ****       
+ 357              	 .loc 1 183 0 discriminator 3
+ 358 01d8 0799     	 ldr r1,[sp,#28]
+ 359 01da 3CF8020F 	 ldrh r0,[ip,#2]!
+ 360 01de 31F81250 	 ldrh r5,[r1,r2,lsl#1]
+ 185:../Algorithm/src/range_doppler.c ****       fft_input_q2[i]  = (float)((p_temp[3])[i] - adc_q2_calibration[cal_idx]);
+ 361              	 .loc 1 185 0 discriminator 3
+ 362 01e2 3EF8021F 	 ldrh r1,[lr,#2]!
+ 182:../Algorithm/src/range_doppler.c ****       fft_input_q1[i]  = (float)((p_temp[1])[i] - adc_q1_calibration[cal_idx]);
+ 363              	 .loc 1 182 0 discriminator 3
+ 364 01e6 A41B     	 subs r4,r4,r6
+ 365 01e8 07EE904A 	 fmsr s15,r4
+ 183:../Algorithm/src/range_doppler.c ****       
+ 366              	 .loc 1 183 0 discriminator 3
+ 367 01ec 401B     	 subs r0,r0,r5
+ 185:../Algorithm/src/range_doppler.c ****       fft_input_q2[i]  = (float)((p_temp[3])[i] - adc_q2_calibration[cal_idx]);
+ 368              	 .loc 1 185 0 discriminator 3
+ 369 01ee 089D     	 ldr r5,[sp,#32]
+ 186:../Algorithm/src/range_doppler.c ****       cal_idx += interp_factor;
+ 370              	 .loc 1 186 0 discriminator 3
+ 371 01f0 099C     	 ldr r4,[sp,#36]
+ 185:../Algorithm/src/range_doppler.c ****       fft_input_q2[i]  = (float)((p_temp[3])[i] - adc_q2_calibration[cal_idx]);
+ 372              	 .loc 1 185 0 discriminator 3
+ 373 01f2 35F81260 	 ldrh r6,[r5,r2,lsl#1]
+ 186:../Algorithm/src/range_doppler.c ****       cal_idx += interp_factor;
+ 374              	 .loc 1 186 0 discriminator 3
+ 375 01f6 34F81240 	 ldrh r4,[r4,r2,lsl#1]
+ 376 01fa 37F8025F 	 ldrh r5,[r7,#2]!
+ 182:../Algorithm/src/range_doppler.c ****       fft_input_q1[i]  = (float)((p_temp[1])[i] - adc_q1_calibration[cal_idx]);
+ 377              	 .loc 1 182 0 discriminator 3
+ 378 01fe F8EEE77A 	 fsitos s15,s15
+ 185:../Algorithm/src/range_doppler.c ****       fft_input_q2[i]  = (float)((p_temp[3])[i] - adc_q2_calibration[cal_idx]);
+ 379              	 .loc 1 185 0 discriminator 3
+ 380 0202 891B     	 subs r1,r1,r6
+ 182:../Algorithm/src/range_doppler.c ****       fft_input_q1[i]  = (float)((p_temp[1])[i] - adc_q1_calibration[cal_idx]);
+ 381              	 .loc 1 182 0 discriminator 3
+ 382 0204 E9EC017A 	 fstmias r9!,{s15}
+ 183:../Algorithm/src/range_doppler.c ****       
+ 383              	 .loc 1 183 0 discriminator 3
+ 384 0208 07EE900A 	 fmsr s15,r0
+ 385 020c F8EEE76A 	 fsitos s13,s15
+ 185:../Algorithm/src/range_doppler.c ****       fft_input_q2[i]  = (float)((p_temp[3])[i] - adc_q2_calibration[cal_idx]);
+ 386              	 .loc 1 185 0 discriminator 3
+ 387 0210 07EE901A 	 fmsr s15,r1
+ 186:../Algorithm/src/range_doppler.c ****       cal_idx += interp_factor;
+ 388              	 .loc 1 186 0 discriminator 3
+ 389 0214 2C1B     	 subs r4,r5,r4
+ 185:../Algorithm/src/range_doppler.c ****       fft_input_q2[i]  = (float)((p_temp[3])[i] - adc_q2_calibration[cal_idx]);
+ 390              	 .loc 1 185 0 discriminator 3
+ 391 0216 B8EEE77A 	 fsitos s14,s15
+ 186:../Algorithm/src/range_doppler.c ****       cal_idx += interp_factor;
+ 392              	 .loc 1 186 0 discriminator 3
+ 393 021a 07EE904A 	 fmsr s15,r4
+ 394 021e 5849     	 ldr r1,.L94+76
+ 395 0220 F8EEE77A 	 fsitos s15,s15
+ 396 0224 CC18     	 adds r4,r1,r3
+ 397 0226 0AEB0301 	 add r1,r10,r3
+ 398 022a 0BEB0300 	 add r0,fp,r3
+ 399 022e C1ED007A 	 fsts s15,[r1]
+ 180:../Algorithm/src/range_doppler.c ****     {
+ 400              	 .loc 1 180 0 discriminator 3
+ 401 0232 0B99     	 ldr r1,[sp,#44]
+ 185:../Algorithm/src/range_doppler.c ****       fft_input_q2[i]  = (float)((p_temp[3])[i] - adc_q2_calibration[cal_idx]);
+ 402              	 .loc 1 185 0 discriminator 3
+ 403 0234 80ED007A 	 fsts s14,[r0]
+ 404 0238 0433     	 adds r3,r3,#4
+ 187:../Algorithm/src/range_doppler.c ****     }
+ 405              	 .loc 1 187 0 discriminator 3
+ 406 023a 0A98     	 ldr r0,[sp,#40]
+ 183:../Algorithm/src/range_doppler.c ****       
+ 407              	 .loc 1 183 0 discriminator 3
+ 408 023c C4ED006A 	 fsts s13,[r4]
+ 180:../Algorithm/src/range_doppler.c ****     {
+ 409              	 .loc 1 180 0 discriminator 3
+ 410 0240 8B42     	 cmp r3,r1
+ 187:../Algorithm/src/range_doppler.c ****     }
+ 411              	 .loc 1 187 0 discriminator 3
+ 412 0242 0244     	 add r2,r2,r0
+ 413              	.LVL42:
+ 180:../Algorithm/src/range_doppler.c ****     {
+ 414              	 .loc 1 180 0 discriminator 3
+ 415 0244 C3D1     	 bne .L7
+ 416              	.LVL43:
+ 417              	.L8:
+ 191:../Algorithm/src/range_doppler.c ****                        fft_type, FFT_FAST_TIME, &if1_real, &if1_imag, &range_fft_signal_rx1[(j * RA
+ 418              	 .loc 1 191 0
+ 419 0246 119B     	 ldr r3,[sp,#68]
+ 420 0248 DDF83880 	 ldr r8,[sp,#56]
+ 421              	.LBE35:
+ 171:../Algorithm/src/range_doppler.c ****   {
+ 422              	 .loc 1 171 0
+ 423 024c 0D9E     	 ldr r6,[sp,#52]
+ 424              	.LBB36:
+ 191:../Algorithm/src/range_doppler.c ****                        fft_type, FFT_FAST_TIME, &if1_real, &if1_imag, &range_fft_signal_rx1[(j * RA
+ 425              	 .loc 1 191 0
+ 426 024e 0F9F     	 ldr r7,[sp,#60]
+ 427 0250 0393     	 str r3,[sp,#12]
+ 428 0252 0225     	 movs r5,#2
+ 429 0254 139B     	 ldr r3,[sp,#76]
+ 430 0256 0493     	 str r3,[sp,#16]
+ 431 0258 0024     	 movs r4,#0
+ 432 025a 0597     	 str r7,[sp,#20]
+ 433 025c 0195     	 str r5,[sp,#4]
+ 434 025e 4948     	 ldr r0,.L94+80
+ 435 0260 4749     	 ldr r1,.L94+76
+ 436 0262 CDED008A 	 fsts s17,[sp]
+ 437 0266 4246     	 mov r2,r8
+ 438 0268 4FF48073 	 mov r3,#256
+ 439              	.LBE36:
+ 171:../Algorithm/src/range_doppler.c ****   {
+ 440              	 .loc 1 171 0
+ 441 026c 0136     	 adds r6,r6,#1
+ 442              	.LBB37:
+ 191:../Algorithm/src/range_doppler.c ****                        fft_type, FFT_FAST_TIME, &if1_real, &if1_imag, &range_fft_signal_rx1[(j * RA
+ 443              	 .loc 1 191 0
+ 444 026e 0294     	 str r4,[sp,#8]
+ 445              	.LBE37:
+ 171:../Algorithm/src/range_doppler.c ****   {
+ 446              	 .loc 1 171 0
+ 447 0270 0D96     	 str r6,[sp,#52]
+ 448              	.LVL44:
+ 449              	.LBB38:
+ 191:../Algorithm/src/range_doppler.c ****                        fft_type, FFT_FAST_TIME, &if1_real, &if1_imag, &range_fft_signal_rx1[(j * RA
+ 450              	 .loc 1 191 0
+ 451 0272 FFF7FEFF 	 bl compute_fft_signal
+ 452              	.LVL45:
+ 195:../Algorithm/src/range_doppler.c ****                        fft_type, FFT_FAST_TIME, &if2_real, &if2_imag, &range_fft_signal_rx2[(j * RA
+ 453              	 .loc 1 195 0
+ 454 0276 129B     	 ldr r3,[sp,#72]
+ 455 0278 0195     	 str r5,[sp,#4]
+ 456 027a 0393     	 str r3,[sp,#12]
+ 457 027c 0C9D     	 ldr r5,[sp,#48]
+ 458 027e 149B     	 ldr r3,[sp,#80]
+ 459 0280 0493     	 str r3,[sp,#16]
+ 460 0282 0C9B     	 ldr r3,[sp,#48]
+ 461 0284 0593     	 str r3,[sp,#20]
+ 462 0286 0294     	 str r4,[sp,#8]
+ 463 0288 4FF48073 	 mov r3,#256
+ 464 028c CDED008A 	 fsts s17,[sp]
+ 465 0290 3D48     	 ldr r0,.L94+84
+ 466 0292 3E49     	 ldr r1,.L94+88
+ 467 0294 4246     	 mov r2,r8
+ 468 0296 07F50067 	 add r7,r7,#2048
+ 469 029a 05F50065 	 add r5,r5,#2048
+ 470 029e 0F97     	 str r7,[sp,#60]
+ 471 02a0 0C95     	 str r5,[sp,#48]
+ 472 02a2 FFF7FEFF 	 bl compute_fft_signal
+ 473              	.LVL46:
+ 474              	.LBE38:
+ 171:../Algorithm/src/range_doppler.c ****   {
+ 475              	 .loc 1 171 0
+ 476 02a6 109B     	 ldr r3,[sp,#64]
+ 477 02a8 9E42     	 cmp r6,r3
+ 478 02aa 7FF45CAF 	 bne .L5
+ 479 02ae DFED388A 	 flds s17,.L94+92
+ 480 02b2 1D9F     	 ldr r7,[sp,#116]
+ 481 02b4 2646     	 mov r6,r4
+ 482              	.LVL47:
+ 483 02b6 24AD     	 add r5,sp,#144
+ 484 02b8 9846     	 mov r8,r3
+ 485              	.LVL48:
+ 486              	.L6:
+ 487              	.LBB39:
+ 210:../Algorithm/src/range_doppler.c **** #else
+ 488              	 .loc 1 210 0
+ 489 02ba 3846     	 mov r0,r7
+ 490 02bc 8021     	 movs r1,#128
+ 491 02be 354A     	 ldr r2,.L94+96
+ 492 02c0 FFF7FEFF 	 bl compute_fft_spectrum
+ 493              	.LVL49:
+ 215:../Algorithm/src/range_doppler.c ****     
+ 494              	 .loc 1 215 0
+ 495 02c4 3348     	 ldr r0,.L94+96
+ 496 02c6 8021     	 movs r1,#128
+ 497 02c8 2A46     	 mov r2,r5
+ 498 02ca 1FAB     	 add r3,sp,#124
+ 499 02cc FFF7FEFF 	 bl arm_max_f32
+ 500              	.LVL50:
+ 217:../Algorithm/src/range_doppler.c ****     {
+ 501              	 .loc 1 217 0
+ 502 02d0 DDED247A 	 flds s15,[sp,#144]
+ 503 02d4 F4EEE87A 	 fcmpes s15,s17
+ 504 02d8 F1EE10FA 	 fmstat
+ 505 02dc C8BF     	 it gt
+ 506 02de 3446     	 movgt r4,r6
+ 507              	.LBE39:
+ 205:../Algorithm/src/range_doppler.c ****   {
+ 508              	 .loc 1 205 0
+ 509 02e0 06F10106 	 add r6,r6,#1
+ 510              	.LVL51:
+ 511              	.LBB40:
+ 219:../Algorithm/src/range_doppler.c ****       
+ 512              	 .loc 1 219 0
+ 513 02e4 C8BF     	 it gt
+ 514 02e6 F0EE678A 	 fcpysgt s17,s15
+ 515              	.LVL52:
+ 516              	.LBE40:
+ 205:../Algorithm/src/range_doppler.c ****   {
+ 517              	 .loc 1 205 0
+ 518 02ea 4645     	 cmp r6,r8
+ 519 02ec 07F50067 	 add r7,r7,#2048
+ 520 02f0 E3D1     	 bne .L6
+ 521 02f2 199B     	 ldr r3,[sp,#100]
+ 522 02f4 6402     	 lsls r4,r4,#9
+ 523              	.LVL53:
+ 524              	.L3:
+ 228:../Algorithm/src/range_doppler.c **** #else
+ 525              	 .loc 1 228 0
+ 526 02f6 03EB8400 	 add r0,r3,r4,lsl#2
+ 527 02fa 8021     	 movs r1,#128
+ 528 02fc 254A     	 ldr r2,.L94+96
+ 225:../Algorithm/src/range_doppler.c ****   
+ 529              	 .loc 1 225 0
+ 530 02fe 1F94     	 str r4,[sp,#124]
+ 228:../Algorithm/src/range_doppler.c **** #else
+ 531              	 .loc 1 228 0
+ 532 0300 FFF7FEFF 	 bl compute_fft_spectrum
+ 533              	.LVL54:
+ 235:../Algorithm/src/range_doppler.c ****   {
+ 534              	 .loc 1 235 0
+ 535 0304 169B     	 ldr r3,[sp,#88]
+ 536 0306 1B6A     	 ldr r3,[r3,#32]
+ 537 0308 012B     	 cmp r3,#1
+ 538 030a 40F09682 	 bne .L11
+ 237:../Algorithm/src/range_doppler.c ****     
+ 539              	 .loc 1 237 0
+ 540 030e 2149     	 ldr r1,.L94+96
+ 541 0310 2148     	 ldr r0,.L94+100
+ 542 0312 4FF40072 	 mov r2,#512
+ 543 0316 FFF7FEFF 	 bl memcpy
+ 544              	.LVL55:
+ 545 031a 074A     	 ldr r2,.L94+4
+ 546 031c 1D4B     	 ldr r3,.L94+96
+ 547 031e 92ED005A 	 flds s10,[r2]
+ 548 0322 064A     	 ldr r2,.L94+8
+ 549 0324 1C49     	 ldr r1,.L94+100
+ 550 0326 D2ED005A 	 flds s11,[r2]
+ 551 032a 0A4A     	 ldr r2,.L94+32
+ 552 032c 03F50070 	 add r0,r3,#512
+ 553 0330 34E0     	 b .L95
+ 554              	.L96:
+ 555 0332 00BF     	 .align 2
+ 556              	.L94:
+ 557 0334 00000000 	 .word .LANCHOR2
+ 558 0338 00000000 	 .word .LANCHOR0
+ 559 033c 00000000 	 .word .LANCHOR1
+ 560 0340 00000000 	 .word .LANCHOR3
+ 561 0344 00000000 	 .word .LANCHOR10
+ 562 0348 00000000 	 .word .LANCHOR4
+ 563 034c 00000000 	 .word .LANCHOR5
+ 564 0350 00000000 	 .word .LANCHOR6
+ 565 0354 00000000 	 .word .LANCHOR7
+ 566 0358 00000000 	 .word .LANCHOR8
+ 567 035c 00000000 	 .word .LANCHOR9
+ 568 0360 00009643 	 .word 1133903872
+ 569 0364 0000C842 	 .word 1120403456
+ 570 0368 00000000 	 .word .LANCHOR11
+ 571 036c 6740533C 	 .word 1012088935
+ 572 0370 00000000 	 .word adc_q2_calibration
+ 573 0374 00000000 	 .word adc_q1_calibration
+ 574 0378 00000000 	 .word adc_i2_calibration
+ 575 037c 00000000 	 .word adc_i1_calibration
+ 576 0380 00000000 	 .word .LANCHOR13
+ 577 0384 00000000 	 .word .LANCHOR12
+ 578 0388 00000000 	 .word .LANCHOR14
+ 579 038c 00000000 	 .word .LANCHOR15
+ 580 0390 00000000 	 .word 0
+ 581 0394 00000000 	 .word .LANCHOR16
+ 582 0398 00000000 	 .word .LANCHOR17
+ 583              	.L95:
+ 584              	.LVL56:
+ 585              	.L12:
+ 241:../Algorithm/src/range_doppler.c ****       
+ 586              	 .loc 1 241 0 discriminator 3
+ 587 039c D2ED007A 	 flds s15,[r2]
+ 588 03a0 93ED007A 	 flds s14,[r3]
+ 243:../Algorithm/src/range_doppler.c ****     }
+ 589              	 .loc 1 243 0 discriminator 3
+ 590 03a4 B1EC016A 	 fldmias r1!,{s12}
+ 591 03a8 67EEA56A 	 fmuls s13,s15,s11
+ 241:../Algorithm/src/range_doppler.c ****       
+ 592              	 .loc 1 241 0 discriminator 3
+ 593 03ac 77EE677A 	 fsubs s15,s14,s15
+ 243:../Algorithm/src/range_doppler.c ****     }
+ 594              	 .loc 1 243 0 discriminator 3
+ 595 03b0 B0EE667A 	 fcpys s14,s13
+ 596 03b4 A6EE057A 	 vfma.f32 s14,s12,s10
+ 241:../Algorithm/src/range_doppler.c ****       
+ 597              	 .loc 1 241 0 discriminator 3
+ 598 03b8 F0EEE77A 	 fabss s15,s15
+ 599 03bc E3EC017A 	 fstmias r3!,{s15}
+ 239:../Algorithm/src/range_doppler.c ****     {
+ 600              	 .loc 1 239 0 discriminator 3
+ 601 03c0 8342     	 cmp r3,r0
+ 243:../Algorithm/src/range_doppler.c ****     }
+ 602              	 .loc 1 243 0 discriminator 3
+ 603 03c2 A2EC017A 	 fstmias r2!,{s14}
+ 239:../Algorithm/src/range_doppler.c ****     {
+ 604              	 .loc 1 239 0 discriminator 3
+ 605 03c6 E9D1     	 bne .L12
+ 606              	.L13:
+ 253:../Algorithm/src/range_doppler.c ****   
+ 607              	 .loc 1 253 0
+ 608 03c8 179B     	 ldr r3,[sp,#92]
+ 609 03ca CF4D     	 ldr r5,.L97+16
+ 610              	.LBB41:
+ 611              	.LBB42:
+ 387:../Algorithm/src/range_doppler.c **** }
+ 388:../Algorithm/src/range_doppler.c **** 
+ 389:../Algorithm/src/range_doppler.c **** //==========================================================================
+ 390:../Algorithm/src/range_doppler.c **** 
+ 391:../Algorithm/src/range_doppler.c **** static uint8_t target_detection(const algo_settings_t *p_algo_settings, float* fft_spectrum, target
+ 392:../Algorithm/src/range_doppler.c **** {
+ 393:../Algorithm/src/range_doppler.c ****   uint32_t target_range;
+ 394:../Algorithm/src/range_doppler.c ****   uint32_t n = 2;
+ 395:../Algorithm/src/range_doppler.c ****   uint32_t  fl2_bin, fl_bin, fp_bin, fr_bin, fr2_bin;
+ 396:../Algorithm/src/range_doppler.c ****   float fl2,fl, fp, fr,fr2;
+ 397:../Algorithm/src/range_doppler.c ****   float peak_idx = 0;
+ 398:../Algorithm/src/range_doppler.c ****   uint8_t num_of_targets = 0;
+ 399:../Algorithm/src/range_doppler.c ****   
+ 400:../Algorithm/src/range_doppler.c ****   while (n <= (search_length - 2))
+ 401:../Algorithm/src/range_doppler.c ****   {
+ 402:../Algorithm/src/range_doppler.c ****     fp_bin  = n;
+ 403:../Algorithm/src/range_doppler.c ****     fl_bin  = fp_bin - 1;
+ 404:../Algorithm/src/range_doppler.c ****     fl2_bin = fp_bin - 2;
+ 405:../Algorithm/src/range_doppler.c ****     fr_bin  = fp_bin + 1;
+ 406:../Algorithm/src/range_doppler.c ****     fr2_bin = fp_bin + 2;
+ 407:../Algorithm/src/range_doppler.c ****     
+ 408:../Algorithm/src/range_doppler.c ****     fp  = fft_spectrum[fp_bin];
+ 409:../Algorithm/src/range_doppler.c ****     fl  = fft_spectrum[fl_bin];
+ 410:../Algorithm/src/range_doppler.c ****     fl2 = fft_spectrum[fl2_bin];
+ 411:../Algorithm/src/range_doppler.c ****     fr  = fft_spectrum[fr_bin];
+ 412:../Algorithm/src/range_doppler.c ****     fr2 = fft_spectrum[fr2_bin];
+ 413:../Algorithm/src/range_doppler.c ****     
+ 414:../Algorithm/src/range_doppler.c ****     if((fp >= threshold) && (fp >= fl2) && (fp >= fl) && (fp > fr) && (fp > fr2))
+ 415:../Algorithm/src/range_doppler.c ****     {
+ 416:../Algorithm/src/range_doppler.c ****       peak_idx = (fl2_bin * fl2 + fl_bin * fl + fp_bin * fp + fr_bin * fr + fr2_bin * fr2) / (fl2 +
+ 417:../Algorithm/src/range_doppler.c ****       
+ 418:../Algorithm/src/range_doppler.c ****       target_range = (uint32_t)(peak_idx * 100.0f * distance_per_bin);
+ 612              	 .loc 1 418 0
+ 613 03cc 9FEDCF9A 	 flds s18,.L97+20
+ 614              	.LBE42:
+ 615              	.LBE41:
+ 253:../Algorithm/src/range_doppler.c ****   
+ 616              	 .loc 1 253 0
+ 617 03d0 03F10C0A 	 add r10,r3,#12
+ 618 03d4 0021     	 movs r1,#0
+ 619 03d6 6422     	 movs r2,#100
+ 620 03d8 5046     	 mov r0,r10
+ 621 03da FFF7FEFF 	 bl memset
+ 622              	.LVL57:
+ 623 03de 1C9B     	 ldr r3,[sp,#112]
+ 255:../Algorithm/src/range_doppler.c ****   
+ 624              	 .loc 1 255 0
+ 625 03e0 CB48     	 ldr r0,.L97+24
+ 626 03e2 0021     	 movs r1,#0
+ 627 03e4 A022     	 movs r2,#160
+ 628 03e6 9F1E     	 subs r7,r3,#2
+ 629 03e8 FFF7FEFF 	 bl memset
+ 630              	.LVL58:
+ 631              	.LBB48:
+ 632              	.LBB45:
+ 633              	 .loc 1 418 0
+ 634 03ec C94B     	 ldr r3,.L97+28
+ 635 03ee DDF85890 	 ldr r9,[sp,#88]
+ 636 03f2 D3ED008A 	 flds s17,[r3]
+ 394:../Algorithm/src/range_doppler.c ****   uint32_t  fl2_bin, fl_bin, fp_bin, fr_bin, fr2_bin;
+ 637              	 .loc 1 394 0
+ 638 03f6 0223     	 movs r3,#2
+ 400:../Algorithm/src/range_doppler.c ****   {
+ 639              	 .loc 1 400 0
+ 640 03f8 BB42     	 cmp r3,r7
+ 641 03fa A5F10804 	 sub r4,r5,#8
+ 642              	.LVL59:
+ 398:../Algorithm/src/range_doppler.c ****   
+ 643              	 .loc 1 398 0
+ 644 03fe 4FF00008 	 mov r8,#0
+ 400:../Algorithm/src/range_doppler.c ****   {
+ 645              	 .loc 1 400 0
+ 646 0402 00F29E80 	 bhi .L90
+ 647              	.LVL60:
+ 648              	.L27:
+ 408:../Algorithm/src/range_doppler.c ****     fl  = fft_spectrum[fl_bin];
+ 649              	 .loc 1 408 0
+ 650 0406 95ED005A 	 flds s10,[r5]
+ 409:../Algorithm/src/range_doppler.c ****     fl2 = fft_spectrum[fl2_bin];
+ 651              	 .loc 1 409 0
+ 652 040a D4ED014A 	 flds s9,[r4,#4]
+ 410:../Algorithm/src/range_doppler.c ****     fr  = fft_spectrum[fr_bin];
+ 653              	 .loc 1 410 0
+ 654 040e B4EC017A 	 fldmias r4!,{s14}
+ 411:../Algorithm/src/range_doppler.c ****     fr2 = fft_spectrum[fr2_bin];
+ 655              	 .loc 1 411 0
+ 656 0412 95ED014A 	 flds s8,[r5,#4]
+ 412:../Algorithm/src/range_doppler.c ****     
+ 657              	 .loc 1 412 0
+ 658 0416 D4ED036A 	 flds s13,[r4,#12]
+ 414:../Algorithm/src/range_doppler.c ****     {
+ 659              	 .loc 1 414 0
+ 660 041a B4EEC58A 	 fcmpes s16,s10
+ 411:../Algorithm/src/range_doppler.c ****     fr2 = fft_spectrum[fr2_bin];
+ 661              	 .loc 1 411 0
+ 662 041e 0435     	 adds r5,r5,#4
+ 414:../Algorithm/src/range_doppler.c ****     {
+ 663              	 .loc 1 414 0
+ 664 0420 F1EE10FA 	 fmstat
+ 403:../Algorithm/src/range_doppler.c ****     fl2_bin = fp_bin - 2;
+ 665              	 .loc 1 403 0
+ 666 0424 03F1FF30 	 add r0,r3,#-1
+ 667              	.LVL61:
+ 404:../Algorithm/src/range_doppler.c ****     fr_bin  = fp_bin + 1;
+ 668              	 .loc 1 404 0
+ 669 0428 A3F10201 	 sub r1,r3,#2
+ 670              	.LVL62:
+ 405:../Algorithm/src/range_doppler.c ****     fr2_bin = fp_bin + 2;
+ 671              	 .loc 1 405 0
+ 672 042c 03F10106 	 add r6,r3,#1
+ 673              	.LVL63:
+ 406:../Algorithm/src/range_doppler.c ****     
+ 674              	 .loc 1 406 0
+ 675 0430 03F10202 	 add r2,r3,#2
+ 676              	.LVL64:
+ 414:../Algorithm/src/range_doppler.c ****     {
+ 677              	 .loc 1 414 0
+ 678 0434 00F28180 	 bhi .L15
+ 679 0438 B4EEC75A 	 fcmpes s10,s14
+ 680 043c F1EE10FA 	 fmstat
+ 681 0440 7BDB     	 blt .L15
+ 682 0442 B4EEE45A 	 fcmpes s10,s9
+ 683 0446 F1EE10FA 	 fmstat
+ 684 044a 76DB     	 blt .L15
+ 685 044c B4EEC45A 	 fcmpes s10,s8
+ 686 0450 F1EE10FA 	 fmstat
+ 687 0454 71DD     	 ble .L15
+ 688 0456 B4EEE65A 	 fcmpes s10,s13
+ 689 045a F1EE10FA 	 fmstat
+ 690 045e 6CDD     	 ble .L15
+ 416:../Algorithm/src/range_doppler.c ****       
+ 691              	 .loc 1 416 0
+ 692 0460 07EE900A 	 fmsr s15,r0
+ 693 0464 F8EE675A 	 fuitos s11,s15
+ 694 0468 07EE901A 	 fmsr s15,r1
+ 695 046c 64EEA55A 	 fmuls s11,s9,s11
+ 696 0470 B8EE676A 	 fuitos s12,s15
+ 697 0474 07EE903A 	 fmsr s15,r3
+ 698 0478 E7EE065A 	 vfma.f32 s11,s14,s12
+ 419:../Algorithm/src/range_doppler.c ****       
+ 420:../Algorithm/src/range_doppler.c ****       if ((target_range - p_algo_settings->range_offset_cm) > 0)
+ 699              	 .loc 1 420 0
+ 700 047c D9F82430 	 ldr r3,[r9,#36]
+ 701              	.LVL65:
+ 416:../Algorithm/src/range_doppler.c ****       
+ 702              	 .loc 1 416 0
+ 703 0480 F8EE677A 	 fuitos s15,s15
+ 704              	.LVL66:
+ 705 0484 34EE876A 	 fadds s12,s9,s14
+ 706 0488 E5EE275A 	 vfma.f32 s11,s10,s15
+ 707 048c 07EE106A 	 fmsr s14,r6
+ 708              	.LVL67:
+ 709 0490 B8EE477A 	 fuitos s14,s14
+ 710 0494 35EE066A 	 fadds s12,s10,s12
+ 711 0498 E4EE075A 	 vfma.f32 s11,s8,s14
+ 712 049c 34EE066A 	 fadds s12,s8,s12
+ 713 04a0 B0EE657A 	 fcpys s14,s11
+ 714 04a4 05EE902A 	 fmsr s11,r2
+ 715 04a8 F8EE655A 	 fuitos s11,s11
+ 716 04ac A6EEA57A 	 vfma.f32 s14,s13,s11
+ 717 04b0 76EE866A 	 fadds s13,s13,s12
+ 718              	.LVL68:
+ 719 04b4 87EE267A 	 fdivs s14,s14,s13
+ 720              	.LVL69:
+ 418:../Algorithm/src/range_doppler.c ****       
+ 721              	 .loc 1 418 0
+ 722 04b8 67EE096A 	 fmuls s13,s14,s18
+ 723 04bc 66EEA86A 	 fmuls s13,s13,s17
+ 724 04c0 FCEEE66A 	 ftouizs s13,s13
+ 725 04c4 16EE902A 	 fmrs r2,s13
+ 726              	.LVL70:
+ 727              	 .loc 1 420 0
+ 728 04c8 9A42     	 cmp r2,r3
+ 421:../Algorithm/src/range_doppler.c ****       {
+ 422:../Algorithm/src/range_doppler.c ****         target_range = target_range - p_algo_settings->range_offset_cm;
+ 729              	 .loc 1 422 0
+ 730 04ca 18BF     	 it ne
+ 731 04cc D31A     	 subne r3,r2,r3
+ 732              	.LVL71:
+ 423:../Algorithm/src/range_doppler.c ****       }
+ 424:../Algorithm/src/range_doppler.c ****       
+ 425:../Algorithm/src/range_doppler.c ****       if ((target_range >= p_algo_settings->min_distance_cm) && (target_range <= p_algo_settings->m
+ 733              	 .loc 1 425 0
+ 734 04ce D9F82C20 	 ldr r2,[r9,#44]
+ 735 04d2 9A42     	 cmp r2,r3
+ 736 04d4 2DD8     	 bhi .L22
+ 737 04d6 D9F83020 	 ldr r2,[r9,#48]
+ 738 04da 9342     	 cmp r3,r2
+ 739 04dc 29D8     	 bhi .L22
+ 740              	.LBB43:
+ 426:../Algorithm/src/range_doppler.c ****       {
+ 427:../Algorithm/src/range_doppler.c ****         float fp_new;
+ 428:../Algorithm/src/range_doppler.c ****         
+ 429:../Algorithm/src/range_doppler.c ****         if(peak_idx > fp_bin)
+ 741              	 .loc 1 429 0
+ 742 04de F4EEC77A 	 fcmpes s15,s14
+ 743 04e2 F1EE10FA 	 fmstat
+ 744 04e6 00F12682 	 bmi .L91
+ 430:../Algorithm/src/range_doppler.c ****           fp_new = fp +(fr - fp) * (peak_idx - fp_bin) / (fr_bin - fp_bin);
+ 431:../Algorithm/src/range_doppler.c ****         else
+ 432:../Algorithm/src/range_doppler.c ****           fp_new= fl + (fp - fl) * (fp_bin - peak_idx) / (fp_bin - fl_bin);
+ 745              	 .loc 1 432 0
+ 746 04ea 35EE645A 	 fsubs s10,s10,s9
+ 747              	.LVL72:
+ 748 04ee 77EEC77A 	 fsubs s15,s15,s14
+ 749 04f2 E5EE274A 	 vfma.f32 s9,s10,s15
+ 750              	.LVL73:
+ 751 04f6 B0EE645A 	 fcpys s10,s9
+ 752              	.LVL74:
+ 753              	.L25:
+ 433:../Algorithm/src/range_doppler.c ****         
+ 434:../Algorithm/src/range_doppler.c ****         target_info[num_of_targets].strength = fp_new;  // FFT magnitude level
+ 435:../Algorithm/src/range_doppler.c ****         
+ 436:../Algorithm/src/range_doppler.c ****         target_info[num_of_targets].range = target_range; // Range in centimeters (cm)
+ 754              	 .loc 1 436 0
+ 755 04fa 07EE903A 	 fmsr s15,r3
+ 434:../Algorithm/src/range_doppler.c ****         
+ 756              	 .loc 1 434 0
+ 757 04fe 08EB880B 	 add fp,r8,r8,lsl#2
+ 758              	 .loc 1 436 0
+ 759 0502 F8EE677A 	 fuitos s15,s15
+ 434:../Algorithm/src/range_doppler.c ****         
+ 760              	 .loc 1 434 0
+ 761 0506 0AEB8B02 	 add r2,r10,fp,lsl#2
+ 762 050a 82ED015A 	 fsts s10,[r2,#4]
+ 763              	.LVL75:
+ 764              	 .loc 1 436 0
+ 765 050e C2ED027A 	 fsts s15,[r2,#8]
+ 437:../Algorithm/src/range_doppler.c ****         
+ 438:../Algorithm/src/range_doppler.c ****         target_info[num_of_targets].idx = (uint32_t)(peak_idx + 0.5);  // index of FFT where target
+ 766              	 .loc 1 438 0
+ 767 0512 17EE100A 	 fmrs r0,s14
+ 768              	.LVL76:
+ 769 0516 FFF7FEFF 	 bl __aeabi_f2d
+ 770              	.LVL77:
+ 771 051a 0022     	 movs r2,#0
+ 772 051c 7E4B     	 ldr r3,.L97+32
+ 773 051e FFF7FEFF 	 bl __aeabi_dadd
+ 774              	.LVL78:
+ 775 0522 FFF7FEFF 	 bl __aeabi_d2uiz
+ 776              	.LVL79:
+ 439:../Algorithm/src/range_doppler.c ****         
+ 440:../Algorithm/src/range_doppler.c ****         num_of_targets++;
+ 777              	 .loc 1 440 0
+ 778 0526 08F10108 	 add r8,r8,#1
+ 438:../Algorithm/src/range_doppler.c ****         
+ 779              	 .loc 1 438 0
+ 780 052a 4AF82B00 	 str r0,[r10,fp,lsl#2]
+ 781              	 .loc 1 440 0
+ 782 052e 5FFA88F8 	 uxtb r8,r8
+ 783              	.LVL80:
+ 784              	.L22:
+ 785              	.LBE43:
+ 441:../Algorithm/src/range_doppler.c ****       }
+ 442:../Algorithm/src/range_doppler.c ****       
+ 443:../Algorithm/src/range_doppler.c ****       if (num_of_targets >= MAX_NUM_OF_TARGETS)
+ 786              	 .loc 1 443 0
+ 787 0532 B8F1040F 	 cmp r8,#4
+ 788 0536 00F20982 	 bhi .L26
+ 789              	.LVL81:
+ 790              	.L15:
+ 791              	.LBE45:
+ 792              	.LBE48:
+ 171:../Algorithm/src/range_doppler.c ****   {
+ 793              	 .loc 1 171 0
+ 794 053a 3346     	 mov r3,r6
+ 795              	.LVL82:
+ 796              	.LBB49:
+ 797              	.LBB46:
+ 400:../Algorithm/src/range_doppler.c ****   {
+ 798              	 .loc 1 400 0
+ 799 053c BB42     	 cmp r3,r7
+ 800 053e 7FF662AF 	 bls .L27
+ 801              	.LVL83:
+ 802              	.L90:
+ 803              	.LBE46:
+ 804              	.LBE49:
+ 257:../Algorithm/src/range_doppler.c ****   
+ 805              	 .loc 1 257 0
+ 806 0542 179B     	 ldr r3,[sp,#92]
+ 807              	.LVL84:
+ 808 0544 C3F80080 	 str r8,[r3]
+ 261:../Algorithm/src/range_doppler.c ****   {
+ 809              	 .loc 1 261 0
+ 810 0548 109B     	 ldr r3,[sp,#64]
+ 811 054a 012B     	 cmp r3,#1
+ 257:../Algorithm/src/range_doppler.c ****   
+ 812              	 .loc 1 257 0
+ 813 054c 4246     	 mov r2,r8
+ 261:../Algorithm/src/range_doppler.c ****   {
+ 814              	 .loc 1 261 0
+ 815 054e 40F21A81 	 bls .L29
+ 816              	.LVL85:
+ 263:../Algorithm/src/range_doppler.c ****     {
+ 817              	 .loc 1 263 0 discriminator 2
+ 818 0552 002A     	 cmp r2,#0
+ 819 0554 00F01781 	 beq .L29
+ 820              	.LVL86:
+ 821              	.L54:
+ 139:../Algorithm/src/range_doppler.c ****   
+ 822              	 .loc 1 139 0
+ 823 0558 1B98     	 ldr r0,[sp,#108]
+ 824 055a 704C     	 ldr r4,.L97+36
+ 825 055c DFF8B091 	 ldr r9,.L97+24
+ 826              	.LVL87:
+ 827 0560 DFF8E4B1 	 ldr fp,.L97+80
+ 828              	.LBB50:
+ 317:../Algorithm/src/range_doppler.c ****       }
+ 829              	 .loc 1 317 0
+ 830 0564 9FED6EBA 	 flds s22,.L97+40
+ 304:../Algorithm/src/range_doppler.c ****         }
+ 831              	 .loc 1 304 0
+ 832 0568 9FED6EAA 	 flds s20,.L97+44
+ 833              	.LBB51:
+ 337:../Algorithm/src/range_doppler.c ****         
+ 834              	 .loc 1 337 0
+ 835 056c DFED6EAA 	 flds s21,.L97+48
+ 836              	.LBE51:
+ 837              	.LBE50:
+ 139:../Algorithm/src/range_doppler.c ****   
+ 838              	 .loc 1 139 0
+ 839 0570 C830     	 adds r0,r0,#200
+ 840 0572 07EE900A 	 fmsr s15,r0
+ 841 0576 F8EE677A 	 fuitos s15,s15
+ 145:../Algorithm/src/range_doppler.c ****   
+ 842              	 .loc 1 145 0
+ 843 057a F7EE008A 	 fconsts s17,#112
+ 139:../Algorithm/src/range_doppler.c ****   
+ 844              	 .loc 1 139 0
+ 845 057e 17EE900A 	 fmrs r0,s15
+ 846 0582 FFF7FEFF 	 bl __aeabi_f2d
+ 847              	.LVL88:
+ 848 0586 5CA3     	 adr r3,.L97
+ 849 0588 D3E90023 	 ldrd r2,[r3]
+ 850 058c FFF7FEFF 	 bl __aeabi_dmul
+ 851              	.LVL89:
+ 852 0590 FFF7FEFF 	 bl __aeabi_d2f
+ 853              	.LVL90:
+ 145:../Algorithm/src/range_doppler.c ****   
+ 854              	 .loc 1 145 0
+ 855 0594 DFED657A 	 flds s15,.L97+52
+ 856 0598 109A     	 ldr r2,[sp,#64]
+ 857 059a DDF85C80 	 ldr r8,[sp,#92]
+ 858              	.LBB57:
+ 859              	.LBB52:
+ 337:../Algorithm/src/range_doppler.c ****         
+ 860              	 .loc 1 337 0
+ 861 059e 169E     	 ldr r6,[sp,#88]
+ 862              	.LBE52:
+ 863              	.LBE57:
+ 145:../Algorithm/src/range_doppler.c ****   
+ 864              	 .loc 1 145 0
+ 865 05a0 07EE100A 	 fmsr s14,r0
+ 866 05a4 67EE277A 	 fmuls s15,s14,s15
+ 867 05a8 93B2     	 uxth r3,r2
+ 868 05aa C8EEA78A 	 fdivs s17,s17,s15
+ 869 05ae 0893     	 str r3,[sp,#32]
+ 870 05b0 20AB     	 add r3,sp,#128
+ 871 05b2 1193     	 str r3,[sp,#68]
+ 872 05b4 22AB     	 add r3,sp,#136
+ 873 05b6 1393     	 str r3,[sp,#76]
+ 874 05b8 21AB     	 add r3,sp,#132
+ 875 05ba 04EB8204 	 add r4,r4,r2,lsl#2
+ 876 05be 1293     	 str r3,[sp,#72]
+ 877 05c0 23AB     	 add r3,sp,#140
+ 878 05c2 4FF0000A 	 mov r10,#0
+ 879              	.LVL91:
+ 880 05c6 1493     	 str r3,[sp,#80]
+ 881 05c8 24AD     	 add r5,sp,#144
+ 882              	.LBB58:
+ 883              	.LBB53:
+ 337:../Algorithm/src/range_doppler.c ****         
+ 884              	 .loc 1 337 0
+ 885 05ca 0794     	 str r4,[sp,#28]
+ 886 05cc 9FED4C9B 	 fldd d9,.L97+8
+ 887              	.LVL92:
+ 888              	.L38:
+ 889              	.LBE53:
+ 265:../Algorithm/src/range_doppler.c ****       target_idx = 2 * p_targets->elems[j].idx; // Get the index of Fast FFT spectrum where target 
+ 890              	 .loc 1 265 0
+ 891 05d0 0023     	 movs r3,#0
+ 892 05d2 2593     	 str r3,[sp,#148]
+ 893              	.LVL93:
+ 266:../Algorithm/src/range_doppler.c ****       
+ 894              	 .loc 1 266 0
+ 895 05d4 D8F80C30 	 ldr r3,[r8,#12]
+ 896 05d8 199C     	 ldr r4,[sp,#100]
+ 897 05da 504A     	 ldr r2,.L97+36
+ 898 05dc 544F     	 ldr r7,.L97+56
+ 899 05de 5548     	 ldr r0,.L97+60
+ 900 05e0 5549     	 ldr r1,.L97+64
+ 901 05e2 DB00     	 lsls r3,r3,#3
+ 902 05e4 04EB030E 	 add lr,r4,r3
+ 903 05e8 544C     	 ldr r4,.L97+68
+ 904 05ea 2344     	 add r3,r3,r4
+ 905 05ec 079C     	 ldr r4,[sp,#28]
+ 906              	.LVL94:
+ 907              	.L30:
+ 908              	.LBB54:
+ 272:../Algorithm/src/range_doppler.c ****         fft_input_q1[i]  = range_fft_signal_rx1[idx + 1];
+ 909              	 .loc 1 272 0 discriminator 3
+ 910 05ee DEED007A 	 flds s15,[lr]
+ 273:../Algorithm/src/range_doppler.c ****         
+ 911              	 .loc 1 273 0 discriminator 3
+ 912 05f2 DEF804C0 	 ldr ip,[lr,#4]
+ 272:../Algorithm/src/range_doppler.c ****         fft_input_q1[i]  = range_fft_signal_rx1[idx + 1];
+ 913              	 .loc 1 272 0 discriminator 3
+ 914 05f6 E2EC017A 	 fstmias r2!,{s15}
+ 275:../Algorithm/src/range_doppler.c ****         fft_input_q2[i]  = range_fft_signal_rx2[idx + 1];
+ 915              	 .loc 1 275 0 discriminator 3
+ 916 05fa D3ED007A 	 flds s15,[r3]
+ 273:../Algorithm/src/range_doppler.c ****         
+ 917              	 .loc 1 273 0 discriminator 3
+ 918 05fe 47F804CB 	 str ip,[r7],#4
+ 919              	.LBE54:
+ 268:../Algorithm/src/range_doppler.c ****       {
+ 920              	 .loc 1 268 0 discriminator 3
+ 921 0602 A242     	 cmp r2,r4
+ 922              	.LBB55:
+ 276:../Algorithm/src/range_doppler.c ****       }
+ 923              	 .loc 1 276 0 discriminator 3
+ 924 0604 D3F804C0 	 ldr ip,[r3,#4]
+ 275:../Algorithm/src/range_doppler.c ****         fft_input_q2[i]  = range_fft_signal_rx2[idx + 1];
+ 925              	 .loc 1 275 0 discriminator 3
+ 926 0608 E0EC017A 	 fstmias r0!,{s15}
+ 927 060c 0EF5006E 	 add lr,lr,#2048
+ 276:../Algorithm/src/range_doppler.c ****       }
+ 928              	 .loc 1 276 0 discriminator 3
+ 929 0610 41F804CB 	 str ip,[r1],#4
+ 930 0614 03F50063 	 add r3,r3,#2048
+ 931              	.LBE55:
+ 268:../Algorithm/src/range_doppler.c ****       {
+ 932              	 .loc 1 268 0 discriminator 3
+ 933 0618 E9D1     	 bne .L30
+ 280:../Algorithm/src/range_doppler.c ****                          FFT_INPUT_COMPLEX, FFT_SLOW_TIME, &if1_real, &if1_imag, doppler_fft_signal
+ 934              	 .loc 1 280 0
+ 935 061a 119B     	 ldr r3,[sp,#68]
+ 936 061c 0794     	 str r4,[sp,#28]
+ 937 061e 0393     	 str r3,[sp,#12]
+ 938 0620 089C     	 ldr r4,[sp,#32]
+ 939 0622 139B     	 ldr r3,[sp,#76]
+ 940 0624 0493     	 str r3,[sp,#16]
+ 941 0626 4FF0020C 	 mov ip,#2
+ 942 062a F7EE00BA 	 fconsts s23,#112
+ 943 062e 0127     	 movs r7,#1
+ 944 0630 434B     	 ldr r3,.L97+72
+ 945 0632 0593     	 str r3,[sp,#20]
+ 946 0634 CDF804C0 	 str ip,[sp,#4]
+ 947 0638 3848     	 ldr r0,.L97+36
+ 948 063a 3D49     	 ldr r1,.L97+56
+ 949 063c CDED00BA 	 fsts s23,[sp]
+ 950 0640 2246     	 mov r2,r4
+ 951 0642 4023     	 movs r3,#64
+ 952 0644 0297     	 str r7,[sp,#8]
+ 953 0646 CDF824C0 	 str ip,[sp,#36]
+ 954 064a FFF7FEFF 	 bl compute_fft_signal
+ 955              	.LVL95:
+ 285:../Algorithm/src/range_doppler.c ****                          FFT_INPUT_COMPLEX, FFT_SLOW_TIME, &if2_real, &if2_imag, doppler_fft_signal
+ 956              	 .loc 1 285 0
+ 957 064e 129B     	 ldr r3,[sp,#72]
+ 958 0650 DDF824C0 	 ldr ip,[sp,#36]
+ 959 0654 0393     	 str r3,[sp,#12]
+ 960 0656 149B     	 ldr r3,[sp,#80]
+ 961 0658 CDF804C0 	 str ip,[sp,#4]
+ 962 065c 0493     	 str r3,[sp,#16]
+ 963 065e 3548     	 ldr r0,.L97+60
+ 964 0660 3549     	 ldr r1,.L97+64
+ 965 0662 CDED00BA 	 fsts s23,[sp]
+ 966 0666 4023     	 movs r3,#64
+ 967 0668 2246     	 mov r2,r4
+ 968 066a 0297     	 str r7,[sp,#8]
+ 969 066c CDF814B0 	 str fp,[sp,#20]
+ 970 0670 FFF7FEFF 	 bl compute_fft_signal
+ 971              	.LVL96:
+ 289:../Algorithm/src/range_doppler.c **** #else
+ 972              	 .loc 1 289 0
+ 973 0674 3248     	 ldr r0,.L97+72
+ 974 0676 334A     	 ldr r2,.L97+76
+ 975 0678 4021     	 movs r1,#64
+ 976 067a FFF7FEFF 	 bl compute_fft_spectrum
+ 977              	.LVL97:
+ 294:../Algorithm/src/range_doppler.c ****       
+ 978              	 .loc 1 294 0
+ 979 067e 3148     	 ldr r0,.L97+76
+ 980 0680 4021     	 movs r1,#64
+ 981 0682 2A46     	 mov r2,r5
+ 982 0684 25AB     	 add r3,sp,#148
+ 983 0686 FFF7FEFF 	 bl arm_max_f32
+ 984              	.LVL98:
+ 296:../Algorithm/src/range_doppler.c ****       {
+ 985              	 .loc 1 296 0
+ 986 068a D6ED0E7A 	 flds s15,[r6,#56]
+ 987 068e 9DED247A 	 flds s14,[sp,#144]
+ 988 0692 F8EE677A 	 fuitos s15,s15
+ 989 0696 F4EEC77A 	 fcmpes s15,s14
+ 990 069a F1EE10FA 	 fmstat
+ 991 069e 00F2D380 	 bhi .L31
+ 296:../Algorithm/src/range_doppler.c ****       {
+ 992              	 .loc 1 296 0 is_stmt 0 discriminator 1
+ 993 06a2 259B     	 ldr r3,[sp,#148]
+ 994 06a4 002B     	 cmp r3,#0
+ 995 06a6 00F0CF80 	 beq .L31
+ 298:../Algorithm/src/range_doppler.c ****         {
+ 996              	 .loc 1 298 0 is_stmt 1
+ 997 06aa 1F2B     	 cmp r3,#31
+ 998 06ac 00F2E780 	 bhi .L33
+ 300:../Algorithm/src/range_doppler.c ****         }
+ 999              	 .loc 1 300 0
+ 1000 06b0 07EE903A 	 fmsr s15,r3
+ 1001 06b4 F8EEE77A 	 fsitos s15,s15
+ 1002 06b8 68EEE77A 	 fnmuls s15,s17,s15
+ 1003 06bc 67EE8A7A 	 fmuls s15,s15,s20
+ 1004              	.L34:
+ 310:../Algorithm/src/range_doppler.c ****         
+ 1005              	 .loc 1 310 0
+ 1006 06c0 DA00     	 lsls r2,r3,#3
+ 1007 06c2 1F49     	 ldr r1,.L97+72
+ 1008 06c4 C8ED067A 	 fsts s15,[r8,#24]
+ 1009 06c8 0432     	 adds r2,r2,#4
+ 1010 06ca 8F18     	 adds r7,r1,r2
+ 313:../Algorithm/src/range_doppler.c ****       }
+ 1011              	 .loc 1 313 0
+ 1012 06cc 0BEB0201 	 add r1,fp,r2
+ 309:../Algorithm/src/range_doppler.c ****         if1_imag = doppler_fft_signal_rx1[2*idx_max + 1];
+ 1013              	 .loc 1 309 0
+ 1014 06d0 1B4A     	 ldr r2,.L97+72
+ 1015 06d2 DB00     	 lsls r3,r3,#3
+ 1016 06d4 D018     	 adds r0,r2,r3
+ 310:../Algorithm/src/range_doppler.c ****         
+ 1017              	 .loc 1 310 0
+ 1018 06d6 3A68     	 ldr r2,[r7]
+ 313:../Algorithm/src/range_doppler.c ****       }
+ 1019              	 .loc 1 313 0
+ 1020 06d8 0F68     	 ldr r7,[r1]
+ 309:../Algorithm/src/range_doppler.c ****         if1_imag = doppler_fft_signal_rx1[2*idx_max + 1];
+ 1021              	 .loc 1 309 0
+ 1022 06da 0168     	 ldr r1,[r0]
+ 320:../Algorithm/src/range_doppler.c ****       {
+ 1023              	 .loc 1 320 0
+ 1024 06dc F068     	 ldr r0,[r6,#12]
+ 310:../Algorithm/src/range_doppler.c ****         
+ 1025              	 .loc 1 310 0
+ 1026 06de 2292     	 str r2,[sp,#136]
+ 312:../Algorithm/src/range_doppler.c ****         if2_imag = doppler_fft_signal_rx2[2*idx_max + 1];
+ 1027              	 .loc 1 312 0
+ 1028 06e0 5B44     	 add r3,r3,fp
+ 320:../Algorithm/src/range_doppler.c ****       {
+ 1029              	 .loc 1 320 0
+ 1030 06e2 0128     	 cmp r0,#1
+ 312:../Algorithm/src/range_doppler.c ****         if2_imag = doppler_fft_signal_rx2[2*idx_max + 1];
+ 1031              	 .loc 1 312 0
+ 1032 06e4 1B68     	 ldr r3,[r3]
+ 313:../Algorithm/src/range_doppler.c ****       }
+ 1033              	 .loc 1 313 0
+ 1034 06e6 2397     	 str r7,[sp,#140]
+ 309:../Algorithm/src/range_doppler.c ****         if1_imag = doppler_fft_signal_rx1[2*idx_max + 1];
+ 1035              	 .loc 1 309 0
+ 1036 06e8 2091     	 str r1,[sp,#128]
+ 312:../Algorithm/src/range_doppler.c ****         if2_imag = doppler_fft_signal_rx2[2*idx_max + 1];
+ 1037              	 .loc 1 312 0
+ 1038 06ea 2193     	 str r3,[sp,#132]
+ 320:../Algorithm/src/range_doppler.c ****       {
+ 1039              	 .loc 1 320 0
+ 1040 06ec 40F0B880 	 bne .L36
+ 1041 06f0 2CE0     	 b .L98
+ 1042              	.L99:
+ 1043 06f2 00BFAFF3 	 .align 3
+ 1043      0080
+ 1044              	.L97:
+ 1045 06f8 8DEDB5A0 	 .word -1598689907
+ 1046 06fc F7C6B03E 	 .word 1051772663
+ 1047 0700 00000000 	 .word 0
+ 1048 0704 00588140 	 .word 1082218496
+ 1049 0708 08000000 	 .word .LANCHOR16+8
+ 1050 070c 0000C842 	 .word 1120403456
+ 1051 0710 00000000 	 .word .LANCHOR9
+ 1052 0714 00000000 	 .word .LANCHOR11
+ 1053 0718 0000E03F 	 .word 1071644672
+ 1054 071c 00000000 	 .word .LANCHOR12
+ 1055 0720 00000000 	 .word 0
+ 1056 0724 5F29CB3B 	 .word 1003170143
+ 1057 0728 462DFF3F 	 .word 1073687878
+ 1058 072c 00008042 	 .word 1115684864
+ 1059 0730 00000000 	 .word .LANCHOR13
+ 1060 0734 00000000 	 .word .LANCHOR14
+ 1061 0738 00000000 	 .word .LANCHOR15
+ 1062 073c 00000000 	 .word .LANCHOR4
+ 1063 0740 00000000 	 .word .LANCHOR5
+ 1064 0744 00000000 	 .word .LANCHOR8
+ 1065 0748 00000000 	 .word .LANCHOR6
+ 1066              	.L98:
+ 1067              	.L93:
+ 322:../Algorithm/src/range_doppler.c ****         target_measurements[j].range    = p_targets->elems[j].range;
+ 1068              	 .loc 1 322 0
+ 1069 074c D8F81000 	 ldr r0,[r8,#16]
+ 1070 0750 C9F80400 	 str r0,[r9,#4]
+ 323:../Algorithm/src/range_doppler.c ****         target_measurements[j].speed    = p_targets->elems[j].speed;
+ 1071              	 .loc 1 323 0
+ 1072 0754 D8F81400 	 ldr r0,[r8,#20]
+ 1073 0758 C9F80800 	 str r0,[r9,#8]
+ 324:../Algorithm/src/range_doppler.c ****         
+ 1074              	 .loc 1 324 0
+ 1075 075c C9ED037A 	 fsts s15,[r9,#12]
+ 326:../Algorithm/src/range_doppler.c ****         target_measurements[j].rx1_angle_arg_im = if1_imag;
+ 1076              	 .loc 1 326 0
+ 1077 0760 C9F81010 	 str r1,[r9,#16]
+ 327:../Algorithm/src/range_doppler.c ****         target_measurements[j].rx2_angle_arg_re = if2_real;
+ 1078              	 .loc 1 327 0
+ 1079 0764 C9F81420 	 str r2,[r9,#20]
+ 328:../Algorithm/src/range_doppler.c ****         target_measurements[j].rx2_angle_arg_im = if2_imag;
+ 1080              	 .loc 1 328 0
+ 1081 0768 C9F81830 	 str r3,[r9,#24]
+ 329:../Algorithm/src/range_doppler.c ****       }
+ 1082              	 .loc 1 329 0
+ 1083 076c C9F81C70 	 str r7,[r9,#28]
+ 1084              	.L37:
+ 1085              	.LBE58:
+ 263:../Algorithm/src/range_doppler.c ****     {
+ 1086              	 .loc 1 263 0 discriminator 1
+ 1087 0770 179B     	 ldr r3,[sp,#92]
+ 1088 0772 1A68     	 ldr r2,[r3]
+ 1089 0774 0AF1010A 	 add r10,r10,#1
+ 1090              	.LVL99:
+ 1091 0778 5245     	 cmp r2,r10
+ 1092 077a 08F11408 	 add r8,r8,#20
+ 1093 077e 09F12009 	 add r9,r9,#32
+ 1094 0782 3FF625AF 	 bhi .L38
+ 1095              	.LVL100:
+ 1096              	.L29:
+ 347:../Algorithm/src/range_doppler.c ****   {
+ 1097              	 .loc 1 347 0
+ 1098 0786 1699     	 ldr r1,[sp,#88]
+ 346:../Algorithm/src/range_doppler.c ****   if (cp_algo_settings->tracking_enable == 1U)
+ 1099              	 .loc 1 346 0
+ 1100 0788 189B     	 ldr r3,[sp,#96]
+ 347:../Algorithm/src/range_doppler.c ****   {
+ 1101              	 .loc 1 347 0
+ 1102 078a C968     	 ldr r1,[r1,#12]
+ 346:../Algorithm/src/range_doppler.c ****   if (cp_algo_settings->tracking_enable == 1U)
+ 1103              	 .loc 1 346 0
+ 1104 078c 5B68     	 ldr r3,[r3,#4]
+ 1105 078e 0120     	 movs r0,#1
+ 347:../Algorithm/src/range_doppler.c ****   {
+ 1106              	 .loc 1 347 0
+ 1107 0790 8142     	 cmp r1,r0
+ 346:../Algorithm/src/range_doppler.c ****   if (cp_algo_settings->tracking_enable == 1U)
+ 1108              	 .loc 1 346 0
+ 1109 0792 1872     	 strb r0,[r3,#8]
+ 347:../Algorithm/src/range_doppler.c ****   {
+ 1110              	 .loc 1 347 0
+ 1111 0794 7ED0     	 beq .L92
+ 1112              	.LVL101:
+ 1113              	.LBB59:
+ 1114              	.LBB60:
+ 444:../Algorithm/src/range_doppler.c ****       {
+ 445:../Algorithm/src/range_doppler.c ****         break;
+ 446:../Algorithm/src/range_doppler.c ****       }
+ 447:../Algorithm/src/range_doppler.c ****     }
+ 448:../Algorithm/src/range_doppler.c ****     n += 1;
+ 449:../Algorithm/src/range_doppler.c ****   }
+ 450:../Algorithm/src/range_doppler.c ****   
+ 451:../Algorithm/src/range_doppler.c ****   return num_of_targets;
+ 452:../Algorithm/src/range_doppler.c **** }
+ 453:../Algorithm/src/range_doppler.c **** 
+ 454:../Algorithm/src/range_doppler.c **** //===========================================================================
+ 455:../Algorithm/src/range_doppler.c **** 
+ 456:../Algorithm/src/range_doppler.c **** static void target_sorting(algo_result_t *algo_result)
+ 457:../Algorithm/src/range_doppler.c **** {
+ 458:../Algorithm/src/range_doppler.c ****   target_data_t *p_target = algo_result->p_target_list->elems;
+ 459:../Algorithm/src/range_doppler.c ****   target_data_t tmp;
+ 460:../Algorithm/src/range_doppler.c ****   
+ 461:../Algorithm/src/range_doppler.c ****   if(algo_result->p_target_list->num_of_targets < 2)
+ 1115              	 .loc 1 461 0
+ 1116 0796 1A68     	 ldr r2,[r3]
+ 1117 0798 012A     	 cmp r2,#1
+ 1118 079a 46D9     	 bls .L42
+ 1119              	.LVL102:
+ 458:../Algorithm/src/range_doppler.c ****   target_data_t tmp;
+ 1120              	 .loc 1 458 0
+ 1121 079c 0021     	 movs r1,#0
+ 1122              	.LBB61:
+ 462:../Algorithm/src/range_doppler.c ****     return; // nothing to sort
+ 463:../Algorithm/src/range_doppler.c ****   
+ 464:../Algorithm/src/range_doppler.c ****   /* Sorting of the targets header */
+ 465:../Algorithm/src/range_doppler.c ****   for (uint8_t m = 0; m < (algo_result->p_target_list->num_of_targets - 1); m++)
+ 1123              	 .loc 1 465 0
+ 1124 079e 013A     	 subs r2,r2,#1
+ 1125              	.LBE61:
+ 458:../Algorithm/src/range_doppler.c ****   target_data_t tmp;
+ 1126              	 .loc 1 458 0
+ 1127 07a0 0891     	 str r1,[sp,#32]
+ 1128              	.LBB63:
+ 1129              	 .loc 1 465 0
+ 1130 07a2 0992     	 str r2,[sp,#36]
+ 1131              	.LBE63:
+ 458:../Algorithm/src/range_doppler.c ****   target_data_t tmp;
+ 1132              	 .loc 1 458 0
+ 1133 07a4 03F10C0A 	 add r10,r3,#12
+ 1134              	.LVL103:
+ 1135 07a8 8B46     	 mov fp,r1
+ 1136              	.LVL104:
+ 1137              	.L47:
+ 1138              	.LBB64:
+ 1139              	.LBB62:
+ 466:../Algorithm/src/range_doppler.c ****   {
+ 467:../Algorithm/src/range_doppler.c ****     for (uint8_t n = 0; n < (algo_result->p_target_list->num_of_targets - m - 1); n++)
+ 1140              	 .loc 1 467 0
+ 1141 07aa 099B     	 ldr r3,[sp,#36]
+ 1142 07ac B3EB0B03 	 subs r3,r3,fp
+ 1143 07b0 0793     	 str r3,[sp,#28]
+ 1144 07b2 32D0     	 beq .L52
+ 1145 07b4 0026     	 movs r6,#0
+ 1146 07b6 3446     	 mov r4,r6
+ 1147              	.LVL105:
+ 1148              	.L50:
+ 468:../Algorithm/src/range_doppler.c ****     {
+ 469:../Algorithm/src/range_doppler.c ****       if (p_target[n].strength < p_target[n+1].strength) // Compare FFT amplitude levels
+ 1149              	 .loc 1 469 0
+ 1150 07b8 04EB8403 	 add r3,r4,r4,lsl#2
+ 1151 07bc 9B00     	 lsls r3,r3,#2
+ 1152 07be 03F11405 	 add r5,r3,#20
+ 1153 07c2 5544     	 add r5,r5,r10
+ 1154 07c4 5344     	 add r3,r3,r10
+ 1155 07c6 D5ED017A 	 flds s15,[r5,#4]
+ 1156 07ca 93ED017A 	 flds s14,[r3,#4]
+ 467:../Algorithm/src/range_doppler.c ****     {
+ 1157              	 .loc 1 467 0
+ 1158 07ce 0136     	 adds r6,r6,#1
+ 1159              	.LVL106:
+ 1160              	 .loc 1 469 0
+ 1161 07d0 B4EEE77A 	 fcmpes s14,s15
+ 470:../Algorithm/src/range_doppler.c ****       {
+ 471:../Algorithm/src/range_doppler.c ****         tmp = p_target[n];
+ 1162              	 .loc 1 471 0
+ 1163 07d4 0DF1980C 	 add ip,sp,#152
+ 467:../Algorithm/src/range_doppler.c ****     {
+ 1164              	 .loc 1 467 0
+ 1165 07d8 F6B2     	 uxtb r6,r6
+ 1166              	.LVL107:
+ 469:../Algorithm/src/range_doppler.c ****       {
+ 1167              	 .loc 1 469 0
+ 1168 07da F1EE10FA 	 fmstat
+ 472:../Algorithm/src/range_doppler.c ****         p_target[n] = p_target[n+1];
+ 1169              	 .loc 1 472 0
+ 1170 07de AE46     	 mov lr,r5
+ 471:../Algorithm/src/range_doppler.c ****         p_target[n] = p_target[n+1];
+ 1171              	 .loc 1 471 0
+ 1172 07e0 1F46     	 mov r7,r3
+ 1173              	 .loc 1 472 0
+ 1174 07e2 9946     	 mov r9,r3
+ 473:../Algorithm/src/range_doppler.c ****         p_target[n+1] = tmp;
+ 1175              	 .loc 1 473 0
+ 1176 07e4 E046     	 mov r8,ip
+ 467:../Algorithm/src/range_doppler.c ****     {
+ 1177              	 .loc 1 467 0
+ 1178 07e6 3446     	 mov r4,r6
+ 469:../Algorithm/src/range_doppler.c ****       {
+ 1179              	 .loc 1 469 0
+ 1180 07e8 14D5     	 bpl .L48
+ 471:../Algorithm/src/range_doppler.c ****         p_target[n] = p_target[n+1];
+ 1181              	 .loc 1 471 0
+ 1182 07ea 0FCF     	 ldmia r7!,{r0,r1,r2,r3}
+ 1183 07ec ACE80F00 	 stmia ip!,{r0,r1,r2,r3}
+ 472:../Algorithm/src/range_doppler.c ****         p_target[n+1] = tmp;
+ 1184              	 .loc 1 472 0
+ 1185 07f0 BEE80F00 	 ldmia lr!,{r0,r1,r2,r3}
+ 471:../Algorithm/src/range_doppler.c ****         p_target[n] = p_target[n+1];
+ 1186              	 .loc 1 471 0
+ 1187 07f4 D7F800B0 	 ldr fp,[r7]
+ 1188 07f8 CCF800B0 	 str fp,[ip]
+ 472:../Algorithm/src/range_doppler.c ****         p_target[n+1] = tmp;
+ 1189              	 .loc 1 472 0
+ 1190 07fc A9E80F00 	 stmia r9!,{r0,r1,r2,r3}
+ 1191              	 .loc 1 473 0
+ 1192 0800 B8E80F00 	 ldmia r8!,{r0,r1,r2,r3}
+ 1193 0804 AC46     	 mov ip,r5
+ 472:../Algorithm/src/range_doppler.c ****         p_target[n+1] = tmp;
+ 1194              	 .loc 1 472 0
+ 1195 0806 DEF80050 	 ldr r5,[lr]
+ 1196 080a 3D60     	 str r5,[r7]
+ 1197              	 .loc 1 473 0
+ 1198 080c ACE80F00 	 stmia ip!,{r0,r1,r2,r3}
+ 1199 0810 CEF800B0 	 str fp,[lr]
+ 1200              	.L48:
+ 467:../Algorithm/src/range_doppler.c ****     {
+ 1201              	 .loc 1 467 0
+ 1202 0814 079B     	 ldr r3,[sp,#28]
+ 1203 0816 9E42     	 cmp r6,r3
+ 1204 0818 CED3     	 bcc .L50
+ 1205              	.LVL108:
+ 1206              	.L52:
+ 1207              	.LBE62:
+ 465:../Algorithm/src/range_doppler.c ****   {
+ 1208              	 .loc 1 465 0
+ 1209 081a 089B     	 ldr r3,[sp,#32]
+ 1210 081c 099A     	 ldr r2,[sp,#36]
+ 1211 081e 0133     	 adds r3,r3,#1
+ 1212 0820 DBB2     	 uxtb r3,r3
+ 1213 0822 9342     	 cmp r3,r2
+ 1214 0824 0893     	 str r3,[sp,#32]
+ 1215              	.LVL109:
+ 1216 0826 9B46     	 mov fp,r3
+ 1217 0828 BFD3     	 bcc .L47
+ 1218              	.LVL110:
+ 1219              	.L42:
+ 1220              	.LBE64:
+ 1221              	.LBE60:
+ 1222              	.LBE59:
+ 358:../Algorithm/src/range_doppler.c ****   
+ 1223              	 .loc 1 358 0
+ 1224 082a 189B     	 ldr r3,[sp,#96]
+ 1225 082c 83ED008A 	 fsts s16,[r3]
+ 360:../Algorithm/src/range_doppler.c **** 
+ 1226              	 .loc 1 360 0
+ 1227 0830 2DB0     	 add sp,sp,#180
+ 1228              	.LCFI3:
+ 1229              	 .cfi_remember_state
+ 1230              	 .cfi_def_cfa_offset 68
+ 1231              	 
+ 1232 0832 BDEC088B 	 fldmfdd sp!,{d8-d11}
+ 1233              	.LCFI4:
+ 1234              	 .cfi_restore 86
+ 1235              	 .cfi_restore 87
+ 1236              	 .cfi_restore 84
+ 1237              	 .cfi_restore 85
+ 1238              	 .cfi_restore 82
+ 1239              	 .cfi_restore 83
+ 1240              	 .cfi_restore 80
+ 1241              	 .cfi_restore 81
+ 1242              	 .cfi_def_cfa_offset 36
+ 1243              	.LVL111:
+ 1244 0836 BDE8F08F 	 pop {r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 1245              	.LVL112:
+ 1246              	.L11:
+ 1247              	.LCFI5:
+ 1248              	 .cfi_restore_state
+ 248:../Algorithm/src/range_doppler.c ****   }
+ 1249              	 .loc 1 248 0
+ 1250 083a 0021     	 movs r1,#0
+ 1251 083c 4FF40072 	 mov r2,#512
+ 1252 0840 4748     	 ldr r0,.L100
+ 1253 0842 FFF7FEFF 	 bl memset
+ 1254              	.LVL113:
+ 1255 0846 BFE5     	 b .L13
+ 1256              	.LVL114:
+ 1257              	.L31:
+ 1258              	.LBB65:
+ 320:../Algorithm/src/range_doppler.c ****       {
+ 1259              	 .loc 1 320 0
+ 1260 0848 F068     	 ldr r0,[r6,#12]
+ 317:../Algorithm/src/range_doppler.c ****       }
+ 1261              	 .loc 1 317 0
+ 1262 084a 88ED06BA 	 fsts s22,[r8,#24]
+ 320:../Algorithm/src/range_doppler.c ****       {
+ 1263              	 .loc 1 320 0
+ 1264 084e 0128     	 cmp r0,#1
+ 1265 0850 2099     	 ldr r1,[sp,#128]
+ 1266 0852 229A     	 ldr r2,[sp,#136]
+ 1267 0854 219B     	 ldr r3,[sp,#132]
+ 1268 0856 239F     	 ldr r7,[sp,#140]
+ 317:../Algorithm/src/range_doppler.c ****       }
+ 1269              	 .loc 1 317 0
+ 1270 0858 DFED427A 	 flds s15,.L100+4
+ 320:../Algorithm/src/range_doppler.c ****       {
+ 1271              	 .loc 1 320 0
+ 1272 085c 3FF476AF 	 beq .L93
+ 1273              	.L36:
+ 1274              	.LVL115:
+ 1275              	.LBB56:
+ 337:../Algorithm/src/range_doppler.c ****         
+ 1276              	 .loc 1 337 0
+ 1277 0860 B6F92800 	 ldrsh r0,[r6,#40]
+ 1278 0864 0490     	 str r0,[sp,#16]
+ 1279 0866 0097     	 str r7,[sp]
+ 1280 0868 8DED029B 	 fstd d9,[sp,#8]
+ 1281 086c CDED05AA 	 fsts s21,[sp,#20]
+ 1282 0870 26A8     	 add r0,sp,#152
+ 1283 0872 FFF7FEFF 	 bl compute_angle
+ 1284              	.LVL116:
+ 339:../Algorithm/src/range_doppler.c ****       }
+ 1285              	 .loc 1 339 0
+ 1286 0876 289B     	 ldr r3,[sp,#160]
+ 1287 0878 C8F81C30 	 str r3,[r8,#28]
+ 1288 087c 78E7     	 b .L37
+ 1289              	.LVL117:
+ 1290              	.L33:
+ 1291              	.LBE56:
+ 304:../Algorithm/src/range_doppler.c ****         }
+ 1292              	 .loc 1 304 0
+ 1293 087e C3F13F02 	 rsb r2,r3,#63
+ 1294 0882 07EE902A 	 fmsr s15,r2
+ 1295 0886 F8EE677A 	 fuitos s15,s15
+ 1296 088a 67EEA87A 	 fmuls s15,s15,s17
+ 1297 088e 67EE8A7A 	 fmuls s15,s15,s20
+ 1298 0892 15E7     	 b .L34
+ 1299              	.LVL118:
+ 1300              	.L92:
+ 1301              	.LBE65:
+ 1302              	.LBB66:
+ 1303              	.LBB67:
+ 474:../Algorithm/src/range_doppler.c ****       }
+ 475:../Algorithm/src/range_doppler.c ****     }
+ 476:../Algorithm/src/range_doppler.c ****   }
+ 477:../Algorithm/src/range_doppler.c **** }
+ 478:../Algorithm/src/range_doppler.c **** 
+ 479:../Algorithm/src/range_doppler.c **** //==========================================================================
+ 480:../Algorithm/src/range_doppler.c **** 
+ 481:../Algorithm/src/range_doppler.c **** static void update_tracking_list(tracking_list_t* p_tracking_list, Measurement_elem_t* measurement_
+ 482:../Algorithm/src/range_doppler.c **** {
+ 483:../Algorithm/src/range_doppler.c ****   data_association(p_tracking_list, measurement_ptr, num_of_targets, cp_algo_Settings, frame_period
+ 1304              	 .loc 1 483 0
+ 1305 0894 1A98     	 ldr r0,[sp,#104]
+ 1306 0896 344C     	 ldr r4,.L100+8
+ 1307 0898 169D     	 ldr r5,[sp,#88]
+ 1308 089a 816A     	 ldr r1,[r0,#40]
+ 1309 089c 4369     	 ldr r3,[r0,#20]
+ 1310 089e 0193     	 str r3,[sp,#4]
+ 1311              	.LVL119:
+ 1312 08a0 0091     	 str r1,[sp]
+ 1313 08a2 92B2     	 uxth r2,r2
+ 1314              	.LVL120:
+ 1315 08a4 2B46     	 mov r3,r5
+ 1316              	.LVL121:
+ 1317 08a6 2046     	 mov r0,r4
+ 1318 08a8 3049     	 ldr r1,.L100+12
+ 1319              	.LVL122:
+ 1320 08aa FFF7FEFF 	 bl data_association
+ 1321              	.LVL123:
+ 1322              	.LBE67:
+ 1323              	.LBE66:
+ 1324              	.LBB68:
+ 1325              	.LBB69:
+ 484:../Algorithm/src/range_doppler.c **** }
+ 485:../Algorithm/src/range_doppler.c **** 
+ 486:../Algorithm/src/range_doppler.c **** //==========================================================================
+ 487:../Algorithm/src/range_doppler.c **** 
+ 488:../Algorithm/src/range_doppler.c **** static void update_target_list_from_tracks(algo_target_list_t *p_targets, tracking_list_t *p_tracks
+ 489:../Algorithm/src/range_doppler.c **** {
+ 490:../Algorithm/src/range_doppler.c ****   if (p_tracks->num_of_tracks > CURRENT_NUM_OF_TRACKS )
+ 1326              	 .loc 1 490 0
+ 1327 08ae 2368     	 ldr r3,[r4]
+ 1328              	.LBE69:
+ 1329              	.LBE68:
+ 350:../Algorithm/src/range_doppler.c ****     
+ 1330              	 .loc 1 350 0
+ 1331 08b0 189A     	 ldr r2,[sp,#96]
+ 1332              	.LBB74:
+ 1333              	.LBB72:
+ 1334              	.LBB70:
+ 491:../Algorithm/src/range_doppler.c ****   {
+ 492:../Algorithm/src/range_doppler.c ****     p_tracks->num_of_tracks = CURRENT_NUM_OF_TRACKS;
+ 493:../Algorithm/src/range_doppler.c ****   }
+ 494:../Algorithm/src/range_doppler.c ****   
+ 495:../Algorithm/src/range_doppler.c ****   p_targets->num_of_targets = 0;
+ 496:../Algorithm/src/range_doppler.c ****   
+ 497:../Algorithm/src/range_doppler.c ****   for (uint8_t i = 0; i < p_tracks->max_num_of_tracks; i++)
+ 1335              	 .loc 1 497 0
+ 1336 08b2 D4F804E0 	 ldr lr,[r4,#4]
+ 1337              	.LBE70:
+ 1338              	.LBE72:
+ 1339              	.LBE74:
+ 350:../Algorithm/src/range_doppler.c ****     
+ 1340              	 .loc 1 350 0
+ 1341 08b6 5668     	 ldr r6,[r2,#4]
+ 1342              	.LVL124:
+ 1343 08b8 D5F81080 	 ldr r8,[r5,#16]
+ 1344              	.LVL125:
+ 1345              	.LBB75:
+ 1346              	.LBB73:
+ 490:../Algorithm/src/range_doppler.c ****   {
+ 1347              	 .loc 1 490 0
+ 1348 08bc 052B     	 cmp r3,#5
+ 492:../Algorithm/src/range_doppler.c ****   }
+ 1349              	 .loc 1 492 0
+ 1350 08be 84BF     	 itt hi
+ 1351 08c0 0523     	 movhi r3,#5
+ 1352 08c2 2360     	 strhi r3,[r4]
+ 495:../Algorithm/src/range_doppler.c ****   
+ 1353              	 .loc 1 495 0
+ 1354 08c4 0023     	 movs r3,#0
+ 1355 08c6 3360     	 str r3,[r6]
+ 1356              	.LVL126:
+ 1357              	.LBB71:
+ 498:../Algorithm/src/range_doppler.c ****   {
+ 499:../Algorithm/src/range_doppler.c ****     p_targets->elems[i].idx = 0;
+ 1358              	 .loc 1 499 0
+ 1359 08c8 9C46     	 mov ip,r3
+ 497:../Algorithm/src/range_doppler.c ****   {
+ 1360              	 .loc 1 497 0
+ 1361 08ca BEF1000F 	 cmp lr,#0
+ 1362 08ce 02D1     	 bne .L41
+ 1363 08d0 2EE0     	 b .L44
+ 1364              	.LVL127:
+ 1365              	.L45:
+ 1366 08d2 9E45     	 cmp lr,r3
+ 1367 08d4 2CD9     	 bls .L44
+ 1368              	.LVL128:
+ 1369              	.L41:
+ 1370              	 .loc 1 499 0
+ 1371 08d6 03EB8305 	 add r5,r3,r3,lsl#2
+ 1372 08da 06EB8505 	 add r5,r6,r5,lsl#2
+ 500:../Algorithm/src/range_doppler.c ****     
+ 501:../Algorithm/src/range_doppler.c ****     if (p_tracks->elems[i].is_alived == 1 && p_tracks->elems[i].measurement_counter > 2 &&
+ 1373              	 .loc 1 501 0
+ 1374 08de 03EBC302 	 add r2,r3,r3,lsl#3
+ 1375 08e2 04EB4212 	 add r2,r4,r2,lsl#5
+ 499:../Algorithm/src/range_doppler.c ****     
+ 1376              	 .loc 1 499 0
+ 1377 08e6 05F10807 	 add r7,r5,#8
+ 1378              	 .loc 1 501 0
+ 1379 08ea 02F10801 	 add r1,r2,#8
+ 499:../Algorithm/src/range_doppler.c ****     
+ 1380              	 .loc 1 499 0
+ 1381 08ee C7F804C0 	 str ip,[r7,#4]
+ 1382              	 .loc 1 501 0
+ 1383 08f2 4878     	 ldrb r0,[r1,#1]
+ 497:../Algorithm/src/range_doppler.c ****   {
+ 1384              	 .loc 1 497 0
+ 1385 08f4 0133     	 adds r3,r3,#1
+ 1386              	.LVL129:
+ 1387              	 .loc 1 501 0
+ 1388 08f6 0128     	 cmp r0,#1
+ 497:../Algorithm/src/range_doppler.c ****   {
+ 1389              	 .loc 1 497 0
+ 1390 08f8 DBB2     	 uxtb r3,r3
+ 1391              	.LVL130:
+ 1392              	 .loc 1 501 0
+ 1393 08fa EAD1     	 bne .L45
+ 1394 08fc 1069     	 ldr r0,[r2,#16]
+ 1395 08fe 0228     	 cmp r0,#2
+ 1396 0900 E7D9     	 bls .L45
+ 1397 0902 8988     	 ldrh r1,[r1,#4]
+ 1398 0904 0029     	 cmp r1,#0
+ 1399 0906 E4D0     	 beq .L45
+ 502:../Algorithm/src/range_doppler.c ****         p_tracks->elems[i].range_change_flag > 0)
+ 503:../Algorithm/src/range_doppler.c ****     {
+ 504:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].idx           = (uint32_t)(p_tracks->elems[i].track_id + 1);
+ 1400              	 .loc 1 504 0
+ 1401 0908 117A     	 ldrb r1,[r2,#8]
+ 505:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].strength      = p_tracks->elems[i].strength;
+ 506:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].range         = p_tracks->elems[i].range;
+ 507:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].speed         = p_tracks->elems[i].speed;
+ 508:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].angle         = p_tracks->elems[i].angle;
+ 509:../Algorithm/src/range_doppler.c ****       
+ 510:../Algorithm/src/range_doppler.c ****       p_targets->num_of_targets         += 1;
+ 1402              	 .loc 1 510 0
+ 1403 090a 3068     	 ldr r0,[r6]
+ 505:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].strength      = p_tracks->elems[i].strength;
+ 1404              	 .loc 1 505 0
+ 1405 090c D2F814B0 	 ldr fp,[r2,#20]
+ 506:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].speed         = p_tracks->elems[i].speed;
+ 1406              	 .loc 1 506 0
+ 1407 0910 D2F818A0 	 ldr r10,[r2,#24]
+ 505:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].strength      = p_tracks->elems[i].strength;
+ 1408              	 .loc 1 505 0
+ 1409 0914 C7F808B0 	 str fp,[r7,#8]
+ 504:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].strength      = p_tracks->elems[i].strength;
+ 1410              	 .loc 1 504 0
+ 1411 0918 0131     	 adds r1,r1,#1
+ 1412              	 .loc 1 510 0
+ 1413 091a 0130     	 adds r0,r0,#1
+ 504:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].strength      = p_tracks->elems[i].strength;
+ 1414              	 .loc 1 504 0
+ 1415 091c 7960     	 str r1,[r7,#4]
+ 511:../Algorithm/src/range_doppler.c ****       
+ 512:../Algorithm/src/range_doppler.c ****       if (p_targets->num_of_targets >= reduced_num_of_tracks)
+ 1416              	 .loc 1 512 0
+ 1417 091e 8045     	 cmp r8,r0
+ 507:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].angle         = p_tracks->elems[i].angle;
+ 1418              	 .loc 1 507 0
+ 1419 0920 D169     	 ldr r1,[r2,#28]
+ 508:../Algorithm/src/range_doppler.c ****       
+ 1420              	 .loc 1 508 0
+ 1421 0922 126A     	 ldr r2,[r2,#32]
+ 1422 0924 EA61     	 str r2,[r5,#28]
+ 506:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].speed         = p_tracks->elems[i].speed;
+ 1423              	 .loc 1 506 0
+ 1424 0926 C5F814A0 	 str r10,[r5,#20]
+ 507:../Algorithm/src/range_doppler.c ****       p_targets->elems[i].angle         = p_tracks->elems[i].angle;
+ 1425              	 .loc 1 507 0
+ 1426 092a A961     	 str r1,[r5,#24]
+ 510:../Algorithm/src/range_doppler.c ****       
+ 1427              	 .loc 1 510 0
+ 1428 092c 3060     	 str r0,[r6]
+ 1429              	 .loc 1 512 0
+ 1430 092e D0D8     	 bhi .L45
+ 1431              	.LVL131:
+ 1432              	.L44:
+ 1433              	.LBE71:
+ 1434              	.LBE73:
+ 1435              	.LBE75:
+ 352:../Algorithm/src/range_doppler.c ****   }
+ 1436              	 .loc 1 352 0
+ 1437 0930 0223     	 movs r3,#2
+ 1438 0932 3372     	 strb r3,[r6,#8]
+ 1439 0934 79E7     	 b .L42
+ 1440              	.LVL132:
+ 1441              	.L91:
+ 1442              	.LBB76:
+ 1443              	.LBB47:
+ 1444              	.LBB44:
+ 430:../Algorithm/src/range_doppler.c ****         else
+ 1445              	 .loc 1 430 0
+ 1446 0936 34EE454A 	 fsubs s8,s8,s10
+ 1447              	.LVL133:
+ 1448 093a 77EE677A 	 fsubs s15,s14,s15
+ 1449 093e A4EE275A 	 vfma.f32 s10,s8,s15
+ 1450              	.LVL134:
+ 1451 0942 DAE5     	 b .L25
+ 1452              	.LVL135:
+ 1453              	.L55:
+ 1454 0944 1C46     	 mov r4,r3
+ 1455 0946 0A4B     	 ldr r3,.L100+16
+ 1456              	.LVL136:
+ 1457 0948 1993     	 str r3,[sp,#100]
+ 1458 094a D4E4     	 b .L3
+ 1459              	.LVL137:
+ 1460              	.L26:
+ 1461              	.LBE44:
+ 1462              	.LBE47:
+ 1463              	.LBE76:
+ 257:../Algorithm/src/range_doppler.c ****   
+ 1464              	 .loc 1 257 0
+ 1465 094c 179B     	 ldr r3,[sp,#92]
+ 1466 094e C3F80080 	 str r8,[r3]
+ 261:../Algorithm/src/range_doppler.c ****   {
+ 1467              	 .loc 1 261 0
+ 1468 0952 109B     	 ldr r3,[sp,#64]
+ 1469 0954 012B     	 cmp r3,#1
+ 257:../Algorithm/src/range_doppler.c ****   
+ 1470              	 .loc 1 257 0
+ 1471 0956 4246     	 mov r2,r8
+ 261:../Algorithm/src/range_doppler.c ****   {
+ 1472              	 .loc 1 261 0
+ 1473 0958 3FF6FEAD 	 bhi .L54
+ 1474 095c 13E7     	 b .L29
+ 1475              	.L101:
+ 1476 095e 00BF     	 .align 2
+ 1477              	.L100:
+ 1478 0960 00000000 	 .word .LANCHOR7
+ 1479 0964 00000000 	 .word 0
+ 1480 0968 00000000 	 .word .LANCHOR10
+ 1481 096c 00000000 	 .word .LANCHOR9
+ 1482 0970 00000000 	 .word .LANCHOR3
+ 1483              	 .cfi_endproc
+ 1484              	.LFE470:
+ 1486 0974 AFF30080 	 .section .bss.range_fft_signal_rx1,"aw",%nobits
+ 1487              	 .align 2
+ 1488              	 .set .LANCHOR3,.+0
+ 1491              	range_fft_signal_rx1:
+ 1492 0000 00000000 	 .space 32768
+ 1492      00000000 
+ 1492      00000000 
+ 1492      00000000 
+ 1492      00000000 
+ 1493              	 .section .bss.range_fft_signal_rx2,"aw",%nobits
+ 1494              	 .align 2
+ 1495              	 .set .LANCHOR4,.+0
+ 1498              	range_fft_signal_rx2:
+ 1499 0000 00000000 	 .space 32768
+ 1499      00000000 
+ 1499      00000000 
+ 1499      00000000 
+ 1499      00000000 
+ 1500              	 .section .bss.fft_input_q1,"aw",%nobits
+ 1501              	 .align 2
+ 1502              	 .set .LANCHOR13,.+0
+ 1505              	fft_input_q1:
+ 1506 0000 00000000 	 .space 1024
+ 1506      00000000 
+ 1506      00000000 
+ 1506      00000000 
+ 1506      00000000 
+ 1507              	 .section .bss.fft_input_q2,"aw",%nobits
+ 1508              	 .align 2
+ 1509              	 .set .LANCHOR15,.+0
+ 1512              	fft_input_q2:
+ 1513 0000 00000000 	 .space 1024
+ 1513      00000000 
+ 1513      00000000 
+ 1513      00000000 
+ 1513      00000000 
+ 1514              	 .section .bss.doppler_fft_signal_rx1,"aw",%nobits
+ 1515              	 .align 2
+ 1516              	 .set .LANCHOR5,.+0
+ 1519              	doppler_fft_signal_rx1:
+ 1520 0000 00000000 	 .space 512
+ 1520      00000000 
+ 1520      00000000 
+ 1520      00000000 
+ 1520      00000000 
+ 1521              	 .section .bss.doppler_fft_signal_rx2,"aw",%nobits
+ 1522              	 .align 2
+ 1523              	 .set .LANCHOR6,.+0
+ 1526              	doppler_fft_signal_rx2:
+ 1527 0000 00000000 	 .space 512
+ 1527      00000000 
+ 1527      00000000 
+ 1527      00000000 
+ 1527      00000000 
+ 1528              	 .section .bss.range_fft_spectrum,"aw",%nobits
+ 1529              	 .align 2
+ 1530              	 .set .LANCHOR16,.+0
+ 1533              	range_fft_spectrum:
+ 1534 0000 00000000 	 .space 512
+ 1534      00000000 
+ 1534      00000000 
+ 1534      00000000 
+ 1534      00000000 
+ 1535              	 .section .bss.distance_per_bin,"aw",%nobits
+ 1536              	 .align 2
+ 1537              	 .set .LANCHOR11,.+0
+ 1540              	distance_per_bin:
+ 1541 0000 00000000 	 .space 4
+ 1542              	 .section .bss.target_measurements,"aw",%nobits
+ 1543              	 .align 2
+ 1544              	 .set .LANCHOR9,.+0
+ 1547              	target_measurements:
+ 1548 0000 00000000 	 .space 160
+ 1548      00000000 
+ 1548      00000000 
+ 1548      00000000 
+ 1548      00000000 
+ 1549              	 .section .bss.beta_mti,"aw",%nobits
+ 1550              	 .align 2
+ 1551              	 .set .LANCHOR1,.+0
+ 1554              	beta_mti:
+ 1555 0000 00000000 	 .space 4
+ 1556              	 .section .data.s_tracking_list,"aw",%progbits
+ 1557              	 .align 2
+ 1558              	 .set .LANCHOR10,.+0
+ 1561              	s_tracking_list:
+ 1562 0000 00000000 	 .word 0
+ 1563 0004 05000000 	 .word 5
+ 1564 0008 00000000 	 .space 1440
+ 1564      00000000 
+ 1564      00000000 
+ 1564      00000000 
+ 1564      00000000 
+ 1565              	 .section .bss.doppler_fft_spectrum,"aw",%nobits
+ 1566              	 .align 2
+ 1567              	 .set .LANCHOR8,.+0
+ 1570              	doppler_fft_spectrum:
+ 1571 0000 00000000 	 .space 256
+ 1571      00000000 
+ 1571      00000000 
+ 1571      00000000 
+ 1571      00000000 
+ 1572              	 .section .bss.range_fft_spectrum_hist,"aw",%nobits
+ 1573              	 .align 2
+ 1574              	 .set .LANCHOR7,.+0
+ 1577              	range_fft_spectrum_hist:
+ 1578 0000 00000000 	 .space 512
+ 1578      00000000 
+ 1578      00000000 
+ 1578      00000000 
+ 1578      00000000 
+ 1579              	 .section .bss.range_fft_spectrum_temp,"aw",%nobits
+ 1580              	 .align 2
+ 1581              	 .set .LANCHOR17,.+0
+ 1584              	range_fft_spectrum_temp:
+ 1585 0000 00000000 	 .space 512
+ 1585      00000000 
+ 1585      00000000 
+ 1585      00000000 
+ 1585      00000000 
+ 1586              	 .section .bss.fft_input_i1,"aw",%nobits
+ 1587              	 .align 2
+ 1588              	 .set .LANCHOR12,.+0
+ 1591              	fft_input_i1:
+ 1592 0000 00000000 	 .space 1024
+ 1592      00000000 
+ 1592      00000000 
+ 1592      00000000 
+ 1592      00000000 
+ 1593              	 .section .bss.samples_per_channel,"aw",%nobits
+ 1594              	 .align 2
+ 1595              	 .set .LANCHOR2,.+0
+ 1598              	samples_per_channel:
+ 1599 0000 00000000 	 .space 4
+ 1600              	 .section .bss.fft_input_i2,"aw",%nobits
+ 1601              	 .align 2
+ 1602              	 .set .LANCHOR14,.+0
+ 1605              	fft_input_i2:
+ 1606 0000 00000000 	 .space 1024
+ 1606      00000000 
+ 1606      00000000 
+ 1606      00000000 
+ 1606      00000000 
+ 1607              	 .section .bss.alpha_mti,"aw",%nobits
+ 1608              	 .align 2
+ 1609              	 .set .LANCHOR0,.+0
+ 1612              	alpha_mti:
+ 1613 0000 00000000 	 .space 4
+ 1614              	 .text
+ 1615              	.Letext0:
+ 1616              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 1617              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 1618              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\lib\\gcc\\arm-none-eabi\\4.9.3\\include\\stddef.h"
+ 1619              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/acq_buffer.h"
+ 1620              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 1621              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 1622              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/CMSIS_DSP/arm_math.h"
+ 1623              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 1624              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 1625              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 1626              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/DSP_LIB/inc/dsp_lib.h"
+ 1627              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 1628              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Algorithm/inc/tracking.h"
+ 1629              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Include/core_cm4.h"
+ 1630              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FMCW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 1631              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 1632              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 1633              	 .file 19 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/radar_calibration.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 range_doppler.c
+    {standard input}:25     .text.range_doppler_do:00000000 $t
+    {standard input}:30     .text.range_doppler_do:00000000 range_doppler_do
+    {standard input}:557    .text.range_doppler_do:00000334 $d
+    {standard input}:587    .text.range_doppler_do:0000039c $t
+    {standard input}:1045   .text.range_doppler_do:000006f8 $d
+    {standard input}:1069   .text.range_doppler_do:0000074c $t
+    {standard input}:1478   .text.range_doppler_do:00000960 $d
+    {standard input}:1487   .bss.range_fft_signal_rx1:00000000 $d
+    {standard input}:1491   .bss.range_fft_signal_rx1:00000000 range_fft_signal_rx1
+    {standard input}:1494   .bss.range_fft_signal_rx2:00000000 $d
+    {standard input}:1498   .bss.range_fft_signal_rx2:00000000 range_fft_signal_rx2
+    {standard input}:1501   .bss.fft_input_q1:00000000 $d
+    {standard input}:1505   .bss.fft_input_q1:00000000 fft_input_q1
+    {standard input}:1508   .bss.fft_input_q2:00000000 $d
+    {standard input}:1512   .bss.fft_input_q2:00000000 fft_input_q2
+    {standard input}:1515   .bss.doppler_fft_signal_rx1:00000000 $d
+    {standard input}:1519   .bss.doppler_fft_signal_rx1:00000000 doppler_fft_signal_rx1
+    {standard input}:1522   .bss.doppler_fft_signal_rx2:00000000 $d
+    {standard input}:1526   .bss.doppler_fft_signal_rx2:00000000 doppler_fft_signal_rx2
+    {standard input}:1529   .bss.range_fft_spectrum:00000000 $d
+    {standard input}:1533   .bss.range_fft_spectrum:00000000 range_fft_spectrum
+    {standard input}:1536   .bss.distance_per_bin:00000000 $d
+    {standard input}:1540   .bss.distance_per_bin:00000000 distance_per_bin
+    {standard input}:1543   .bss.target_measurements:00000000 $d
+    {standard input}:1547   .bss.target_measurements:00000000 target_measurements
+    {standard input}:1550   .bss.beta_mti:00000000 $d
+    {standard input}:1554   .bss.beta_mti:00000000 beta_mti
+    {standard input}:1557   .data.s_tracking_list:00000000 $d
+    {standard input}:1561   .data.s_tracking_list:00000000 s_tracking_list
+    {standard input}:1566   .bss.doppler_fft_spectrum:00000000 $d
+    {standard input}:1570   .bss.doppler_fft_spectrum:00000000 doppler_fft_spectrum
+    {standard input}:1573   .bss.range_fft_spectrum_hist:00000000 $d
+    {standard input}:1577   .bss.range_fft_spectrum_hist:00000000 range_fft_spectrum_hist
+    {standard input}:1580   .bss.range_fft_spectrum_temp:00000000 $d
+    {standard input}:1584   .bss.range_fft_spectrum_temp:00000000 range_fft_spectrum_temp
+    {standard input}:1587   .bss.fft_input_i1:00000000 $d
+    {standard input}:1591   .bss.fft_input_i1:00000000 fft_input_i1
+    {standard input}:1594   .bss.samples_per_channel:00000000 $d
+    {standard input}:1598   .bss.samples_per_channel:00000000 samples_per_channel
+    {standard input}:1601   .bss.fft_input_i2:00000000 $d
+    {standard input}:1605   .bss.fft_input_i2:00000000 fft_input_i2
+    {standard input}:1608   .bss.alpha_mti:00000000 $d
+    {standard input}:1612   .bss.alpha_mti:00000000 alpha_mti
+                     .debug_frame:00000010 $d
+    {standard input}:1486   .text.range_doppler_do:00000974 $t
+
+UNDEFINED SYMBOLS
+__aeabi_f2d
+__aeabi_dadd
+__aeabi_d2uiz
+__aeabi_dmul
+__aeabi_d2f
+memset
+fft_init
+get_buffer_address_by_chirp
+compute_fft_signal
+compute_fft_spectrum
+arm_max_f32
+memcpy
+adc_q2_calibration
+adc_q1_calibration
+adc_i2_calibration
+adc_i1_calibration
+compute_angle
+data_association

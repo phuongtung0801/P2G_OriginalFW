@@ -1,0 +1,1204 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "datastore.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.store_algo_result,"ax",%progbits
+  20              	 .align 2
+  21              	 .global store_algo_result
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	store_algo_result:
+  26              	.LFB471:
+  27              	 .file 1 "../Store/src/datastore.c"
+   1:../Store/src/datastore.c **** /**
+   2:../Store/src/datastore.c ****     @file  datastore.c
+   3:../Store/src/datastore.c **** */
+   4:../Store/src/datastore.c **** 
+   5:../Store/src/datastore.c **** /* ===========================================================================
+   6:../Store/src/datastore.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+   7:../Store/src/datastore.c **** ** All rights reserved.
+   8:../Store/src/datastore.c **** ** ===========================================================================
+   9:../Store/src/datastore.c **** **
+  10:../Store/src/datastore.c **** ** ===========================================================================
+  11:../Store/src/datastore.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  12:../Store/src/datastore.c **** ** Passing on and copying of this document, and communication of its contents
+  13:../Store/src/datastore.c **** ** is not permitted without Infineon's prior written authorization.
+  14:../Store/src/datastore.c **** ** ===========================================================================
+  15:../Store/src/datastore.c **** */
+  16:../Store/src/datastore.c **** 
+  17:../Store/src/datastore.c **** /*
+  18:../Store/src/datastore.c **** ==============================================================================
+  19:../Store/src/datastore.c ****    1. INCLUDE FILES
+  20:../Store/src/datastore.c **** ==============================================================================
+  21:../Store/src/datastore.c **** */
+  22:../Store/src/datastore.c **** 
+  23:../Store/src/datastore.c **** #include "datastore.h"
+  24:../Store/src/datastore.c **** #include "position2go_bsp.h"
+  25:../Store/src/datastore.c **** 
+  26:../Store/src/datastore.c **** /*
+  27:../Store/src/datastore.c **** ==============================================================================
+  28:../Store/src/datastore.c ****    2. DATA
+  29:../Store/src/datastore.c **** ==============================================================================
+  30:../Store/src/datastore.c ****  */
+  31:../Store/src/datastore.c **** 
+  32:../Store/src/datastore.c **** /*----------------------------------------------------------------------------
+  33:../Store/src/datastore.c ****  * NOTE: It is assumed that the storage and the consumption of the data is
+  34:../Store/src/datastore.c ****  *       executed in the same execution context. (=Thread or task) otherwise
+  35:../Store/src/datastore.c ****  *       counter measures against data corruption need to be considered!
+  36:../Store/src/datastore.c ****  */
+  37:../Store/src/datastore.c **** 
+  38:../Store/src/datastore.c **** /* This would be the data structure that is persistent in flash memory! (done via scatter load link
+  39:../Store/src/datastore.c **** const algo_settings_t ds_default_algo_settings = {
+  40:../Store/src/datastore.c ****   .max_number_of_targets          = MAX_NUM_OF_TARGETS,
+  41:../Store/src/datastore.c ****   .max_number_of_tracks           = CURRENT_NUM_OF_TRACKS,
+  42:../Store/src/datastore.c ****   .isChecked		              = 0,
+  43:../Store/src/datastore.c ****   .isUpdated                      = 0,
+  44:../Store/src/datastore.c ****   
+  45:../Store/src/datastore.c ****   .tracking_enable                = TRACKING_ENABLE,
+  46:../Store/src/datastore.c ****   .num_of_tracks                  = CURRENT_NUM_OF_TRACKS,
+  47:../Store/src/datastore.c ****   .mti_filter_len                 = MTI_FILTER_LEN,
+  48:../Store/src/datastore.c ****   .mti_filter_enable              = MTI_FILTER_ENABLE,
+  49:../Store/src/datastore.c ****   .median_filter_len              = MEDIAN_FILTER_LEN,
+  50:../Store/src/datastore.c ****   .mvg_avg_len                    = MVG_AVG_LEN,
+  51:../Store/src/datastore.c ****   .range_detection_threshold      = RANGE_DETECTION_THRESHOLD,
+  52:../Store/src/datastore.c ****   .min_distance_cm                = MINIMUM_RANGE_CM,
+  53:../Store/src/datastore.c ****   .max_distance_cm                = MAXIMUM_RANGE_CM,
+  54:../Store/src/datastore.c ****   .speed_detection_threshold      = SPEED_DETECTION_THRESHOLD,
+  55:../Store/src/datastore.c ****   .min_speed_kmh                  = MINIMUM_SPEED_KMH,
+  56:../Store/src/datastore.c ****   .max_speed_kmh                  = MAXIMUM_SPEED_KMH,
+  57:../Store/src/datastore.c ****   .wave_length_ant_spacing_ratio  = (BSP_TGT_WAVE_LENGTH_MM / BSP_TGT_ANTENNA_SPACING_MM),
+  58:../Store/src/datastore.c ****   .min_angle_for_track_assignment = MIN_ANGLE_FOR_ASSIGNMENT,
+  59:../Store/src/datastore.c **** };
+  60:../Store/src/datastore.c **** 
+  61:../Store/src/datastore.c **** /* Global structure used to fill the target information e.g. range, speed, angle etc. in FMCW */
+  62:../Store/src/datastore.c **** ds_target_list_t  ds_target_list = { .max_num_of_targets = MAX_NUM_OF_TARGETS };
+  63:../Store/src/datastore.c **** 
+  64:../Store/src/datastore.c **** static algo_settings_t ds_algo_settings;
+  65:../Store/src/datastore.c **** 
+  66:../Store/src/datastore.c **** float result_range_detection_threshold = 0;
+  67:../Store/src/datastore.c **** 
+  68:../Store/src/datastore.c **** static device_settings_t ds_default_device_settings = {
+  69:../Store/src/datastore.c ****   /* PLL Settings */
+  70:../Store/src/datastore.c ****   .pll_chirp_time_usec             = CHIRP_TIME_USEC,
+  71:../Store/src/datastore.c ****   .pll_frequency_kHz               = BSP_DOPPLER_BASE_FREQ_MHZ * 1000U,
+  72:../Store/src/datastore.c ****   .pll_lower_frequency_kHz         = BSP_MIN_RF_FREQUENCY_KHZ,
+  73:../Store/src/datastore.c ****   .pll_upper_frequency_kHz         = BSP_MIN_RF_FREQUENCY_KHZ + (BANDWIDTH_MHZ * 1000U),
+  74:../Store/src/datastore.c ****   .pll_bandwidth_MHz               = BANDWIDTH_MHZ,
+  75:../Store/src/datastore.c ****   .pll_num_of_chirps_per_frame     = NUM_OF_CHIRPS,
+  76:../Store/src/datastore.c ****   .pll_modulation_mode			   = 1, /* 0: Constant frequency (Doppler), 1: FMCW-modulation */
+  77:../Store/src/datastore.c ****   
+  78:../Store/src/datastore.c ****   /* ADC Settings */
+  79:../Store/src/datastore.c **** #if FW_MODULATION_TYPE == 1U /* FMCW modulation */
+  80:../Store/src/datastore.c ****   .adc_sampling_freq_Hz            = FMCW_SAMPLING_FREQ_HZ,
+  81:../Store/src/datastore.c **** #else /* Doppler modulation */
+  82:../Store/src/datastore.c ****   .adc_sampling_freq_Hz            = DOPPLER_SAMPLING_FREQ_HZ,
+  83:../Store/src/datastore.c **** #endif
+  84:../Store/src/datastore.c ****   .adc_resolution                  = 12,
+  85:../Store/src/datastore.c ****   .adc_use_post_calibration        = 0,
+  86:../Store/src/datastore.c ****   
+  87:../Store/src/datastore.c ****   /* BGT and PGA Settings */
+  88:../Store/src/datastore.c ****   .pga_rx_gain_level               = PGA_GAIN,
+  89:../Store/src/datastore.c ****   .power_duty_cycle_enable_flag    = DUTY_CYCLE_ENABLE,
+  90:../Store/src/datastore.c ****   .bgt_tx_power_level              = BGT_TX_POWER,
+  91:../Store/src/datastore.c ****   .bgt_rx_lna_gain_enable_flag     = true,
+  92:../Store/src/datastore.c ****   
+  93:../Store/src/datastore.c ****   /* Frame Settings */
+  94:../Store/src/datastore.c ****   .frame_period_usec               = FRAME_PERIOD_MSEC *1000,
+  95:../Store/src/datastore.c ****   .num_samples_per_chirp           = SAMPLES_PER_CHIRP,
+  96:../Store/src/datastore.c ****   .rx_antenna_mask                 = BSP_RX_ANTENNA_MASK,
+  97:../Store/src/datastore.c ****   
+  98:../Store/src/datastore.c ****   .isGainlevelUpdated              = 0,
+  99:../Store/src/datastore.c ****   .is_duty_cycle_enable_updated    = 0,
+ 100:../Store/src/datastore.c ****   .isUpdated_doppler_config        = 0,
+ 101:../Store/src/datastore.c ****   .isUpdated_fmcw_config           = 0
+ 102:../Store/src/datastore.c **** };
+ 103:../Store/src/datastore.c **** 
+ 104:../Store/src/datastore.c **** static device_settings_t ds_shadow_device_settings;
+ 105:../Store/src/datastore.c **** 
+ 106:../Store/src/datastore.c **** /* The new device settings will be applied for the next frame  */
+ 107:../Store/src/datastore.c **** static device_settings_t ds_device_settings;
+ 108:../Store/src/datastore.c **** 
+ 109:../Store/src/datastore.c **** static acq_buf_obj s_acq_buf = { .status = not_initialized } ;
+ 110:../Store/src/datastore.c **** 
+ 111:../Store/src/datastore.c **** /*
+ 112:../Store/src/datastore.c **** ==============================================================================
+ 113:../Store/src/datastore.c ****    3. LOCAL FUNCTIONS
+ 114:../Store/src/datastore.c **** ==============================================================================
+ 115:../Store/src/datastore.c ****  */
+ 116:../Store/src/datastore.c **** 
+ 117:../Store/src/datastore.c **** static void copy_target_elem(ds_target_elem_t *p_dst, target_data_t *p_src)
+ 118:../Store/src/datastore.c **** {
+ 119:../Store/src/datastore.c ****   p_dst->target_id  = p_src->idx;
+ 120:../Store/src/datastore.c ****   p_dst->strength   = p_src->strength;
+ 121:../Store/src/datastore.c ****   p_dst->speed      = p_src->speed;
+ 122:../Store/src/datastore.c ****   p_dst->range      = p_src->range;
+ 123:../Store/src/datastore.c ****   p_dst->angle      = p_src->angle;
+ 124:../Store/src/datastore.c **** }
+ 125:../Store/src/datastore.c **** 
+ 126:../Store/src/datastore.c **** /*
+ 127:../Store/src/datastore.c **** ==============================================================================
+ 128:../Store/src/datastore.c ****    4. EXPORTED FUNCTIONS
+ 129:../Store/src/datastore.c **** ==============================================================================
+ 130:../Store/src/datastore.c ****  */
+ 131:../Store/src/datastore.c **** 
+ 132:../Store/src/datastore.c **** void store_algo_result(algo_result_t *p_result)
+ 133:../Store/src/datastore.c **** {
+  28              	 .loc 1 133 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 2DE9F043 	 push {r4,r5,r6,r7,r8,r9,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 28
+  36              	 .cfi_offset 4,-28
+  37              	 .cfi_offset 5,-24
+  38              	 .cfi_offset 6,-20
+  39              	 .cfi_offset 7,-16
+  40              	 .cfi_offset 8,-12
+  41              	 .cfi_offset 9,-8
+  42              	 .cfi_offset 14,-4
+ 134:../Store/src/datastore.c ****   algo_target_list_t *p_curr_target_list = p_result->p_target_list;
+  43              	 .loc 1 134 0
+  44 0004 4668     	 ldr r6,[r0,#4]
+  45              	.LVL1:
+  46 0006 DFF84C90 	 ldr r9,.L10+4
+ 133:../Store/src/datastore.c ****   algo_target_list_t *p_curr_target_list = p_result->p_target_list;
+  47              	 .loc 1 133 0
+  48 000a 8046     	 mov r8,r0
+ 135:../Store/src/datastore.c ****   uint32_t index;
+ 136:../Store/src/datastore.c **** 
+ 137:../Store/src/datastore.c ****   for(index = 0; index < p_curr_target_list->max_num_of_targets; index++)
+  49              	 .loc 1 137 0
+  50 000c 7068     	 ldr r0,[r6,#4]
+  51              	.LVL2:
+  52 000e B0B1     	 cbz r0,.L2
+  53 0010 3346     	 mov r3,r6
+  54 0012 4A46     	 mov r2,r9
+  55 0014 0021     	 movs r1,#0
+  56              	.LVL3:
+  57              	.L3:
+  58              	 .loc 1 137 0 is_stmt 0 discriminator 3
+  59 0016 0131     	 adds r1,r1,#1
+  60              	.LVL4:
+  61              	.LBB6:
+  62              	.LBB7:
+ 120:../Store/src/datastore.c ****   p_dst->speed      = p_src->speed;
+  63              	 .loc 1 120 0 is_stmt 1 discriminator 3
+  64 0018 1F69     	 ldr r7,[r3,#16]
+ 121:../Store/src/datastore.c ****   p_dst->range      = p_src->range;
+  65              	 .loc 1 121 0 discriminator 3
+  66 001a D3F818C0 	 ldr ip,[r3,#24]
+ 122:../Store/src/datastore.c ****   p_dst->angle      = p_src->angle;
+  67              	 .loc 1 122 0 discriminator 3
+  68 001e D3F814E0 	 ldr lr,[r3,#20]
+ 123:../Store/src/datastore.c **** }
+  69              	 .loc 1 123 0 discriminator 3
+  70 0022 DC69     	 ldr r4,[r3,#28]
+ 119:../Store/src/datastore.c ****   p_dst->strength   = p_src->strength;
+  71              	 .loc 1 119 0 discriminator 3
+  72 0024 DD68     	 ldr r5,[r3,#12]
+  73 0026 9560     	 str r5,[r2,#8]
+  74              	.LBE7:
+  75              	.LBE6:
+  76              	 .loc 1 137 0 discriminator 3
+  77 0028 8142     	 cmp r1,r0
+  78              	.LBB9:
+  79              	.LBB8:
+ 120:../Store/src/datastore.c ****   p_dst->speed      = p_src->speed;
+  80              	 .loc 1 120 0 discriminator 3
+  81 002a 9761     	 str r7,[r2,#24]
+ 121:../Store/src/datastore.c ****   p_dst->range      = p_src->range;
+  82              	 .loc 1 121 0 discriminator 3
+  83 002c C2F810C0 	 str ip,[r2,#16]
+ 122:../Store/src/datastore.c ****   p_dst->angle      = p_src->angle;
+  84              	 .loc 1 122 0 discriminator 3
+  85 0030 C2F80CE0 	 str lr,[r2,#12]
+  86 0034 03F11403 	 add r3,r3,#20
+ 123:../Store/src/datastore.c **** }
+  87              	 .loc 1 123 0 discriminator 3
+  88 0038 42F8144F 	 str r4,[r2,#20]!
+  89              	.LBE8:
+  90              	.LBE9:
+  91              	 .loc 1 137 0 discriminator 3
+  92 003c EBD1     	 bne .L3
+  93              	.LVL5:
+  94              	.L2:
+ 138:../Store/src/datastore.c ****   {
+ 139:../Store/src/datastore.c ****     copy_target_elem(&ds_target_list.elems[index], &p_curr_target_list->elems[index]);
+ 140:../Store/src/datastore.c ****   }
+ 141:../Store/src/datastore.c ****   ds_target_list.max_num_of_targets = p_curr_target_list->max_num_of_targets;
+ 142:../Store/src/datastore.c ****   ds_target_list.used_num_of_targets = p_curr_target_list->num_of_targets;
+  95              	 .loc 1 142 0
+  96 003e 3168     	 ldr r1,[r6]
+ 143:../Store/src/datastore.c **** 
+ 144:../Store/src/datastore.c ****   result_range_detection_threshold = p_result->range_detection_threshold;
+  97              	 .loc 1 144 0
+  98 0040 034B     	 ldr r3,.L10
+  99 0042 D8F80020 	 ldr r2,[r8]
+ 100 0046 1A60     	 str r2,[r3]
+ 141:../Store/src/datastore.c ****   ds_target_list.used_num_of_targets = p_curr_target_list->num_of_targets;
+ 101              	 .loc 1 141 0
+ 102 0048 89E80300 	 stmia r9,{r0,r1}
+ 103              	 .loc 1 144 0
+ 104 004c BDE8F083 	 pop {r4,r5,r6,r7,r8,r9,pc}
+ 105              	.LVL6:
+ 106              	.L11:
+ 107              	 .align 2
+ 108              	.L10:
+ 109 0050 00000000 	 .word .LANCHOR1
+ 110 0054 00000000 	 .word .LANCHOR0
+ 111              	 .cfi_endproc
+ 112              	.LFE471:
+ 114              	 .section .text.ds_get_target_list,"ax",%progbits
+ 115              	 .align 2
+ 116              	 .global ds_get_target_list
+ 117              	 .thumb
+ 118              	 .thumb_func
+ 120              	ds_get_target_list:
+ 121              	.LFB472:
+ 145:../Store/src/datastore.c **** }
+ 146:../Store/src/datastore.c **** 
+ 147:../Store/src/datastore.c **** //============================================================================
+ 148:../Store/src/datastore.c **** 
+ 149:../Store/src/datastore.c **** ds_target_list_t *ds_get_target_list(void)
+ 150:../Store/src/datastore.c **** {
+ 122              	 .loc 1 150 0
+ 123              	 .cfi_startproc
+ 124              	 
+ 125              	 
+ 126              	 
+ 151:../Store/src/datastore.c **** 	return &ds_target_list;
+ 152:../Store/src/datastore.c **** }
+ 127              	 .loc 1 152 0
+ 128 0000 0048     	 ldr r0,.L13
+ 129 0002 7047     	 bx lr
+ 130              	.L14:
+ 131              	 .align 2
+ 132              	.L13:
+ 133 0004 00000000 	 .word .LANCHOR0
+ 134              	 .cfi_endproc
+ 135              	.LFE472:
+ 137              	 .section .text.ds_algo_store_settings,"ax",%progbits
+ 138              	 .align 2
+ 139              	 .global ds_algo_store_settings
+ 140              	 .thumb
+ 141              	 .thumb_func
+ 143              	ds_algo_store_settings:
+ 144              	.LFB473:
+ 153:../Store/src/datastore.c **** 
+ 154:../Store/src/datastore.c **** //============================================================================
+ 155:../Store/src/datastore.c **** 
+ 156:../Store/src/datastore.c **** void ds_algo_store_settings(algo_settings_t *p_algo_settings)
+ 157:../Store/src/datastore.c **** {
+ 145              	 .loc 1 157 0
+ 146              	 .cfi_startproc
+ 147              	 
+ 148              	 
+ 149              	 
+ 150              	.LVL7:
+ 151              	 .loc 1 157 0
+ 152 0000 0146     	 mov r1,r0
+ 158:../Store/src/datastore.c ****   memcpy(&ds_algo_settings, p_algo_settings, sizeof(ds_algo_settings));
+ 153              	 .loc 1 158 0
+ 154 0002 4C22     	 movs r2,#76
+ 155 0004 0148     	 ldr r0,.L16
+ 156              	.LVL8:
+ 157 0006 FFF7FEBF 	 b memcpy
+ 158              	.LVL9:
+ 159              	.L17:
+ 160 000a 00BF     	 .align 2
+ 161              	.L16:
+ 162 000c 00000000 	 .word .LANCHOR2
+ 163              	 .cfi_endproc
+ 164              	.LFE473:
+ 166              	 .section .text.ds_algo_fetch_settings,"ax",%progbits
+ 167              	 .align 2
+ 168              	 .global ds_algo_fetch_settings
+ 169              	 .thumb
+ 170              	 .thumb_func
+ 172              	ds_algo_fetch_settings:
+ 173              	.LFB474:
+ 159:../Store/src/datastore.c **** }
+ 160:../Store/src/datastore.c **** 
+ 161:../Store/src/datastore.c **** //============================================================================
+ 162:../Store/src/datastore.c **** 
+ 163:../Store/src/datastore.c **** void ds_algo_fetch_settings(algo_settings_t *p_algo_settings)
+ 164:../Store/src/datastore.c **** {
+ 174              	 .loc 1 164 0
+ 175              	 .cfi_startproc
+ 176              	 
+ 177              	 
+ 178              	 
+ 179              	.LVL10:
+ 165:../Store/src/datastore.c ****   /* Data structures are aligned, so no need to do a assignment by member */
+ 166:../Store/src/datastore.c ****   memcpy(p_algo_settings, &ds_algo_settings, sizeof(ds_algo_settings));
+ 180              	 .loc 1 166 0
+ 181 0000 0149     	 ldr r1,.L19
+ 182 0002 4C22     	 movs r2,#76
+ 183 0004 FFF7FEBF 	 b memcpy
+ 184              	.LVL11:
+ 185              	.L20:
+ 186              	 .align 2
+ 187              	.L19:
+ 188 0008 00000000 	 .word .LANCHOR2
+ 189              	 .cfi_endproc
+ 190              	.LFE474:
+ 192              	 .section .text.ds_algo_get_settings,"ax",%progbits
+ 193              	 .align 2
+ 194              	 .global ds_algo_get_settings
+ 195              	 .thumb
+ 196              	 .thumb_func
+ 198              	ds_algo_get_settings:
+ 199              	.LFB475:
+ 167:../Store/src/datastore.c **** }
+ 168:../Store/src/datastore.c **** 
+ 169:../Store/src/datastore.c **** //============================================================================
+ 170:../Store/src/datastore.c **** 
+ 171:../Store/src/datastore.c **** algo_settings_t *ds_algo_get_settings(void)
+ 172:../Store/src/datastore.c **** {
+ 200              	 .loc 1 172 0
+ 201              	 .cfi_startproc
+ 202              	 
+ 203              	 
+ 204              	 
+ 173:../Store/src/datastore.c ****   return &ds_algo_settings;
+ 174:../Store/src/datastore.c **** }
+ 205              	 .loc 1 174 0
+ 206 0000 0048     	 ldr r0,.L22
+ 207 0002 7047     	 bx lr
+ 208              	.L23:
+ 209              	 .align 2
+ 210              	.L22:
+ 211 0004 00000000 	 .word .LANCHOR2
+ 212              	 .cfi_endproc
+ 213              	.LFE475:
+ 215              	 .section .text.ds_algo_check_settings,"ax",%progbits
+ 216              	 .align 2
+ 217              	 .global ds_algo_check_settings
+ 218              	 .thumb
+ 219              	 .thumb_func
+ 221              	ds_algo_check_settings:
+ 222              	.LFB476:
+ 175:../Store/src/datastore.c **** 
+ 176:../Store/src/datastore.c **** //============================================================================
+ 177:../Store/src/datastore.c **** 
+ 178:../Store/src/datastore.c **** /* If staged Algo settings are with-in range 0 is return, otherwise non-zero
+ 179:../Store/src/datastore.c ****  * the return value could be interpreted as bit field to identify the failure, if needed!
+ 180:../Store/src/datastore.c ****  */
+ 181:../Store/src/datastore.c **** uint32_t ds_algo_check_settings(algo_settings_t *ptr)
+ 182:../Store/src/datastore.c **** {
+ 223              	 .loc 1 182 0
+ 224              	 .cfi_startproc
+ 225              	 
+ 226              	 
+ 227              	 
+ 228              	.LVL12:
+ 183:../Store/src/datastore.c ****   uint32_t retValue = 0;
+ 184:../Store/src/datastore.c ****   
+ 185:../Store/src/datastore.c ****   if((ptr->tracking_enable != 0) && (ptr->tracking_enable != 1))
+ 229              	 .loc 1 185 0
+ 230 0000 C368     	 ldr r3,[r0,#12]
+ 186:../Store/src/datastore.c ****   {
+ 187:../Store/src/datastore.c ****     retValue += 2;
+ 188:../Store/src/datastore.c ****   }
+ 189:../Store/src/datastore.c ****   if(ptr->mti_filter_len > BSP_MAX_MTI_FILTER_LEN)
+ 190:../Store/src/datastore.c ****   {
+ 191:../Store/src/datastore.c ****     retValue += 4;
+ 192:../Store/src/datastore.c ****   }
+ 193:../Store/src/datastore.c ****   if(!((ptr->num_of_tracks > 0) && (ptr->num_of_tracks <= BSP_MAX_NUM_OF_TRACKS)))
+ 231              	 .loc 1 193 0
+ 232 0002 0269     	 ldr r2,[r0,#16]
+ 185:../Store/src/datastore.c ****   {
+ 233              	 .loc 1 185 0
+ 234 0004 022B     	 cmp r3,#2
+ 182:../Store/src/datastore.c ****   uint32_t retValue = 0;
+ 235              	 .loc 1 182 0
+ 236 0006 10B4     	 push {r4}
+ 237              	.LCFI1:
+ 238              	 .cfi_def_cfa_offset 4
+ 239              	 .cfi_offset 4,-4
+ 189:../Store/src/datastore.c ****   {
+ 240              	 .loc 1 189 0
+ 241 0008 C469     	 ldr r4,[r0,#28]
+ 185:../Store/src/datastore.c ****   {
+ 242              	 .loc 1 185 0
+ 243 000a 35BF     	 itete cc
+ 244 000c 0021     	 movcc r1,#0
+ 245 000e 0221     	 movcs r1,#2
+ 246              	.LVL13:
+ 247 0010 0423     	 movcc r3,#4
+ 248 0012 0623     	 movcs r3,#6
+ 249              	 .loc 1 193 0
+ 250 0014 013A     	 subs r2,r2,#1
+ 189:../Store/src/datastore.c ****   {
+ 251              	 .loc 1 189 0
+ 252 0016 B4F57A7F 	 cmp r4,#1000
+ 253 001a 98BF     	 it ls
+ 254 001c 0B46     	 movls r3,r1
+ 255              	.LVL14:
+ 256              	 .loc 1 193 0
+ 257 001e 042A     	 cmp r2,#4
+ 194:../Store/src/datastore.c ****   {
+ 195:../Store/src/datastore.c ****     retValue += 8;
+ 196:../Store/src/datastore.c ****   }
+ 197:../Store/src/datastore.c ****   if(ptr->mti_filter_enable > 1)
+ 258              	 .loc 1 197 0
+ 259 0020 026A     	 ldr r2,[r0,#32]
+ 198:../Store/src/datastore.c ****   {
+ 199:../Store/src/datastore.c ****     retValue += 32;
+ 200:../Store/src/datastore.c ****   }
+ 201:../Store/src/datastore.c ****   if(!((ptr->mvg_avg_len != 0) && (ptr->mvg_avg_len <= MAX_MVG_AVG_LEN)))
+ 202:../Store/src/datastore.c ****   {
+ 203:../Store/src/datastore.c ****     retValue += 128;
+ 204:../Store/src/datastore.c ****   }
+ 205:../Store/src/datastore.c ****   if( ptr->speed_detection_threshold > BSP_MAX_SPEED_THRESHOLD )
+ 206:../Store/src/datastore.c ****   {
+ 207:../Store/src/datastore.c ****     retValue += 256;
+ 208:../Store/src/datastore.c ****   }
+ 209:../Store/src/datastore.c ****   if(!(ptr->max_speed_kmh > ptr->min_speed_kmh) && (ptr->max_speed_kmh <= BSP_MAX_SPEED_KMH))
+ 260              	 .loc 1 209 0
+ 261 0022 C16B     	 ldr r1,[r0,#60]
+ 195:../Store/src/datastore.c ****   }
+ 262              	 .loc 1 195 0
+ 263 0024 88BF     	 it hi
+ 264 0026 0833     	 addhi r3,r3,#8
+ 265              	.LVL15:
+ 197:../Store/src/datastore.c ****   {
+ 266              	 .loc 1 197 0
+ 267 0028 012A     	 cmp r2,#1
+ 201:../Store/src/datastore.c ****   {
+ 268              	 .loc 1 201 0
+ 269 002a 4269     	 ldr r2,[r0,#20]
+ 270 002c 02F1FF32 	 add r2,r2,#-1
+ 199:../Store/src/datastore.c ****   }
+ 271              	 .loc 1 199 0
+ 272 0030 88BF     	 it hi
+ 273 0032 2033     	 addhi r3,r3,#32
+ 274              	.LVL16:
+ 201:../Store/src/datastore.c ****   {
+ 275              	 .loc 1 201 0
+ 276 0034 092A     	 cmp r2,#9
+ 205:../Store/src/datastore.c ****   {
+ 277              	 .loc 1 205 0
+ 278 0036 826B     	 ldr r2,[r0,#56]
+ 203:../Store/src/datastore.c ****   }
+ 279              	 .loc 1 203 0
+ 280 0038 88BF     	 it hi
+ 281 003a 8033     	 addhi r3,r3,#128
+ 282              	.LVL17:
+ 205:../Store/src/datastore.c ****   {
+ 283              	 .loc 1 205 0
+ 284 003c B2F57A7F 	 cmp r2,#1000
+ 285              	 .loc 1 209 0
+ 286 0040 026C     	 ldr r2,[r0,#64]
+ 207:../Store/src/datastore.c ****   }
+ 287              	 .loc 1 207 0
+ 288 0042 88BF     	 it hi
+ 289 0044 03F58073 	 addhi r3,r3,#256
+ 290              	.LVL18:
+ 291              	 .loc 1 209 0
+ 292 0048 8A42     	 cmp r2,r1
+ 293 004a 07D8     	 bhi .L32
+ 294              	 .loc 1 209 0 is_stmt 0 discriminator 1
+ 295 004c 142A     	 cmp r2,#20
+ 210:../Store/src/datastore.c ****   {
+ 211:../Store/src/datastore.c ****     retValue += 512;
+ 296              	 .loc 1 211 0 is_stmt 1 discriminator 1
+ 297 004e 98BF     	 it ls
+ 298 0050 03F50073 	 addls r3,r3,#512
+ 299              	.LVL19:
+ 212:../Store/src/datastore.c ****   }
+ 213:../Store/src/datastore.c ****   if(ptr->min_speed_kmh > ptr->max_speed_kmh)
+ 300              	 .loc 1 213 0 discriminator 1
+ 301 0054 8A42     	 cmp r2,r1
+ 214:../Store/src/datastore.c ****   {
+ 215:../Store/src/datastore.c ****     retValue += 1024;
+ 302              	 .loc 1 215 0 discriminator 1
+ 303 0056 38BF     	 it cc
+ 304 0058 03F58063 	 addcc r3,r3,#1024
+ 305              	.LVL20:
+ 306              	.L32:
+ 216:../Store/src/datastore.c ****   }
+ 217:../Store/src/datastore.c ****   if(ptr->range_detection_threshold > BSP_MAX_RANGE_THRESHOLD)
+ 307              	 .loc 1 217 0
+ 308 005c 426B     	 ldr r2,[r0,#52]
+ 218:../Store/src/datastore.c ****   {
+ 219:../Store/src/datastore.c ****     retValue += 2048;
+ 220:../Store/src/datastore.c ****   }
+ 221:../Store/src/datastore.c ****   if((ptr->max_distance_cm < ptr->min_distance_cm) || (ptr->max_distance_cm > BSP_MAX_RANGE_CM))
+ 309              	 .loc 1 221 0
+ 310 005e C16A     	 ldr r1,[r0,#44]
+ 217:../Store/src/datastore.c ****   {
+ 311              	 .loc 1 217 0
+ 312 0060 B2F57A7F 	 cmp r2,#1000
+ 313              	 .loc 1 221 0
+ 314 0064 026B     	 ldr r2,[r0,#48]
+ 219:../Store/src/datastore.c ****   }
+ 315              	 .loc 1 219 0
+ 316 0066 88BF     	 it hi
+ 317 0068 03F50063 	 addhi r3,r3,#2048
+ 318              	.LVL21:
+ 319              	 .loc 1 221 0
+ 320 006c 8A42     	 cmp r2,r1
+ 321 006e 0BD3     	 bcc .L34
+ 322              	 .loc 1 221 0 is_stmt 0 discriminator 1
+ 323 0070 41F28834 	 movw r4,#5000
+ 324 0074 A242     	 cmp r2,r4
+ 325 0076 12D8     	 bhi .L43
+ 222:../Store/src/datastore.c ****   {
+ 223:../Store/src/datastore.c ****     retValue += 4096;
+ 224:../Store/src/datastore.c ****   }
+ 225:../Store/src/datastore.c ****   if(ptr->min_distance_cm >= ptr->max_distance_cm)
+ 326              	 .loc 1 225 0 is_stmt 1
+ 327 0078 8A42     	 cmp r2,r1
+ 328 007a 08D8     	 bhi .L38
+ 329              	.L36:
+ 226:../Store/src/datastore.c ****   {
+ 227:../Store/src/datastore.c ****     retValue += 8192;
+ 330              	 .loc 1 227 0
+ 331 007c 03F50053 	 add r3,r3,#8192
+ 332              	.LVL22:
+ 333              	.L40:
+ 228:../Store/src/datastore.c ****   }
+ 229:../Store/src/datastore.c ****   if(retValue == 0)
+ 230:../Store/src/datastore.c ****   {
+ 231:../Store/src/datastore.c ****     ptr->isChecked = 1;
+ 232:../Store/src/datastore.c ****   }
+ 233:../Store/src/datastore.c ****   
+ 234:../Store/src/datastore.c ****   return retValue;
+ 235:../Store/src/datastore.c **** }
+ 334              	 .loc 1 235 0
+ 335 0080 1846     	 mov r0,r3
+ 336              	.LVL23:
+ 337 0082 5DF8044B 	 ldr r4,[sp],#4
+ 338              	.LCFI2:
+ 339              	 .cfi_remember_state
+ 340              	 .cfi_restore 4
+ 341              	 .cfi_def_cfa_offset 0
+ 342 0086 7047     	 bx lr
+ 343              	.LVL24:
+ 344              	.L34:
+ 345              	.LCFI3:
+ 346              	 .cfi_restore_state
+ 223:../Store/src/datastore.c ****   }
+ 347              	 .loc 1 223 0
+ 348 0088 03F58053 	 add r3,r3,#4096
+ 349              	.LVL25:
+ 350 008c F6E7     	 b .L36
+ 351              	.L38:
+ 229:../Store/src/datastore.c ****   {
+ 352              	 .loc 1 229 0
+ 353 008e 002B     	 cmp r3,#0
+ 354 0090 F6D1     	 bne .L40
+ 231:../Store/src/datastore.c ****   }
+ 355              	 .loc 1 231 0
+ 356 0092 0122     	 movs r2,#1
+ 357 0094 4270     	 strb r2,[r0,#1]
+ 358              	 .loc 1 235 0
+ 359 0096 5DF8044B 	 ldr r4,[sp],#4
+ 360              	.LCFI4:
+ 361              	 .cfi_remember_state
+ 362              	 .cfi_restore 4
+ 363              	 .cfi_def_cfa_offset 0
+ 364 009a 1846     	 mov r0,r3
+ 365              	.LVL26:
+ 366 009c 7047     	 bx lr
+ 367              	.LVL27:
+ 368              	.L43:
+ 369              	.LCFI5:
+ 370              	 .cfi_restore_state
+ 225:../Store/src/datastore.c ****   {
+ 371              	 .loc 1 225 0
+ 372 009e 8A42     	 cmp r2,r1
+ 223:../Store/src/datastore.c ****   }
+ 373              	 .loc 1 223 0
+ 374 00a0 03F58053 	 add r3,r3,#4096
+ 375              	.LVL28:
+ 225:../Store/src/datastore.c ****   {
+ 376              	 .loc 1 225 0
+ 377 00a4 EAD9     	 bls .L36
+ 378              	 .loc 1 235 0
+ 379 00a6 1846     	 mov r0,r3
+ 380              	.LVL29:
+ 381 00a8 5DF8044B 	 ldr r4,[sp],#4
+ 382              	.LCFI6:
+ 383              	 .cfi_restore 4
+ 384              	 .cfi_def_cfa_offset 0
+ 385 00ac 7047     	 bx lr
+ 386              	 .cfi_endproc
+ 387              	.LFE476:
+ 389 00ae 00BF     	 .section .text.ds_device_get_settings,"ax",%progbits
+ 390              	 .align 2
+ 391              	 .global ds_device_get_settings
+ 392              	 .thumb
+ 393              	 .thumb_func
+ 395              	ds_device_get_settings:
+ 396              	.LFB477:
+ 236:../Store/src/datastore.c **** 
+ 237:../Store/src/datastore.c **** //============================================================================
+ 238:../Store/src/datastore.c **** 
+ 239:../Store/src/datastore.c **** device_settings_t *ds_device_get_settings(void)
+ 240:../Store/src/datastore.c **** {
+ 397              	 .loc 1 240 0
+ 398              	 .cfi_startproc
+ 399              	 
+ 400              	 
+ 401              	 
+ 241:../Store/src/datastore.c ****   return &ds_device_settings;
+ 242:../Store/src/datastore.c **** }
+ 402              	 .loc 1 242 0
+ 403 0000 0048     	 ldr r0,.L45
+ 404 0002 7047     	 bx lr
+ 405              	.L46:
+ 406              	 .align 2
+ 407              	.L45:
+ 408 0004 00000000 	 .word .LANCHOR3
+ 409              	 .cfi_endproc
+ 410              	.LFE477:
+ 412              	 .section .text.ds_device_get_shadow_settings,"ax",%progbits
+ 413              	 .align 2
+ 414              	 .global ds_device_get_shadow_settings
+ 415              	 .thumb
+ 416              	 .thumb_func
+ 418              	ds_device_get_shadow_settings:
+ 419              	.LFB478:
+ 243:../Store/src/datastore.c **** 
+ 244:../Store/src/datastore.c **** //============================================================================
+ 245:../Store/src/datastore.c **** 
+ 246:../Store/src/datastore.c **** device_settings_t *ds_device_get_shadow_settings(void)
+ 247:../Store/src/datastore.c **** {
+ 420              	 .loc 1 247 0
+ 421              	 .cfi_startproc
+ 422              	 
+ 423              	 
+ 424              	 
+ 248:../Store/src/datastore.c ****   return &ds_shadow_device_settings;
+ 249:../Store/src/datastore.c **** }
+ 425              	 .loc 1 249 0
+ 426 0000 0048     	 ldr r0,.L48
+ 427 0002 7047     	 bx lr
+ 428              	.L49:
+ 429              	 .align 2
+ 430              	.L48:
+ 431 0004 00000000 	 .word .LANCHOR4
+ 432              	 .cfi_endproc
+ 433              	.LFE478:
+ 435              	 .section .text.ds_is_device_settings_updated,"ax",%progbits
+ 436              	 .align 2
+ 437              	 .global ds_is_device_settings_updated
+ 438              	 .thumb
+ 439              	 .thumb_func
+ 441              	ds_is_device_settings_updated:
+ 442              	.LFB479:
+ 250:../Store/src/datastore.c **** 
+ 251:../Store/src/datastore.c **** //============================================================================
+ 252:../Store/src/datastore.c **** 
+ 253:../Store/src/datastore.c **** /* Handling for staged setting */
+ 254:../Store/src/datastore.c **** uint32_t ds_is_device_settings_updated(void)
+ 255:../Store/src/datastore.c **** {
+ 443              	 .loc 1 255 0
+ 444              	 .cfi_startproc
+ 445              	 
+ 446              	 
+ 447              	.LVL30:
+ 448 0000 08B5     	 push {r3,lr}
+ 449              	.LCFI7:
+ 450              	 .cfi_def_cfa_offset 8
+ 451              	 .cfi_offset 3,-8
+ 452              	 .cfi_offset 14,-4
+ 256:../Store/src/datastore.c ****   int32_t retValue = 0;
+ 257:../Store/src/datastore.c ****   
+ 258:../Store/src/datastore.c ****   /* If both structs are identical, retValue is 0, otherwise != 0 */
+ 259:../Store/src/datastore.c ****   retValue = memcmp(&ds_shadow_device_settings,&ds_device_settings, sizeof(ds_shadow_device_setting
+ 453              	 .loc 1 259 0
+ 454 0002 0449     	 ldr r1,.L52
+ 455 0004 0448     	 ldr r0,.L52+4
+ 456 0006 4422     	 movs r2,#68
+ 457 0008 FFF7FEFF 	 bl memcmp
+ 458              	.LVL31:
+ 260:../Store/src/datastore.c ****   
+ 261:../Store/src/datastore.c ****   /* Result of memcmp could be negative! */
+ 262:../Store/src/datastore.c ****   return (retValue == 0) ? 0U : 1U;
+ 263:../Store/src/datastore.c **** }
+ 459              	 .loc 1 263 0
+ 460 000c 0030     	 adds r0,r0,#0
+ 461 000e 18BF     	 it ne
+ 462 0010 0120     	 movne r0,#1
+ 463              	.LVL32:
+ 464 0012 08BD     	 pop {r3,pc}
+ 465              	.L53:
+ 466              	 .align 2
+ 467              	.L52:
+ 468 0014 00000000 	 .word .LANCHOR3
+ 469 0018 00000000 	 .word .LANCHOR4
+ 470              	 .cfi_endproc
+ 471              	.LFE479:
+ 473              	 .section .text.ds_device_settings_copy_to_shadow,"ax",%progbits
+ 474              	 .align 2
+ 475              	 .global ds_device_settings_copy_to_shadow
+ 476              	 .thumb
+ 477              	 .thumb_func
+ 479              	ds_device_settings_copy_to_shadow:
+ 480              	.LFB480:
+ 264:../Store/src/datastore.c **** 
+ 265:../Store/src/datastore.c **** //============================================================================
+ 266:../Store/src/datastore.c **** 
+ 267:../Store/src/datastore.c **** void ds_device_settings_copy_to_shadow(void)
+ 268:../Store/src/datastore.c **** {
+ 481              	 .loc 1 268 0
+ 482              	 .cfi_startproc
+ 483              	 
+ 484              	 
+ 485 0000 08B5     	 push {r3,lr}
+ 486              	.LCFI8:
+ 487              	 .cfi_def_cfa_offset 8
+ 488              	 .cfi_offset 3,-8
+ 489              	 .cfi_offset 14,-4
+ 269:../Store/src/datastore.c ****   memcpy(&ds_shadow_device_settings, &ds_device_settings, sizeof(ds_shadow_device_settings));
+ 490              	 .loc 1 269 0
+ 491 0002 0349     	 ldr r1,.L56
+ 492 0004 0348     	 ldr r0,.L56+4
+ 493 0006 4422     	 movs r2,#68
+ 494 0008 FFF7FEFF 	 bl memcpy
+ 495              	.LVL33:
+ 496 000c 08BD     	 pop {r3,pc}
+ 497              	.L57:
+ 498 000e 00BF     	 .align 2
+ 499              	.L56:
+ 500 0010 00000000 	 .word .LANCHOR3
+ 501 0014 00000000 	 .word .LANCHOR4
+ 502              	 .cfi_endproc
+ 503              	.LFE480:
+ 505              	 .section .text.ds_init,"ax",%progbits
+ 506              	 .align 2
+ 507              	 .global ds_init
+ 508              	 .thumb
+ 509              	 .thumb_func
+ 511              	ds_init:
+ 512              	.LFB481:
+ 270:../Store/src/datastore.c **** }
+ 271:../Store/src/datastore.c **** 
+ 272:../Store/src/datastore.c **** //============================================================================
+ 273:../Store/src/datastore.c **** 
+ 274:../Store/src/datastore.c **** /* This function could be used to pre-init the settings store
+ 275:../Store/src/datastore.c ****  *  e.g. with persistent value, that are stored in some persistent memory region.
+ 276:../Store/src/datastore.c ****  */
+ 277:../Store/src/datastore.c **** uint32_t ds_init(void)
+ 278:../Store/src/datastore.c **** {
+ 513              	 .loc 1 278 0
+ 514              	 .cfi_startproc
+ 515              	 
+ 516              	 
+ 517              	.LVL34:
+ 518 0000 2DE9F84F 	 push {r3,r4,r5,r6,r7,r8,r9,r10,fp,lr}
+ 519              	.LCFI9:
+ 520              	 .cfi_def_cfa_offset 40
+ 521              	 .cfi_offset 3,-40
+ 522              	 .cfi_offset 4,-36
+ 523              	 .cfi_offset 5,-32
+ 524              	 .cfi_offset 6,-28
+ 525              	 .cfi_offset 7,-24
+ 526              	 .cfi_offset 8,-20
+ 527              	 .cfi_offset 9,-16
+ 528              	 .cfi_offset 10,-12
+ 529              	 .cfi_offset 11,-8
+ 530              	 .cfi_offset 14,-4
+ 279:../Store/src/datastore.c ****   uint32_t retValue = 0;
+ 280:../Store/src/datastore.c ****   
+ 281:../Store/src/datastore.c ****   ds_algo_settings = ds_default_algo_settings;
+ 531              	 .loc 1 281 0
+ 532 0004 1C4C     	 ldr r4,.L60
+ 282:../Store/src/datastore.c ****   
+ 283:../Store/src/datastore.c ****   ds_device_settings = ds_default_device_settings;
+ 533              	 .loc 1 283 0
+ 534 0006 1D4E     	 ldr r6,.L60+4
+ 281:../Store/src/datastore.c ****   
+ 535              	 .loc 1 281 0
+ 536 0008 2046     	 mov r0,r4
+ 537 000a 0021     	 movs r1,#0
+ 538 000c 4C22     	 movs r2,#76
+ 539 000e FFF7FEFF 	 bl memset
+ 540              	.LVL35:
+ 541              	 .loc 1 283 0
+ 542 0012 4425     	 movs r5,#68
+ 281:../Store/src/datastore.c ****   
+ 543              	 .loc 1 281 0
+ 544 0014 1A4B     	 ldr r3,.L60+8
+ 545 0016 DFF874E0 	 ldr lr,.L60+20
+ 546 001a 6364     	 str r3,[r4,#68]
+ 547 001c 4FF0040C 	 mov ip,#4
+ 548 0020 0523     	 movs r3,#5
+ 549 0022 6427     	 movs r7,#100
+ 550              	 .loc 1 283 0
+ 551 0024 2A46     	 mov r2,r5
+ 552 0026 1749     	 ldr r1,.L60+12
+ 281:../Store/src/datastore.c ****   
+ 553              	 .loc 1 281 0
+ 554 0028 6360     	 str r3,[r4,#4]
+ 555 002a 4FF0020B 	 mov fp,#2
+ 556 002e 4FF05A0A 	 mov r10,#90
+ 557 0032 4FF47A79 	 mov r9,#1000
+ 558 0036 4FF03208 	 mov r8,#50
+ 559              	 .loc 1 283 0
+ 560 003a 3046     	 mov r0,r6
+ 281:../Store/src/datastore.c ****   
+ 561              	 .loc 1 281 0
+ 562 003c A360     	 str r3,[r4,#8]
+ 563 003e 2361     	 str r3,[r4,#16]
+ 564 0040 A361     	 str r3,[r4,#24]
+ 565 0042 C4F840C0 	 str ip,[r4,#64]
+ 566 0046 C4F848E0 	 str lr,[r4,#72]
+ 567 004a C4F814B0 	 str fp,[r4,#20]
+ 568 004e C4F82CA0 	 str r10,[r4,#44]
+ 569 0052 C4F83090 	 str r9,[r4,#48]
+ 570 0056 C4F83880 	 str r8,[r4,#56]
+ 571 005a E761     	 str r7,[r4,#28]
+ 572 005c 6763     	 str r7,[r4,#52]
+ 573              	 .loc 1 283 0
+ 574 005e FFF7FEFF 	 bl memcpy
+ 575              	.LVL36:
+ 576              	.LBB14:
+ 577              	.LBB15:
+ 269:../Store/src/datastore.c **** }
+ 578              	 .loc 1 269 0
+ 579 0062 3146     	 mov r1,r6
+ 580 0064 2A46     	 mov r2,r5
+ 581 0066 0848     	 ldr r0,.L60+16
+ 582 0068 FFF7FEFF 	 bl memcpy
+ 583              	.LVL37:
+ 584              	.LBE15:
+ 585              	.LBE14:
+ 586              	.LBB16:
+ 587              	.LBB17:
+ 231:../Store/src/datastore.c ****   }
+ 588              	 .loc 1 231 0
+ 589 006c 0123     	 movs r3,#1
+ 590 006e 6370     	 strb r3,[r4,#1]
+ 591              	.LVL38:
+ 592              	.LBE17:
+ 593              	.LBE16:
+ 284:../Store/src/datastore.c ****   
+ 285:../Store/src/datastore.c ****   ds_device_settings_copy_to_shadow();
+ 286:../Store/src/datastore.c ****   
+ 287:../Store/src/datastore.c ****   retValue += ds_algo_check_settings(&ds_algo_settings);
+ 288:../Store/src/datastore.c ****   
+ 289:../Store/src/datastore.c ****   return retValue;
+ 290:../Store/src/datastore.c **** }
+ 594              	 .loc 1 290 0
+ 595 0070 0020     	 movs r0,#0
+ 596 0072 BDE8F88F 	 pop {r3,r4,r5,r6,r7,r8,r9,r10,fp,pc}
+ 597              	.L61:
+ 598 0076 00BF     	 .align 2
+ 599              	.L60:
+ 600 0078 00000000 	 .word .LANCHOR2
+ 601 007c 00000000 	 .word .LANCHOR3
+ 602 0080 462DFF3F 	 .word 1073687878
+ 603 0084 00000000 	 .word .LANCHOR5
+ 604 0088 00000000 	 .word .LANCHOR4
+ 605 008c 00004842 	 .word 1112014848
+ 606              	 .cfi_endproc
+ 607              	.LFE481:
+ 609              	 .section .text.ds_get_active_acq_buf,"ax",%progbits
+ 610              	 .align 2
+ 611              	 .global ds_get_active_acq_buf
+ 612              	 .thumb
+ 613              	 .thumb_func
+ 615              	ds_get_active_acq_buf:
+ 616              	.LFB482:
+ 291:../Store/src/datastore.c **** 
+ 292:../Store/src/datastore.c **** //============================================================================
+ 293:../Store/src/datastore.c **** 
+ 294:../Store/src/datastore.c **** acq_buf_obj *ds_get_active_acq_buf(void)
+ 295:../Store/src/datastore.c **** {
+ 617              	 .loc 1 295 0
+ 618              	 .cfi_startproc
+ 619              	 
+ 620              	 
+ 621              	 
+ 296:../Store/src/datastore.c ****   return &s_acq_buf;
+ 297:../Store/src/datastore.c **** }
+ 622              	 .loc 1 297 0
+ 623 0000 0048     	 ldr r0,.L63
+ 624 0002 7047     	 bx lr
+ 625              	.L64:
+ 626              	 .align 2
+ 627              	.L63:
+ 628 0004 00000000 	 .word .LANCHOR6
+ 629              	 .cfi_endproc
+ 630              	.LFE482:
+ 632              	 .section .text.ds_set_active_acq_buf,"ax",%progbits
+ 633              	 .align 2
+ 634              	 .global ds_set_active_acq_buf
+ 635              	 .thumb
+ 636              	 .thumb_func
+ 638              	ds_set_active_acq_buf:
+ 639              	.LFB483:
+ 298:../Store/src/datastore.c **** 
+ 299:../Store/src/datastore.c **** //============================================================================
+ 300:../Store/src/datastore.c **** 
+ 301:../Store/src/datastore.c **** void ds_set_active_acq_buf(const acq_buf_obj acq_buf)
+ 302:../Store/src/datastore.c **** {
+ 640              	 .loc 1 302 0
+ 641              	 .cfi_startproc
+ 642              	 
+ 643              	 
+ 644 0000 84B0     	 sub sp,sp,#16
+ 645              	.LCFI10:
+ 646              	 .cfi_def_cfa_offset 16
+ 647 0002 38B5     	 push {r3,r4,r5,lr}
+ 648              	.LCFI11:
+ 649              	 .cfi_def_cfa_offset 32
+ 650              	 .cfi_offset 3,-32
+ 651              	 .cfi_offset 4,-28
+ 652              	 .cfi_offset 5,-24
+ 653              	 .cfi_offset 14,-20
+ 303:../Store/src/datastore.c ****   if(s_acq_buf.p_acq_buf != NULL)
+ 654              	 .loc 1 303 0
+ 655 0004 0B4C     	 ldr r4,.L71
+ 656 0006 A56A     	 ldr r5,[r4,#40]
+ 302:../Store/src/datastore.c ****   if(s_acq_buf.p_acq_buf != NULL)
+ 657              	 .loc 1 302 0
+ 658 0008 0DF1100E 	 add lr,sp,#16
+ 659 000c 8EE80F00 	 stmia lr,{r0,r1,r2,r3}
+ 660              	 .loc 1 303 0
+ 661 0010 15B1     	 cbz r5,.L66
+ 304:../Store/src/datastore.c ****   {
+ 305:../Store/src/datastore.c ****     delete_acq_buffer_obj(&s_acq_buf);
+ 662              	 .loc 1 305 0
+ 663 0012 2046     	 mov r0,r4
+ 664 0014 FFF7FEFF 	 bl delete_acq_buffer_obj
+ 665              	.LVL39:
+ 666              	.L66:
+ 306:../Store/src/datastore.c ****   }
+ 307:../Store/src/datastore.c ****   
+ 308:../Store/src/datastore.c ****   memcpy(&s_acq_buf, &acq_buf, sizeof(acq_buf_obj));
+ 667              	 .loc 1 308 0
+ 668 0018 04AD     	 add r5,sp,#16
+ 669 001a 0FCD     	 ldmia r5!,{r0,r1,r2,r3}
+ 670 001c 054C     	 ldr r4,.L71
+ 671 001e 0FC4     	 stmia r4!,{r0,r1,r2,r3}
+ 672 0020 0FCD     	 ldmia r5!,{r0,r1,r2,r3}
+ 673 0022 0FC4     	 stmia r4!,{r0,r1,r2,r3}
+ 674 0024 95E80F00 	 ldmia r5,{r0,r1,r2,r3}
+ 675 0028 84E80F00 	 stmia r4,{r0,r1,r2,r3}
+ 309:../Store/src/datastore.c **** }
+ 676              	 .loc 1 309 0
+ 677 002c BDE83840 	 pop {r3,r4,r5,lr}
+ 678              	.LCFI12:
+ 679              	 .cfi_restore 14
+ 680              	 .cfi_restore 5
+ 681              	 .cfi_restore 4
+ 682              	 .cfi_restore 3
+ 683              	 .cfi_def_cfa_offset 16
+ 684 0030 04B0     	 add sp,sp,#16
+ 685              	.LCFI13:
+ 686              	 .cfi_def_cfa_offset 0
+ 687 0032 7047     	 bx lr
+ 688              	.L72:
+ 689              	 .align 2
+ 690              	.L71:
+ 691 0034 00000000 	 .word .LANCHOR6
+ 692              	 .cfi_endproc
+ 693              	.LFE483:
+ 695              	 .global result_range_detection_threshold
+ 696              	 .global ds_target_list
+ 697              	 .global ds_default_algo_settings
+ 698              	 .section .data.ds_target_list,"aw",%progbits
+ 699              	 .align 2
+ 700              	 .set .LANCHOR0,.+0
+ 703              	ds_target_list:
+ 704 0000 05000000 	 .word 5
+ 705 0004 00000000 	 .space 104
+ 705      00000000 
+ 705      00000000 
+ 705      00000000 
+ 705      00000000 
+ 706              	 .section .bss.result_range_detection_threshold,"aw",%nobits
+ 707              	 .align 2
+ 708              	 .set .LANCHOR1,.+0
+ 711              	result_range_detection_threshold:
+ 712 0000 00000000 	 .space 4
+ 713              	 .section .rodata.ds_default_algo_settings,"a",%progbits
+ 714              	 .align 2
+ 717              	ds_default_algo_settings:
+ 718 0000 00       	 .byte 0
+ 719 0001 00       	 .byte 0
+ 720 0002 0000     	 .space 2
+ 721 0004 05000000 	 .word 5
+ 722 0008 05000000 	 .word 5
+ 723 000c 00000000 	 .word 0
+ 724 0010 05000000 	 .word 5
+ 725 0014 02000000 	 .word 2
+ 726 0018 05000000 	 .word 5
+ 727 001c 64000000 	 .word 100
+ 728 0020 00000000 	 .word 0
+ 729 0024 00000000 	 .space 8
+ 729      00000000 
+ 730 002c 5A000000 	 .word 90
+ 731 0030 E8030000 	 .word 1000
+ 732 0034 64000000 	 .word 100
+ 733 0038 32000000 	 .word 50
+ 734 003c 00000000 	 .word 0
+ 735 0040 04000000 	 .word 4
+ 736 0044 462DFF3F 	 .word 1073687878
+ 737 0048 00004842 	 .word 1112014848
+ 738              	 .section .rodata.ds_default_device_settings,"a",%progbits
+ 739              	 .align 2
+ 740              	 .set .LANCHOR5,.+0
+ 743              	ds_default_device_settings:
+ 744 0000 2C010000 	 .word 300
+ 745 0004 6005B84B 	 .word 1270351200
+ 746 0008 D44BB74B 	 .word 1270303700
+ 747 000c 74D2B84B 	 .word 1270403700
+ 748 0010 00004843 	 .word 1128792064
+ 749 0014 10000000 	 .word 16
+ 750 0018 01000000 	 .word 1
+ 751 001c AB420300 	 .word 213675
+ 752 0020 0C       	 .byte 12
+ 753 0021 00       	 .byte 0
+ 754 0022 0400     	 .short 4
+ 755 0024 01       	 .byte 1
+ 756 0025 07       	 .byte 7
+ 757 0026 01       	 .byte 1
+ 758 0027 00       	 .space 1
+ 759 0028 F0490200 	 .word 150000
+ 760 002c 40000000 	 .word 64
+ 761 0030 03       	 .byte 3
+ 762 0031 000000   	 .space 3
+ 763 0034 00000000 	 .word 0
+ 764 0038 00000000 	 .word 0
+ 765 003c 00000000 	 .word 0
+ 766 0040 00000000 	 .word 0
+ 767              	 .section .bss.ds_algo_settings,"aw",%nobits
+ 768              	 .align 2
+ 769              	 .set .LANCHOR2,.+0
+ 772              	ds_algo_settings:
+ 773 0000 00000000 	 .space 76
+ 773      00000000 
+ 773      00000000 
+ 773      00000000 
+ 773      00000000 
+ 774              	 .section .bss.ds_shadow_device_settings,"aw",%nobits
+ 775              	 .align 2
+ 776              	 .set .LANCHOR4,.+0
+ 779              	ds_shadow_device_settings:
+ 780 0000 00000000 	 .space 68
+ 780      00000000 
+ 780      00000000 
+ 780      00000000 
+ 780      00000000 
+ 781              	 .section .bss.ds_device_settings,"aw",%nobits
+ 782              	 .align 2
+ 783              	 .set .LANCHOR3,.+0
+ 786              	ds_device_settings:
+ 787 0000 00000000 	 .space 68
+ 787      00000000 
+ 787      00000000 
+ 787      00000000 
+ 787      00000000 
+ 788              	 .section .data.s_acq_buf,"aw",%progbits
+ 789              	 .align 2
+ 790              	 .set .LANCHOR6,.+0
+ 793              	s_acq_buf:
+ 794 0000 00000000 	 .space 44
+ 794      00000000 
+ 794      00000000 
+ 794      00000000 
+ 794      00000000 
+ 795 002c 07       	 .byte 7
+ 796 002d 000000   	 .space 3
+ 797              	 .text
+ 798              	.Letext0:
+ 799              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 800              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 801              	 .file 4 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\lib\\gcc\\arm-none-eabi\\4.9.3\\include\\stddef.h"
+ 802              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Radar_Control/inc/acq_buffer.h"
+ 803              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Store/inc/datastore.h"
+ 804              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 805              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 806              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 807              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 808              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 809              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 810              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 811              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 812              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+ 813              	 .file 16 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\string.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 datastore.c
+    {standard input}:20     .text.store_algo_result:00000000 $t
+    {standard input}:25     .text.store_algo_result:00000000 store_algo_result
+    {standard input}:109    .text.store_algo_result:00000050 $d
+    {standard input}:115    .text.ds_get_target_list:00000000 $t
+    {standard input}:120    .text.ds_get_target_list:00000000 ds_get_target_list
+    {standard input}:133    .text.ds_get_target_list:00000004 $d
+    {standard input}:138    .text.ds_algo_store_settings:00000000 $t
+    {standard input}:143    .text.ds_algo_store_settings:00000000 ds_algo_store_settings
+    {standard input}:162    .text.ds_algo_store_settings:0000000c $d
+    {standard input}:167    .text.ds_algo_fetch_settings:00000000 $t
+    {standard input}:172    .text.ds_algo_fetch_settings:00000000 ds_algo_fetch_settings
+    {standard input}:188    .text.ds_algo_fetch_settings:00000008 $d
+    {standard input}:193    .text.ds_algo_get_settings:00000000 $t
+    {standard input}:198    .text.ds_algo_get_settings:00000000 ds_algo_get_settings
+    {standard input}:211    .text.ds_algo_get_settings:00000004 $d
+    {standard input}:216    .text.ds_algo_check_settings:00000000 $t
+    {standard input}:221    .text.ds_algo_check_settings:00000000 ds_algo_check_settings
+    {standard input}:390    .text.ds_device_get_settings:00000000 $t
+    {standard input}:395    .text.ds_device_get_settings:00000000 ds_device_get_settings
+    {standard input}:408    .text.ds_device_get_settings:00000004 $d
+    {standard input}:413    .text.ds_device_get_shadow_settings:00000000 $t
+    {standard input}:418    .text.ds_device_get_shadow_settings:00000000 ds_device_get_shadow_settings
+    {standard input}:431    .text.ds_device_get_shadow_settings:00000004 $d
+    {standard input}:436    .text.ds_is_device_settings_updated:00000000 $t
+    {standard input}:441    .text.ds_is_device_settings_updated:00000000 ds_is_device_settings_updated
+    {standard input}:468    .text.ds_is_device_settings_updated:00000014 $d
+    {standard input}:474    .text.ds_device_settings_copy_to_shadow:00000000 $t
+    {standard input}:479    .text.ds_device_settings_copy_to_shadow:00000000 ds_device_settings_copy_to_shadow
+    {standard input}:500    .text.ds_device_settings_copy_to_shadow:00000010 $d
+    {standard input}:506    .text.ds_init:00000000 $t
+    {standard input}:511    .text.ds_init:00000000 ds_init
+    {standard input}:600    .text.ds_init:00000078 $d
+    {standard input}:610    .text.ds_get_active_acq_buf:00000000 $t
+    {standard input}:615    .text.ds_get_active_acq_buf:00000000 ds_get_active_acq_buf
+    {standard input}:628    .text.ds_get_active_acq_buf:00000004 $d
+    {standard input}:633    .text.ds_set_active_acq_buf:00000000 $t
+    {standard input}:638    .text.ds_set_active_acq_buf:00000000 ds_set_active_acq_buf
+    {standard input}:691    .text.ds_set_active_acq_buf:00000034 $d
+    {standard input}:711    .bss.result_range_detection_threshold:00000000 result_range_detection_threshold
+    {standard input}:703    .data.ds_target_list:00000000 ds_target_list
+    {standard input}:717    .rodata.ds_default_algo_settings:00000000 ds_default_algo_settings
+    {standard input}:699    .data.ds_target_list:00000000 $d
+    {standard input}:707    .bss.result_range_detection_threshold:00000000 $d
+    {standard input}:714    .rodata.ds_default_algo_settings:00000000 $d
+    {standard input}:739    .rodata.ds_default_device_settings:00000000 $d
+    {standard input}:743    .rodata.ds_default_device_settings:00000000 ds_default_device_settings
+    {standard input}:768    .bss.ds_algo_settings:00000000 $d
+    {standard input}:772    .bss.ds_algo_settings:00000000 ds_algo_settings
+    {standard input}:775    .bss.ds_shadow_device_settings:00000000 $d
+    {standard input}:779    .bss.ds_shadow_device_settings:00000000 ds_shadow_device_settings
+    {standard input}:782    .bss.ds_device_settings:00000000 $d
+    {standard input}:786    .bss.ds_device_settings:00000000 ds_device_settings
+    {standard input}:789    .data.s_acq_buf:00000000 $d
+    {standard input}:793    .data.s_acq_buf:00000000 s_acq_buf
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+memcpy
+memcmp
+memset
+delete_acq_buffer_obj

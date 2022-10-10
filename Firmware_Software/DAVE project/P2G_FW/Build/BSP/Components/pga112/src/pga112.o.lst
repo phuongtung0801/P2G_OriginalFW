@@ -1,0 +1,481 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .eabi_attribute 27,3
+   4              	 .fpu fpv4-sp-d16
+   5              	 .eabi_attribute 20,1
+   6              	 .eabi_attribute 21,1
+   7              	 .eabi_attribute 23,3
+   8              	 .eabi_attribute 24,1
+   9              	 .eabi_attribute 25,1
+  10              	 .eabi_attribute 26,1
+  11              	 .eabi_attribute 30,2
+  12              	 .eabi_attribute 34,1
+  13              	 .eabi_attribute 18,4
+  14              	 .thumb
+  15              	 .file "pga112.c"
+  16              	 .text
+  17              	.Ltext0:
+  18              	 .cfi_sections .debug_frame
+  19              	 .section .text.pga112_init,"ax",%progbits
+  20              	 .align 2
+  21              	 .global pga112_init
+  22              	 .thumb
+  23              	 .thumb_func
+  25              	pga112_init:
+  26              	.LFB470:
+  27              	 .file 1 "../BSP/Components/pga112/src/pga112.c"
+   1:../BSP/Components/pga112/src/pga112.c **** /**
+   2:../BSP/Components/pga112/src/pga112.c ****     @file: pga112.c
+   3:../BSP/Components/pga112/src/pga112.c **** 
+   4:../BSP/Components/pga112/src/pga112.c ****     @brief: This file provides driver for PGA112xxx Zero-Drift, Programmable Gain
+   5:../BSP/Components/pga112/src/pga112.c ****             Amplifier. It contains a set of functions to configure and use PGA112 device.
+   6:../BSP/Components/pga112/src/pga112.c **** */
+   7:../BSP/Components/pga112/src/pga112.c **** 
+   8:../BSP/Components/pga112/src/pga112.c **** /* ===========================================================================
+   9:../BSP/Components/pga112/src/pga112.c **** ** Copyright (C) 2018-2019 Infineon Technologies AG
+  10:../BSP/Components/pga112/src/pga112.c **** ** All rights reserved.
+  11:../BSP/Components/pga112/src/pga112.c **** ** ===========================================================================
+  12:../BSP/Components/pga112/src/pga112.c **** **
+  13:../BSP/Components/pga112/src/pga112.c **** ** ===========================================================================
+  14:../BSP/Components/pga112/src/pga112.c **** ** This document contains proprietary information of Infineon Technologies AG.
+  15:../BSP/Components/pga112/src/pga112.c **** ** Passing on and copying of this document, and communication of its contents
+  16:../BSP/Components/pga112/src/pga112.c **** ** is not permitted without Infineon's prior written authorization.
+  17:../BSP/Components/pga112/src/pga112.c **** ** ===========================================================================
+  18:../BSP/Components/pga112/src/pga112.c **** */
+  19:../BSP/Components/pga112/src/pga112.c **** 
+  20:../BSP/Components/pga112/src/pga112.c **** /*
+  21:../BSP/Components/pga112/src/pga112.c **** ==============================================================================
+  22:../BSP/Components/pga112/src/pga112.c ****    1. INCLUDE FILES
+  23:../BSP/Components/pga112/src/pga112.c **** ==============================================================================
+  24:../BSP/Components/pga112/src/pga112.c ****  */
+  25:../BSP/Components/pga112/src/pga112.c **** 
+  26:../BSP/Components/pga112/src/pga112.c **** #include "pga112.h"
+  27:../BSP/Components/pga112/src/pga112.c **** 
+  28:../BSP/Components/pga112/src/pga112.c **** /*
+  29:../BSP/Components/pga112/src/pga112.c **** ==============================================================================
+  30:../BSP/Components/pga112/src/pga112.c ****    2. DATA
+  31:../BSP/Components/pga112/src/pga112.c **** ==============================================================================
+  32:../BSP/Components/pga112/src/pga112.c ****  */
+  33:../BSP/Components/pga112/src/pga112.c **** 
+  34:../BSP/Components/pga112/src/pga112.c **** static volatile  uint16_t pga112_global_gain = 0; /**< Current PGA112 gain */
+  35:../BSP/Components/pga112/src/pga112.c **** 
+  36:../BSP/Components/pga112/src/pga112.c **** static volatile  uint16_t pga112_global_config = PGA112_BASE_CONF; /**< Current PGA112 configuratio
+  37:../BSP/Components/pga112/src/pga112.c **** 
+  38:../BSP/Components/pga112/src/pga112.c **** static SPI_DIGITAL_IOs_t  pga112_spi_pins; /**< SPI GPIOs used to configure PGA112 device */
+  39:../BSP/Components/pga112/src/pga112.c **** 
+  40:../BSP/Components/pga112/src/pga112.c **** /*
+  41:../BSP/Components/pga112/src/pga112.c **** ==============================================================================
+  42:../BSP/Components/pga112/src/pga112.c ****    3. LOCAL FUNCTION PROTOTYPES
+  43:../BSP/Components/pga112/src/pga112.c **** ==============================================================================
+  44:../BSP/Components/pga112/src/pga112.c ****  */
+  45:../BSP/Components/pga112/src/pga112.c **** 
+  46:../BSP/Components/pga112/src/pga112.c **** /**
+  47:../BSP/Components/pga112/src/pga112.c ****  * \brief This function returns the PGA112 gain value from the selected index.
+  48:../BSP/Components/pga112/src/pga112.c ****  *
+  49:../BSP/Components/pga112/src/pga112.c ****  * \param[in]  gain_idx  index of the PGA112 gain value (from 0 to 7)
+  50:../BSP/Components/pga112/src/pga112.c ****  *
+  51:../BSP/Components/pga112/src/pga112.c ****  * \return PGA112 gain value
+  52:../BSP/Components/pga112/src/pga112.c ****  */
+  53:../BSP/Components/pga112/src/pga112.c **** static Pga112_Binary_Gain_t pga112_get_binary_gain(uint16_t gain_idx);
+  54:../BSP/Components/pga112/src/pga112.c **** 
+  55:../BSP/Components/pga112/src/pga112.c **** /*
+  56:../BSP/Components/pga112/src/pga112.c **** ==============================================================================
+  57:../BSP/Components/pga112/src/pga112.c ****    4. EXPORTED FUNCTIONS
+  58:../BSP/Components/pga112/src/pga112.c **** ==============================================================================
+  59:../BSP/Components/pga112/src/pga112.c ****  */
+  60:../BSP/Components/pga112/src/pga112.c **** 
+  61:../BSP/Components/pga112/src/pga112.c **** Pga_Status_t pga112_init(uint16_t gain_level)
+  62:../BSP/Components/pga112/src/pga112.c **** {
+  28              	 .loc 1 62 0
+  29              	 .cfi_startproc
+  30              	 
+  31              	 
+  32              	.LVL0:
+  33 0000 70B5     	 push {r4,r5,r6,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 16
+  36              	 .cfi_offset 4,-16
+  37              	 .cfi_offset 5,-12
+  38              	 .cfi_offset 6,-8
+  39              	 .cfi_offset 14,-4
+  63:../BSP/Components/pga112/src/pga112.c ****   /* Set the digital IOs used by SPI interface */
+  64:../BSP/Components/pga112/src/pga112.c ****   pga112_spi_pins.spi_device = PGA_DEVICE;
+  40              	 .loc 1 64 0
+  41 0002 154A     	 ldr r2,.L6
+  65:../BSP/Components/pga112/src/pga112.c ****   pga112_spi_pins.gpio_cs_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_PGA;
+  42              	 .loc 1 65 0
+  43 0004 1549     	 ldr r1,.L6+4
+  66:../BSP/Components/pga112/src/pga112.c ****   pga112_spi_pins.gpio_data_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_DATA_PGA;
+  44              	 .loc 1 66 0
+  45 0006 164D     	 ldr r5,.L6+8
+  67:../BSP/Components/pga112/src/pga112.c ****   pga112_spi_pins.gpio_clk_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CLK;
+  46              	 .loc 1 67 0
+  47 0008 164B     	 ldr r3,.L6+12
+  65:../BSP/Components/pga112/src/pga112.c ****   pga112_spi_pins.gpio_cs_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_PGA;
+  48              	 .loc 1 65 0
+  49 000a 5160     	 str r1,[r2,#4]
+  62:../BSP/Components/pga112/src/pga112.c ****   /* Set the digital IOs used by SPI interface */
+  50              	 .loc 1 62 0
+  51 000c 82B0     	 sub sp,sp,#8
+  52              	.LCFI1:
+  53              	 .cfi_def_cfa_offset 24
+  64:../BSP/Components/pga112/src/pga112.c ****   pga112_spi_pins.gpio_cs_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_PGA;
+  54              	 .loc 1 64 0
+  55 000e 0221     	 movs r1,#2
+  56              	.LBB7:
+  57              	.LBB8:
+  68:../BSP/Components/pga112/src/pga112.c **** 
+  69:../BSP/Components/pga112/src/pga112.c ****   return (pga112_set_gain(gain_level));
+  70:../BSP/Components/pga112/src/pga112.c **** }
+  71:../BSP/Components/pga112/src/pga112.c **** 
+  72:../BSP/Components/pga112/src/pga112.c **** //============================================================================
+  73:../BSP/Components/pga112/src/pga112.c **** 
+  74:../BSP/Components/pga112/src/pga112.c **** Pga_Status_t pga112_get_gain(uint16_t* gain_level)
+  75:../BSP/Components/pga112/src/pga112.c **** {
+  76:../BSP/Components/pga112/src/pga112.c ****   *gain_level = pga112_global_gain;
+  77:../BSP/Components/pga112/src/pga112.c **** 
+  78:../BSP/Components/pga112/src/pga112.c ****   return (PGA_STATUS_SUCCESS);
+  79:../BSP/Components/pga112/src/pga112.c **** }
+  80:../BSP/Components/pga112/src/pga112.c **** 
+  81:../BSP/Components/pga112/src/pga112.c **** //============================================================================
+  82:../BSP/Components/pga112/src/pga112.c **** 
+  83:../BSP/Components/pga112/src/pga112.c **** Pga_Status_t pga112_set_gain(uint16_t gain_level)
+  84:../BSP/Components/pga112/src/pga112.c **** {
+  85:../BSP/Components/pga112/src/pga112.c ****   Pga112_Binary_Gain_t  gain_val;
+  86:../BSP/Components/pga112/src/pga112.c ****   uint16_t shuffled_data = 0;
+  58              	 .loc 1 86 0
+  59 0010 0024     	 movs r4,#0
+  87:../BSP/Components/pga112/src/pga112.c **** 
+  88:../BSP/Components/pga112/src/pga112.c ****   if(gain_level > PGA112_MAX_NUMBER_SUPPORTED_GAIN)
+  60              	 .loc 1 88 0
+  61 0012 0728     	 cmp r0,#7
+  62              	.LBE8:
+  63              	.LBE7:
+  66:../BSP/Components/pga112/src/pga112.c ****   pga112_spi_pins.gpio_clk_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CLK;
+  64              	 .loc 1 66 0
+  65 0014 9560     	 str r5,[r2,#8]
+  67:../BSP/Components/pga112/src/pga112.c **** 
+  66              	 .loc 1 67 0
+  67 0016 D360     	 str r3,[r2,#12]
+  68              	.LVL1:
+  64:../BSP/Components/pga112/src/pga112.c ****   pga112_spi_pins.gpio_cs_pin = (DIGITAL_IO_t*)&DIGITAL_IO_SPI_M_CS_PGA;
+  69              	 .loc 1 64 0
+  70 0018 1170     	 strb r1,[r2]
+  71              	.LBB11:
+  72              	.LBB9:
+  86:../BSP/Components/pga112/src/pga112.c **** 
+  73              	 .loc 1 86 0
+  74 001a ADF80640 	 strh r4,[sp,#6]
+  75              	 .loc 1 88 0
+  76 001e 18D8     	 bhi .L3
+  77 0020 114B     	 ldr r3,.L6+16
+  89:../BSP/Components/pga112/src/pga112.c ****   {
+  90:../BSP/Components/pga112/src/pga112.c ****     return (PGA_STATUS_FAIL);
+  91:../BSP/Components/pga112/src/pga112.c ****   }
+  92:../BSP/Components/pga112/src/pga112.c **** 
+  93:../BSP/Components/pga112/src/pga112.c ****   /* Get PGA112 gain value from the selected index */
+  94:../BSP/Components/pga112/src/pga112.c ****   pga112_global_gain = gain_level;
+  95:../BSP/Components/pga112/src/pga112.c ****   gain_val = pga112_get_binary_gain(gain_level);
+  96:../BSP/Components/pga112/src/pga112.c **** 
+  97:../BSP/Components/pga112/src/pga112.c ****   pga112_global_config = (PGA112_CMD_WRITE | gain_val | PGA112_CH1);
+  78              	 .loc 1 97 0
+  79 0022 124E     	 ldr r6,.L6+20
+  80 0024 1B5C     	 ldrb r3,[r3,r0]
+  94:../BSP/Components/pga112/src/pga112.c ****   gain_val = pga112_get_binary_gain(gain_level);
+  81              	 .loc 1 94 0
+  82 0026 124D     	 ldr r5,.L6+24
+  83              	 .loc 1 97 0
+  84 0028 43F42853 	 orr r3,r3,#10752
+  85 002c 43F00103 	 orr r3,r3,#1
+  94:../BSP/Components/pga112/src/pga112.c ****   gain_val = pga112_get_binary_gain(gain_level);
+  86              	 .loc 1 94 0
+  87 0030 2880     	 strh r0,[r5]
+  88              	.LVL2:
+  89              	 .loc 1 97 0
+  90 0032 3380     	 strh r3,[r6]
+  98:../BSP/Components/pga112/src/pga112.c **** 
+  99:../BSP/Components/pga112/src/pga112.c ****   /* Lower byte goes to upper byte position */
+ 100:../BSP/Components/pga112/src/pga112.c ****   shuffled_data  = ((pga112_global_config & 0x00FF) << 8);
+  91              	 .loc 1 100 0
+  92 0034 3588     	 ldrh r5,[r6]
+ 101:../BSP/Components/pga112/src/pga112.c **** 
+ 102:../BSP/Components/pga112/src/pga112.c ****   /* Upper byte goes to lower byte position */
+ 103:../BSP/Components/pga112/src/pga112.c ****   shuffled_data |= ((pga112_global_config & 0xFF00) >> 8);
+  93              	 .loc 1 103 0
+  94 0036 3388     	 ldrh r3,[r6]
+  95 0038 02A8     	 add r0,sp,#8
+  96              	.LVL3:
+ 100:../BSP/Components/pga112/src/pga112.c **** 
+  97              	 .loc 1 100 0
+  98 003a ADB2     	 uxth r5,r5
+  99              	 .loc 1 103 0
+ 100 003c C3F30723 	 ubfx r3,r3,#8,#8
+ 101 0040 43EA0523 	 orr r3,r3,r5,lsl#8
+ 102 0044 20F8023D 	 strh r3,[r0,#-2]!
+ 104:../BSP/Components/pga112/src/pga112.c **** 
+ 105:../BSP/Components/pga112/src/pga112.c ****   /* Send command to PGA112 */
+ 106:../BSP/Components/pga112/src/pga112.c ****   spi_transmit_data((uint8_t *)&shuffled_data, 2, (void*) &pga112_spi_pins);
+ 103              	 .loc 1 106 0
+ 104 0048 FFF7FEFF 	 bl spi_transmit_data
+ 105              	.LVL4:
+ 107:../BSP/Components/pga112/src/pga112.c **** 
+ 108:../BSP/Components/pga112/src/pga112.c ****   return (PGA_STATUS_SUCCESS);
+ 106              	 .loc 1 108 0
+ 107 004c 2046     	 mov r0,r4
+ 108              	.LBE9:
+ 109              	.LBE11:
+  70:../BSP/Components/pga112/src/pga112.c **** 
+ 110              	 .loc 1 70 0
+ 111 004e 02B0     	 add sp,sp,#8
+ 112              	.LCFI2:
+ 113              	 .cfi_remember_state
+ 114              	 .cfi_def_cfa_offset 16
+ 115              	 
+ 116 0050 70BD     	 pop {r4,r5,r6,pc}
+ 117              	.LVL5:
+ 118              	.L3:
+ 119              	.LCFI3:
+ 120              	 .cfi_restore_state
+ 121              	.LBB12:
+ 122              	.LBB10:
+  90:../BSP/Components/pga112/src/pga112.c ****   }
+ 123              	 .loc 1 90 0
+ 124 0052 0120     	 movs r0,#1
+ 125              	.LVL6:
+ 126              	.LBE10:
+ 127              	.LBE12:
+  70:../BSP/Components/pga112/src/pga112.c **** 
+ 128              	 .loc 1 70 0
+ 129 0054 02B0     	 add sp,sp,#8
+ 130              	.LCFI4:
+ 131              	 .cfi_def_cfa_offset 16
+ 132              	 
+ 133 0056 70BD     	 pop {r4,r5,r6,pc}
+ 134              	.L7:
+ 135              	 .align 2
+ 136              	.L6:
+ 137 0058 00000000 	 .word .LANCHOR0
+ 138 005c 00000000 	 .word DIGITAL_IO_SPI_M_CS_PGA
+ 139 0060 00000000 	 .word DIGITAL_IO_SPI_DATA_PGA
+ 140 0064 00000000 	 .word DIGITAL_IO_SPI_M_CLK
+ 141 0068 00000000 	 .word .LANCHOR2
+ 142 006c 00000000 	 .word .LANCHOR3
+ 143 0070 00000000 	 .word .LANCHOR1
+ 144              	 .cfi_endproc
+ 145              	.LFE470:
+ 147              	 .section .text.pga112_get_gain,"ax",%progbits
+ 148              	 .align 2
+ 149              	 .global pga112_get_gain
+ 150              	 .thumb
+ 151              	 .thumb_func
+ 153              	pga112_get_gain:
+ 154              	.LFB471:
+  75:../BSP/Components/pga112/src/pga112.c ****   *gain_level = pga112_global_gain;
+ 155              	 .loc 1 75 0
+ 156              	 .cfi_startproc
+ 157              	 
+ 158              	 
+ 159              	 
+ 160              	.LVL7:
+  76:../BSP/Components/pga112/src/pga112.c **** 
+ 161              	 .loc 1 76 0
+ 162 0000 024B     	 ldr r3,.L9
+ 163 0002 1B88     	 ldrh r3,[r3]
+ 164 0004 0380     	 strh r3,[r0]
+  79:../BSP/Components/pga112/src/pga112.c **** 
+ 165              	 .loc 1 79 0
+ 166 0006 0020     	 movs r0,#0
+ 167              	.LVL8:
+ 168 0008 7047     	 bx lr
+ 169              	.L10:
+ 170 000a 00BF     	 .align 2
+ 171              	.L9:
+ 172 000c 00000000 	 .word .LANCHOR1
+ 173              	 .cfi_endproc
+ 174              	.LFE471:
+ 176              	 .section .text.pga112_set_gain,"ax",%progbits
+ 177              	 .align 2
+ 178              	 .global pga112_set_gain
+ 179              	 .thumb
+ 180              	 .thumb_func
+ 182              	pga112_set_gain:
+ 183              	.LFB472:
+  84:../BSP/Components/pga112/src/pga112.c ****   Pga112_Binary_Gain_t  gain_val;
+ 184              	 .loc 1 84 0
+ 185              	 .cfi_startproc
+ 186              	 
+ 187              	 
+ 188              	.LVL9:
+ 189 0000 10B5     	 push {r4,lr}
+ 190              	.LCFI5:
+ 191              	 .cfi_def_cfa_offset 8
+ 192              	 .cfi_offset 4,-8
+ 193              	 .cfi_offset 14,-4
+ 194 0002 82B0     	 sub sp,sp,#8
+ 195              	.LCFI6:
+ 196              	 .cfi_def_cfa_offset 16
+  86:../BSP/Components/pga112/src/pga112.c **** 
+ 197              	 .loc 1 86 0
+ 198 0004 0024     	 movs r4,#0
+  88:../BSP/Components/pga112/src/pga112.c ****   {
+ 199              	 .loc 1 88 0
+ 200 0006 0728     	 cmp r0,#7
+  86:../BSP/Components/pga112/src/pga112.c **** 
+ 201              	 .loc 1 86 0
+ 202 0008 ADF80640 	 strh r4,[sp,#6]
+  88:../BSP/Components/pga112/src/pga112.c ****   {
+ 203              	 .loc 1 88 0
+ 204 000c 1AD8     	 bhi .L13
+ 205 000e 0F4B     	 ldr r3,.L15
+  97:../BSP/Components/pga112/src/pga112.c **** 
+ 206              	 .loc 1 97 0
+ 207 0010 0F4A     	 ldr r2,.L15+4
+ 208 0012 1B5C     	 ldrb r3,[r3,r0]
+  94:../BSP/Components/pga112/src/pga112.c ****   gain_val = pga112_get_binary_gain(gain_level);
+ 209              	 .loc 1 94 0
+ 210 0014 0F49     	 ldr r1,.L15+8
+  97:../BSP/Components/pga112/src/pga112.c **** 
+ 211              	 .loc 1 97 0
+ 212 0016 43F42853 	 orr r3,r3,#10752
+ 213 001a 43F00103 	 orr r3,r3,#1
+  94:../BSP/Components/pga112/src/pga112.c ****   gain_val = pga112_get_binary_gain(gain_level);
+ 214              	 .loc 1 94 0
+ 215 001e 0880     	 strh r0,[r1]
+ 216              	.LVL10:
+  97:../BSP/Components/pga112/src/pga112.c **** 
+ 217              	 .loc 1 97 0
+ 218 0020 1380     	 strh r3,[r2]
+ 100:../BSP/Components/pga112/src/pga112.c **** 
+ 219              	 .loc 1 100 0
+ 220 0022 1188     	 ldrh r1,[r2]
+ 103:../BSP/Components/pga112/src/pga112.c **** 
+ 221              	 .loc 1 103 0
+ 222 0024 1388     	 ldrh r3,[r2]
+ 106:../BSP/Components/pga112/src/pga112.c **** 
+ 223              	 .loc 1 106 0
+ 224 0026 0C4A     	 ldr r2,.L15+12
+ 103:../BSP/Components/pga112/src/pga112.c **** 
+ 225              	 .loc 1 103 0
+ 226 0028 02A8     	 add r0,sp,#8
+ 227              	.LVL11:
+ 100:../BSP/Components/pga112/src/pga112.c **** 
+ 228              	 .loc 1 100 0
+ 229 002a 89B2     	 uxth r1,r1
+ 103:../BSP/Components/pga112/src/pga112.c **** 
+ 230              	 .loc 1 103 0
+ 231 002c C3F30723 	 ubfx r3,r3,#8,#8
+ 232 0030 43EA0123 	 orr r3,r3,r1,lsl#8
+ 233 0034 20F8023D 	 strh r3,[r0,#-2]!
+ 106:../BSP/Components/pga112/src/pga112.c **** 
+ 234              	 .loc 1 106 0
+ 235 0038 0221     	 movs r1,#2
+ 236 003a FFF7FEFF 	 bl spi_transmit_data
+ 237              	.LVL12:
+ 238              	 .loc 1 108 0
+ 239 003e 2046     	 mov r0,r4
+ 109:../BSP/Components/pga112/src/pga112.c **** }
+ 240              	 .loc 1 109 0
+ 241 0040 02B0     	 add sp,sp,#8
+ 242              	.LCFI7:
+ 243              	 .cfi_remember_state
+ 244              	 .cfi_def_cfa_offset 8
+ 245              	 
+ 246 0042 10BD     	 pop {r4,pc}
+ 247              	.LVL13:
+ 248              	.L13:
+ 249              	.LCFI8:
+ 250              	 .cfi_restore_state
+  90:../BSP/Components/pga112/src/pga112.c ****   }
+ 251              	 .loc 1 90 0
+ 252 0044 0120     	 movs r0,#1
+ 253              	.LVL14:
+ 254              	 .loc 1 109 0
+ 255 0046 02B0     	 add sp,sp,#8
+ 256              	.LCFI9:
+ 257              	 .cfi_def_cfa_offset 8
+ 258              	 
+ 259 0048 10BD     	 pop {r4,pc}
+ 260              	.L16:
+ 261 004a 00BF     	 .align 2
+ 262              	.L15:
+ 263 004c 00000000 	 .word .LANCHOR2
+ 264 0050 00000000 	 .word .LANCHOR3
+ 265 0054 00000000 	 .word .LANCHOR1
+ 266 0058 00000000 	 .word .LANCHOR0
+ 267              	 .cfi_endproc
+ 268              	.LFE472:
+ 270              	 .section .rodata.CSWTCH.9,"a",%progbits
+ 271              	 .align 2
+ 272              	 .set .LANCHOR2,.+0
+ 275              	CSWTCH.9:
+ 276 0000 00       	 .byte 0
+ 277 0001 10       	 .byte 16
+ 278 0002 20       	 .byte 32
+ 279 0003 30       	 .byte 48
+ 280 0004 40       	 .byte 64
+ 281 0005 50       	 .byte 80
+ 282 0006 60       	 .byte 96
+ 283 0007 70       	 .byte 112
+ 284              	 .section .data.pga112_global_config,"aw",%progbits
+ 285              	 .align 1
+ 286              	 .set .LANCHOR3,.+0
+ 289              	pga112_global_config:
+ 290 0000 512A     	 .short 10833
+ 291              	 .section .bss.pga112_spi_pins,"aw",%nobits
+ 292              	 .align 2
+ 293              	 .set .LANCHOR0,.+0
+ 296              	pga112_spi_pins:
+ 297 0000 00000000 	 .space 16
+ 297      00000000 
+ 297      00000000 
+ 297      00000000 
+ 298              	 .section .bss.pga112_global_gain,"aw",%nobits
+ 299              	 .align 1
+ 300              	 .set .LANCHOR1,.+0
+ 303              	pga112_global_gain:
+ 304 0000 0000     	 .space 2
+ 305              	 .text
+ 306              	.Letext0:
+ 307              	 .file 2 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 308              	 .file 3 "c:\\infineon\\tools\\dave ide\\4.5.0.202105191637\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 309              	 .file 4 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/XMC4700.h"
+ 310              	 .file 5 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_gpio.h"
+ 311              	 .file 6 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 312              	 .file 7 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_vadc.h"
+ 313              	 .file 8 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io.h"
+ 314              	 .file 9 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd_regs.h"
+ 315              	 .file 10 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/XMCLib/inc/xmc_usbd.h"
+ 316              	 .file 11 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd.h"
+ 317              	 .file 12 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/inc/bsp_common.h"
+ 318              	 .file 13 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/BSP/Components/pga112/inc/pga112.h"
+ 319              	 .file 14 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Include/core_cm4.h"
+ 320              	 .file 15 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Libraries/CMSIS/Infineon/XMC4700_series/Include/system_XMC4700.h"
+ 321              	 .file 16 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/ADC_MEASUREMENT_ADV/adc_measurement_adv.h"
+ 322              	 .file 17 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/DIGITAL_IO/digital_io_extern.h"
+ 323              	 .file 18 "E:/NOVA/Assets/IFX_P2G-HW-SW_V1.0.4/Firmware_Software/DAVE project/P2G_FW/Dave/Generated/USBD/usbd_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 pga112.c
+    {standard input}:20     .text.pga112_init:00000000 $t
+    {standard input}:25     .text.pga112_init:00000000 pga112_init
+    {standard input}:137    .text.pga112_init:00000058 $d
+    {standard input}:148    .text.pga112_get_gain:00000000 $t
+    {standard input}:153    .text.pga112_get_gain:00000000 pga112_get_gain
+    {standard input}:172    .text.pga112_get_gain:0000000c $d
+    {standard input}:177    .text.pga112_set_gain:00000000 $t
+    {standard input}:182    .text.pga112_set_gain:00000000 pga112_set_gain
+    {standard input}:263    .text.pga112_set_gain:0000004c $d
+    {standard input}:271    .rodata.CSWTCH.9:00000000 $d
+    {standard input}:275    .rodata.CSWTCH.9:00000000 CSWTCH.9
+    {standard input}:285    .data.pga112_global_config:00000000 $d
+    {standard input}:289    .data.pga112_global_config:00000000 pga112_global_config
+    {standard input}:292    .bss.pga112_spi_pins:00000000 $d
+    {standard input}:296    .bss.pga112_spi_pins:00000000 pga112_spi_pins
+    {standard input}:299    .bss.pga112_global_gain:00000000 $d
+    {standard input}:303    .bss.pga112_global_gain:00000000 pga112_global_gain
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+spi_transmit_data
+DIGITAL_IO_SPI_M_CS_PGA
+DIGITAL_IO_SPI_DATA_PGA
+DIGITAL_IO_SPI_M_CLK
